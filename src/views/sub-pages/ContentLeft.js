@@ -1,10 +1,7 @@
 // ** MUI Imports
-import { Card, Chip, Button, Typography } from '@mui/material'
-import Box from '@mui/material/Box'
-import { DataGrid } from '@mui/x-data-grid'
+import { Box, Card, Chip, Button, Typography } from '@mui/material'
 
 // ** Components
-import PopupButton from 'src/components/Button/PopupButton/PopupButton'
 
 const ContentLeft = ({ menuColumn, dataRow, handleRowClick }) => {
   return (
@@ -13,9 +10,7 @@ const ContentLeft = ({ menuColumn, dataRow, handleRowClick }) => {
         <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
           Item
         </Typography>
-        <Box sx={{ display: 'flex' }}>
-          <PopupButton />
-        </Box>
+        <Box sx={{ display: 'flex' }}>test</Box>
       </Box>
       <Card>
         {dataRow.map((item, index) => (
