@@ -52,7 +52,7 @@ ItemPage.getLayout = page => <SubPageLayout>{page}</SubPageLayout>
 
 // nextJS SSR
 export async function getServerSideProps() {
-  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}Item?fields=["*"]`, {
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}Item?fields=["*"]&order_by=creation`, {
     headers: {
       Authorization: process.env.NEXT_PUBLIC_API_TOKEN
     }

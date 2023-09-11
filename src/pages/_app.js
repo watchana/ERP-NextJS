@@ -63,10 +63,10 @@ const App = ({ Component, initialIsLoggedIn, ...rest }) => {
   const { emotionCache = clientSideEmotionCache, pageProps } = props
 
   const router = useRouter()
+  const token = Cookies.get('jwt')
 
   useEffect(() => {
     const checkAuth = async () => {
-      const token = Cookies.get('jwt')
       try {
         const res = await axios.post('/api/logger', { token: token })
         if (res.status !== 200 && router.pathname !== '/pages/login') {
@@ -83,7 +83,7 @@ const App = ({ Component, initialIsLoggedIn, ...rest }) => {
     }
 
     checkAuth()
-  }, [router])
+  }, [router, token])
 
   return (
     <Provider store={store}>

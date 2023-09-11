@@ -1,11 +1,10 @@
 // ** React Imports
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useEffect } from 'react'
 
 // ** Next Import
 import { useRouter } from 'next/router'
 
 //  ** Redux Imports
-import { useDispatch, useSelector } from 'react-redux'
 import { logoutSuccess } from 'src/redux/userSlice'
 
 // ** MUI Imports
@@ -26,6 +25,8 @@ import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 import MessageOutline from 'mdi-material-ui/MessageOutline'
 import HelpCircleOutline from 'mdi-material-ui/HelpCircleOutline'
+
+//  ** Cookies
 import Cookies from 'js-cookie'
 
 // ** Styled Components
@@ -40,15 +41,24 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
 const UserDropdown = () => {
   // ** States
   const [anchorEl, setAnchorEl] = useState(null)
-  const user = useSelector(state => state.user)
+  const [userData, setUserData] = useState({})
 
   // ** Hooks
   const router = useRouter()
-  const dispatch = useDispatch()
 
   const handleDropdownOpen = event => {
     setAnchorEl(event.currentTarget)
   }
+
+  useEffect(() => {
+    const storedUserString = localStorage.getItem('userData')
+    const storedUser = JSON.parse(storedUserString)
+    setUserData(storedUser)
+  }, [])
+
+  useEffect(() => {
+    console.log('userData', userData)
+  }, [userData])
 
   const handleDropdownClose = url => {
     if (url) {
@@ -58,9 +68,9 @@ const UserDropdown = () => {
   }
 
   const handleLogout = () => {
-    dispatch(logoutSuccess())
     handleDropdownClose('/pages/login')
     Cookies.remove('jwt')
+    localStorage.removeItem('userData')
   }
 
   const styles = {
@@ -86,7 +96,7 @@ const UserDropdown = () => {
         badgeContent={<BadgeContentSpan />}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <Avatar alt='John Doe' onClick={handleDropdownOpen} sx={{ width: 40, height: 40 }} src={user.userImage} />
+        <Avatar alt='John Doe' onClick={handleDropdownOpen} sx={{ width: 40, height: 40 }} src={userData.userImage} />
       </Badge>
       <Menu
         anchorEl={anchorEl}
@@ -103,18 +113,18 @@ const UserDropdown = () => {
               badgeContent={<BadgeContentSpan />}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             >
-              <Avatar alt='John Doe' src={user.userImage} sx={{ width: '2.5rem', height: '2.5rem' }} />
+              <Avatar alt='John Doe' src={userData.userImage} sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
               {/* 
               // ? Name
                */}
-              <Typography sx={{ fontWeight: 600 }}>{user.userName}</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{userData.userName}</Typography>
               {/* 
               // ? Role 
                */}
               <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
-                {user.userRole}
+                {userData.userRole}
               </Typography>
             </Box>
           </Box>

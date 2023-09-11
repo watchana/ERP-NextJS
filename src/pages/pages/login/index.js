@@ -108,8 +108,10 @@ const LoginPage = () => {
       )
 
       if (response.status === 200) {
-        dispatch(loginSuccess(response.data.data))
-        Cookies.set('jwt', response.data.data.token, { expires: 1, path: '' })
+        const userString = JSON.stringify(response.data.data)
+        localStorage.setItem('userData', userString)
+
+        Cookies.set('jwt', response.data.data.token, { expires: 1, path: '/' })
         router.push('/')
       } else {
         console.error('Login failed')
