@@ -60,7 +60,7 @@ const HomeShortcut = [
     route: '/app/accounting/sales-invoice'
   },
   {
-    name: ' Leaderbord',
+    name: ' Leaderboard',
     route: '/app/leaderboard'
   }
 ]
