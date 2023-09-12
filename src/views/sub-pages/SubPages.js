@@ -100,14 +100,13 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
             )}
 
             {(screenMDSelect || !screenMD) && (
-              <Grid item xs md={contentSize} sx={{ p: 5 }}>
+              <Grid item xs md={contentSize}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                   <Box
                     sx={{
                       flexDirection: 'row',
                       display: 'flex',
-                      justifyContent: 'space-between',
-                      mb: 2
+                      justifyContent: 'space-between'
                     }}
                   >
                     <Box>
@@ -125,7 +124,7 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
                       </IconButton>
                     </Box>
                   </Box>
-                  <Box>
+                  <Box sx={{ mr: 4 }}>
                     <TabContext value={tabValue.toString()}>
                       <Tabs
                         value={tabValue}
@@ -139,22 +138,16 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
                             color: 'white',
                             backgroundColor: 'primary.main'
                           },
-                          borderRadius: 1
+                          borderTopLeftRadius: '10px', // กำหนด borderRadius สำหรับมุมบนซ้าย
+                          borderTopRightRadius: '10px' // กำหนด borderRadius สำหรับมุมบนขวา
                         }}
-
-                        // TabIndicatorProps={{
-                        //   style: {
-                        //     backgroundColor: 'white',
-                        //     height: 3
-                        //   }
-                        // }}
                       >
                         {menuContent?.map(item => (
                           <Tab value={item.id} label={item.name} key={item.id} />
                         ))}
                       </Tabs>
                       {showContent.map((item, index) => (
-                        <TabPanel value={(index + 1).toString()} key={index + 1}>
+                        <TabPanel value={(index + 1).toString()} key={index + 1} sx={{ m: -3 }}>
                           {item}
                         </TabPanel>
                       ))}
