@@ -125,7 +125,7 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
                       </IconButton>
                     </Box>
                   </Box>
-                  <Card>
+                  <Box>
                     <TabContext value={tabValue.toString()}>
                       <Tabs
                         value={tabValue}
@@ -138,7 +138,8 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
                           '& .MuiTab-root.Mui-selected': {
                             color: 'white',
                             backgroundColor: 'primary.main'
-                          }
+                          },
+                          borderRadius: 1
                         }}
 
                         // TabIndicatorProps={{
@@ -158,7 +159,7 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
                         </TabPanel>
                       ))}
                     </TabContext>
-                  </Card>
+                  </Box>
                 </Box>
               </Grid>
             )}
