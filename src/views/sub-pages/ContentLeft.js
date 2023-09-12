@@ -1,5 +1,7 @@
 // ** MUI Imports
-import { Box, Card, Chip, Button, Typography } from '@mui/material'
+import { Card, Chip, Button, Typography } from '@mui/material'
+import Box from '@mui/material/Box'
+import { DataGrid } from '@mui/x-data-grid'
 
 // ** Components
 
