@@ -110,7 +110,7 @@ const DetailItem = ({ dataRow }) => {
               value={dataRow.over_delivery_receipt_allowance}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6} sx={{ alignSelf: 'flex-end' }}>
             <Typography sx={{ marginBottom: 2 }}>Over Billing Allowance (%)</Typography>
             <TextField fullWidth size='small' variant='filled' label='' value={dataRow.over_billing_allowance} />
           </Grid>
