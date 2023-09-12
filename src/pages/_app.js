@@ -70,12 +70,14 @@ const App = ({ Component, initialIsLoggedIn, ...rest }) => {
       try {
         const res = await axios.post('/api/logger', { token: token })
         if (res.status !== 200 && router.pathname !== '/pages/login') {
+          localStorage.removeItem('userData')
           router.push('/pages/login')
         } else if (res.status === 200 && router.pathname === '/pages/login') {
           router.push('/')
         }
       } catch (error) {
         console.error('ErrorApp:', error)
+        localStorage.removeItem('userData')
         if (router.pathname !== '/pages/login') {
           router.push('/pages/login')
         }
