@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 
 // ** MUI Imports
-import { Box, Card, Divider, Grid, IconButton, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Button, Card, Divider, Grid, IconButton, Tab, Tabs, TextField, Typography } from '@mui/material'
 import { TabPanel, TabContext } from '@mui/lab' // Import TabContext
 
 // ** Icons Imports
@@ -152,6 +152,18 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
                         </TabPanel>
                       ))}
                     </TabContext>
+                    <Card sx={{ marginBlock: 4, p: 2 }}>
+                      <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                          <Typography variant='h6' sx={{ my: 2 }}>
+                            Add Comment
+                          </Typography>
+                          <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
+                          <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
+                          <Button>add comment</Button>
+                        </Grid>
+                      </Grid>
+                    </Card>
                   </Box>
                 </Box>
               </Grid>
