@@ -2,7 +2,7 @@
 import React from 'react'
 
 // MUI Imports
-import { Box, Typography, Checkbox, TextField, Button } from '@mui/material'
+import { Box, Typography, Checkbox, TextField, Card, Grid } from '@mui/material'
 
 const QualityItem = ({ dataRow }) => {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
@@ -13,32 +13,30 @@ const QualityItem = ({ dataRow }) => {
 
   return (
     <Box>
-      <Box>
-        <Box sx={{ display: 'flex' }}>
-          <Checkbox {...label} checked={dataRow.inspection_required_before_purchase} onChange={handleCheckboxChange} />
-          <Typography variant='subtitle2' sx={{ m: 4 }}>
-            Inspection Required before Purchase
-          </Typography>
-        </Box>
-        <Box>
-          <Typography variant='subtitle2' sx={{ m: 4 }}>
-            Quality Inspection Template
-          </Typography>
-          <TextField variant='filled' label='' size='small' value={dataRow.quality_inspection_template} />
-        </Box>
-        <Box sx={{ display: 'flex' }}>
-          <Checkbox {...label} checked={dataRow.inspection_required_before_delivery} onChange={handleCheckboxChange} />
-          <Typography variant='subtitle2' sx={{ m: 4 }}>
-            Inspection Required before Delivery
-          </Typography>
-        </Box>
-        <Box sx={{ mt: 10 }}>
-          <Typography>Add a comment</Typography>
-          <TextField variant='filled' label='' multiline rows={6} fullWidth />
-          <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-          <Button>add comment</Button>
-        </Box>
-      </Box>
+      <Card>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
+            <Checkbox
+              {...label}
+              checked={dataRow.inspection_required_before_purchase}
+              onChange={handleCheckboxChange}
+            />
+            <Typography variant='subtitle2'>Inspection Required before Purchase</Typography>
+          </Grid>
+          <Grid item xs={12} sx={{ ml: 3 }}>
+            <Typography variant='subtitle2'>Quality Inspection Template</Typography>
+            <TextField fullWidth variant='filled' label='' size='small' value={dataRow.quality_inspection_template} />
+          </Grid>
+          <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
+            <Checkbox
+              {...label}
+              checked={dataRow.inspection_required_before_delivery}
+              onChange={handleCheckboxChange}
+            />
+            <Typography variant='subtitle2'>Inspection Required before Delivery</Typography>
+          </Grid>
+        </Grid>
+      </Card>
     </Box>
   )
 }

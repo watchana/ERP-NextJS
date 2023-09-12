@@ -2,7 +2,7 @@
 import React from 'react'
 
 // MUI imports
-import { Box, Typography, Checkbox, TextField, Button, Card, Grid } from '@mui/material'
+import { Box, Typography, Checkbox, Card, Grid } from '@mui/material'
 
 const ManufacturingItem = ({ dataRow }) => {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
