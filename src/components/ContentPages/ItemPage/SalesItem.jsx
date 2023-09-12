@@ -66,24 +66,26 @@ const SalesItem = ({ dataRow }) => {
         <Box sx={{ display: 'flex' }}>
           <Box>
             <Typography sx={{ marginBottom: 2 }}>Default Sales Unit of Measure :</Typography>
-            <TextField variant='filled' label='' value={dataRow.sales_uom} />
+            <TextField variant='filled' label='' value={dataRow.sales_uom || ''} />
           </Box>
           <Box sx={{ ml: 20 }}>
             <Typography sx={{ marginBottom: 2 }}>Max Discount (%) :</Typography>
-            <TextField variant='filled' label='' value={dataRow.max_discount} />
+            <TextField variant='filled' label='' value={dataRow.max_discount || ''} />
           </Box>
         </Box>
         <Box sx={{ display: 'flex' }}>
-          <Checkbox {...label} checked={dataRow.grant_commission} onChange={handleCheckboxChange} />
-          <Typography variant='subtitle1' sx={{ m: 4 }}>
-            Grant Commission
-          </Typography>
+          <FormControlLabel
+            sx={{ mt: 2 }}
+            control={<Checkbox checked={Boolean(dataRow[0]?.grant_commission) || false} />}
+            label='Grant Commission'
+          />
         </Box>
         <Box sx={{ display: 'flex' }}>
-          <Checkbox {...label} checked={dataRow.is_sales_item} onChange={handleCheckboxChange} />
-          <Typography variant='subtitle1' sx={{ m: 4 }}>
-            Allow Sales
-          </Typography>
+          <FormControlLabel
+            sx={{ mt: 2 }}
+            control={<Checkbox checked={Boolean(dataRow[0]?.is_sales_item) || false} />}
+            label='Allow Sales'
+          />
         </Box>
         <Box sx={{ mt: 5, display: 'flex' }}>
           <Button size='small' variant='filled' label='' onClick={handleDeferred}>
@@ -116,11 +118,16 @@ const SalesItem = ({ dataRow }) => {
                     <Box>
                       <Box sx={{ mt: 4 }}>
                         <Typography>Deferred Expense Account</Typography>
-                        <TextField label='' variant='outlined' fullWidth value={dataRow.deferred_revenue_account} />
+                        <TextField
+                          label=''
+                          variant='outlined'
+                          fullWidth
+                          value={dataRow.deferred_revenue_account || ''}
+                        />
                       </Box>
                       <Box sx={{ mt: 4 }}>
                         <Typography>No of Months (Expense)</Typography>
-                        <TextField label='' variant='outlined' fullWidth value={dataRow.no_of_months} />
+                        <TextField label='' variant='outlined' fullWidth value={dataRow.no_of_months || ''} />
                       </Box>
                     </Box>
                   )}

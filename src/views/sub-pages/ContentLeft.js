@@ -10,7 +10,6 @@ const ContentLeft = ({ menuColumn, dataRow, handleRowClick }) => {
         <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
           Item
         </Typography>
-        <Box sx={{ display: 'flex' }}>test</Box>
       </Box>
       <Card>
         {dataRow.map((item, index) => (
