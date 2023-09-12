@@ -2,7 +2,7 @@
 import React from 'react'
 
 // MUI imports
-import { Box, Typography, Checkbox, TextField, Button } from '@mui/material'
+import { Box, Typography, Checkbox, TextField, Button, Card, Grid } from '@mui/material'
 
 const ManufacturingItem = ({ dataRow }) => {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
@@ -13,33 +13,23 @@ const ManufacturingItem = ({ dataRow }) => {
 
   return (
     <Box>
-      <Box>
-        <Box sx={{ display: 'flex' }}>
-          <Checkbox {...label} checked={dataRow.include_item_in_manufacturing} onChange={handleCheckboxChange} />
-          <Typography variant='subtitle1' sx={{ m: 4 }}>
-            Include Item In Manufacturing
-          </Typography>
-        </Box>
-        <Box sx={{ display: 'flex' }}>
-          <Checkbox {...label} checked={dataRow.is_sub_contracted_item} onChange={handleCheckboxChange} />
-          <Typography variant='subtitle1' sx={{ m: 4 }}>
-            Supply Raw Materials for Purchase
-          </Typography>
-        </Box>
-        <Box>
-          <Typography variant='subtitle2'>If subcontracted to a vendor</Typography>
-        </Box>
-      </Box>
-      <Box>
-        <Box sx={{ mt: 10 }}>
-          <Typography>Add a comment</Typography>
-          <TextField variant='filled' label='' multiline rows={6} fullWidth />
-          <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-        </Box>
-        <Box sx={{ mt: 6 }}>
-          <Button>Add Comment</Button>
-        </Box>
-      </Box>
+      <Card>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
+            <Checkbox {...label} checked={dataRow.include_item_in_manufacturing} onChange={handleCheckboxChange} />
+            <Typography variant='subtitle1'>Include Item In Manufacturing</Typography>
+          </Grid>
+          <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+              <Checkbox {...label} checked={dataRow.is_sub_contracted_item} onChange={handleCheckboxChange} />
+              <Typography variant='subtitle1'>Supply Raw Materials for Purchase</Typography>
+            </Box>
+            <Box sx={{ ml: 4 }}>
+              <Typography variant='subtitle2'>If subcontracted to a vendor</Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </Card>
     </Box>
   )
 }
