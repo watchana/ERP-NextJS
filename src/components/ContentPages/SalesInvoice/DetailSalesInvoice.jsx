@@ -177,9 +177,9 @@ const DetailSalesInvoice = ({ dataRow }) => {
       })
   }, [dataRow])
 
-  useEffect(() => {
-    console.log('quotation', quotation)
-  }, [quotation])
+  // useEffect(() => {
+  //   console.log('quotation', quotation)
+  // }, [quotation])
 
   const columns = [
     { field: 'item_name', headerName: 'Item', width: 150 },
@@ -259,7 +259,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
           />
         </Grid>
       </Grid>
-      <Divider sx={{ margin: 0, mb: 5 }} />
+      <Divider sx={{ margin: 0, my: 5 }} />
 
       {/* /                   แสดงข่อมูลชุด dopdown                               / */}
 
@@ -304,7 +304,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
           </Collapse>
         </Grid>
       </Grid>
-      <Divider sx={{ margin: 0, mb: 5 }} />
+      <Divider sx={{ margin: 0, my: 5 }} />
 
       {/* /                   แสดงข่อมูลชุด Item ที่เป็น DataGit                               / */}
       <Typography size='small' sx={{ fontWeight: 'bold' }}>
@@ -1413,7 +1413,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
           </Grid>
         </Collapse>
       </Grid>
-      <Divider sx={{ margin: 0, mb: 5 }} />
+      <Divider sx={{ margin: 0, my: 5 }} />
       <Typography variant=''>Add a comment:</Typography>
       <TextField size='small' variant='filled' label='' multiline rows={8} fullWidth value={dataRow.description} />
       <Box sx={{ width: 'auto', marginBlock: 2 }}>

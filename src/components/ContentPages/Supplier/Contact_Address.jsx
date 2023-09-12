@@ -4,31 +4,41 @@ import React from 'react'
 // ** Mui Import
 
 import { useState } from 'react'
-import { Grid, Card, TextField, Box, Typography, IconButton, Dialog, DialogTitle, DialogContent } from '@mui/material'
+import {
+  Grid,
+  Card,
+  TextField,
+  Box,
+  Typography,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Divider
+} from '@mui/material'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
-
 import Button from '@mui/material/Button'
 import DialogActions from '@mui/material/DialogActions'
 import DorpdownButton from 'src/components/Button/Dorpdown_Text/Dorpdown_text'
-import FormLabel from '@mui/material/FormLabel'
-import FormControl from '@mui/material/FormControl'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import FormHelperText from '@mui/material/FormHelperText'
 import Checkbox from '@mui/material/Checkbox'
 import { useEffect } from 'react'
 import axios from 'axios'
 import EditIcon from '@mui/icons-material/Edit'
+import { ChevronDown, ChevronUp } from 'mdi-material-ui'
+import { DataGrid } from '@mui/x-data-grid'
 
-const Contact_Address = ({ getDataRow }) => {
+const Contact_Address = ({ dataRow }) => {
   const [age, setAge] = useState('')
 
   const handleChanges = event => {
     setAge(event.target.value)
   }
-
+  const [isOpenEditLinkName, setIsOpenEditLinkName] = useState(false)
+  const [linkName, setLinkName] = useState(null)
   const [isOpenDetailAddress, setIsOpenDetailAddress] = useState(false)
   const [isOpenDetaiContact, setIsOpenDetailContact] = useState(false)
   const [isPopupOpen, setIsPopupOpen] = useState(false)
@@ -74,14 +84,36 @@ const Contact_Address = ({ getDataRow }) => {
   }
   const { Preferred_Billing_Address, Preferred_Shipping_Addressn, Disabled } = state
 
+  const column = [
+    { field: 'link_doctype', headerName: 'Link Document Typee *', width: 200 },
+    {
+      field: 'link_name',
+      headerName: 'Link Name *',
+      width: 250,
+      renderCell: params => (
+        <Button sx={{ color: 'black' }} onClick={() => handleEditLinkName(params.row)}>
+          {params.row.link_name}
+        </Button>
+      )
+    },
+
+    { field: 'link_title', headerName: 'Link Title', width: 250 }
+  ]
+
+  const handleEditLinkName = row => {
+    setLinkName(row)
+    setIsOpenEditLinkName(true)
+  }
+
   const [dataAddress, setDataAddress] = useState('')
   const [dataContact, setDataContact] = useState('')
+  const [dataSuppliers, setDataSuppliers] = useState('')
   const [dataDetailAddress, setDataDetailAddress] = useState('')
 
   useEffect(() => {
     axios
       .get(
-        `${process.env.NEXT_PUBLIC_API_URL}Address?filters=[["Dynamic Link","link_name", "=", "${getDataRow.name}"]]&fields=["*"]`,
+        `${process.env.NEXT_PUBLIC_API_URL}Address?filters=[["Dynamic Link","link_name", "=", "${dataRow.name}"]]&fields=["*"]`,
         {
           headers: {
             Authorization: 'token 5891d01ccc2961e:0e446b332dc22aa'
@@ -97,7 +129,7 @@ const Contact_Address = ({ getDataRow }) => {
 
     axios
       .get(
-        `${process.env.NEXT_PUBLIC_API_URL}Contact?filters=[["Dynamic Link","link_name", "=", "${getDataRow.name}"]]&fields=["*"]`,
+        `${process.env.NEXT_PUBLIC_API_URL}Contact?filters=[["Dynamic Link","link_name", "=", "${dataRow.name}"]]&fields=["*"]`,
         {
           headers: {
             Authorization: 'token 5891d01ccc2961e:0e446b332dc22aa'
@@ -110,7 +142,22 @@ const Contact_Address = ({ getDataRow }) => {
       .catch(err => {
         console.log(err)
       })
-  }, [getDataRow])
+  }, [dataRow])
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}Address/${dataAddress[0]?.name}`, {
+        headers: {
+          Authorization: 'token 5891d01ccc2961e:0e446b332dc22aa'
+        }
+      })
+      .then(res => {
+        setDataSuppliers(res.data.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [dataAddress])
 
   useEffect(() => {
     axios
@@ -131,11 +178,11 @@ const Contact_Address = ({ getDataRow }) => {
   }, [])
 
   useEffect(() => {
-    console.log('Supplier', getDataRow)
+    console.log('Supplier 2', dataSuppliers.links)
   })
   useEffect(() => {
     console.log('Address', dataAddress)
-  })
+  }, [dataAddress])
   useEffect(() => {
     console.log('Contact', dataContact)
   })
@@ -338,9 +385,96 @@ const Contact_Address = ({ getDataRow }) => {
                         </Grid>
                       </Grid>
                     </Card>
+                    <DataGrid
+                      sx={{ width: 'full', mt: 6, height: 'auto' }}
+                      rows={dataSuppliers?.links}
+                      columns={column}
+                      getRowId={row => row.name}
+                    />
+
+                    <Dialog
+                      fullScreen
+                      PaperProps={{
+                        style: {
+                          width: '80%',
+                          height: '80%',
+                          margin: 0,
+                          maxWidth: 'none',
+                          maxHeight: 'none'
+                        }
+                      }}
+                      open={isOpenEditLinkName}
+                      onClose={() => setIsOpenEditLinkName(false)}
+                    >
+                      <CardHeader title={dataAddress[0]?.address_title} />
+                      <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
+                      <Typography variant='body1' sx={{ ml: 5 }}>
+                        Address and Contacts
+                      </Typography>
+                      <CardContent sx={{ width: '100%' }}>
+                        <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center', p: 5 }}>
+                          <Grid item sm={12} md={6} lg={6}>
+                            <Card>
+                              <CardContent sx={{ width: '100%' }}>
+                                <Typography variant='body2'>{dataAddress[0]?.name}</Typography>
+                                <Typography variant='body2'>{dataAddress[0]?.address_line1}</Typography>
+                                <Typography variant='body2'>{dataAddress[0]?.pincode}</Typography>
+                                <Typography variant='body2'>{dataAddress[0]?.city}</Typography>
+                                <Typography variant='body2'>{dataAddress[0]?.state}</Typography>
+                                <Typography variant='body2'>{dataAddress[0]?.pincode}</Typography>
+                                <Typography variant='body2'>{dataAddress[0]?.country}</Typography>
+                                <Typography variant='body2'>Phone: {dataAddress[0]?.phone} </Typography>
+                                <Typography variant='body2'>Email: {dataAddress[0]?.email_id}</Typography>
+                              </CardContent>
+                            </Card>
+                          </Grid>
+                          <Grid item sm={12} md={6} lg={6}>
+                            <Card>
+                              <CardContent sx={{ width: '100%' }}>
+                                <Typography variant='body2'>{dataContact[0]?.address}</Typography>
+                                <Typography variant='body2'>{dataContact[0]?.address}</Typography>
+                              </CardContent>
+                            </Card>
+                          </Grid>
+                        </Grid>
+                        <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
+
+                        <Typography variant='body1' sx={{ ml: 5 }}>
+                          Primary Address and Contact
+                        </Typography>
+
+                        <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
+                          <Grid item xs={12} sm={12} md={6} lg={6}>
+                            <Typography>Customer Name *</Typography>
+                            <TextField
+                              sx={{ marginBottom: 5 }}
+                              size='small'
+                              variant='filled'
+                              fullWidth
+                              value={linkName?.customer_name || ''}
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={12} md={6} lg={6}>
+                            <Typography>Customer Name *</Typography>
+                            <TextField
+                              sx={{ marginBottom: 5 }}
+                              size='small'
+                              variant='filled'
+                              fullWidth
+                              value={linkName?.customer_name || ''}
+                            />
+                          </Grid>
+                        </Grid>
+                      </CardContent>
+
+                      <DialogActions>
+                        <Button onClick={() => setIsOpenEditLinkName(false)}>Close</Button>
+                        {/* เพิ่มปุ่ม "Save" เพื่อบันทึกการแก้ไข */}
+                      </DialogActions>
+                    </Dialog>
                     <Card sx={{ width: '100%', p: 5 }}>
                       <Typography variant=''>Add a comment:</Typography>
-                      <TextField size='small' variant='filled' label='' multiline rows={8} fullWidth />
+                      <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
                     </Card>
 
                     <DialogActions sx={{ m: 2, display: 'flex', justifyContent: 'end' }}>
@@ -373,7 +507,6 @@ const Contact_Address = ({ getDataRow }) => {
                     }
                   }}
                 >
-                  <DialogTitle>Edit Contect</DialogTitle>
                   <DialogContent>
                     <Card sx={{ width: '100%', p: 5 }}>
                       <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -629,7 +762,7 @@ const Contact_Address = ({ getDataRow }) => {
                               </Card>
                               <Card sx={{ width: '100%', p: 5 }}>
                                 <Typography variant=''>Add a comment:</Typography>
-                                <TextField size='small' variant='filled' label='' multiline rows={8} fullWidth />
+                                <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
                               </Card>
 
                               <DialogActions sx={{ m: 2, display: 'flex', justifyContent: 'end' }}>
@@ -690,7 +823,7 @@ const Contact_Address = ({ getDataRow }) => {
                     </Card>
                     <Card sx={{ width: '100%', p: 5 }}>
                       <Typography variant=''>Add a comment:</Typography>
-                      <TextField size='small' variant='filled' label='' multiline rows={8} fullWidth />
+                      <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
                     </Card>
                   </DialogContent>
                   <DialogActions>
@@ -700,7 +833,7 @@ const Contact_Address = ({ getDataRow }) => {
                 </Dialog>
               </CardActions>
             </Card>
-
+            <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
             <CardHeader title='Primary Address and Contact' />
 
             {/* ////////////////////////////////////// แถวที่ 1 ///////////////////////////////////////////// */}
@@ -717,9 +850,10 @@ const Contact_Address = ({ getDataRow }) => {
             </Grid>
           </CardContent>
           <CardActions className='card-action-dense'></CardActions>
+          <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
           <Grid sx={{ mt: 5 }}>
             <Typography variant=''>Add a comment:</Typography>
-            <TextField size='small' variant='filled' label='' multiline rows={8} fullWidth />
+            <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
           </Grid>
         </Grid>
       </Grid>

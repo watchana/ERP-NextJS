@@ -2,7 +2,7 @@
 import React from 'react'
 
 // ** Mui Import
-import { Box, Button, Grid, TextField, Typography } from '@mui/material'
+import { Box, Button, Divider, Grid, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import DorpdownButton from 'src/components/Button/Dorpdown_Text/Dorpdown_text'
 import { DataGrid } from '@mui/x-data-grid'
@@ -63,11 +63,10 @@ const Accounting = () => {
       <Grid sx={{ mt: 5 }}>
         <Box sx={{ mt: 10 }}>
           <Typography variant='h6' sx={{ m: 2 }}>
+            <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
             Add Comment
           </Typography>
           <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
-          <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-          <Button>add comment</Button>
         </Box>
       </Grid>
     </Box>

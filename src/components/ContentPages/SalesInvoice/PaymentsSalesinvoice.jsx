@@ -73,6 +73,7 @@ const Payments = ({ dataRow }) => {
 '
                 />
               </Grid>
+
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <Btn
                   detailbutton={' Get Advances Automatically'}
@@ -85,6 +86,7 @@ const Payments = ({ dataRow }) => {
           </Collapse>
         </Grid>
       </Grid>
+      <Divider sx={{ margin: 0, my: 5 }} />
       <Grid container sx={{ mt: 5 }}>
         <Grid>
           <Box>
@@ -118,6 +120,7 @@ const Payments = ({ dataRow }) => {
           </Box>
         </Grid>
       </Grid>
+      <Divider sx={{ margin: 0, my: 5 }} />
       <Grid sx={{ my: 5 }}>
         <Typography variant=''>Add a comment:</Typography>
         <TextField size='small' variant='filled' label='' multiline rows={8} fullWidth value={dataRow.description} />

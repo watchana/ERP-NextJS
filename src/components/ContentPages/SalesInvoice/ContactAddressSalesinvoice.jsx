@@ -35,24 +35,24 @@ import { ChevronDown, ChevronUp } from 'mdi-material-ui'
 
 const ContactAddressSalesinvoice = ({ dataRow }) => {
   const [isOpenDetailAddress, setIsOpenDetailAddress] = useState(false)
-  const [isOpenDetaiContact, setIsOpenDetailContact] = useState(false)
+  const [isOpenDetaiContact, setIsOpenCustomerAddress] = useState(false)
   const [internalCustomer, setInternalSupplier] = useState(false)
   const [moreInformation, setCurrencyPrice] = useState(false)
 
-  const handleEditClickDetailAddress = () => {
+  const handleEditClickCustomerAddress = () => {
+    setIsOpenCustomerAddress(true)
+  }
+
+  const handleSaveClickCustomerAddress = () => {
+    setIsOpenCustomerAddress(false)
+  }
+
+  const handleEditClickAddress = () => {
     setIsOpenDetailAddress(true)
   }
 
-  const handleSaveClickDetailAddress = () => {
+  const handleSaveClickAddress = () => {
     setIsOpenDetailAddress(false)
-  }
-
-  const handleEditClickDetailContact = () => {
-    setIsOpenDetailContact(true)
-  }
-
-  const handleSaveClickDetailContact = () => {
-    setIsOpenDetailContact(false)
   }
 
   const handleClickInternalCustomer = () => {
@@ -162,18 +162,18 @@ const ContactAddressSalesinvoice = ({ dataRow }) => {
       })
   }, [dataRow])
 
-  useEffect(() => {
-    console.log('Supplier', dataRow)
-  })
-  useEffect(() => {
-    console.log('Address', dataAddress)
-  })
-  useEffect(() => {
-    console.log('Contact', dataContact)
-  })
-  useEffect(() => {
-    console.log('Customer', dataCustomer)
-  }, [dataCustomer])
+  // useEffect(() => {
+  //   console.log('Supplier', dataRow)
+  // })
+  // useEffect(() => {
+  //   console.log('Address', dataAddress)
+  // })
+  // useEffect(() => {
+  //   console.log('Contact', dataContact)
+  // })
+  // useEffect(() => {
+  //   console.log('Customer', dataCustomer)
+  // }, [dataCustomer])
 
   return (
     <Box>
@@ -181,6 +181,7 @@ const ContactAddressSalesinvoice = ({ dataRow }) => {
       <Grid container>
         <Grid item sx={{ width: '100%', height: '100%' }}>
           <CardHeader title='Billing Address' />
+
           <CardContent>
             <Typography>Customer Address</Typography>
             <Card sx={{ mb: 5 }}>
@@ -188,10 +189,10 @@ const ContactAddressSalesinvoice = ({ dataRow }) => {
                 <Typography variant='body2'>{dataAddress[0]?.name}</Typography>
               </CardContent>
               <CardActions className='card-action-dense'>
-                <Button onClick={handleEditClickDetailContact}>แก้ไข</Button>
+                <Button onClick={handleEditClickCustomerAddress}>แก้ไข</Button>
                 <Dialog
                   open={isOpenDetaiContact}
-                  onClose={() => setIsOpenDetailContact(false)}
+                  onClose={() => setIsOpenCustomerAddress(false)}
                   fullScreen
                   PaperProps={{
                     style: {
@@ -390,6 +391,7 @@ const ContactAddressSalesinvoice = ({ dataRow }) => {
                                     fullWidth
                                     value={linkName?.customer_name || ''}
                                   />
+
                                   <Typography>Customer Type *</Typography>
                                   <TextField
                                     sx={{ marginBottom: 5 }}
@@ -605,12 +607,13 @@ const ContactAddressSalesinvoice = ({ dataRow }) => {
                     </Card>
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={() => setIsOpenDetailContact(false)}>ยกเลิก</Button>
-                    <Button onClick={handleSaveClickDetailContact}>บันทึก</Button>
+                    <Button onClick={() => setIsOpenCustomerAddress(false)}>ยกเลิก</Button>
+                    <Button onClick={handleSaveClickCustomerAddress}>บันทึก</Button>
                   </DialogActions>
                 </Dialog>
               </CardActions>
             </Card>
+
             <Typography>Address</Typography>
             <Card sx={{ mb: 5 }}>
               <CardContent sx={{ width: '100%' }}>
@@ -625,10 +628,10 @@ const ContactAddressSalesinvoice = ({ dataRow }) => {
                 <Typography variant='body2'>Email: {dataAddress[0]?.email_id}</Typography>
               </CardContent>
               <CardActions className='card-action-dense'>
-                <Button onClick={handleEditClickDetailAddress}>แก้ไข</Button>
+                <Button onClick={handleEditClickAddress}>แก้ไข</Button>
                 <Dialog
                   open={isOpenDetailAddress}
-                  onClose={handleSaveClickDetailAddress}
+                  onClose={handleSaveClickAddress}
                   fullScreen
                   PaperProps={{
                     style: {
@@ -779,14 +782,14 @@ const ContactAddressSalesinvoice = ({ dataRow }) => {
                     </Card>
 
                     <DialogActions sx={{ m: 2, display: 'flex', justifyContent: 'end' }}>
-                      <Button onClick={() => setIsOpenDetailContact(false)}>ยกเลิก</Button>
-                      <Button onClick={handleSaveClickDetailContact}>บันทึก</Button>
+                      <Button onClick={() => setIsOpenDetailAddress(false)}>ยกเลิก</Button>
+                      <Button onClick={handleSaveClickAddress}>บันทึก</Button>
                     </DialogActions>
                   </DialogContent>
                 </Dialog>
               </CardActions>
             </Card>
-
+            <Divider sx={{ margin: 0, my: 5 }} />
             <Grid container spacing={3} sx={{ display: 'flex' }}>
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <Typography sx={{ margin: 1 }}>Contact Person</Typography>
@@ -820,7 +823,7 @@ const ContactAddressSalesinvoice = ({ dataRow }) => {
 
             {/* ////////////////////////////////////// แถวที่ 1 ///////////////////////////////////////////// */}
           </CardContent>
-          <CardHeader sx={{ my: 4 }} title='Shipping Address' />
+          <CardHeader title='Shipping Address' />
           <CardContent>
             <Grid item sx={{ mr: -5 }}></Grid>
 
