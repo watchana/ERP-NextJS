@@ -9,15 +9,15 @@ import SubPages from 'src/views/sub-pages/SubPages'
 import { ItemContentMenu, defaultMaterialRequestType } from 'src/dummy/contentPages/itemPage'
 
 // ** Custom Components
-import DetailItem from 'src/components/SubPages/DetailItem'
-import DashboardItem from 'src/components/SubPages/DashboardItem'
-import InventoryItem from 'src/components/SubPages/InventoryItem'
+import DetailItem from 'src/components/ContentPages/ItemPage/DetailItem'
+import DashboardItem from 'src/components/ContentPages/ItemPage/DashboardItem'
+import InventoryItem from 'src/components/ContentPages/ItemPage/InventoryItem'
 import AccountingItem from 'src/components/ContentPages/ItemPage/AccountingItem'
-import PurchasingItem from 'src/components/SubPages/PurchasingItem'
-import SalesItem from 'src/components/SubPages/SalesItem'
-import TexItem from 'src/components/SubPages/TexItem'
-import QualityItem from 'src/components/SubPages/QualityItem'
-import ManufacturingItem from 'src/components/SubPages/ManufacturingItem'
+import PurchasingItem from 'src/components/ContentPages/ItemPage/PurchasingItem'
+import SalesItem from 'src/components/ContentPages/ItemPage/SalesItem'
+import TexItem from 'src/components/ContentPages/ItemPage/TexItem'
+import QualityItem from 'src/components/ContentPages/ItemPage/QualityItem'
+import ManufacturingItem from 'src/components/ContentPages/ItemPage/ManufacturingItem'
 
 // ** Layouts
 import SubPageLayout from 'src/@core/layouts/SubPageLayout'

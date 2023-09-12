@@ -2,29 +2,27 @@
 import React from 'react'
 
 // MUI imports
-import { Box, Typography, Checkbox, TextField, Button } from '@mui/material'
+import { Box, Typography, Checkbox, TextField, Button, FormControlLabel } from '@mui/material'
 
 const ManufacturingItem = ({ dataRow }) => {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-
-  const handleCheckboxChange = event => {
-    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-  }
 
   return (
     <Box>
       <Box>
         <Box sx={{ display: 'flex' }}>
-          <Checkbox {...label} checked={dataRow.include_item_in_manufacturing} onChange={handleCheckboxChange} />
-          <Typography variant='subtitle1' sx={{ m: 4 }}>
-            Include Item In Manufacturing
-          </Typography>
+          <FormControlLabel
+            sx={{ mt: 2 }}
+            control={<Checkbox checked={Boolean(dataRow[0]?.include_item_in_manufacturing) || false} />}
+            label='Include Item In Manufacturing'
+          />
         </Box>
         <Box sx={{ display: 'flex' }}>
-          <Checkbox {...label} checked={dataRow.is_sub_contracted_item} onChange={handleCheckboxChange} />
-          <Typography variant='subtitle1' sx={{ m: 4 }}>
-            Supply Raw Materials for Purchase
-          </Typography>
+          <FormControlLabel
+            sx={{ mt: 2 }}
+            control={<Checkbox checked={Boolean(dataRow[0]?.is_sub_contracted_item) || false} />}
+            label='Supply Raw Materials for Purchase'
+          />
         </Box>
         <Box>
           <Typography variant='subtitle2'>If subcontracted to a vendor</Typography>

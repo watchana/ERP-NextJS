@@ -2,7 +2,7 @@
 import React from 'react'
 
 // MUI Imports
-import { Box, Typography, Checkbox, TextField, Button } from '@mui/material'
+import { Box, Typography, Checkbox, TextField, Button, FormControlLabel } from '@mui/material'
 
 const QualityItem = ({ dataRow }) => {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
@@ -15,22 +15,24 @@ const QualityItem = ({ dataRow }) => {
     <Box>
       <Box>
         <Box sx={{ display: 'flex' }}>
-          <Checkbox {...label} checked={dataRow.inspection_required_before_purchase} onChange={handleCheckboxChange} />
-          <Typography variant='subtitle2' sx={{ m: 4 }}>
-            Inspection Required before Purchase
-          </Typography>
+          <FormControlLabel
+            sx={{ mt: 2 }}
+            control={<Checkbox checked={Boolean(dataRow[0]?.inspection_required_before_purchase) || false} />}
+            label='Inspection Required before Purchase'
+          />
         </Box>
         <Box>
           <Typography variant='subtitle2' sx={{ m: 4 }}>
             Quality Inspection Template
           </Typography>
-          <TextField variant='filled' label='' size='small' value={dataRow.quality_inspection_template} />
+          <TextField variant='filled' label='' size='small' value={dataRow.quality_inspection_template || ''} />
         </Box>
         <Box sx={{ display: 'flex' }}>
-          <Checkbox {...label} checked={dataRow.inspection_required_before_delivery} onChange={handleCheckboxChange} />
-          <Typography variant='subtitle2' sx={{ m: 4 }}>
-            Inspection Required before Delivery
-          </Typography>
+          <FormControlLabel
+            sx={{ mt: 2 }}
+            control={<Checkbox checked={Boolean(dataRow[0]?.inspection_required_before_delivery) || false} />}
+            label='Inspection Required before Delivery'
+          />
         </Box>
         <Box sx={{ mt: 10 }}>
           <Typography>Add a comment</Typography>

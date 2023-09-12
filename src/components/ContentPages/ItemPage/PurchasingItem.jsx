@@ -98,8 +98,11 @@ const PurchasingItem = ({ dataRow }) => {
             <TextField variant='filled' label='' value={dataRow.last_purchase_rate || ''} />
           </Box>
           <Box sx={{ display: 'flex', ml: 3 }}>
-            <Checkbox {...label} checked={dataRow.is_customer_provided_item} onChange={handleCheckboxChange} />
-            <Typography sx={{ mt: 2 }}>Is Customer Provided Item</Typography>
+            <FormControlLabel
+              sx={{ mt: 2 }}
+              control={<Checkbox checked={Boolean(dataRow[0]?.is_customer_provided_item) || false} />}
+              label='Is Customer Provided Item'
+            />
           </Box>
         </Box>
       </Box>
@@ -110,10 +113,11 @@ const PurchasingItem = ({ dataRow }) => {
             <TextField variant='filled' label='' value={dataRow.safety_stock || ''} />
           </Box>
           <Box sx={{ display: 'flex' }}>
-            <Checkbox {...label} checked={dataRow.is_customer_provided_item} onChange={handleCheckboxChange} />
-            <Typography variant='subtitle1' sx={{ mt: 2 }}>
-              Allow Purchase
-            </Typography>
+            <FormControlLabel
+              sx={{ mt: 2 }}
+              control={<Checkbox checked={Boolean(dataRow[0]?.is_purchase_item) || false} />}
+              label='Allow Purchase'
+            />
           </Box>
         </Box>
       </Box>
@@ -139,13 +143,11 @@ const PurchasingItem = ({ dataRow }) => {
           <CardContent>
             <Box sx={{ display: 'flex' }}>
               <Box sx={{ display: 'flex', width: '40%' }}>
-                <Checkbox
-                  {...label}
-                  checked={dataRow.delivered_by_supplier}
-                  onChange={handleCheckboxChange}
-                  sx={{ height: 30 }}
+                <FormControlLabel
+                  sx={{ mt: 2, height: 30 }}
+                  control={<Checkbox checked={Boolean(dataRow[0]?.delivered_by_supplier) || false} />}
+                  label='Delivered by Supplier (Drop Ship)'
                 />
-                <Typography variant='subtitle1'>Delivered by Supplier (Drop Ship)</Typography>
               </Box>
               <Box sx={{ width: '60%' }}>
                 <DataGrid

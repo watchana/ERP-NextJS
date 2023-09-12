@@ -14,7 +14,11 @@ const AccountingItem = ({ dataRow }) => {
     { field: 'default_price_list', headerName: 'Default Price List', width: 200 }
   ]
 
-  const [dataItemAccouting, setDataItemAccouting] = useState('')
+  const [dataItemAccouting, setDataItemAccouting] = useState([])
+
+  useEffect(() => {
+    console.log(dataItemAccouting)
+  }, [dataItemAccouting])
 
   useEffect(() => {
     axios
@@ -39,8 +43,9 @@ const AccountingItem = ({ dataRow }) => {
       </Typography>
       <Box>
         <DataGrid
-          rows={dataItemAccouting}
+          rows={dataItemAccouting.item_defaults}
           columns={columnsAcc}
+          getRowId={row => row.name}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 5 }
