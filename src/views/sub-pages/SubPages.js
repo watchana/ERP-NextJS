@@ -9,9 +9,15 @@ import { TabPanel, TabContext } from '@mui/lab' // Import TabContext
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft'
 import CloseIcon from '@mui/icons-material/Close'
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import SaveIcon from '@mui/icons-material/Save'
 
 // ** Custom Components
 import ContentLeft from 'src/views/sub-pages/ContentLeft'
+
+const IconButtonStyle = { bgcolor: 'white', borderRadius: 1, border: '1px solid #E0E0E0', mx: 0.5 }
 
 const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
   const contentSizeInit = 7
@@ -46,6 +52,10 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
     }
   }, [])
 
+  useEffect(() => {
+    console.log('dataRow', data)
+  }, [data])
+
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue)
   }
@@ -74,6 +84,25 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
       setContentSize(contentSizeInit)
     }
     setScreenMDSelect(false)
+  }
+
+  const handleArrowLeft = () => {
+    const index = data.findIndex(item => item === dataRow)
+    if (index === 0) {
+      console.log('No further records')
+    } else {
+      setDataRow(data[index - 1])
+    }
+  }
+
+  const handleArrowRight = () => {
+    const index = data.findIndex(item => item === dataRow)
+    const lastIndex = data.length - 1
+    if (index === lastIndex) {
+      console.log('No further records')
+    } else {
+      setDataRow(data[index + 1])
+    }
   }
 
   if (!data) {
@@ -106,7 +135,8 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
                     sx={{
                       flexDirection: 'row',
                       display: 'flex',
-                      justifyContent: 'space-between'
+                      justifyContent: 'space-between',
+                      mb: 2
                     }}
                   >
                     <Box>
@@ -114,12 +144,20 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
                         {dataRow.name}
                       </Typography>
                     </Box>
-                    <Box>
-                      <IconButton
-                        color='error'
-                        sx={{ mr: 1, display: 'flex', alignItems: 'center' }}
-                        onClick={handleContentClose}
-                      >
+                    <Box sx={{ display: 'flex', flexDirection: 'row',mr: 3 }}>
+                      <IconButton onClick={() => handleArrowLeft()} sx={IconButtonStyle}>
+                        <KeyboardArrowLeftIcon />
+                      </IconButton>
+                      <IconButton onClick={() => handleArrowRight()} sx={IconButtonStyle}>
+                        <KeyboardArrowRightIcon />
+                      </IconButton>
+                      <IconButton sx={IconButtonStyle}>
+                        <MoreHorizIcon />
+                      </IconButton>
+                      <IconButton color='success' sx={IconButtonStyle}>
+                        <SaveIcon />
+                      </IconButton>
+                      <IconButton color='error' sx={IconButtonStyle} onClick={handleContentClose}>
                         <CloseIcon />
                       </IconButton>
                     </Box>
