@@ -33,7 +33,7 @@ import { mdiChevronDown } from '@mdi/js'
 import { mdiKeyboardOutline } from '@mdi/js'
 
 //import Dummy and Components
-import { ColumnPreOrder, RowsPreOrder, ColumnUnit, RowsUnit } from './DummyInventoryItem/DummyInventory'
+import { ColumnPreOrder, RowsPreOrder, RowsUnit, ColumnUnit } from 'src/dummy/DummyInventory'
 import axios from 'axios'
 
 const InventoryItem = ({ dataRow, dropDowns }) => {
@@ -139,21 +139,21 @@ const InventoryItem = ({ dataRow, dropDowns }) => {
       <Box sx={{ display: 'flex' }}>
         <Box>
           <Typography sx={{ marginBottom: 2 }}> Shelf Life In Days :</Typography>
-          <TextField variant='filled' label='' value={dataRow.shelf_life_in_days} />
+          <TextField variant='filled' label='' value={dataRow.shelf_life_in_days || ''} />
         </Box>
         <Box sx={{ ml: 20 }}>
           <Typography sx={{ marginBottom: 2 }}>Warranty Period (in days) :</Typography>
-          <TextField variant='filled' label='' value={dataRow.warranty_period} />
+          <TextField variant='filled' label='' value={dataRow.warranty_period || ''} />
         </Box>
       </Box>
       <Box sx={{ mt: 6, display: 'flex' }}>
         <Box>
           <Typography sx={{ marginBottom: 2 }}>End of Life:</Typography>
-          <TextField variant='filled' label='' value={dataRow.end_of_life} />
+          <TextField variant='filled' label='' value={dataRow.end_of_life || ''} />
         </Box>
         <Box sx={{ ml: 20 }}>
           <Typography sx={{ marginBottom: 2 }}>Weight Per Unit:</Typography>
-          <TextField variant='filled' label='' value={dataRow.weight_per_unit} />
+          <TextField variant='filled' label='' value={dataRow.weight_per_unit || ''} />
         </Box>
       </Box>
       <Box sx={{ mt: 6, display: 'flex' }}>
@@ -178,7 +178,7 @@ const InventoryItem = ({ dataRow, dropDowns }) => {
         </Box>
         <Box sx={{ ml: 14 }}>
           <Typography sx={{ marginBottom: 2 }}>Weight UOM:</Typography>
-          <TextField variant='filled' label='' value={dataRow.weight_uom} />
+          <TextField variant='filled' label='' value={dataRow.weight_uom || ''} />
         </Box>
       </Box>
       <Box sx={{ mt: 6, display: 'flex' }}>
@@ -237,7 +237,7 @@ const InventoryItem = ({ dataRow, dropDowns }) => {
 
             <Box sx={{ display: 'flex', width: 850 }}>
               <Box sx={{ width: '20%' }}>
-                <Typography variant='h6'>{getRowBarcodes.idx}</Typography>
+                <Typography variant='h6'>{getRowBarcodes.idx || ''}</Typography>
               </Box>
               <Box sx={{ width: '80%' }}>
                 <Button
@@ -273,15 +273,15 @@ const InventoryItem = ({ dataRow, dropDowns }) => {
                 <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ mt: 4 }}>
                     <Typography sx={{ marginBottom: 2 }}>Barcode*</Typography>
-                    <TextField variant='filled' label='' value={getRowBarcodes.barcode} />
+                    <TextField variant='filled' label='' value={getRowBarcodes.barcode || ''} />
                   </Box>
                   <Box sx={{ mt: 4 }}>
                     <Typography sx={{ marginBottom: 2 }}>Barcode Type</Typography>
-                    <TextField variant='filled' label='' value={getRowBarcodes.barcode_type} />
+                    <TextField variant='filled' label='' value={getRowBarcodes.barcode_type || ''} />
                   </Box>
                   <Box sx={{ mt: 4 }}>
                     <Typography sx={{ marginBottom: 2 }}>UOM</Typography>
-                    <TextField variant='filled' label='' value={getRowBarcodes.uom} />
+                    <TextField variant='filled' label='' value={getRowBarcodes.uom || ''} />
                   </Box>
                 </Box>
               </Box>

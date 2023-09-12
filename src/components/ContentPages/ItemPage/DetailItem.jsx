@@ -10,6 +10,8 @@ import {
   Checkbox,
   Collapse,
   Divider,
+  FormControlLabel,
+  Grid,
   IconButton,
   TextField,
   TextareaAutosize,
@@ -33,72 +35,58 @@ const DetailItem = ({ dataRow }) => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Box>
-            <Typography sx={{ margin: 1 }}>Item Name :</Typography>
-            <TextField size='small' variant='filled' value={dataRow.item_name} />
-          </Box>
-          <Box sx={{ mt: 4 }}>
-            <Typography sx={{ marginBottom: 2 }}>Item Group :</Typography>
-            <TextField size='small' variant='filled' label='' value={dataRow.item_group} />
-          </Box>
-        </Box>
+      <Grid container spacing={2} width={'100%'}>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <Typography sx={{ margin: 1 }}>Item Name :</Typography>
+          <TextField size='small' variant='filled' value={dataRow.item_name} fullWidth />
 
-        <Box sx={{ ml: 18, display: 'flex', flexDirection: 'column' }}>
-          <Box sx={{ display: 'flex' }}>
-            <Checkbox {...label} checked={dataRow.disabled} onChange={handleCheckboxChange} />
-            <Typography variant='subtitle2' sx={{ mt: 2 }}>
-              Disabled
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex' }}>
-            <Checkbox {...label} checked={dataRow.allow_alternative_item} onChange={handleCheckboxChange} />
-            <Typography variant='subtitle2' sx={{ mt: 2 }}>
-              Allow Alternative Item
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex' }}>
-            <Checkbox {...label} checked={dataRow.is_stock_item} onChange={handleCheckboxChange} />
-            <Typography variant='subtitle2' sx={{ mt: 2 }}>
-              Maintain Stock
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'flex' }}>
-            <Checkbox {...label} checked={dataRow.has_variants} onChange={handleCheckboxChange} />
-            <Typography variant='subtitle2' sx={{ mt: 2 }}>
-              Has Variants
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
-      <Box sx={{ display: 'flex', mt: 6 }}>
-        <Box>
+          <Typography sx={{ marginBottom: 2 }}>Item Group :</Typography>
+          <TextField size='small' variant='filled' label='' value={dataRow.item_group || ''} fullWidth />
+
           <Typography sx={{ marginBottom: 2 }}>Default Unit of Measure :</Typography>
-          <TextField size='small' variant='filled' label='' value={dataRow.stock_uom} />
-        </Box>
-        <Box sx={{ ml: 20 }}>
-          <Typography sx={{ marginBottom: 2 }}>Valuation Rate :</Typography>
-          <TextField size='small' variant='filled' label='' value={dataRow.valuation_rate} />
-          <Box sx={{ display: 'flex' }}>
-            <Checkbox {...label} checked={dataRow.is_fixed_asset} onChange={handleCheckboxChange} />
-            <Typography sx={{ m: 2 }}>Is Fixed Asset</Typography>
-          </Box>
-        </Box>
-      </Box>
-      <Box sx={{ display: 'flex', mt: 6 }}>
-        <Box sx={{ ml: 82 }}>
-          <Box>
-            <Typography sx={{ marginBottom: 2 }}>Over Delivery/Receipt Allowance (%) :</Typography>
-            <TextField size='small' variant='filled' label='' value={dataRow.over_delivery_receipt_allowance} />
-          </Box>
-          <Box sx={{ mt: 4 }}>
-            <Typography sx={{ marginBottom: 2 }}>Over Billing Allowance (%) :</Typography>
-            <TextField size='small' variant='filled' label='' value={dataRow.over_billing_allowance} />
-          </Box>
-        </Box>
-      </Box>
-      <Box sx={{ mt: 30, display: 'flex' }}>
+          <TextField size='small' variant='filled' label='' value={dataRow.stock_uo || ''} fullWidth />
+        </Grid>
+        <Grid item xs={12} sm={12} md={6} lg={6} sx={{ display: 'flex', flexDirection: 'column' }}>
+          <FormControlLabel
+            sx={{ mt: 2 }}
+            control={<Checkbox checked={Boolean(dataRow[0]?.disabled) || false} />}
+            label='Disabled'
+          />
+
+          <FormControlLabel
+            sx={{ mt: 2 }}
+            control={<Checkbox checked={Boolean(dataRow[0]?.allow_alternative_item) || false} />}
+            label=' Allow Alternative Item'
+          />
+
+          <FormControlLabel
+            sx={{ mt: 2 }}
+            control={<Checkbox checked={Boolean(dataRow[0]?.is_stock_item) || false} />}
+            label='Maintain Stock'
+          />
+          <FormControlLabel
+            sx={{ mt: 2 }}
+            control={<Checkbox checked={Boolean(dataRow[0]?.has_variants) || false} />}
+            label='Maintain Stock'
+          />
+
+          <Typography sx={{ marginBottom: 2 }}>Valuation Rate</Typography>
+          <TextField size='small' variant='filled' label='' value={dataRow.valuation_rate || ''} fullWidth />
+
+          <FormControlLabel
+            sx={{ mt: 2 }}
+            control={<Checkbox checked={Boolean(dataRow[0]?.is_fixed_asset) || false} />}
+            label='Is Fixed Asset'
+          />
+
+          <Typography sx={{ marginBottom: 2 }}>Over Delivery/Receipt Allowance (%) :</Typography>
+          <TextField size='small' variant='filled' label='' value={dataRow.over_delivery_receipt_allowance || ''} />
+
+          <Typography sx={{ marginBottom: 2 }}>Over Billing Allowance (%) :</Typography>
+          <TextField size='small' variant='filled' label='' value={dataRow.over_billing_allowance || ''} />
+        </Grid>
+      </Grid>
+      <Box sx={{ mt: 10, display: 'flex' }}>
         <Button size='small' variant='filled' label='' onClick={handleClickDescription}>
           <Typography variant='h6'>Description</Typography>
         </Button>
