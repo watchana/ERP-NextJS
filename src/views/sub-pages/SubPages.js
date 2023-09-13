@@ -130,7 +130,7 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype
       <Grid container justifyContent='center' columnSpacing={4}>
         {(!screenMD || !screenMDSelect) && (
           <Grid item xs>
-            <ContentLeft dataRow={data} handleRowClick={handleRowClick} />
+            <ContentLeft dataRow={data} doctype={doctype} handleRowClick={handleRowClick} />
           </Grid>
         )}
 
@@ -201,7 +201,7 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype
                         ))}
                       </Tabs>
                       {showContent.map((item, index) => (
-                        <TabPanel value={(index + 1).toString()} key={index + 1} sx={{ m: -3 }}>
+                        <TabPanel value={(index + 1).toString()} key={index + 1} sx={{ m: -3, width: '100%' }}>
                           {item}
                         </TabPanel>
                       ))}
@@ -214,7 +214,9 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype
                           </Typography>
                           <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
                           <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-                          <Button>add comment</Button>
+                          <Button variant='contained' sx={{ marginBlock: 2 }}>
+                            comment
+                          </Button>
                         </Grid>
                       </Grid>
                     </Card>

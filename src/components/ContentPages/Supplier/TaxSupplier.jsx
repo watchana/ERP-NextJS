@@ -2,27 +2,55 @@
 import React from 'react'
 
 // ** Mui Import
-import { Box, Grid, TextField, Typography } from '@mui/material'
+import { Box, Divider, Grid, TextField, Typography, Card } from '@mui/material'
 
-const TaxSupplier = () => {
+const TaxSupplier = dataRow => {
   return (
     <Box>
-      {/* ////////////////////////////////////// แถวที่ 1 ///////////////////////////////////////////// */}
-      <Grid container spacing={2}>
-        <Grid item sm={12} md={12} lg={6}>
-          <Typography sx={{ margin: 1 }}>Tax ID</Typography>
-          <TextField fullWidth size='small' variant='filled' />
-        </Grid>
-        <Grid item sm={12} md={12} lg={6}>
-          <Typography sx={{ marginBottom: 2 }}>Tax Category</Typography>
-          <TextField fullWidth size='small' variant='filled' label='' />
-          <Typography sx={{ marginBottom: 2 }}>Tax Wihholding Category</Typography>
-          <TextField fullWidth size='small' variant='filled' label='' />
-        </Grid>
+      <Card
+        sx={{
+          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
+          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
+          p: 2,
+          mb: 2
+        }}
+      >
+        {/* ////////////////////////////////////// แถวที่ 1 ///////////////////////////////////////////// */}
+        <Grid container spacing={2}>
+          <Grid item sm={12} md={12} lg={6}>
+            <Typography>Tax ID</Typography>
+            <TextField
+              sx={{ marginBottom: 5 }}
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow?.tax_id || ''}
+              fullWidth
+            />
+          </Grid>
+          <Grid item sm={12} md={12} lg={6}>
+            <Typography>Tax Category</Typography>
+            <TextField
+              sx={{ marginBottom: 5 }}
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow?.tax_category || ''}
+              fullWidth
+            />
 
-        <Typography variant=''>Add a comment:</Typography>
-        <TextField size='small' variant='filled' label='' multiline rows={8} fullWidth />
-      </Grid>
+            <Typography>Tax Wihholding Category</Typography>
+            <TextField
+              sx={{ marginBottom: 5 }}
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow?.tax_withholding_category || ''}
+              fullWidth
+            />
+          </Grid>
+        </Grid>
+      </Card>
     </Box>
   )
 }
