@@ -17,8 +17,6 @@ import {
   Checkbox
 } from '@mui/material'
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
-
-import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid'
 
 // ** Mdi Import
@@ -27,7 +25,6 @@ import ChevronDown from 'mdi-material-ui/ChevronDown'
 import Icon from '@mdi/react'
 import { mdiPencil } from '@mdi/js'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import Btn from 'src/components/Button/Button'
 
 const DetailSalesInvoice = ({ dataRow }) => {
   // ** State
@@ -95,8 +92,6 @@ const DetailSalesInvoice = ({ dataRow }) => {
 
   /*  checkbox */
   const handleCheckboxChange = event => {
-    // เมื่อ Checkbox ถูกเปลี่ยนแปลงสถานะ
-    // คุณสามารถทำสิ่งที่คุณต้องการเมื่อ Checkbox ถูกเปิดหรือปิดที่นี่
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
   }
 
@@ -145,10 +140,11 @@ const DetailSalesInvoice = ({ dataRow }) => {
     const timeParts = timeString.split(':')
     const hours = timeParts[0]
     const minutes = timeParts[1]
+    const formattedTime = `${hours}:${minutes}`
 
-    return `${hours}:${minutes}`
+    return formattedTime
   }
-  const formattedTime = formatTime(dataRow.posting_time)
+  const formattedTime = formatTime(dataRow?.posting_time || '')
 
   function formatCurrency(params) {
     const formattedValue = new Intl.NumberFormat('th-TH', {
@@ -161,25 +157,9 @@ const DetailSalesInvoice = ({ dataRow }) => {
   }
   const isLGScreen = useMediaQuery(theme => theme.breakpoints.up('lg'))
 
-  const [quotation, setQuotation] = useState([])
   useEffect(() => {
-    axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}Sales%20Invoice/${dataRow.name}`, {
-        headers: {
-          Authorization: 'token 5891d01ccc2961e:0e446b332dc22aa'
-        }
-      })
-      .then(res => {
-        setQuotation(res.data.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    console.log('test', dataRow.taxes)
   }, [dataRow])
-
-  // useEffect(() => {
-  //   console.log('quotation', quotation)
-  // }, [quotation])
 
   const columns = [
     { field: 'item_name', headerName: 'Item', width: 150 },
@@ -218,7 +198,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
     }
   ]
 
-  if (quotation.length === 0) {
+  if (dataRow.length === 0) {
     return 'waiting...'
   }
 
@@ -347,7 +327,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
         <div>
           <DataGrid
             sx={{ width: 'full', mt: 6 }}
-            rows={quotation.items}
+            rows={dataRow?.items || []}
             columns={columns}
             getRowId={row => row.name}
             initialState={{
@@ -380,9 +360,6 @@ const DetailSalesInvoice = ({ dataRow }) => {
             <DialogContent>
               <Card sx={{ width: '100%', p: 5 }}>
                 <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center' }}>
-                  {/* {Object.values(quotation.items)?.map(item => ( */}
-                  {/* ))} */}
-
                   <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
                     <Grid item xs={12} sm={12} md={6} lg={6}>
                       <Typography>Item</Typography>
@@ -1059,7 +1036,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
         <Grid container spacing={2} width={'100%'}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Typography>Total Quantity</Typography>
-            <TextField sx={{ marginBottom: 5 }} size='small' variant='filled' fullWidth value={quotation.currency} />
+            <TextField sx={{ marginBottom: 5 }} size='small' variant='filled' fullWidth value={dataRow.currency} />
           </Grid>
 
           <Grid item xs={12} sm={12} md={6} lg={6}>
@@ -1069,7 +1046,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
               size='small'
               variant='filled'
               fullWidth
-              value={`฿ ${parseFloat(quotation.total).toLocaleString('en-US', {
+              value={`฿ ${parseFloat(dataRow.total).toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })}`}
@@ -1081,7 +1058,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
               variant='filled'
               fullWidth
               label=''
-              value={`฿ ${parseFloat(quotation.total_taxes_and_charges).toLocaleString('en-US', {
+              value={`฿ ${parseFloat(dataRow.total_taxes_and_charges).toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })}`}
@@ -1091,10 +1068,10 @@ const DetailSalesInvoice = ({ dataRow }) => {
 
         {/* /                   แสดงข่อมูลชุด ที่ใน Datagit ตารางที่2 แสดงเมื่อมีข้อมูล                            / */}
         <Box>
-          {quotation.taxes.length > 0 ? (
+          {dataRow?.taxes?.length > 0 && (
             <DataGrid
               sx={{ width: 'full', mt: 6 }}
-              rows={quotation.taxes}
+              rows={dataRow?.taxes || []} // Use optional chaining for dataRow.taxes
               columns={column}
               getRowId={row => row.name}
               initialState={{
@@ -1105,8 +1082,6 @@ const DetailSalesInvoice = ({ dataRow }) => {
               pageSizeOptions={[5, 10]}
               onRowClick={handleRowClickDtb2}
             />
-          ) : (
-            <p></p>
           )}
 
           {/* Popup Dialog */}
@@ -1301,7 +1276,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
               variant='filled'
               fullWidth
               label=''
-              value={`฿ ${parseFloat(quotation.grand_total).toLocaleString('en-US', {
+              value={`฿ ${parseFloat(dataRow.grand_total).toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })}`}
@@ -1312,7 +1287,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
               size='small'
               variant='filled'
               fullWidth
-              value={`฿ ${parseFloat(quotation.rounding_adjustment).toLocaleString('en-US', {
+              value={`฿ ${parseFloat(dataRow.rounding_adjustment).toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })}`}
@@ -1331,7 +1306,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
               variant='filled'
               fullWidth
               label=''
-              value={`฿ ${parseFloat(quotation.rounded_total).toLocaleString('en-US', {
+              value={`฿ ${parseFloat(dataRow.rounded_total).toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })}`}
@@ -1346,7 +1321,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
               variant='filled'
               fullWidth
               label=''
-              value={quotation.in_words}
+              value={dataRow.in_words}
             />
 
             <Typography>Total Advance</Typography>
@@ -1359,7 +1334,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
               variant='filled'
               fullWidth
               label=''
-              value={`฿ ${parseFloat(quotation.total_advance).toLocaleString('en-US', {
+              value={`฿ ${parseFloat(dataRow.total_advance).toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })}`}
@@ -1372,7 +1347,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
               variant='filled'
               fullWidth
               label=''
-              value={`฿ ${parseFloat(quotation.outstanding_amount).toLocaleString('en-US', {
+              value={`฿ ${parseFloat(dataRow.outstanding_amount).toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })}`}
@@ -1436,7 +1411,7 @@ const DetailSalesInvoice = ({ dataRow }) => {
                   variant='filled'
                   fullWidth
                   label=''
-                  value={`฿ ${parseFloat(quotation.discount_amount).toLocaleString('en-US', {
+                  value={`฿ ${parseFloat(dataRow.discount_amount).toLocaleString('en-US', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
                   })}`}

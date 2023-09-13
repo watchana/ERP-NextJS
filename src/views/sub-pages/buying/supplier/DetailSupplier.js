@@ -59,7 +59,7 @@ const DetailSupplier = ({ dataRow }) => {
         {/* ////////////////////////////////////// แถวที่ 1 ///////////////////////////////////////////// */}
         <Grid container spacing={2} width={'100%'}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Typography>Supplier Name * :</Typography>
+            <Typography>Supplier Name * </Typography>
             <TextField
               sx={{ marginBottom: 5 }}
               size='small'
@@ -67,7 +67,7 @@ const DetailSupplier = ({ dataRow }) => {
               fullWidth
               value={dataRow?.supplier_name}
             />
-            <Typography>Country :</Typography>
+            <Typography>Country </Typography>
             <TextField
               sx={{ marginBottom: 5 }}
               size='small'
@@ -78,7 +78,7 @@ const DetailSupplier = ({ dataRow }) => {
             />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6} sx={{ mb: 5, display: 'flex', flexDirection: 'column' }}>
-            <Typography>Supplier Group * :</Typography>
+            <Typography>Supplier Group * </Typography>
             <TextField
               sx={{ marginBottom: 5 }}
               size='small'
@@ -87,7 +87,7 @@ const DetailSupplier = ({ dataRow }) => {
               label=''
               value={dataRow?.supplier_group}
             />
-            <Typography>Pupplier Type :</Typography>
+            <Typography>Pupplier Type </Typography>
             <DorpdownButton />
             <FormControlLabel
               sx={{ mt: 2 }}
@@ -141,9 +141,8 @@ const DetailSupplier = ({ dataRow }) => {
               )}
             </IconButton>
           </Box>
-          <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
+
           <Collapse in={internalSupplier}>
-            <Divider sx={{ margin: 0 }} />
             <CardContent>
               <FormGroup>
                 <FormControlLabel
@@ -156,6 +155,7 @@ const DetailSupplier = ({ dataRow }) => {
             </CardContent>
           </Collapse>
         </Grid>
+        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
         <Grid container>
           <Box sx={{ width: '100%' }}>
             <Button size='small' variant='filled' onClick={handleClickMoreInformation}>
@@ -174,20 +174,20 @@ const DetailSupplier = ({ dataRow }) => {
               <Divider sx={{ margin: 0 }} />
               <CardContent sx={{ width: '100%' }}>
                 <Grid container spacing={2} width={'100%'}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
+                  <Grid item xs={12}>
                     <Typography>Supplier Details</Typography>
                     <TextareaAutosize
-                      fullWidth={true} // หรือใช้ fullWidth={false} ถ้าคุณต้องการปิดการใช้งาน
+                      fullWidth={false}
                       style={{
                         minHeight: '200px',
                         width: '100%',
-                        maxWidth: 'auto',
-                        minWidth: 'auto',
+                        maxWidth: '100%',
+                        minWidth: '300px',
                         overflow: 'hidden'
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
+                  <Grid item xs={12}>
                     <Typography>Website</Typography>
                     <TextField
                       sx={{ marginBottom: 5 }}
