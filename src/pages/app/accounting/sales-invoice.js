@@ -9,14 +9,14 @@ import SubPages from 'src/views/sub-pages/SubPages'
 import { SalesInvoiceContentMenu } from 'src/dummy/contentPages/salesInvoice'
 
 // ** Custom Components
+import DetailSalesInvoice from 'src/views/sub-pages/accounting/sales-invoice/DetailSalesInvoice'
+import Payments from 'src/views/sub-pages/accounting/sales-invoice/PaymentsSalesInvoice'
+import ContactAddressSalesinvoice from 'src/views/sub-pages/accounting/sales-invoice/ContactAddressSalesInvoice'
+import TermsSalesInvoice from 'src/views/sub-pages/accounting/sales-invoice/TermsSalesInvoice'
+import MoreinfoSalesinvoice from 'src/views/sub-pages/accounting/sales-invoice/MoreinfoSalesInvoice'
 
 // ** Layouts
-import DetailSalesInvoice from 'src/components/ContentPages/SalesInvoice/DetailSalesInvoice'
-import Payments from 'src/components/ContentPages/SalesInvoice/PaymentsSalesinvoice'
-import ContactAddressSalesinvoice from 'src/components/ContentPages/SalesInvoice/ContactAddressSalesinvoice'
 import SubPageLayout from 'src/@core/layouts/SubPageLayout'
-import TermsSalesInvoice from 'src/components/ContentPages/SalesInvoice/TermsSalesInvoice'
-import MoreinfoSalesinvoice from 'src/components/ContentPages/SalesInvoice/MoreinfoSalesinvoice'
 
 const SalesInvoice = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
@@ -36,6 +36,7 @@ const SalesInvoice = ({ data }) => {
       showContent={showContent}
       dataRow={dataRow}
       setDataRow={setDataRow}
+      doctype='Sales Invoice'
     />
   )
 }
