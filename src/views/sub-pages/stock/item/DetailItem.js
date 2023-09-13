@@ -62,6 +62,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
           <Grid item xs={12} sm={6}>
             <Typography sx={{ margin: 1 }}>Item Name</Typography>
             <TextField
+              fullWidth
               size='small'
               variant='filled'
               value={dataRow.item_name || ''}
@@ -72,6 +73,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
           <Grid item xs={12} sm={6}>
             <Typography sx={{ marginBottom: 2 }}>Item Group</Typography>
             <TextField
+              fullWidth
               size='small'
               variant='filled'
               label=''
@@ -111,6 +113,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
           <Grid item xs={12} sm={6}>
             <Typography sx={{ marginBottom: 2 }}>Default Unit of Measure</Typography>
             <TextField
+              fullWidth
               size='small'
               variant='filled'
               label=''
@@ -122,6 +125,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
           <Grid item xs={12} sm={6}>
             <Typography sx={{ marginBottom: 2 }}>Valuation Rate</Typography>
             <TextField
+              fullWidth
               size='small'
               variant='filled'
               label=''
@@ -141,6 +145,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
           <Grid item xs={12} sm={6}>
             <Typography sx={{ marginBottom: 2 }}>Over Delivery / Receipt Allowance (%)</Typography>
             <TextField
+              fullWidth
               size='small'
               variant='filled'
               value={dataRow.over_delivery_receipt_allowance || ''}
@@ -151,6 +156,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
           <Grid item xs={12} sm={6} sx={{ alignSelf: 'flex-end' }}>
             <Typography sx={{ marginBottom: 2 }}>Over Billing Allowance (%)</Typography>
             <TextField
+              fullWidth
               size='small'
               variant='filled'
               label=''
@@ -174,6 +180,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
                 <Box>
                   <Typography variant='subtitle2'>Description</Typography>
                   <TextField
+                    fullWidth
                     multiline
                     rows={4}
                     value={dataRow.description || ''}
@@ -183,7 +190,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
                 </Box>
                 <Box>
                   <Typography variant='subtitle1'>Brand</Typography>
-                  <TextField size='small' variant='filled' />
+                  <TextField fullWidth size='small' variant='filled' />
                 </Box>
               </CardContent>
             </Collapse>
