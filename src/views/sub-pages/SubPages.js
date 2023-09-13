@@ -214,7 +214,9 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype
                           </Typography>
                           <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
                           <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-                          <Button>add comment</Button>
+                          <Button variant='contained' sx={{ marginBlock: 2 }}>
+                            comment
+                          </Button>
                         </Grid>
                       </Grid>
                     </Card>
