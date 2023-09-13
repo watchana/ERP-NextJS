@@ -1,6 +1,9 @@
 // ** React Imports
 import React, { useEffect, useState } from 'react'
 
+// ** Axios Imports
+import axios from 'axios'
+
 // ** MUI Imports
 import { Box, Button, Card, Divider, Grid, IconButton, Tab, Tabs, TextField, Typography } from '@mui/material'
 import { TabPanel, TabContext } from '@mui/lab' // Import TabContext
@@ -19,7 +22,7 @@ import ContentLeft from 'src/views/sub-pages/ContentLeft'
 
 const IconButtonStyle = { bgcolor: 'white', borderRadius: 1, border: '1px solid #E0E0E0', mx: 0.5 }
 
-const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
+const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype }) => {
   const contentSizeInit = 7
 
   // ** States
@@ -71,7 +74,20 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
   }
 
   const handleRowClick = params => {
-    setDataRow(params)
+    console.log('params:', params.name)
+    console.log('path: ', `${process.env.NEXT_PUBLIC_API_URL}${doctype}/${params.name}`)
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}${doctype}/${params.name}`, {
+        headers: {
+          Authorization: process.env.NEXT_PUBLIC_API_TOKEN
+        }
+      })
+      .then(res => {
+        setDataRow(res.data.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
     setSideContentOpen(true)
     setScreenMDSelect(true)
   }
@@ -144,7 +160,7 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
                         {dataRow.name}
                       </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'row',mr: 3 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', mr: 3 }}>
                       <IconButton onClick={() => handleArrowLeft()} sx={IconButtonStyle}>
                         <KeyboardArrowLeftIcon />
                       </IconButton>

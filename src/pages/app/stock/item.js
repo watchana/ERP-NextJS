@@ -44,6 +44,7 @@ const ItemPage = ({ data }) => {
       showContent={showContent}
       dataRow={dataRow}
       setDataRow={setDataRow}
+      doctype='Item'
     />
   )
 }

@@ -68,12 +68,28 @@ const App = ({ Component, initialIsLoggedIn, ...rest }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.post('/api/logger', { token: token })
-        if (res.status !== 200 && router.pathname !== '/pages/login') {
+        if (!token) {
           localStorage.removeItem('userData')
-          router.push('/pages/login')
-        } else if (res.status === 200 && router.pathname === '/pages/login') {
-          router.push('/')
+          if (router.pathname !== '/pages/login') {
+            router.push('/pages/login')
+          }
+        } else {
+          const userData = JSON.parse(localStorage.getItem('userData'))
+          console.log('userData', userData)
+          if (userData === null || Object.keys(userData).length === 0) {
+            localStorage.removeItem('userData')
+            if (router.pathname !== '/pages/login') {
+              router.push('/pages/login')
+            }
+          } else {
+            const res = await axios.post('/api/logger', { token: token })
+            if (res.status !== 200 && router.pathname !== '/pages/login') {
+              localStorage.removeItem('userData')
+              router.push('/pages/login')
+            } else if (res.status === 200 && router.pathname === '/pages/login') {
+              router.push('/')
+            }
+          }
         }
       } catch (error) {
         console.error('ErrorApp:', error)

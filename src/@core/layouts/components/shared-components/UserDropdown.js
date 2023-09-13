@@ -96,7 +96,7 @@ const UserDropdown = () => {
         badgeContent={<BadgeContentSpan />}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <Avatar alt='John Doe' onClick={handleDropdownOpen} sx={{ width: 40, height: 40 }} src={userData.userImage} />
+        <Avatar alt='John Doe' onClick={handleDropdownOpen} sx={{ width: 40, height: 40 }} src={userData?.userImage} />
       </Badge>
       <Menu
         anchorEl={anchorEl}
@@ -113,18 +113,18 @@ const UserDropdown = () => {
               badgeContent={<BadgeContentSpan />}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             >
-              <Avatar alt='John Doe' src={userData.userImage} sx={{ width: '2.5rem', height: '2.5rem' }} />
+              <Avatar alt='John Doe' src={userData?.userImage} sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
               {/* 
               // ? Name
                */}
-              <Typography sx={{ fontWeight: 600 }}>{userData.userName}</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{userData?.userName}</Typography>
               {/* 
               // ? Role 
                */}
               <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
-                {userData.userRole}
+                {userData?.userRole}
               </Typography>
             </Box>
           </Box>
