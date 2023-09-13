@@ -29,7 +29,6 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { useEffect } from 'react'
 import axios from 'axios'
-import Btn from 'src/components/Button/Button'
 import { DataGrid } from '@mui/x-data-grid'
 import { ChevronDown, ChevronUp } from 'mdi-material-ui'
 
@@ -108,7 +107,6 @@ const ContactAddressSalesinvoice = ({ dataRow }) => {
   }
 
   const [dataAddress, setDataAddress] = useState('')
-  const [dataContact, setDataContact] = useState('')
   const [dataCustomer, setDataCustomer] = useState([])
   const [isInternalCustomer, setIsInternalSupplier] = useState(false)
 
@@ -162,18 +160,15 @@ const ContactAddressSalesinvoice = ({ dataRow }) => {
       })
   }, [dataRow])
 
-  // useEffect(() => {
-  //   console.log('Supplier', dataRow)
-  // })
-  // useEffect(() => {
-  //   console.log('Address', dataAddress)
-  // })
-  // useEffect(() => {
-  //   console.log('Contact', dataContact)
-  // })
-  // useEffect(() => {
-  //   console.log('Customer', dataCustomer)
-  // }, [dataCustomer])
+  useEffect(() => {
+    console.log('Supplier', dataRow)
+  })
+  useEffect(() => {
+    console.log('Address', dataAddress)
+  })
+  useEffect(() => {
+    console.log('Customer', dataCustomer)
+  }, [dataCustomer])
 
   return (
     <Box>

@@ -3,21 +3,20 @@ import React from 'react'
 
 // ** Axios Imports
 import axios from 'axios'
-import SubPages from 'src/views/sub-pages/SubPages'
 
 // ** Dummy Data
 
-import DetailSupplier from 'src/components/ContentPages/Supplier/DetailSupplier'
-import Dashboard_sup from 'src/components/ContentPages/Supplier/DashboardSupplier'
-import TaxSupplier from 'src/components/ContentPages/Supplier/TaxSupplier'
-import Contact_Address from 'src/components/ContentPages/Supplier/Contact_Address'
-import Accounting from 'src/components/ContentPages/Supplier/AccountingSupplier'
-import SettingsSupplier from 'src/components/ContentPages/Supplier/SettingsSupplier'
-import PortalUserSupplier from 'src/components/ContentPages/Supplier/PortalUsersSupplier'
+// ** Custom Components
+import SubPages from 'src/views/sub-pages/SubPages'
+import DetailSupplier from 'src/views/sub-pages/buying/supplier/DetailSupplier'
+import Dashboard_sup from 'src/views/sub-pages/buying/supplier/DashboardSupplier'
+import TaxSupplier from 'src/views/sub-pages/buying/supplier/TaxSupplier'
+import Contact_Address from 'src/views/sub-pages/buying/supplier/ContactAddressSupplie'
+import Accounting from 'src/views/sub-pages/buying/supplier/AccountingSupplier'
+import SettingsSupplier from 'src/views/sub-pages/buying/supplier/SettingsSupplier'
+import PortalUserSupplier from 'src/views/sub-pages/buying/supplier/PortalUsersSupplier'
 import SubPageLayout from 'src/@core/layouts/SubPageLayout'
 import { SupplierContentMenu } from 'src/dummy/contentPages/supplierPage'
-
-// ** Custom Components
 
 // ** Layouts
 
@@ -41,6 +40,7 @@ const SupplierPage = ({ data }) => {
       showContent={showContent}
       dataRow={dataRow}
       setDataRow={setDataRow}
+      doctype='Supplier'
     />
   )
 }

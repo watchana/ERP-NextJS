@@ -557,6 +557,7 @@ const Contact_Address = ({ dataRow }) => {
                     }}
                   >
                     <DialogContent>
+                      <DialogTitle>Edit Contact</DialogTitle>
                       <Card sx={{ width: '100%', p: 5 }}>
                         <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center' }}>
                           <Grid item sm={12} md={6} lg={6}>
