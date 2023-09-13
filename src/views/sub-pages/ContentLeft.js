@@ -3,12 +3,12 @@ import { Box, Card, Chip, Button, Typography } from '@mui/material'
 
 // ** Components
 
-const ContentLeft = ({ menuColumn, dataRow, handleRowClick }) => {
+const ContentLeft = ({ menuColumn, dataRow, handleRowClick, doctype }) => {
   return (
     <Box sx={{ px: 2 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
         <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-          Item
+          {doctype}
         </Typography>
       </Box>
       <Card>

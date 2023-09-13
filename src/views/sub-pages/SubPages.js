@@ -130,7 +130,7 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype
       <Grid container justifyContent='center' columnSpacing={4}>
         {(!screenMD || !screenMDSelect) && (
           <Grid item xs>
-            <ContentLeft dataRow={data} handleRowClick={handleRowClick} />
+            <ContentLeft dataRow={data} doctype={doctype} handleRowClick={handleRowClick} />
           </Grid>
         )}
 

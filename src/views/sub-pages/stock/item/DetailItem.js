@@ -27,8 +27,6 @@ const DetailItem = ({ dataRow }) => {
     setCollapseDescription(!collapseDescription)
   }
 
-  const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-
   const handleCheckboxChange = event => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
   }
@@ -63,25 +61,21 @@ const DetailItem = ({ dataRow }) => {
             <TextField fullWidth size='small' variant='filled' label='' value={dataRow.item_group} />
           </Grid>
           <Grid item xs={12} sm={6} sx={checkboxStyle}>
-            <Checkbox {...label} checked={dataRow.disabled === 1 ? true : false} onChange={handleCheckboxChange} />
+            <Checkbox checked={dataRow.disabled === 1 ? true : false} onChange={handleCheckboxChange} />
             <Typography fullWidth variant='subtitle2'>
               Disabled
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6} sx={checkboxStyle}>
-            <Checkbox
-              {...label}
-              checked={dataRow.allow_alternative_item === 1 ? true : false}
-              onChange={handleCheckboxChange}
-            />
+            <Checkbox checked={dataRow.allow_alternative_item === 1 ? true : false} onChange={handleCheckboxChange} />
             <Typography variant='subtitle2'>Allow Alternative Item</Typography>
           </Grid>
           <Grid item xs={12} sm={6} sx={checkboxStyle}>
-            <Checkbox {...label} checked={dataRow.is_stock_item === 1 ? true : false} onChange={handleCheckboxChange} />
+            <Checkbox checked={dataRow.is_stock_item === 1 ? true : false} onChange={handleCheckboxChange} />
             <Typography variant='subtitle2'>Maintain Stock</Typography>
           </Grid>
           <Grid item xs={12} sm={6} sx={checkboxStyle}>
-            <Checkbox {...label} checked={dataRow.has_variants === 1 ? true : false} onChange={handleCheckboxChange} />
+            <Checkbox checked={dataRow.has_variants === 1 ? true : false} onChange={handleCheckboxChange} />
             <Typography variant='subtitle2'>Has Variants</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -92,23 +86,13 @@ const DetailItem = ({ dataRow }) => {
             <Typography sx={{ marginBottom: 2 }}>Valuation Rate</Typography>
             <TextField fullWidth size='small' variant='filled' label='' value={dataRow.valuation_rate} />
             <Box sx={{ display: 'flex' }}>
-              <Checkbox
-                {...label}
-                checked={dataRow.is_fixed_asset === 1 ? true : false}
-                onChange={handleCheckboxChange}
-              />
+              <Checkbox checked={dataRow.is_fixed_asset === 1 ? true : false} onChange={handleCheckboxChange} />
               <Typography sx={{ m: 2 }}>Is Fixed Asset</Typography>
             </Box>
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography sx={{ marginBottom: 2 }}>Over Delivery / Receipt Allowance (%)</Typography>
-            <TextField
-              fullWidth
-              size='small'
-              variant='filled'
-              label=''
-              value={dataRow.over_delivery_receipt_allowance}
-            />
+            <TextField fullWidth size='small' variant='filled' value={dataRow.over_delivery_receipt_allowance} />
           </Grid>
           <Grid item xs={12} sm={6} sx={{ alignSelf: 'flex-end' }}>
             <Typography sx={{ marginBottom: 2 }}>Over Billing Allowance (%)</Typography>
