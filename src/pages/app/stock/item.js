@@ -33,8 +33,8 @@ const ItemPage = ({ data }) => {
     <PurchasingItem key='purchasing' dataRow={dataRow} />,
     <SalesItem key='sales' dataRow={dataRow} />,
     <TexItem key='tex' />,
-    <QualityItem key='quality' dataRow={dataRow} />,
-    <ManufacturingItem key='manufacturing' dataRow={dataRow} />
+    <QualityItem key='quality' dataRow={dataRow} setDataRow={setDataRow} />,
+    <ManufacturingItem key='manufacturing' dataRow={dataRow} setDataRow={setDataRow} />
   ]
 
   return (
