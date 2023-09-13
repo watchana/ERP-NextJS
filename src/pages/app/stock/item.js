@@ -26,7 +26,7 @@ const ItemPage = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
 
   const showContent = [
-    <DetailItem key='detail' dataRow={dataRow} />,
+    <DetailItem key='detail' dataRow={dataRow} setDataRow={setDataRow} />,
     <DashboardItem key='dashboard' />,
     <InventoryItem key='inventory' dataRow={dataRow} dropDowns={defaultMaterialRequestType} />,
     <AccountingItem key='accounting' dataRow={dataRow} />,
