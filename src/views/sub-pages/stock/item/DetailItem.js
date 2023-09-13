@@ -54,8 +54,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
           borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
           borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
           p: 2,
-          mb: 2,
-          width: '100%'
+          mb: 2
         }}
       >
         <Grid container spacing={2}>

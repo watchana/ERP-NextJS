@@ -2,7 +2,7 @@
 import React from 'react'
 
 // MUI imports
-import { Box, Typography, TextField, Button } from '@mui/material'
+import { Box, Typography, TextField, Button, Card } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
 const TexItem = () => {
@@ -28,17 +28,27 @@ const TexItem = () => {
 
   return (
     <Box>
-      <Typography variant='subtitle2'>Taxes</Typography>
-      <Typography variant='subtitle2'>Will also apply for variants</Typography>
-      <Box sx={{ mt: 4 }}>
-        <DataGrid rows={rowTax} columns={columnsTax} checkboxSelection disableRowSelectionOnClick />
-      </Box>
-      <Box sx={{ mt: 10 }}>
-        <Typography>Add a comment</Typography>
-        <TextField variant='filled' label='' multiline rows={6} fullWidth />
-        <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-        <Button>add comment</Button>
-      </Box>
+      <Card
+        sx={{
+          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
+          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
+          p: 2,
+          mb: 2,
+          width: '100%'
+        }}
+      >
+        <Typography variant='subtitle2'>Taxes</Typography>
+        <Typography variant='subtitle2'>Will also apply for variants</Typography>
+        <Box sx={{ mt: 4 }}>
+          <DataGrid rows={rowTax} columns={columnsTax} checkboxSelection disableRowSelectionOnClick />
+        </Box>
+        <Box sx={{ mt: 10 }}>
+          <Typography>Add a comment</Typography>
+          <TextField variant='filled' label='' multiline rows={6} fullWidth />
+          <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
+          <Button>add comment</Button>
+        </Box>
+      </Card>
     </Box>
   )
 }

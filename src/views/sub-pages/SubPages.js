@@ -201,7 +201,7 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype
                         ))}
                       </Tabs>
                       {showContent.map((item, index) => (
-                        <TabPanel value={(index + 1).toString()} key={index + 1} sx={{ m: -3, width: '100%' }}>
+                        <TabPanel value={(index + 1).toString()} key={index + 1} sx={{ m: -3 }}>
                           {item}
                         </TabPanel>
                       ))}
