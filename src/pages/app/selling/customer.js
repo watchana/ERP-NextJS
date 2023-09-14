@@ -30,9 +30,9 @@ const CustomerPage = ({ data }) => {
   }, [dataRow])
 
   const showContent = [
-    <DetailCustomer key='detail' dataRow={dataRow} />,
+    <DetailCustomer key='detail' dataRow={dataRow} setDataRow={setDataRow} />,
     <DashboardCustomer key='dashboard' dataRow={dataRow} />,
-    <ContactAndAddress key='ContactAndAddress' dataRow={dataRow} />,
+    <ContactAndAddress key='ContactAndAddress' dataRow={dataRow} setDataRow={setDataRow} />,
     <TaxCustomer key='Tax' dataRow={dataRow} />,
     <AccountingCustomer key='Accounting' dataRow={dataRow} />,
     <SalesTeamCustomer key='salesTeam' dataRow={dataRow} />,

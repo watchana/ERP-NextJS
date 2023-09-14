@@ -28,7 +28,7 @@ import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid'
 import { ChevronDown, ChevronUp } from 'mdi-material-ui'
 
-const ContactAndAddress = ({ dataRow }) => {
+const ContactAndAddress = ({ dataRow, setDataRow }) => {
   const [isOpenAddress, setIsOpenAddress] = useState(false)
   const [address_title, setAddressTitle] = useState('')
   const [email_address, setEmailAddress] = useState('')
@@ -165,6 +165,27 @@ const ContactAndAddress = ({ dataRow }) => {
 
   const { Preferred_Billing_Address, Preferred_Shipping_Addressn, Disabled } = state
 
+  const handleCheckboxChangeAddr = event => {
+    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
+    setDataAddr({ ...dataAddr, [event.target.name]: event.target.checked })
+  }
+
+  const handleTextChangeAddress = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setDataAddr({ ...dataAddr, [event.target.name]: event.target.value })
+  }
+
+  const handleTextChangeContact = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setDataContact({ ...dataContact, [event.target.name]: event.target.value })
+  }
+
+  const checkboxStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  }
+
   return (
     <Box>
       <Card
@@ -209,14 +230,15 @@ const ContactAndAddress = ({ dataRow }) => {
                     <DialogTitle>Edit</DialogTitle>
                     <DialogContent sx={{ minWidth: 600, width: '100%', height: '100%' }}>
                       <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Grid item sm={12} md={6} lg={6}>
+                        <Grid item xs={12} sm={12} md={6} lg={6}>
                           <Typography sx={{ margin: 1 }}>Address Title</Typography>
                           <TextField
                             size='small'
                             variant='filled'
                             value={dataAddr.address_title}
                             fullWidth
-                            onChange={e => setAddressTitle(e.target.value)}
+                            onChange={handleTextChangeAddress}
+                            name='address_title'
                           />
                           <Typography sx={{ marginBottom: 2 }}>Address Type</Typography>
 
@@ -236,7 +258,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataAddr.address_line1}
-                            onChange={e => setAddress_L1(e.target.value)}
+                            onChange={handleTextChangeAddress}
+                            name='address_line1'
                           />
 
                           <Typography sx={{ margin: 1 }}>Address Line 2 </Typography>
@@ -246,7 +269,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataAddr.address_line2}
-                            onChange={e => setAddress_L2(e.target.value)}
+                            onChange={handleTextChangeAddress}
+                            name='address_line2'
                           />
 
                           <Typography sx={{ margin: 1 }}>City/Town </Typography>
@@ -256,7 +280,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataAddr.city}
-                            onChange={e => setCityTown(e.target.value)}
+                            onChange={handleTextChangeAddress}
+                            name='city'
                           />
 
                           <Typography sx={{ margin: 1 }}>County </Typography>
@@ -266,7 +291,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataAddr.county}
-                            onChange={e => setCounty(e.target.value)}
+                            onChange={handleTextChangeAddress}
+                            name='county'
                           />
 
                           <Typography sx={{ margin: 1 }}>State/Province </Typography>
@@ -276,7 +302,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataAddr.state}
-                            onChange={e => setStateProvince(e.target.value)}
+                            onChange={handleTextChangeAddress}
+                            name='state'
                           />
 
                           <Typography sx={{ margin: 1 }}>Country </Typography>
@@ -286,7 +313,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataAddr.country}
-                            onChange={e => setCounty_E(e.target.value)}
+                            onChange={handleTextChangeAddress}
+                            name='country'
                           />
 
                           <Typography sx={{ margin: 1 }}>Postal Code </Typography>
@@ -296,7 +324,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataAddr.pincode}
-                            onChange={e => setPostalCode(e.target.value)}
+                            onChange={handleTextChangeAddress}
+                            name='pincode'
                           />
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={6}>
@@ -307,7 +336,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataAddr.email_id}
-                            onChange={e => setEmailAddress(e.target.value)}
+                            onChange={handleTextChangeAddress}
+                            name='email_id'
                           />
 
                           <Typography sx={{ margin: 1 }}>Phone </Typography>
@@ -317,7 +347,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataAddr.phone}
-                            onChange={e => setPhone(e.target.value)}
+                            onChange={handleTextChangeAddress}
+                            name='phone'
                           />
 
                           <Typography sx={{ margin: 1 }}>Fax </Typography>
@@ -325,8 +356,10 @@ const ContactAndAddress = ({ dataRow }) => {
                             size='small'
                             variant='filled'
                             type='text'
+                            fullWidth
                             value={dataAddr.fax}
-                            onChange={e => setFax(e.target.value)}
+                            onChange={handleTextChangeAddress}
+                            name='fax'
                           />
 
                           <Typography sx={{ margin: 1 }}>Tax Category </Typography>
@@ -336,20 +369,19 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataAddr.tax_category}
-                            onChange={e => setTaxCategory(e.target.value)}
+                            onChange={handleTextChangeAddress}
+                            name='tax_category'
                           />
-
-                          <FormGroup>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={Preferred_Billing_Address}
-                                  onChange={handleChange}
-                                  name='Preferred_Billing_Address'
-                                />
-                              }
-                              label='Preferred Billing Address'
+                          <Grid item xs={12} sx={checkboxStyle}>
+                            <Checkbox
+                              checked={dataRow.is_primary_address === 1 ? true : false}
+                              name='is_primary_address'
+                              onChange={handleCheckboxChangeAddr}
                             />
+                            <Typography variant='subtitle2'>Preferred Billing Address</Typography>
+                          </Grid>
+                          {/* <FormGroup>
+                            
                             <FormControlLabel
                               control={
                                 <Checkbox
@@ -365,7 +397,7 @@ const ContactAndAddress = ({ dataRow }) => {
                               control={<Checkbox checked={Disabled} onChange={handleChange} name='Disabled' />}
                               label='Disabled'
                             />
-                          </FormGroup>
+                          </FormGroup> */}
                         </Grid>
                       </Grid>
                       <Grid container spacing={3}>
@@ -445,7 +477,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataContact.first_name}
-                            onChange={e => setFirstName(e.target.value)}
+                            onChange={handleTextChangeContact}
+                            name='first_name'
                           />
 
                           <Typography sx={{ margin: 1 }}>Middle Name </Typography>
@@ -455,7 +488,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataContact.middle_name}
-                            onChange={e => setMiddleName(e.target.value)}
+                            onChange={handleTextChangeContact}
+                            name='middle_name'
                           />
 
                           <Typography sx={{ margin: 1 }}>Last Name </Typography>
@@ -465,7 +499,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataContact.last_name}
-                            onChange={e => setLastName(e.target.value)}
+                            onChange={handleTextChangeContact}
+                            name='last_name'
                           />
 
                           <Typography sx={{ margin: 1 }}>User Id </Typography>
@@ -475,7 +510,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataContact.user}
-                            onChange={e => setUserId(e.target.value)}
+                            onChange={handleTextChangeContact}
+                            name='user'
                           />
 
                           <Typography sx={{ margin: 1 }}>Address</Typography>
@@ -485,7 +521,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataContact.address}
-                            onChange={e => setAddress(e.target.value)}
+                            onChange={handleTextChangeContact}
+                            name='address'
                           />
                         </Grid>
 
@@ -507,7 +544,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataContact.salutation}
-                            onChange={e => setSalutation(e.target.value)}
+                            onChange={handleTextChangeContact}
+                            name='salutation'
                           />
 
                           <Typography sx={{ margin: 1 }}>Designation </Typography>
@@ -517,7 +555,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataContact.designation}
-                            onChange={e => setDesignation(e.target.value)}
+                            onChange={handleTextChangeContact}
+                            name='designation'
                           />
 
                           <Typography sx={{ margin: 1 }}>Gender </Typography>
@@ -527,7 +566,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataContact.gender}
-                            onChange={e => setGender(e.target.value)}
+                            onChange={handleTextChangeContact}
+                            name='gender'
                           />
 
                           <Typography sx={{ margin: 1 }}>Company Name </Typography>
@@ -537,7 +577,8 @@ const ContactAndAddress = ({ dataRow }) => {
                             type='text'
                             fullWidth
                             value={dataContact.company_name}
-                            onChange={e => setCompanyName(e.target.value)}
+                            onChange={handleTextChangeContact}
+                            name='company_name'
                           />
                         </Grid>
                       </Grid>
@@ -582,6 +623,8 @@ const ContactAndAddress = ({ dataRow }) => {
                                               variant='filled'
                                               type='text'
                                               value={dataContact.google_contacts || ''}
+                                              onChange={handleTextChangeContact}
+                                              name='google_contacts'
                                             />
                                           </Grid>
                                           <Grid item xs={12} sm={12} md={6} lg={6}>
@@ -665,6 +708,7 @@ const ContactAndAddress = ({ dataRow }) => {
                           <Grid container spacing={3}>
                             <Grid
                               item
+                              xs={12}
                               sm={12}
                               md={12}
                               lg={12}
@@ -686,13 +730,15 @@ const ContactAndAddress = ({ dataRow }) => {
                         <Grid container spacing={3} sx={{ mt: 10 }}>
                           <Grid item xs={12} sm={12} md={6} lg={6}>
                             <Typography variant='h6'>More Information</Typography>
-                            <Typography sx={{ mt: 4 }}>Contact Numbers</Typography>
+                            <Typography sx={{ mt: 4 }}>Department</Typography>
                             <TextField
                               size='small'
                               variant='filled'
                               type='text'
                               fullWidth
                               value={dataContact.department}
+                              onChange={handleTextChangeContact}
+                              name='department'
                             />
                             <FormControlLabel
                               sx={{ mt: 2, ml: 1 }}

@@ -24,7 +24,7 @@ import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 import IconButton from '@mui/material/IconButton'
 
-const DetailCustomer = ({ dataRow }) => {
+const DetailCustomer = ({ dataRow, setDataRow }) => {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 
   const [collapseInternal, setCollapseInternal] = useState(false)
@@ -42,6 +42,11 @@ const DetailCustomer = ({ dataRow }) => {
 
   const handleCompanyCheck = event => {
     setIsCompanyCheck(event.target.checked)
+  }
+
+  const handleTextChange = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
   }
 
   useEffect(() => {
@@ -66,6 +71,8 @@ const DetailCustomer = ({ dataRow }) => {
               size='small'
               variant='filled'
               value={dataRow.customer_name || ''}
+              onChange={handleTextChange}
+              name='customer_name'
               fullWidth
             />
             <Typography>Customer Type</Typography>
@@ -74,7 +81,9 @@ const DetailCustomer = ({ dataRow }) => {
               size='small'
               variant='filled'
               label=''
+              onChange={handleTextChange}
               value={dataRow.customer_type || ''}
+              name='customer_type'
               fullWidth
             />
             <Typography>Customer Group</Typography>
@@ -83,7 +92,9 @@ const DetailCustomer = ({ dataRow }) => {
               size='small'
               variant='filled'
               label=''
+              onChange={handleTextChange}
               value={dataRow.customer_group || ''}
+              name='customer_group'
               fullWidth
             />
           </Grid>
@@ -96,6 +107,8 @@ const DetailCustomer = ({ dataRow }) => {
               variant='filled'
               label=''
               value={dataRow.territory || ''}
+              onChange={handleTextChange}
+              name='territory'
               fullWidth
             />
             <Typography>From Lead</Typography>
@@ -105,6 +118,8 @@ const DetailCustomer = ({ dataRow }) => {
               variant='filled'
               label=''
               value={dataRow.lead_name || ''}
+              onChange={handleTextChange}
+              name='lead_name'
               fullWidth
             />
             <Typography>From Opportunity</Typography>
@@ -114,6 +129,8 @@ const DetailCustomer = ({ dataRow }) => {
               variant='filled'
               label=''
               value={dataRow.opportunity_name || ''}
+              onChange={handleTextChange}
+              name='opportunity_name'
               fullWidth
             />
             <Typography>Account Manager</Typography>
@@ -123,6 +140,8 @@ const DetailCustomer = ({ dataRow }) => {
               variant='filled'
               label=''
               value={dataRow.account_manager || ''}
+              onChange={handleTextChange}
+              name='account_manager'
               fullWidth
             />
           </Grid>
@@ -138,6 +157,8 @@ const DetailCustomer = ({ dataRow }) => {
               variant='filled'
               label=''
               value={dataRow.default_currency || ''}
+              onChange={handleTextChange}
+              name='default_currency'
               fullWidth
             />
             <Typography>Default Price List</Typography>
@@ -147,6 +168,8 @@ const DetailCustomer = ({ dataRow }) => {
               variant='filled'
               label=''
               value={dataRow.default_price_list || ''}
+              onChange={handleTextChange}
+              name='default_price_list'
               fullWidth
             />
           </Grid>
@@ -158,6 +181,8 @@ const DetailCustomer = ({ dataRow }) => {
               variant='filled'
               label=''
               value={dataRow.default_bank_account || ''}
+              onChange={handleTextChange}
+              name='default_bank_account'
               fullWidth
             />
           </Grid>
@@ -199,6 +224,8 @@ const DetailCustomer = ({ dataRow }) => {
                           fullWidth
                           size='small'
                           value={dataRow.represents_company || ''}
+                          onChange={handleTextChange}
+                          name='represents_company'
                         />
                       </Grid>
                     )}
@@ -233,6 +260,8 @@ const DetailCustomer = ({ dataRow }) => {
                       variant='filled'
                       label=''
                       value={dataRow.market_segment}
+                      onChange={handleTextChange}
+                      name='market_segment'
                       fullWidth
                     />
 
@@ -243,6 +272,8 @@ const DetailCustomer = ({ dataRow }) => {
                       variant='filled'
                       label=''
                       value={dataRow.industry}
+                      onChange={handleTextChange}
+                      name='industry'
                       fullWidth
                     />
 
@@ -253,6 +284,8 @@ const DetailCustomer = ({ dataRow }) => {
                       variant='filled'
                       label=''
                       value={dataRow.website}
+                      onChange={handleTextChange}
+                      name='website'
                       fullWidth
                     />
 
@@ -263,6 +296,8 @@ const DetailCustomer = ({ dataRow }) => {
                       variant='filled'
                       label=''
                       value={dataRow.language}
+                      onChange={handleTextChange}
+                      name='language'
                       fullWidth
                     />
                   </Grid>
@@ -276,6 +311,8 @@ const DetailCustomer = ({ dataRow }) => {
                       rows={13}
                       fullWidth
                       value={dataRow.customer_details}
+                      onChange={handleTextChange}
+                      name='customer_details'
                     />
                     <Typography variant='subtitle2'>Additional information regarding the customer.</Typography>
                   </Grid>
