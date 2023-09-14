@@ -3,10 +3,12 @@ import { useState } from 'react'
 
 // ** MUI Imports
 import { Box, Card, Chip, Button, Typography, Divider, Grid, TextField } from '@mui/material'
+import { red } from '@mui/material/colors'
 
 // ** Components
 
 const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName }) => {
+  const errorColor = red[500]
   const [dataFilter, setDataFilter] = useState(data)
 
   const handleIDSearch = event => {
@@ -61,7 +63,7 @@ const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName 
               {item[docStatusName] === 0 ? (
                 <Chip label='Enable' color='success' size='small' />
               ) : (
-                <Chip label='Disable' color='error' size='small' />
+                <Chip label='Disable' size='small' sx={{ bgcolor: errorColor, color: 'white' }} />
               )}
             </Box>
             <Divider />
