@@ -27,11 +27,10 @@ const ItemGroupPage = ({ data }) => {
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='ItemGroup'
+      docStatusName='disabled'
     />
   )
 }
-
-ItemGroupPage.getLayout = page => <SubPageLayout>{page}</SubPageLayout>
 
 // nextJS SSR
 export async function getServerSideProps() {
