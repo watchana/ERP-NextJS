@@ -33,11 +33,10 @@ const StockEntry = ({ data }) => {
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='StockEntry'
+      docStatusName='disabled'
     />
   )
 }
-
-StockEntry.getLayout = page => <SubPageLayout>{page}</SubPageLayout>
 
 // nextJS SSR
 export async function getServerSideProps() {

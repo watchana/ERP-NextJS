@@ -97,6 +97,7 @@ const AccountingCustomer = ({ dataRow }) => {
             sx={{ height: '100%' }}
             rows={getDataAccount.credit_limits}
             columns={columnsCredit}
+            getRowId={row => row.name}
             initialState={{
               pagination: {
                 paginationModel: { page: 0, pageSize: 5 }
@@ -118,6 +119,7 @@ const AccountingCustomer = ({ dataRow }) => {
             <DataGrid
               rows={getDataAccount.accounts}
               columns={columnsAcount}
+              getRowId={row => row.name}
               initialState={{
                 pagination: {
                   paginationModel: { page: 0, pageSize: 5 }
