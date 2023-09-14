@@ -1,41 +1,34 @@
 import { Box, TextField, Typography, Checkbox, Button } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 
-const PotalUserCustomer = () => {
+const PotalUserCustomer = ({ dataRow }) => {
   const columns = [
-    { field: 'id', headerName: 'No', width: 70 },
-    { field: 'User', headerName: 'User', width: 150 }
+    { field: 'idx', headerName: 'No', width: 70 },
+    { field: 'user', headerName: 'User', width: 150 }
   ]
 
-  const rows = [
-    { id: 1, User: 'Sidw' },
-    {
-      id: 2,
-      User: 'Lannister'
-    },
-    {
-      id: 3,
-      User: 'Lannister'
-    },
-    { id: 4, User: 'Stark' },
-    {
-      id: 5,
-      User: 'Targaryen'
-    },
-    {
-      id: 6,
-      User: 'Melisandre'
-    },
-    {
-      id: 7,
-      User: 'Clifford'
-    },
-    {
-      id: 8,
-      User: 'Frances'
-    },
-    { id: 9, User: 'Roxie' }
-  ]
+  const [getPortalUser, setGetProtalUser] = useState([])
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}Customer/${dataRow.name}`, {
+        headers: {
+          Authorization: 'token 5891d01ccc2961e:0e446b332dc22aa'
+        }
+      })
+      .then(res => {
+        setGetProtalUser(res.data.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [dataRow])
+
+  if (Object.values(getPortalUser)?.length === 0) {
+    return 'waiting...'
+  }
 
   return (
     <Box>
@@ -43,8 +36,9 @@ const PotalUserCustomer = () => {
         <Box>
           <Typography>Customer Portal Users</Typography>
           <DataGrid
-            rows={rows}
+            rows={getPortalUser.portal_users}
             columns={columns}
+            getRowId={row => row.name}
             initialState={{
               pagination: {
                 paginationModel: { page: 0, pageSize: 5 }
