@@ -10,7 +10,8 @@ import {
   Collapse,
   Divider,
   CardContent,
-  Grid
+  Grid,
+  Card
 } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
@@ -41,58 +42,66 @@ const AccountingCustomer = ({ dataRow }) => {
   }
 
   return (
-    <Grid>
-      <Grid container spacing={2}>
-        <Grid item sm={12} md={12} lg={6}>
-          <Typography sx={{ marginBottom: 2 }}>Default Payment Terms Template</Typography>
-          <TextField size='small' variant='filled' label='' value={dataRow.payment_terms} fullWidth />
+    <Box>
+      <Card
+        sx={{
+          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
+          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
+          p: 2,
+          mb: 2
+        }}
+      >
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography sx={{ marginBottom: 2 }}>Default Payment Terms Template</Typography>
+            <TextField size='small' variant='filled' value={dataRow.payment_terms} fullWidth />
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid container spacing={2} sx={{ mt: 6 }}>
-        <Grid item sm={12} md={12} lg={12}>
-          <Typography>Credit Limit</Typography>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 }
-              }
-            }}
-            pageSizeOptions={[5, 10]}
-            checkboxSelection
-          />
+        <Grid container spacing={2} sx={{ mt: 5 }}>
+          <Grid item sx={12} md={12} lg={12}>
+            <Typography>Credit Limit</Typography>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 }
+                }
+              }}
+              pageSizeOptions={[5, 10]}
+              checkboxSelection
+            />
+          </Grid>
         </Grid>
-      </Grid>
 
-      <Grid sx={{ mt: 20 }}>
-        <Typography variant='h6'>Default Accounts:</Typography>
-      </Grid>
-      <Grid container spacing={2}>
-        <Grid item sm={12} md={12} lg={12}>
-          <Typography variant='subtitle1'>Accounts</Typography>
-          <Typography variant='subtitle1'>Mention if non-standard Receivable account</Typography>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 }
-              }
-            }}
-            pageSizeOptions={[5, 10]}
-            checkboxSelection
-          />
+        <Grid sx={{ mt: 15 }}>
+          <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
+          <Typography variant='h6'>Default Accounts:</Typography>
         </Grid>
-      </Grid>
+        <Grid container spacing={2} sx={{ mb: 20 }}>
+          <Grid item sm={12} md={12} lg={12}>
+            <Typography variant='subtitle1'>Accounts</Typography>
+            <Typography variant='subtitle1'>Mention if non-standard Receivable account</Typography>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 }
+                }
+              }}
+              pageSizeOptions={[5, 10]}
+              checkboxSelection
+            />
+          </Grid>
+        </Grid>
+        <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
+        <Grid container sx={{ mb: 5 }}>
+          <Grid item sx={{ width: '100%' }}>
+            <Button size='small' variant='filled' onClick={handleClickInformation}>
+              More Infomation
+            </Button>
 
-      <Grid container sx={{ mb: 5 }}>
-        <Grid sx={{ width: '100%', display: 'flex' }}>
-          <Button size='small' variant='filled' label='' onClick={handleClickInformation}>
-            <Typography variant='h6'> More Infomation</Typography>
-          </Button>
-
-          <CardActions className='card-action-dense'>
             <IconButton size='small' onClick={handleClickInformation}>
               {collapseInformation ? (
                 <ChevronUp sx={{ fontSize: '1.875rem' }} />
@@ -100,21 +109,20 @@ const AccountingCustomer = ({ dataRow }) => {
                 <ChevronDown sx={{ fontSize: '1.875rem' }} />
               )}
             </IconButton>
-          </CardActions>
-        </Grid>
-      </Grid>
-
-      <Grid container>
-        <Collapse in={collapseInformation} width={'100%'} style={{ width: '100%' }}>
-          <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <Typography sx={{ marginBottom: 2 }}>Loyalty Program</Typography>
-              <TextField size='small' variant='filled' label='' value={dataRow.loyalty_program} fullWidth />
-            </Grid>
           </Grid>
-        </Collapse>
-      </Grid>
-    </Grid>
+        </Grid>
+        <Grid container>
+          <Collapse in={collapseInformation} width={'100%'} style={{ width: '100%' }}>
+            <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
+              <Grid item xs={12}>
+                <Typography sx={{ marginBottom: 2 }}>Loyalty Program</Typography>
+                <TextField size='small' variant='filled' value={dataRow.loyalty_program} fullWidth />
+              </Grid>
+            </Grid>
+          </Collapse>
+        </Grid>
+      </Card>
+    </Box>
   )
 }
 
