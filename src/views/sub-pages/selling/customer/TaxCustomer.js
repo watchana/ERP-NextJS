@@ -12,16 +12,16 @@ const TaxCustomer = ({ dataRow }) => {
         }}
       >
         <Grid container spacing={2}>
-          <Grid item sm={12} md={12} lg={6}>
+          <Grid item xs={12} sm={12} md={12} lg={6}>
             <Typography sx={{ marginBottom: 2 }}>Tax ID</Typography>
             <TextField size='small' variant='filled' label='' value={dataRow.tax_id || ''} fullWidth />
           </Grid>
 
-          <Grid item sm={12} md={12} lg={6}>
+          <Grid item xs={12} sm={12} md={12} lg={6}>
             <Typography sx={{ marginBottom: 2 }}>Tax Category</Typography>
             <TextField size='small' variant='filled' label='' value={dataRow.tax_category || ''} fullWidth />
 
-            <Typography sx={{ marginBottom: 2 }}>tax_withholding_category</Typography>
+            <Typography sx={{ marginBottom: 2 }}>Tax Withholding Category</Typography>
             <TextField
               size='small'
               variant='filled'

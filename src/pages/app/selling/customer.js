@@ -48,11 +48,10 @@ const CustomerPage = ({ data }) => {
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='Customer'
+      docStatusName='disabled'
     />
   )
 }
-
-CustomerPage.getLayout = page => <SubPageLayout>{page}</SubPageLayout>
 
 // nextJS SSR
 export async function getServerSideProps() {
