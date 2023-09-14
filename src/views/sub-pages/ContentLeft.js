@@ -2,14 +2,33 @@
 import { useState } from 'react'
 
 // ** MUI Imports
-import { Box, Card, Chip, Button, Typography, Divider, Grid, TextField } from '@mui/material'
+import {
+  Box,
+  Card,
+  Chip,
+  Button,
+  Typography,
+  Divider,
+  Grid,
+  TextField,
+  ToggleButtonGroup,
+  ToggleButton,
+  ButtonGroup,
+  SvgIcon,
+  IconButton
+} from '@mui/material'
 import { red } from '@mui/material/colors'
 
-// ** Components
+// ** Icons
+import Image from 'next/image'
+import sortAscending from 'public/images/icons/sort-ascending.png'
+import sortDescending from 'public/images/icons/sort-descending.png'
 
 const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName }) => {
+  // ** States
   const errorColor = red[500]
   const [dataFilter, setDataFilter] = useState(data)
+  const [sort, setSort] = useState('asc')
 
   const handleIDSearch = event => {
     console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
@@ -24,6 +43,15 @@ const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName 
 
         setDataFilter(matches)
       }
+    }
+  }
+
+  const handleSortClick = sort => {
+    setSort(sort)
+    if (sort === 'asc') {
+      console.log('sort จากน้อยไปมาก')
+    } else {
+      console.log('sort จากมากไปน้อย')
     }
   }
 
@@ -42,8 +70,41 @@ const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName 
           <Grid item xs={12} sm={6} sx={{ p: 2, ml: 2 }}>
             <TextField fullWidth variant='outlined' size='small' label='ID Search' onChange={handleIDSearch} />
           </Grid>
-          <Grid item xs sx={{ p: 2, ml: 2, justifyContent: 'center', display: 'flex' }}>
-            <Button> test </Button>
+          <Grid item xs sx={{ p: 2, ml: 2, justifyContent: 'end', display: 'flex' }}>
+            <ButtonGroup variant='outlined'>
+              {sort === 'asc' ? (
+                <IconButton
+                  sx={{
+                    width: 40,
+                    height: 40,
+                    borderTopLeftRadius: '4px',
+                    borderBottomLeftRadius: '4px',
+                    borderBottomRightRadius: '0',
+                    borderTopRightRadius: '0',
+                    border: 1
+                  }}
+                  onClick={() => handleSortClick('desc')}
+                >
+                  <Image src={sortAscending} alt='sortAscending' />
+                </IconButton>
+              ) : (
+                <IconButton
+                  sx={{
+                    width: 40,
+                    height: 40,
+                    borderTopLeftRadius: '4px',
+                    borderBottomLeftRadius: '4px',
+                    borderBottomRightRadius: '0',
+                    borderTopRightRadius: '0',
+                    border: 1
+                  }}
+                  onClick={() => handleSortClick('asc')}
+                >
+                  <Image src={sortDescending} alt='sortDescending' />
+                </IconButton>
+              )}
+              <Button variant='outlined'>Last Updated On</Button>
+            </ButtonGroup>
           </Grid>
         </Grid>
         <Divider />
