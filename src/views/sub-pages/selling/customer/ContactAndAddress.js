@@ -178,7 +178,7 @@ const ContactAndAddress = ({ dataRow }) => {
         <CardHeader title='Address and Contacts' />
         <CardContent>
           <Grid container spacing={3}>
-            <Grid item sm={12} md={12} lg={12}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
               <Card>
                 {/* sx={{ marginBottom: 3.25 }} */}
                 <CardContent sx={{ width: '100%' }}>
@@ -299,7 +299,7 @@ const ContactAndAddress = ({ dataRow }) => {
                             onChange={e => setPostalCode(e.target.value)}
                           />
                         </Grid>
-                        <Grid item sm={12} md={6} lg={6}>
+                        <Grid item xs={12} sm={12} md={6} lg={6}>
                           <Typography sx={{ marginBottom: 2 }}>Email Address</Typography>
                           <TextField
                             size='small'
@@ -369,7 +369,7 @@ const ContactAndAddress = ({ dataRow }) => {
                         </Grid>
                       </Grid>
                       <Grid container spacing={3}>
-                        <Grid item sm={12} md={6} lg={6}>
+                        <Grid item xs={12} sm={12} md={6} lg={6}>
                           <Typography variant='h6'>Reference</Typography>
 
                           <FormControlLabel
@@ -378,7 +378,7 @@ const ContactAndAddress = ({ dataRow }) => {
                             label='Is Your Company Address'
                           />
                         </Grid>
-                        <Grid item sm={12} md={12} lg={12}>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
                           <Typography>links</Typography>
                           <DataGrid
                             rows={getDataContact.links}
@@ -409,7 +409,7 @@ const ContactAndAddress = ({ dataRow }) => {
               </Card>
               {/* End Address Detail */}
             </Grid>
-            <Grid item sm={12} md={12} lg={12}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
               <Card>
                 {/* sx={{ marginBottom: 3.25 }} */}
                 <CardContent sx={{ width: '100%' }}>
@@ -437,7 +437,7 @@ const ContactAndAddress = ({ dataRow }) => {
                     <DialogTitle>Edit</DialogTitle>
                     <DialogContent sx={{ minWidth: 600, width: '100%', height: '100%' }}>
                       <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', p: 5 }}>
-                        <Grid item sm={12} md={6} lg={6}>
+                        <Grid item xs={12} sm={12} md={6} lg={6}>
                           <Typography sx={{ marginBottom: 2 }}>First Name</Typography>
                           <TextField
                             size='small'
@@ -489,7 +489,7 @@ const ContactAndAddress = ({ dataRow }) => {
                           />
                         </Grid>
 
-                        <Grid item sm={12} md={6} lg={6}>
+                        <Grid item xs={12} sm={12} md={6} lg={6}>
                           <Typography sx={{ marginBottom: 2 }}>{dataContact.status}</Typography>
                           <Autocomplete
                             sx={{ height: 50 }}
@@ -574,7 +574,7 @@ const ContactAndAddress = ({ dataRow }) => {
                                       <Divider sx={{ margin: 0 }} />
                                       <CardContent>
                                         <Grid container spacing={3}>
-                                          <Grid item sm={12} md={6} lg={6}>
+                                          <Grid item xs={12} sm={12} md={6} lg={6}>
                                             <Typography sx={{ margin: 1 }}>Google Contacts </Typography>
                                             <TextField
                                               fullWidth
@@ -584,7 +584,7 @@ const ContactAndAddress = ({ dataRow }) => {
                                               value={dataContact.google_contacts || ''}
                                             />
                                           </Grid>
-                                          <Grid item sm={12} md={6} lg={6}>
+                                          <Grid item xs={12} sm={12} md={6} lg={6}>
                                             <FormControlLabel
                                               sx={{ mt: 2 }}
                                               control={
@@ -607,7 +607,7 @@ const ContactAndAddress = ({ dataRow }) => {
                           </FormGroup>
                         </Box>
                         <Grid container spacing={3} sx={{ mt: 5 }}>
-                          <Grid item sm={12} md={12} lg={12}>
+                          <Grid item xs={12} sm={12} md={12} lg={12}>
                             <Typography variant='h6'>Contact Details</Typography>
 
                             <Typography sx={{ mt: 4 }}>Email IDs</Typography>
@@ -627,7 +627,7 @@ const ContactAndAddress = ({ dataRow }) => {
                           </Grid>
                         </Grid>
                         <Grid container spacing={3} sx={{ mt: 24 }}>
-                          <Grid item sm={12} md={12} lg={12}>
+                          <Grid item xs={12} sm={12} md={12} lg={12}>
                             <Typography sx={{ mt: 4 }}>Contact Numbers</Typography>
                             <DataGrid
                               rows={getDataContact.phone_nos}
@@ -645,7 +645,7 @@ const ContactAndAddress = ({ dataRow }) => {
                           </Grid>
                         </Grid>
                         <Grid container spacing={3} sx={{ mt: 24 }}>
-                          <Grid item sm={12} md={12} lg={12}>
+                          <Grid item xs={12} sm={12} md={12} lg={12}>
                             <Typography variant='h6'>Reference</Typography>
                             <Typography sx={{ mt: 4 }}>links</Typography>
                             <DataGrid
@@ -684,7 +684,7 @@ const ContactAndAddress = ({ dataRow }) => {
                           </Grid>
                         </Grid>
                         <Grid container spacing={3} sx={{ mt: 10 }}>
-                          <Grid item sm={12} md={6} lg={6}>
+                          <Grid item xs={12} sm={12} md={6} lg={6}>
                             <Typography variant='h6'>More Information</Typography>
                             <Typography sx={{ mt: 4 }}>Contact Numbers</Typography>
                             <TextField

@@ -1,4 +1,4 @@
-import { Box, TextField, Typography, Checkbox, Button } from '@mui/material'
+import { Box, TextField, Typography, Checkbox, Button, Card, Grid } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
@@ -31,28 +31,30 @@ const PotalUserCustomer = ({ dataRow }) => {
   }
 
   return (
-    <Box>
-      <Box>
+    <Grid>
+      <Card sx={{ width: '100%', p: 5 }}>
         <Box>
-          <Typography>Customer Portal Users</Typography>
-          <DataGrid
-            rows={getPortalUser.portal_users}
-            columns={columns}
-            getRowId={row => row.name}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 }
-              }
-            }}
-            pageSizeOptions={[5, 10]}
-            checkboxSelection
-          />
           <Box>
-            <Button>Add row</Button>
+            <Typography>Customer Portal Users</Typography>
+            <DataGrid
+              rows={getPortalUser.portal_users}
+              columns={columns}
+              getRowId={row => row.name}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 }
+                }
+              }}
+              pageSizeOptions={[5, 10]}
+              checkboxSelection
+            />
+            <Box>
+              <Button>Add row</Button>
+            </Box>
           </Box>
         </Box>
-      </Box>
-    </Box>
+      </Card>
+    </Grid>
   )
 }
 
