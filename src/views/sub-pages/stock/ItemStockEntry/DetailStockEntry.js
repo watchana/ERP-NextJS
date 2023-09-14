@@ -2,6 +2,7 @@
 import {
   Box,
   Button,
+  Card,
   CardActions,
   CardContent,
   Checkbox,
@@ -124,7 +125,7 @@ const DetailStockEntry = ({ dataRow }) => {
   }
 
   return (
-    <Grid>
+    <Card>
       <Box sx={{ display: 'flex' }}>
         <Box>
           <Typography sx={{ margin: 1 }}>Stock Entry Type</Typography>
@@ -516,7 +517,7 @@ const DetailStockEntry = ({ dataRow }) => {
           </DialogActions>
         </Dialog>
       </Box>
-    </Grid>
+    </Card>
   )
 }
 

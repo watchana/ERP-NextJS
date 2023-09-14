@@ -1,9 +1,11 @@
 // ** React Import
 import React from 'react'
 
-// ** Mui Import
-
 import { useState } from 'react'
+
+import { useEffect } from 'react'
+
+// ** Mui Import
 import {
   Grid,
   Card,
@@ -17,17 +19,18 @@ import {
   Divider,
   IconButton,
   Collapse,
-  FormGroup
+  FormGroup,
+  CardHeader,
+  CardContent,
+  Button,
+  DialogActions,
+  FormControlLabel,
+  Checkbox,
+  CardActions
 } from '@mui/material'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
-import CardActions from '@mui/material/CardActions'
-import Button from '@mui/material/Button'
-import DialogActions from '@mui/material/DialogActions'
+
 import DorpdownButton from 'src/components/Button/Dorpdown_Text/Dorpdown_text'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
-import { useEffect } from 'react'
+
 import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid'
 import { ChevronDown, ChevronUp } from 'mdi-material-ui'
@@ -353,7 +356,7 @@ const ContactAddressSalesinvoice = ({ dataRow }) => {
                           </Grid>
                         </Grid>
                       </Card>
-                      <Grid></Grid>
+
                       <DataGrid
                         sx={{ width: 'full', mt: 6, height: 'auto' }}
                         rows={dataCustomer}

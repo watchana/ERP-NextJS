@@ -104,11 +104,11 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
   }, [dataRow])
 
   const column = [
-    { field: 'sales_person', headerName: 'Sales Person *', width: 120 },
-    { field: 'contribution', headerName: 'Contribution (%)', width: 100 },
-    { field: 'contribution_to_net_to', headerName: 'Contribution to Net To', width: 100 },
-    { field: 'commission_rate', headerName: 'Commission Rate', width: 100 },
-    { field: 'incentives', headerName: 'Incentives', width: 100 }
+    { field: 'sales_person', headerName: 'Sales Person *', width: 140 },
+    { field: 'contribution', headerName: 'Contribution (%)', width: 140 },
+    { field: 'contribution_to_net_to', headerName: 'Contribution to Net To', width: 140 },
+    { field: 'commission_rate', headerName: 'Commission Rate', width: 140 },
+    { field: 'incentives', headerName: 'Incentives', width: 140 }
   ]
 
   const [inputValue, setInputValue] = useState(' ')

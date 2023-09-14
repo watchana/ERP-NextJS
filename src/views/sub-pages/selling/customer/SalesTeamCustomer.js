@@ -1,4 +1,4 @@
-import { Box, TextField, Typography, Checkbox, Button, Grid } from '@mui/material'
+import { Box, TextField, Typography, Card, Button, Grid, Divider } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
 const SalesTeamCustomer = ({ dataRow }) => {
@@ -37,35 +37,26 @@ const SalesTeamCustomer = ({ dataRow }) => {
 
   return (
     <Grid>
-      <Grid container spacing={2}>
-        <Grid item sm={12} md={12} lg={12}>
-          <Typography>Sales Team</Typography>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 }
-              }
-            }}
-            pageSizeOptions={[5, 10]}
-            checkboxSelection
-          />
-          <Box>
-            <Button>Add row</Button>
-          </Box>
+      <Card sx={{ width: '100%', p: 5 }}>
+        <Grid container spacing={2}>
+          <Grid item sx={12} md={12} lg={12}>
+            <Typography>Sales Team</Typography>
+            <DataGrid rows={rows} columns={columns} />
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid container spacing={2} sx={{ mt: 20 }}>
-        <Grid item sm={12} md={12} lg={6}>
-          <Typography sx={{ marginBottom: 2 }}>Sales Partner</Typography>
-          <TextField size='small' variant='filled' label='' value={dataRow.default_sales_partner} fullWidth />
+
+        <Grid container spacing={2} sx={{ mt: 10 }}>
+          <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
+          <Grid item sm={12} md={12} lg={6}>
+            <Typography sx={{ marginBottom: 2 }}>Sales Partner</Typography>
+            <TextField size='small' variant='filled' label='' value={dataRow.default_sales_partner} fullWidth />
+          </Grid>
+          <Grid item sx={12} md={12} lg={6}>
+            <Typography sx={{ marginBottom: 2 }}>Commission Rate</Typography>
+            <TextField size='small' variant='filled' label='' value={dataRow.default_commission_rate} fullWidth />
+          </Grid>
         </Grid>
-        <Grid item sx={12} md={12} lg={6}>
-          <Typography sx={{ marginBottom: 2 }}>Commission Rate</Typography>
-          <TextField size='small' variant='filled' label='' value={dataRow.default_commission_rate} fullWidth />
-        </Grid>
-      </Grid>
+      </Card>
     </Grid>
   )
 }
