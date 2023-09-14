@@ -22,7 +22,7 @@ import ContentLeft from 'src/views/sub-pages/ContentLeft'
 
 const IconButtonStyle = { bgcolor: 'white', borderRadius: 1, border: '1px solid #E0E0E0', mx: 0.5 }
 
-const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype }) => {
+const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype, docStatusName }) => {
   const contentSizeInit = 7
 
   // ** States
@@ -130,7 +130,7 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype
       <Grid container justifyContent='center' columnSpacing={4}>
         {(!screenMD || !screenMDSelect) && (
           <Grid item xs>
-            <ContentLeft dataRow={data} doctype={doctype} handleRowClick={handleRowClick} />
+            <ContentLeft data={data} doctype={doctype} docStatusName={docStatusName} handleRowClick={handleRowClick} />
           </Grid>
         )}
 
@@ -152,6 +152,7 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype
                       flexDirection: 'row',
                       display: 'flex',
                       justifyContent: 'space-between',
+                      alignItems: 'center',
                       mb: 2
                     }}
                   >

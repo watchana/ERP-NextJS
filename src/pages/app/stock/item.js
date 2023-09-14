@@ -45,6 +45,7 @@ const ItemPage = ({ data }) => {
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='Item'
+      docStatusName='disabled'
     />
   )
 }
