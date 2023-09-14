@@ -57,21 +57,20 @@ const AccountingCustomer = ({ dataRow }) => {
             <TextField size='small' variant='filled' value={dataRow.payment_terms} fullWidth />
           </Grid>
         </Grid>
-        <Grid container spacing={2} sx={{ mt: 5 }}>
-          <Grid item sx={12} md={12} lg={12}>
-            <Typography>Credit Limit</Typography>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 5 }
-                }
-              }}
-              pageSizeOptions={[5, 10]}
-              checkboxSelection
-            />
-          </Grid>
+
+        <Grid item sx={12} md={12} lg={12}>
+          <Typography>Credit Limit</Typography>
+          <DataGrid
+            rows={dataRow}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 }
+              }
+            }}
+            pageSizeOptions={[5, 10]}
+            checkboxSelection
+          />
         </Grid>
 
         <Grid sx={{ mt: 15 }}>
