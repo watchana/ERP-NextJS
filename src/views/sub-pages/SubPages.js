@@ -22,7 +22,7 @@ import ContentLeft from 'src/views/sub-pages/ContentLeft'
 
 const IconButtonStyle = { bgcolor: 'white', borderRadius: 1, border: '1px solid #E0E0E0', mx: 0.5 }
 
-const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype, docStatusName }) => {
+const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow, doctype, docStatusName }) => {
   const contentSizeInit = 7
 
   // ** States
@@ -73,21 +73,31 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype
     setButtonArrow(!buttonArrow)
   }
 
-  const handleRowClick = params => {
-    console.log('params:', params.name)
-    console.log('path: ', `${process.env.NEXT_PUBLIC_API_URL}${doctype}/${params.name}`)
-    axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}${doctype}/${params.name}`, {
+  const fetchData = (doctype, name) => {
+    return axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}${doctype}/${name}`, {
         headers: {
           Authorization: process.env.NEXT_PUBLIC_API_TOKEN
         }
       })
-      .then(res => {
-        setDataRow(res.data.data)
-      })
+      .then(res => res.data.data)
       .catch(err => {
         console.log(err)
+        throw err
       })
+  }
+
+  const handleRowClick = async params => {
+    console.log('params:', params.name)
+    console.log('path: ', `${process.env.NEXT_PUBLIC_API_URL}${doctype}/${params.name}`)
+
+    try {
+      const dataRow = await fetchData(doctype, params.name)
+      setDataRow(dataRow)
+    } catch (err) {
+      console.log('Error fetching data:', err)
+    }
+
     setSideContentOpen(true)
     setScreenMDSelect(true)
   }
@@ -102,22 +112,28 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype
     setScreenMDSelect(false)
   }
 
-  const handleArrowLeft = () => {
-    const index = data.findIndex(item => item === dataRow)
+  const handleArrowLeft = async () => {
+    let copiedData = [...data] // สำเนาข้อมูล
+    const index = copiedData.findIndex(item => item.name === dataRow.name)
     if (index === 0) {
       console.log('No further records')
     } else {
-      setDataRow(data[index - 1])
+      console.log('test:', copiedData[index - 1].name)
+      let dataRow = await fetchData(doctype, copiedData[index - 1].name)
+      setDataRow(dataRow)
     }
   }
 
-  const handleArrowRight = () => {
-    const index = data.findIndex(item => item === dataRow)
-    const lastIndex = data.length - 1
+  const handleArrowRight = async () => {
+    let copiedData = [...data] // สำเนาข้อมูล
+    const index = copiedData.findIndex(item => item.name === dataRow.name)
+    const lastIndex = copiedData.length - 1
     if (index === lastIndex) {
       console.log('No further records')
     } else {
-      setDataRow(data[index + 1])
+      console.log('test:', copiedData[index + 1].name)
+      let dataRow = await fetchData(doctype, copiedData[index + 1].name)
+      setDataRow(dataRow)
     }
   }
 
@@ -130,7 +146,13 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype
       <Grid container justifyContent='center' columnSpacing={4}>
         {(!screenMD || !screenMDSelect) && (
           <Grid item xs>
-            <ContentLeft data={data} doctype={doctype} docStatusName={docStatusName} handleRowClick={handleRowClick} />
+            <ContentLeft
+              data={data}
+              setData={setData}
+              doctype={doctype}
+              docStatusName={docStatusName}
+              handleRowClick={handleRowClick}
+            />
           </Grid>
         )}
 

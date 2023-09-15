@@ -26,11 +26,10 @@ import Image from 'next/image'
 import sortAscending from 'public/images/icons/sort-ascending.png'
 import sortDescending from 'public/images/icons/sort-descending.png'
 
-const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName }) => {
+const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) => {
   // ** States
   const errorColor = red[500]
-  const [dataFilter, setDataFilter] = useState(data)
-  const [showData, setShowData] = useState([])
+  const [showData, setShowData] = useState(data)
   const [sort, setSort] = useState('desc')
 
   // ** Sort Type
@@ -54,58 +53,45 @@ const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName 
 
   useEffect(() => {
     console.log('sort', sort)
-    const copiedData = [...data] // สำเนาข้อมูล
+    let copiedData = [...data] // สำเนาข้อมูล
 
-    switch (sortOption) {
-      case 'Last Updated On': {
-        if (sort === 'asc') {
-          copiedData.sort((a, b) => new Date(a.modified) - new Date(b.modified))
-        } else {
-          copiedData.sort((a, b) => new Date(b.modified) - new Date(a.modified))
-        }
-        break
+    const sortData = () => {
+      switch (sortOption) {
+        case 'Last Updated On':
+          return (a, b) => new Date(a.modified) - new Date(b.modified)
+        case `${doctype} Name`:
+          return (a, b) => a.name.localeCompare(b.name)
+        case 'ID':
+          return (a, b) => a.id - b.id
+        case 'Created On':
+          return (a, b) => new Date(a.creation) - new Date(b.creation)
+        case 'Most Used':
+          // ยังไม่ได้ระบุการเรียงลำดับสำหรับ 'Most Used'
+          return (a, b) => 0
+        default:
+          return (a, b) => 0
       }
-      case `${doctype} Name`: {
-        if (sort === 'asc') {
-          copiedData.sort((a, b) => a.name.localeCompare(b.name))
-        } else {
-          copiedData.sort((a, b) => b.name.localeCompare(a.name))
-        }
-        break
-      }
-      case 'ID': {
-        if (sort === 'asc') {
-          copiedData.sort((a, b) => a.id - b.id)
-        } else {
-          copiedData.sort((a, b) => b.id - a.id)
-        }
-        break
-      }
-      case 'Created On': {
-        if (sort === 'asc') {
-          copiedData.sort((a, b) => new Date(a.creation) - new Date(b.creation))
-        } else {
-          copiedData.sort((a, b) => new Date(b.creation) - new Date(a.creation))
-        }
-        break
-      }
-      case 'Most Used': {
-        // ยังไม่ได้ระบุการเรียงลำดับสำหรับ 'Most Used'
-        break
-      }
-      default:
-        break
     }
 
-    setShowData(copiedData)
-  }, [sort, data, sortOption, doctype])
+    if (sort === 'asc') {
+      copiedData.sort(sortData())
+    } else {
+      copiedData.sort((a, b) => sortData()(b, a))
+    }
+
+    // เพิ่มเงื่อนไขเพื่อป้องกัน loop
+    if (JSON.stringify(data) !== JSON.stringify(copiedData)) {
+      setData(copiedData)
+      setShowData(copiedData)
+    }
+  }, [sort, sortOption, doctype, data, setData])
 
   const handleIDSearch = event => {
     console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
     const value = event.target.value
 
     if (value === '') {
-      setShowData(dataFilter)
+      setShowData(data)
     } else {
       {
         // ค้นหาคำที่คล้ายคลึงกับคำที่คุณค้นหา
