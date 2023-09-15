@@ -1,50 +1,61 @@
-import { Box, TextField, Typography, Checkbox, Button, Grid, FormControlLabel } from '@mui/material'
+import { Box, TextField, Typography, Checkbox, Button, Grid, FormControlLabel, Card } from '@mui/material'
 
-const SettingsCustomer = ({ dataRow }) => {
-  const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-
+const SettingsCustomer = ({ dataRow, setDataRow }) => {
   const handleCheckboxChange = event => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
+  }
+
+  const checkboxStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 
   return (
     <Grid>
-      <Grid container spacing={2}>
-        <Grid item sm={12} md={6} lg={6}>
-          <Box sx={{ display: 'flex' }}>
-            <FormControlLabel
-              sx={{ mt: 2 }}
-              control={<Checkbox checked={Boolean(dataRow[0]?.so_required) || false} />}
-              label='Allow Sales Invoice Creation Without Sales Order'
-            />
-          </Box>
+      <Card sx={{ width: '100%', p: 5 }}>
+        <Grid container spacing={2}>
+          <Grid item sm={12} md={6} lg={6}>
+            <Grid item xs={12} sx={checkboxStyle}>
+              <Checkbox
+                checked={dataRow.so_required === 1 ? true : false}
+                name='so_required'
+                onChange={handleCheckboxChange}
+              />
+              <Typography variant='subtitle2'>Allow Sales Invoice Creation Without Sales Order</Typography>
+            </Grid>
 
-          <Box sx={{ display: 'flex' }}>
-            <FormControlLabel
-              sx={{ mt: 2 }}
-              control={<Checkbox checked={Boolean(dataRow[0]?.dn_required) || false} />}
-              label='Allow Sales Invoice Creation Without Delivery Note'
-            />
-          </Box>
-        </Grid>
+            <Grid item xs={12} sx={checkboxStyle}>
+              <Checkbox
+                checked={dataRow.dn_required === 1 ? true : false}
+                name='dn_required'
+                onChange={handleCheckboxChange}
+              />
+              <Typography variant='subtitle2'>Allow Sales Invoice Creation Without Delivery Note</Typography>
+            </Grid>
+          </Grid>
 
-        <Grid item sm={12} md={6} lg={6}>
-          <Box sx={{ display: 'flex' }}>
-            <FormControlLabel
-              sx={{ mt: 2 }}
-              control={<Checkbox checked={Boolean(dataRow[0]?.is_frozen) || false} />}
-              label='Is Frozen'
-            />
-          </Box>
-          <Box sx={{ display: 'flex' }}>
-            <FormControlLabel
-              sx={{ mt: 2 }}
-              control={<Checkbox checked={Boolean(dataRow[0]?.disabled) || false} />}
-              label='Disabled'
-            />
-          </Box>
+          <Grid item sm={12} md={6} lg={6}>
+            <Grid item xs={12} sx={checkboxStyle}>
+              <Checkbox
+                checked={dataRow.is_frozen === 1 ? true : false}
+                name='is_frozen'
+                onChange={handleCheckboxChange}
+              />
+              <Typography variant='subtitle2'>Is Frozen</Typography>
+            </Grid>
+            <Grid item xs={12} sx={checkboxStyle}>
+              <Checkbox
+                checked={dataRow.disabled === 1 ? true : false}
+                name='disabled'
+                onChange={handleCheckboxChange}
+              />
+              <Typography variant='subtitle2'>Disabled</Typography>
+            </Grid>
+          </Grid>
         </Grid>
-      </Grid>
+      </Card>
     </Grid>
   )
 }

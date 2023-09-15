@@ -38,8 +38,6 @@ const StockEntry = ({ data }) => {
   )
 }
 
-StockEntry.getLayout = page => <SubPageLayout>{page}</SubPageLayout>
-
 // nextJS SSR
 export async function getServerSideProps() {
   const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}Stock Entry?fields=["*"]`, {

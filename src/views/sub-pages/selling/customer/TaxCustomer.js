@@ -1,6 +1,11 @@
 import { Box, TextField, Typography, Card, Button, Grid } from '@mui/material'
 
-const TaxCustomer = ({ dataRow }) => {
+const TaxCustomer = ({ dataRow, setDataRow }) => {
+  const handleTextChange = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+  }
+
   return (
     <Box>
       <Card
@@ -12,22 +17,40 @@ const TaxCustomer = ({ dataRow }) => {
         }}
       >
         <Grid container spacing={2}>
-          <Grid item sm={12} md={12} lg={6}>
+          <Grid item xs={12} sm={12} md={12} lg={6}>
             <Typography sx={{ marginBottom: 2 }}>Tax ID</Typography>
-            <TextField size='small' variant='filled' label='' value={dataRow.tax_id || ''} fullWidth />
+            <TextField
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow.tax_id || ''}
+              fullWidth
+              onChange={handleTextChange}
+              name='tax_id'
+            />
           </Grid>
 
-          <Grid item sm={12} md={12} lg={6}>
+          <Grid item xs={12} sm={12} md={12} lg={6}>
             <Typography sx={{ marginBottom: 2 }}>Tax Category</Typography>
-            <TextField size='small' variant='filled' label='' value={dataRow.tax_category || ''} fullWidth />
+            <TextField
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow.tax_category || ''}
+              fullWidth
+              onChange={handleTextChange}
+              name='tax_category'
+            />
 
-            <Typography sx={{ marginBottom: 2 }}>tax_withholding_category</Typography>
+            <Typography sx={{ marginBottom: 2 }}>Tax Withholding Category</Typography>
             <TextField
               size='small'
               variant='filled'
               label=''
               value={dataRow.tax_withholding_category || ''}
               fullWidth
+              onChange={handleTextChange}
+              name='tax_withholding_category'
             />
           </Grid>
         </Grid>

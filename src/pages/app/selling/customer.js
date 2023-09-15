@@ -30,13 +30,13 @@ const CustomerPage = ({ data }) => {
   }, [dataRow])
 
   const showContent = [
-    <DetailCustomer key='detail' dataRow={dataRow} />,
+    <DetailCustomer key='detail' dataRow={dataRow} setDataRow={setDataRow} />,
     <DashboardCustomer key='dashboard' dataRow={dataRow} />,
-    <ContactAndAddress key='ContactAndAddress' dataRow={dataRow} />,
-    <TaxCustomer key='Tax' dataRow={dataRow} />,
-    <AccountingCustomer key='Accounting' dataRow={dataRow} />,
-    <SalesTeamCustomer key='salesTeam' dataRow={dataRow} />,
-    <SettingsCustomer key='salesTeam' dataRow={dataRow} />,
+    <ContactAndAddress key='ContactAndAddress' dataRow={dataRow} setDataRow={setDataRow} />,
+    <TaxCustomer key='Tax' dataRow={dataRow} setDataRow={setDataRow} />,
+    <AccountingCustomer key='Accounting' dataRow={dataRow} setDataRow={setDataRow} />,
+    <SalesTeamCustomer key='salesTeam' dataRow={dataRow} setDataRow={setDataRow} />,
+    <SettingsCustomer key='salesTeam' dataRow={dataRow} setDataRow={setDataRow} />,
     <PotalUserCustomer key='potalUser' dataRow={dataRow} />
   ]
 
@@ -52,8 +52,6 @@ const CustomerPage = ({ data }) => {
     />
   )
 }
-
-CustomerPage.getLayout = page => <SubPageLayout>{page}</SubPageLayout>
 
 // nextJS SSR
 export async function getServerSideProps() {

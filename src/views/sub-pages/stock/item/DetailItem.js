@@ -31,7 +31,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
 
   const handleCheckboxChange = event => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.checked })
+    setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
   }
 
   const handleTextChange = event => {

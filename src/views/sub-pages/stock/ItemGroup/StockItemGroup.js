@@ -16,9 +16,10 @@ import {
   CardContent
 } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
+import axios from 'axios'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 import ChevronUp from 'mdi-material-ui/ChevronUp'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 //Import Custom Components
 
@@ -27,79 +28,64 @@ const StockItemGroup = ({ dataRow }) => {
   const [collapseWebsite, setCollapseWebsite] = useState([])
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 
+  const [getAllRowItemGroup, setGetAllRowItemGroup] = useState([])
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}Customer/${dataRow.name}`, {
+        headers: {
+          Authorization: 'token 5891d01ccc2961e:0e446b332dc22aa'
+        }
+      })
+      .then(res => {
+        setGetAllRowItemGroup(res.data.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [dataRow])
+
+  // if (Object.values(getAllRowItemGroup)?.length === 0) {
+  //   return 'waiting...'
+  // }
+
   const columnsGroup = [
-    { field: 'id', headerName: 'No', width: 70 },
-    { field: 'Company', headerName: 'Company', width: 150 },
-    { field: 'DefaultWarehouse', headerName: 'Default Warehouse', width: 300 },
+    { field: 'idx', headerName: 'No', width: 70 },
+    { field: 'company', headerName: 'Company', width: 150 },
+    { field: 'default_warehouse', headerName: 'Default Warehouse', width: 300 },
     {
-      field: 'DefaultPriceList',
+      field: 'default_price_list',
       headerName: 'Default Price List',
       width: 300
     }
   ]
 
-  const rowsGroup = [{ id: 1, Company: 'Sidw', TaxCategory: 'Jon', DefaultWarehouse: 'dasd', DefaultPriceList: 'List' }]
-
   const columns = [
     { field: 'id', headerName: 'No', width: 70 },
-    { field: 'ItemTaxTemplate', headerName: 'Item Tax Template', width: 150 },
-    { field: 'TaxCategory', headerName: 'Tax Category', width: 300 },
+    { field: 'item_tax_template', headerName: 'Item Tax Template', width: 150 },
+    { field: 'tax_category', headerName: 'Tax Category', width: 300 },
     {
-      field: 'ValidFrom',
+      field: 'valid_from',
       headerName: 'Valid From',
       width: 300
     },
-    { field: 'MinimumNetRate', headerName: 'Minimum Net Rate', width: 300 },
-    { field: 'MaximumNetRate', headerName: 'Maximum Net Rate', width: 300 }
-  ]
-
-  const rows = [
-    {
-      id: 1,
-      ItemTaxTemplate: 'Sidw',
-      TaxCategory: 'Jon',
-      ValidFrom: 'dasd',
-      MinimumNetRate: 'dsss',
-      MaximumNetRate: 'dada'
-    }
+    { field: 'minimum_net_rate', headerName: 'Minimum Net Rate', width: 300 },
+    { field: 'maximum_net_rate', headerName: 'Maximum Net Rate', width: 300 }
   ]
 
   const columnsFields = [
-    { field: 'id', headerName: 'No', width: 70 },
-    { field: 'Fieldname', headerName: 'Fieldname', width: 150 }
-  ]
-
-  const rowsFields = [
-    {
-      id: 1,
-      Fieldname: 'Sidw'
-    }
+    { field: 'label', headerName: 'Label', width: 150 },
+    { field: 'description', headerName: 'Description', width: 150 }
   ]
 
   const columnsAttr = [
     { field: 'id', headerName: 'No', width: 70 },
-    { field: 'Attribute', headerName: 'Attribute', width: 150 }
-  ]
-
-  const rowsAttr = [
-    {
-      id: 1,
-      Attribute: 'Sidw'
-    }
+    { field: 'fieldname', headerName: 'Attribute', width: 150 }
   ]
 
   const columnsWeb = [
     { field: 'id', headerName: 'No', width: 70 },
-    { field: 'label', headerName: 'Label', width: 150 },
-    { field: 'des', headerName: 'description', width: 150 }
-  ]
-
-  const rowsWeb = [
-    {
-      id: 1,
-      label: 'show',
-      des: 'description'
-    }
+    { field: 'attribute', headerName: 'Label', width: 150 }
   ]
 
   const handleClickWebsite = () => {
@@ -114,7 +100,7 @@ const StockItemGroup = ({ dataRow }) => {
     <Card>
       <CardContent>
         <Grid container spacing={3}>
-          <Grid item sm={12} md={6} lg={6}>
+          <Grid item xs={12}>
             <Typography variant='h6'>General Settings</Typography>
 
             <Typography sx={{ margin: 1 }}>Parent Item Group</Typography>
@@ -128,13 +114,14 @@ const StockItemGroup = ({ dataRow }) => {
             <Typography variant='subtitle2'>Only leaf nodes are allowed in transaction</Typography>
           </Grid>
 
-          <Grid item sm={12} md={12} lg={12}>
+          <Grid item xs={12}>
             <Typography variant='h6'>Defaults</Typography>
 
             <Typography variant='subtitle2'>Item Group Defaults</Typography>
             <DataGrid
-              rows={rowsGroup}
+              rows={getAllRowItemGroup}
               columns={columnsGroup}
+              getRowId={row => row.name}
               initialState={{
                 pagination: {
                   paginationModel: { page: 0, pageSize: 5 }
@@ -146,11 +133,11 @@ const StockItemGroup = ({ dataRow }) => {
             <Button>Add row</Button>
           </Grid>
 
-          <Grid item sm={12} md={12} lg={12} sx={{ mt: 30 }}>
+          <Grid item xs={12} sx={{ mt: 30 }}>
             <Typography variant='h6'>Item Tax</Typography>
             <Typography variant='subtitle2'>Taxes</Typography>
             <DataGrid
-              rows={rows}
+              rows={getAllRowItemGroup}
               columns={columns}
               initialState={{
                 pagination: {
@@ -163,7 +150,7 @@ const StockItemGroup = ({ dataRow }) => {
             <Button>Add row</Button>
           </Grid>
 
-          <Grid item sm={12} md={12} lg={12} sx={{ mt: 30 }}>
+          <Grid item xs={12} sm={12} md={12} lg={12} sx={{ mt: 30 }}>
             <FormGroup>
               <FormControlLabel
                 control={<Checkbox checked={IsShowWebsite} onChange={handleShowWebsite} />}
@@ -173,7 +160,7 @@ const StockItemGroup = ({ dataRow }) => {
               <Typography variant='subtitle2'>Make Item Group visible in website</Typography>
               {IsShowWebsite && (
                 <Grid container spacing={3}>
-                  <Grid item sm={12} md={6} lg={6} sx={{ mt: 4 }}>
+                  <Grid item xs={12} sm={12} md={6} lg={6} sx={{ mt: 4 }}>
                     <Typography sx={{ margin: 1 }}>Route</Typography>
                     <TextField size='small' variant='filled' value={dataRow.route || ''} fullWidth />
 
@@ -197,7 +184,7 @@ const StockItemGroup = ({ dataRow }) => {
                     <Typography variant='subtitle2'>Include Website Items belonging to child Item Groups</Typography>
                   </Grid>
 
-                  <Grid item sm={12} md={6} lg={6} sx={{ mt: 4 }}>
+                  <Grid item xs={12} sm={12} md={6} lg={6} sx={{ mt: 4 }}>
                     <Typography sx={{ margin: 1 }}>Title</Typography>
                     <TextField size='small' variant='filled' value={dataRow.website_title || ''} fullWidth />
 
@@ -208,7 +195,7 @@ const StockItemGroup = ({ dataRow }) => {
                     <Typography sx={{ mt: 4 }}>Website Specifications</Typography>
                     <DataGrid
                       sx={{ height: '40%' }}
-                      rows={rowsWeb}
+                      rows={getAllRowItemGroup}
                       columns={columnsWeb}
                       initialState={{
                         pagination: {
@@ -220,7 +207,7 @@ const StockItemGroup = ({ dataRow }) => {
                     />
                   </Grid>
 
-                  <Grid item sm={12} md={12} lg={12} sx={{ mt: 4, display: 'flex' }}>
+                  <Grid item xs={12} sx={{ mt: 4, display: 'flex' }}>
                     <Button size='small' variant='filled' label='' onClick={handleClickWebsite}>
                       <Typography>Website Filters</Typography>
                     </Button>
@@ -238,10 +225,10 @@ const StockItemGroup = ({ dataRow }) => {
                     <Collapse in={collapseWebsite}>
                       <Divider sx={{ margin: 0 }} />
                       <CardContent>
-                        <Grid item sm={12} md={12} lg={12}>
+                        <Grid item xs={12}>
                           <Typography>Item Fields</Typography>
                           <DataGrid
-                            rows={rowsFields}
+                            rows={getAllRowItemGroup}
                             columns={columnsFields}
                             initialState={{
                               pagination: {
@@ -254,10 +241,10 @@ const StockItemGroup = ({ dataRow }) => {
                           <Button>Add Row</Button>
                         </Grid>
 
-                        <Grid item sm={12} md={12} lg={12} sx={{ mt: 10 }}>
+                        <Grid item xs={12} sx={{ mt: 10 }}>
                           <Typography>Attributes</Typography>
                           <DataGrid
-                            rows={rowsAttr}
+                            rows={getAllRowItemGroup}
                             columns={columnsAttr}
                             initialState={{
                               pagination: {

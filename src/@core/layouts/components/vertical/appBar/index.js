@@ -3,6 +3,9 @@ import { styled, useTheme } from '@mui/material/styles'
 import MuiAppBar from '@mui/material/AppBar'
 import MuiToolbar from '@mui/material/Toolbar'
 
+// ** Theme Colors
+import DefaultPalette from 'src/@core/theme/palette'
+
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
   transition: 'none',
   alignItems: 'center',
@@ -37,8 +40,19 @@ const LayoutAppBar = props => {
   // ** Vars
   const { contentWidth } = settings
 
+  // ** ThemeColors
+  const mode = 'light' // หรือ 'dark' ตามต้องการ
+  const themeColor = 'primary'
+  const palette = DefaultPalette(mode, themeColor)
+
   return (
-    <AppBar elevation={0} color='default' className='layout-navbar' position='static'>
+    <AppBar
+      elevation={0}
+      color='default'
+      className='layout-navbar'
+      position='static'
+      sx={{ color: palette.primary.contrastText, backgroundColor: palette.primary.main }}
+    >
       <Toolbar
         className='navbar-content-container'
         sx={{
