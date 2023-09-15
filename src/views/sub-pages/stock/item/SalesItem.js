@@ -14,7 +14,9 @@ import {
   Divider,
   CardContent,
   FormGroup,
-  FormControlLabel
+  FormControlLabel,
+  Card,
+  Grid
 } from '@mui/material'
 
 //Icon MUI
@@ -40,6 +42,16 @@ const SalesItem = ({ dataRow }) => {
     setIsDeferredCheck(event.target.checked)
   }
 
+  const handleCheckboxChange = event => {
+    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.checked })
+  }
+
+  const handleTextChange = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+  }
+
   const columnsCus = [
     { field: 'id', headerName: 'No', width: 70 },
     { field: 'CustomerName', headerName: 'Customer Name', width: 150 },
@@ -56,130 +68,134 @@ const SalesItem = ({ dataRow }) => {
     }
   ]
 
-  const handleCheckboxChange = event => {
-    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-  }
-
   return (
     <Box>
-      <Box>
-        <Box sx={{ display: 'flex' }}>
-          <Box>
-            <Typography sx={{ marginBottom: 2 }}>Default Sales Unit of Measure :</Typography>
-            <TextField variant='filled' label='' value={dataRow.sales_uom} />
-          </Box>
-          <Box sx={{ ml: 20 }}>
-            <Typography sx={{ marginBottom: 2 }}>Max Discount (%) :</Typography>
-            <TextField variant='filled' label='' value={dataRow.max_discount} />
-          </Box>
-        </Box>
-        <Box sx={{ display: 'flex' }}>
-          <Checkbox {...label} checked={dataRow.grant_commission} onChange={handleCheckboxChange} />
-          <Typography variant='subtitle1' sx={{ m: 4 }}>
-            Grant Commission
-          </Typography>
-        </Box>
-        <Box sx={{ display: 'flex' }}>
-          <Checkbox {...label} checked={dataRow.is_sales_item} onChange={handleCheckboxChange} />
-          <Typography variant='subtitle1' sx={{ m: 4 }}>
-            Allow Sales
-          </Typography>
-        </Box>
-        <Box sx={{ mt: 5, display: 'flex' }}>
-          <Button size='small' variant='filled' label='' onClick={handleDeferred}>
-            <Typography variant='h6'>Deferred Revenue</Typography>
-          </Button>
-          <Box>
-            <CardActions className='card-action-dense'>
-              <IconButton size='small' onClick={handleDeferred}>
-                {collapseDeferred ? (
-                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                ) : (
-                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                )}
-              </IconButton>
-            </CardActions>
-          </Box>
-        </Box>
-        <Box>
-          <Collapse in={collapseDeferred}>
-            <Divider sx={{ margin: 0 }} />
-            <CardContent>
-              <Box sx={{ mt: 4, display: 'flex' }}>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={IsDeferredCheck} onChange={handleDeferredCheck} />}
-                    variant='body2'
-                    label='Enable Deferred Expense'
+      <Card
+        sx={{
+          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
+          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
+          p: 2,
+          mb: 2
+        }}
+      >
+        <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Typography sx={{ marginBottom: 2 }}>Default Sales Unit of Measure</Typography>
+            <TextField
+              fullWidth
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow.sales_uom || ''}
+              name='sales_uom'
+              onChange={handleTextChange}
+            />
+            <FormControlLabel
+              control={<Checkbox checked={Boolean(dataRow.grant_commission) || false} />}
+              label=' Grant Commission'
+            />
+            <FormControlLabel
+              control={<Checkbox checked={Boolean(dataRow.is_sales_item) || false} />}
+              label='  Allow Sales'
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Typography sx={{ marginBottom: 2 }}>Max Discount (%)</Typography>
+            <TextField
+              fullWidth
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow.max_discount || ''}
+              name='max_discount'
+              onChange={handleTextChange}
+            />
+          </Grid>
+        </Grid>
+        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
+        <Button variant='filled' label='' onClick={handleDeferred} sx={{ fontWeight: 'bold' }}>
+          Deferred Revenue
+        </Button>
+        <IconButton size='small' onClick={handleDeferred}>
+          {collapseDeferred ? (
+            <ChevronUp sx={{ fontSize: '1.875rem' }} />
+          ) : (
+            <ChevronDown sx={{ fontSize: '1.875rem' }} />
+          )}
+        </IconButton>
+
+        <Collapse in={collapseDeferred}>
+          <Divider sx={{ margin: 0 }} />
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox checked={IsDeferredCheck} onChange={handleDeferredCheck} />}
+              variant='body2'
+              label='Enable Deferred Expense'
+            />
+            {IsDeferredCheck && (
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={12} md={6} lg={6}>
+                  <Typography sx={{ marginBottom: 2 }}>Deferred Expense Account</Typography>
+                  <TextField
+                    fullWidth
+                    size='small'
+                    variant='filled'
+                    value={dataRow.deferred_revenue_account || ''}
+                    name='deferred_revenue_account'
+                    onChange={handleTextChange}
                   />
-                  {IsDeferredCheck && (
-                    <Box>
-                      <Box sx={{ mt: 4 }}>
-                        <Typography>Deferred Expense Account</Typography>
-                        <TextField label='' variant='outlined' fullWidth value={dataRow.deferred_revenue_account} />
-                      </Box>
-                      <Box sx={{ mt: 4 }}>
-                        <Typography>No of Months (Expense)</Typography>
-                        <TextField label='' variant='outlined' fullWidth value={dataRow.no_of_months} />
-                      </Box>
-                    </Box>
-                  )}
-                </FormGroup>
-              </Box>
-            </CardContent>
-          </Collapse>
-        </Box>
-        <Box sx={{ mt: 5, display: 'flex' }}>
-          <Button size='small' variant='filled' label='' onClick={handleCustomer}>
-            <Typography variant='h6'>Customer Details</Typography>
-          </Button>
-          <Box>
-            <CardActions className='card-action-dense'>
-              <IconButton size='small' onClick={handleCustomer}>
-                {collapseCustomer ? (
-                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                ) : (
-                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                )}
-              </IconButton>
-            </CardActions>
-          </Box>
-        </Box>
-        <Box>
-          <Collapse in={collapseCustomer}>
-            <Divider sx={{ margin: 0 }} />
-            <CardContent>
-              <Box>
-                <Typography variant='subtitle2' sx={{ marginBottom: 2 }}>
-                  Customer Items
-                </Typography>
-                <Box>
-                  <DataGrid
-                    rows={rowCus}
-                    columns={columnsCus}
-                    initialState={{
-                      pagination: {
-                        paginationModel: { page: 0, pageSize: 5 }
-                      }
-                    }}
-                    pageSizeOptions={[5, 10]}
-                    checkboxSelection
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={6}>
+                  <Typography sx={{ marginBottom: 2 }}>No of Months (Expense)</Typography>
+                  <TextField
+                    fullWidth
+                    size='small'
+                    variant='filled'
+                    value={dataRow.no_of_months || ''}
+                    name='no_of_months'
+                    onChange={handleTextChange}
                   />
-                </Box>
-                <Button>Add row</Button>
-              </Box>
-            </CardContent>
-          </Collapse>
-        </Box>
-      </Box>
-      <Box>
-        <Typography variant='h6' sx={{ m: 2 }}>
-          Add Comment
-        </Typography>
-        <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
-        <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-        <Button>add comment</Button>
-      </Box>
+                </Grid>
+              </Grid>
+            )}
+          </FormGroup>
+        </Collapse>
+        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
+        <Button size='small' variant='filled' label='' onClick={handleCustomer} sx={{ fontWeight: 'bold' }}>
+          Customer Details
+        </Button>
+
+        <IconButton size='small' onClick={handleCustomer}>
+          {collapseCustomer ? (
+            <ChevronUp sx={{ fontSize: '1.875rem' }} />
+          ) : (
+            <ChevronDown sx={{ fontSize: '1.875rem' }} />
+          )}
+        </IconButton>
+
+        <Collapse in={collapseCustomer}>
+          <Divider sx={{ margin: 0 }} />
+          <CardContent>
+            <Typography variant='subtitle2' sx={{ marginBottom: 2 }}>
+              Customer Items
+            </Typography>
+
+            <DataGrid
+              rows={rowCus}
+              columns={columnsCus}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 }
+                }
+              }}
+              pageSizeOptions={[5, 10]}
+              checkboxSelection
+            />
+
+            <Button>Add row</Button>
+          </CardContent>
+        </Collapse>
+      </Card>
     </Box>
   )
 }
