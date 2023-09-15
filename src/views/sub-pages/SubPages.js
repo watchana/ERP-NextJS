@@ -32,7 +32,6 @@ const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow
   const [sideContentOpen, setSideContentOpen] = useState(false)
   const [tabValue, setTabValue] = useState(1)
   const [buttonArrow, setButtonArrow] = useState(true)
-  const colorEnabled = blue[100]
 
   useEffect(() => {
     const handleResize = () => {
