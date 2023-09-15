@@ -48,6 +48,7 @@ const CustomerPage = ({ data }) => {
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='Customer'
+      docStatusName='disabled'
     />
   )
 }

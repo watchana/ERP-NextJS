@@ -471,16 +471,6 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
           </Grid>
         </Grid>
       </Card>
-      <Grid sx={{ my: 5 }}>
-        <Typography variant=''>Add a comment:</Typography>
-        <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
-      </Grid>
-      <Btn
-        detailbutton={' Comment'}
-        bgcolorbutton={'white'}
-        numminwid={'auto'}
-        handleButtonClick={() => router.push()}
-      />
     </Grid>
   )
 }

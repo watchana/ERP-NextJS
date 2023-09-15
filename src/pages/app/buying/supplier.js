@@ -41,6 +41,7 @@ const SupplierPage = ({ data }) => {
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='Supplier'
+      docStatusName='disabled'
     />
   )
 }

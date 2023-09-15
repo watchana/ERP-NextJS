@@ -50,7 +50,7 @@ const DashboardCustomer = () => {
           </Collapse>
         </Grid>
 
-        <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
+        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
 
         <Grid container>
           <Box sx={{ width: '100%' }}>
@@ -66,7 +66,7 @@ const DashboardCustomer = () => {
             <CardContent>test</CardContent>
           </Collapse>
 
-          <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
+          <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
 
           <Box sx={{ width: '100%' }}>
             <Button sx={{ fontWeight: 'bold', p: 0 }} variant='filled' onClick={handleClickConnections}>
@@ -86,7 +86,7 @@ const DashboardCustomer = () => {
             <CardContent>test</CardContent>
           </Collapse>
         </Grid>
-        <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
+        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
       </Card>
     </Box>
   )

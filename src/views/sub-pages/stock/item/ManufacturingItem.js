@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 
 // MUI imports
-import { Box, Typography, Checkbox, Card, Grid } from '@mui/material'
+import { Box, Typography, Checkbox, Card, Grid, TextField } from '@mui/material'
 
 const ManufacturingItem = ({ dataRow, setDataRow = { setDataRow } }) => {
   const handleCheckboxChange = event => {
@@ -13,7 +13,15 @@ const ManufacturingItem = ({ dataRow, setDataRow = { setDataRow } }) => {
 
   return (
     <Box>
-      <Card>
+      <Card
+        sx={{
+          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
+          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
+          p: 2,
+          mb: 2,
+          width: '100%'
+        }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
             <Checkbox
@@ -36,6 +44,10 @@ const ManufacturingItem = ({ dataRow, setDataRow = { setDataRow } }) => {
               <Typography variant='subtitle2'>If subcontracted to a vendor</Typography>
             </Box>
           </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography sx={{ marginBottom: 2 }}>Deferred Expense Account</Typography>
+          <TextField fullWidth size='small' variant='filled' value={dataRow.default_bom || ''} />
         </Grid>
       </Card>
     </Box>
