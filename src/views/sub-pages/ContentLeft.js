@@ -28,30 +28,44 @@ const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName 
   // ** States
   const errorColor = red[500]
   const [dataFilter, setDataFilter] = useState(data)
+  const [showData, setShowData] = useState(data)
   const [sort, setSort] = useState('asc')
+  const [sortType, setSortType] = useState()
+
+  const handleSortClick = sort => {
+    setSort(sort)
+    if (sort === 'asc') {
+      console.log('sort จากน้อยไปมาก')
+
+      const sortData = data.sort((a, b) => {
+        return a.modified.localeCompare(b.modified)
+      })
+      setDataFilter(sortData)
+      setShowData(sortData)
+    } else {
+      console.log('sort จากมากไปน้อย')
+
+      const sortData = data.sort((a, b) => {
+        return b.modified.localeCompare(a.modified)
+      })
+      setDataFilter(sortData)
+      setShowData(sortData)
+    }
+  }
 
   const handleIDSearch = event => {
     console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
     const value = event.target.value
 
     if (value === '') {
-      setDataFilter(data)
+      setShowData(dataFilter)
     } else {
       {
         // ค้นหาคำที่คล้ายคลึงกับคำที่คุณค้นหา
         const matches = data.filter(item => item.name.toLowerCase().includes(value.toLowerCase()))
 
-        setDataFilter(matches)
+        setShowData(matches)
       }
-    }
-  }
-
-  const handleSortClick = sort => {
-    setSort(sort)
-    if (sort === 'asc') {
-      console.log('sort จากน้อยไปมาก')
-    } else {
-      console.log('sort จากมากไปน้อย')
     }
   }
 
@@ -108,7 +122,7 @@ const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName 
           </Grid>
         </Grid>
         <Divider />
-        {dataFilter.map((item, index) => (
+        {showData.map((item, index) => (
           <Box key={item.name}>
             <Box
               sx={{
