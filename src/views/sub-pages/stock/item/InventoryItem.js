@@ -20,7 +20,8 @@ import {
   DialogContent,
   DialogContentText,
   Card,
-  Grid
+  Grid,
+  Skeleton
 } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import React, { useEffect, useState } from 'react'
@@ -178,7 +179,7 @@ const InventoryItem = ({ dataRow, dropDowns }) => {
   }, [dataRow])
 
   if (getDataBarcodes.length === 0) {
-    return 'waiting...'
+    return <Skeleton variant='rounded' width={'100%'} height={'60vh'} />
   }
 
   return (

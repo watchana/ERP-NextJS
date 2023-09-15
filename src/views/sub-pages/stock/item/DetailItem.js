@@ -15,6 +15,7 @@ import {
   FormGroup,
   Grid,
   IconButton,
+  Skeleton,
   TextField,
   TextareaAutosize,
   Typography
@@ -48,6 +49,8 @@ const DetailItem = ({ dataRow, setDataRow }) => {
     flexDirection: 'row',
     alignItems: 'center'
   }
+
+  if (!dataRow) return <Skeleton variant='rounded' width={210} height={60} />
 
   return (
     <Box>
