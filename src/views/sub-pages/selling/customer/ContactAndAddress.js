@@ -124,7 +124,7 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
     })
   }
 
-  const [dataAddr, setDataAddr] = useState('')
+  const [dataAddr, setDataAddr] = useState({})
   const [dataContact, setDataContact] = useState('')
   const [getDataLinks, setGetDataLinks] = useState([])
   const [getDataContact, setGetDataContact] = useState([])
@@ -167,7 +167,12 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
 
   const handleCheckboxChangeAddr = event => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-    setDataAddr({ ...dataAddr, [event.target.name]: event.target.checked })
+    setDataAddr({ ...dataAddr, [event.target.name]: event.target.checked === true ? 1 : 0 })
+  }
+
+  const handleCheckboxChangeCont = event => {
+    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
+    setDataContact({ ...dataContact, [event.target.name]: event.target.checked === true ? 1 : 0 })
   }
 
   const handleTextChangeAddress = event => {
@@ -374,41 +379,42 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                           />
                           <Grid item xs={12} sx={checkboxStyle}>
                             <Checkbox
-                              checked={dataRow.is_primary_address === 1 ? true : false}
+                              checked={dataAddr.is_primary_address === 1 ? true : false}
                               name='is_primary_address'
                               onChange={handleCheckboxChangeAddr}
                             />
                             <Typography variant='subtitle2'>Preferred Billing Address</Typography>
                           </Grid>
-                          {/* <FormGroup>
-                            
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={Preferred_Shipping_Addressn}
-                                  onChange={handleChange}
-                                  name='Preferred_Shipping_Addressn'
-                                />
-                              }
-                              label='Preferred Shipping Addressn'
+                          <Grid item xs={12} sx={checkboxStyle}>
+                            <Checkbox
+                              checked={dataAddr.is_shipping_address === 1 ? true : false}
+                              name='is_shipping_address'
+                              onChange={handleCheckboxChangeAddr}
                             />
-
-                            <FormControlLabel
-                              control={<Checkbox checked={Disabled} onChange={handleChange} name='Disabled' />}
-                              label='Disabled'
+                            <Typography variant='subtitle2'>Preferred Shipping Address</Typography>
+                          </Grid>
+                          <Grid item xs={12} sx={checkboxStyle}>
+                            <Checkbox
+                              checked={dataAddr.disabled === 1 ? true : false}
+                              name='disabled'
+                              onChange={handleCheckboxChangeAddr}
                             />
-                          </FormGroup> */}
+                            <Typography variant='subtitle2'>Disabled</Typography>
+                          </Grid>
                         </Grid>
                       </Grid>
                       <Grid container spacing={3}>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                        <Grid item xs={12} sm={12} md={6} lg={6} sx={{ mt: 6 }}>
                           <Typography variant='h6'>Reference</Typography>
 
-                          <FormControlLabel
-                            sx={{ mt: 2 }}
-                            control={<Checkbox checked={Boolean(dataRow[0]?.is_your_company_address) || false} />}
-                            label='Is Your Company Address'
-                          />
+                          <Grid item xs={12} sx={checkboxStyle}>
+                            <Checkbox
+                              checked={dataAddr.is_your_company_address === 1 ? true : false}
+                              name='is_your_company_address'
+                              onChange={handleCheckboxChangeAddr}
+                            />
+                            <Typography variant='subtitle2'>Is Your Company Address</Typography>
+                          </Grid>
                         </Grid>
                         <Grid item xs={12} sm={12} md={12} lg={12}>
                           <Typography>links</Typography>
@@ -627,18 +633,14 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                                               name='google_contacts'
                                             />
                                           </Grid>
-                                          <Grid item xs={12} sm={12} md={6} lg={6}>
-                                            <FormControlLabel
-                                              sx={{ mt: 2 }}
-                                              control={
-                                                <Checkbox
-                                                  checked={
-                                                    Boolean(dataContact[0]?.pulled_from_google_contacts) || false
-                                                  }
-                                                />
-                                              }
-                                              label='Pulled from Google Contacts'
+
+                                          <Grid item xs={12} sm={12} md={6} lg={6} sx={checkboxStyle}>
+                                            <Checkbox
+                                              checked={dataContact.pulled_from_google_contacts === 1 ? true : false}
+                                              name='pulled_from_google_contacts'
+                                              onChange={handleCheckboxChangeCont}
                                             />
+                                            <Typography variant='subtitle2'>Pulled from Google Contacts</Typography>
                                           </Grid>
                                         </Grid>
                                       </CardContent>
@@ -714,16 +716,23 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                               lg={12}
                               sx={{ mt: 26, display: 'flex', flexDirection: 'column' }}
                             >
-                              <FormControlLabel
-                                sx={{ mt: 2, ml: 2 }}
-                                control={<Checkbox checked={Boolean(dataContact[0]?.is_primary_contact) || false} />}
-                                label='Preferred Billing Address'
-                              />
-                              <FormControlLabel
-                                sx={{ mt: 2, ml: 2 }}
-                                control={<Checkbox checked={Boolean(dataContact[0]?.is_billing_contact) || false} />}
-                                label='Preferred Billing Address'
-                              />
+                              <Grid item xs={12} sm={12} md={6} lg={6} sx={checkboxStyle}>
+                                <Checkbox
+                                  checked={dataContact.is_primary_contact === 1 ? true : false}
+                                  name='is_primary_contact'
+                                  onChange={handleCheckboxChangeCont}
+                                />
+                                <Typography variant='subtitle2'>Is Primary Contact</Typography>
+                              </Grid>
+
+                              <Grid item xs={12} sm={12} md={6} lg={6} sx={checkboxStyle}>
+                                <Checkbox
+                                  checked={dataContact.is_billing_contact === 1 ? true : false}
+                                  name='is_billing_contact'
+                                  onChange={handleCheckboxChangeCont}
+                                />
+                                <Typography variant='subtitle2'>Is Billing Contact</Typography>
+                              </Grid>
                             </Grid>
                           </Grid>
                         </Grid>
@@ -740,11 +749,14 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                               onChange={handleTextChangeContact}
                               name='department'
                             />
-                            <FormControlLabel
-                              sx={{ mt: 2, ml: 1 }}
-                              control={<Checkbox checked={Boolean(dataContact[0]?.unsubscribed) || false} />}
-                              label='Unsubscribed'
-                            />
+                            <Grid item xs={12} sm={12} md={6} lg={6} sx={checkboxStyle}>
+                              <Checkbox
+                                checked={dataContact.unsubscribed === 1 ? true : false}
+                                name='unsubscribed'
+                                onChange={handleCheckboxChangeCont}
+                              />
+                              <Typography variant='subtitle2'>Unsubscribed</Typography>
+                            </Grid>
                           </Grid>
                         </Grid>
                       </Grid>
@@ -769,7 +781,8 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                     <TextField
                       size='small'
                       variant='filled'
-                      value={dataRow.customer_primary_contact}
+                      onChange={handleTextChangeContact}
+                      name='customer_primary_contact'
                       fullWidth
                       multiline
                     />
@@ -786,7 +799,8 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                       size='small'
                       variant='filled'
                       label=''
-                      value={dataRow.customer_primary_address}
+                      onChange={handleTextChangeAddress}
+                      name='customer_primary_address'
                       fullWidth
                       multiline
                     />
