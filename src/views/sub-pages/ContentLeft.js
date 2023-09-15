@@ -204,7 +204,9 @@ const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName 
               }}
               onClick={() => handleRowClick(item)}
             >
-              <Typography variant='h6'>{item.name}</Typography>
+              <Typography variant='body1' sx={{ fontWeight: 'Bold' }}>
+                {item.name}
+              </Typography>
               {item[docStatusName] === 0 ? (
                 <Chip label='Enable' color='success' size='small' />
               ) : (
