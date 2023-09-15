@@ -56,7 +56,7 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow, doctype
   }, [])
 
   useEffect(() => {
-    console.log('dataRow', data)
+    console.log('data', data)
   }, [data])
 
   const handleTabChange = (event, newValue) => {
