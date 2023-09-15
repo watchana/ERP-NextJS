@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // ** MUI Imports
 import {
@@ -28,16 +28,21 @@ const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName 
   // ** States
   const errorColor = red[500]
   const [dataFilter, setDataFilter] = useState(data)
-  const [showData, setShowData] = useState(data)
-  const [sort, setSort] = useState('asc')
+  const [showData, setShowData] = useState([])
+  const [sort, setSort] = useState('desc')
   const [sortType, setSortType] = useState()
 
   const handleSortClick = sort => {
     setSort(sort)
+  }
+
+  useEffect(() => {
+    console.log('sort', sort)
+    const copiedData = [...data] // สำเนาข้อมูล
     if (sort === 'asc') {
       console.log('sort จากน้อยไปมาก')
 
-      const sortData = data.sort((a, b) => {
+      const sortData = copiedData.sort((a, b) => {
         return a.modified.localeCompare(b.modified)
       })
       setDataFilter(sortData)
@@ -45,13 +50,13 @@ const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName 
     } else {
       console.log('sort จากมากไปน้อย')
 
-      const sortData = data.sort((a, b) => {
+      const sortData = copiedData.sort((a, b) => {
         return b.modified.localeCompare(a.modified)
       })
       setDataFilter(sortData)
       setShowData(sortData)
     }
-  }
+  }, [sort, data])
 
   const handleIDSearch = event => {
     console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
