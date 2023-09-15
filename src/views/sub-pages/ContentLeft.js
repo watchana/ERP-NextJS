@@ -15,7 +15,9 @@ import {
   ToggleButton,
   ButtonGroup,
   SvgIcon,
-  IconButton
+  IconButton,
+  Menu,
+  MenuItem
 } from '@mui/material'
 import { red } from '@mui/material/colors'
 
@@ -30,33 +32,73 @@ const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName 
   const [dataFilter, setDataFilter] = useState(data)
   const [showData, setShowData] = useState([])
   const [sort, setSort] = useState('desc')
-  const [sortType, setSortType] = useState()
+
+  // ** Sort Type
+  const sortOptions = ['Last Updated On', `${doctype} Name`, 'ID', 'Created On', 'Most Used']
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [sortOption, setSortOption] = useState('Last Updated On')
+  const sortOptionOpen = Boolean(anchorEl)
 
   const handleSortClick = sort => {
     setSort(sort)
   }
 
+  const handleSortOptionClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleSortOptionClose = value => {
+    setAnchorEl(null)
+    setSortOption(value)
+  }
+
   useEffect(() => {
     console.log('sort', sort)
     const copiedData = [...data] // สำเนาข้อมูล
-    if (sort === 'asc') {
-      console.log('sort จากน้อยไปมาก')
 
-      const sortData = copiedData.sort((a, b) => {
-        return a.modified.localeCompare(b.modified)
-      })
-      setDataFilter(sortData)
-      setShowData(sortData)
-    } else {
-      console.log('sort จากมากไปน้อย')
-
-      const sortData = copiedData.sort((a, b) => {
-        return b.modified.localeCompare(a.modified)
-      })
-      setDataFilter(sortData)
-      setShowData(sortData)
+    switch (sortOption) {
+      case 'Last Updated On': {
+        if (sort === 'asc') {
+          copiedData.sort((a, b) => new Date(a.modified) - new Date(b.modified))
+        } else {
+          copiedData.sort((a, b) => new Date(b.modified) - new Date(a.modified))
+        }
+        break
+      }
+      case `${doctype} Name`: {
+        if (sort === 'asc') {
+          copiedData.sort((a, b) => a.name.localeCompare(b.name))
+        } else {
+          copiedData.sort((a, b) => b.name.localeCompare(a.name))
+        }
+        break
+      }
+      case 'ID': {
+        if (sort === 'asc') {
+          copiedData.sort((a, b) => a.id - b.id)
+        } else {
+          copiedData.sort((a, b) => b.id - a.id)
+        }
+        break
+      }
+      case 'Created On': {
+        if (sort === 'asc') {
+          copiedData.sort((a, b) => new Date(a.creation) - new Date(b.creation))
+        } else {
+          copiedData.sort((a, b) => new Date(b.creation) - new Date(a.creation))
+        }
+        break
+      }
+      case 'Most Used': {
+        // ยังไม่ได้ระบุการเรียงลำดับสำหรับ 'Most Used'
+        break
+      }
+      default:
+        break
     }
-  }, [sort, data])
+
+    setShowData(copiedData)
+  }, [sort, data, sortOption, doctype])
 
   const handleIDSearch = event => {
     console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
@@ -122,7 +164,30 @@ const ContentLeft = ({ menuColumn, data, handleRowClick, doctype, docStatusName 
                   <Image src={sortDescending} alt='sortDescending' />
                 </IconButton>
               )}
-              <Button variant='outlined'>Last Updated On</Button>
+              <Button
+                id='basic-button'
+                aria-controls={sortOptionOpen ? 'basic-menu' : undefined}
+                aria-haspopup='true'
+                aria-expanded={sortOptionOpen ? 'true' : undefined}
+                onClick={handleSortOptionClick}
+              >
+                {sortOption}
+              </Button>
+              <Menu
+                id='basic-menu'
+                anchorEl={anchorEl}
+                open={sortOptionOpen}
+                onClose={() => handleSortOptionClose(sortOption)}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button'
+                }}
+              >
+                {sortOptions.map(option => (
+                  <MenuItem key={option} onClick={() => handleSortOptionClose(option)}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Menu>
             </ButtonGroup>
           </Grid>
         </Grid>
