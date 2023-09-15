@@ -230,18 +230,16 @@ const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow
                       ))}
                     </TabContext>
                     <Card sx={{ marginBlock: 4, p: 2 }}>
-                      <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                          <Typography variant='h6' sx={{ my: 2 }}>
-                            Add Comment
-                          </Typography>
-                          <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
-                          <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-                          <Button variant='contained' sx={{ marginBlock: 2 }}>
-                            comment
-                          </Button>
-                        </Grid>
-                      </Grid>
+                      <Box sx={{ width: '100%' }}>
+                        <Typography variant='h6' sx={{ my: 2 }}>
+                          Add Comment
+                        </Typography>
+                        <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
+                        <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
+                        <Button variant='contained' sx={{ marginBlock: 2 }}>
+                          comment
+                        </Button>
+                      </Box>
                     </Card>
                   </Box>
                 </Box>
