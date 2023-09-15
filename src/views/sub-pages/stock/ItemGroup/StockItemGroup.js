@@ -23,16 +23,15 @@ import { useEffect, useState } from 'react'
 
 //Import Custom Components
 
-const StockItemGroup = ({ dataRow }) => {
+const StockItemGroup = ({ dataRow, setDataRow }) => {
   const [IsShowWebsite, setIsShowWebsite] = useState([])
   const [collapseWebsite, setCollapseWebsite] = useState([])
-  const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 
   const [getAllRowItemGroup, setGetAllRowItemGroup] = useState([])
 
   useEffect(() => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}Customer/${dataRow.name}`, {
+      .get(`${process.env.NEXT_PUBLIC_API_URL}Item Group/${dataRow.name}`, {
         headers: {
           Authorization: 'token 5891d01ccc2961e:0e446b332dc22aa'
         }
@@ -48,6 +47,10 @@ const StockItemGroup = ({ dataRow }) => {
   // if (Object.values(getAllRowItemGroup)?.length === 0) {
   //   return 'waiting...'
   // }
+
+  useEffect(() => {
+    console.log('Group', dataRow)
+  }, [dataRow])
 
   const columnsGroup = [
     { field: 'idx', headerName: 'No', width: 70 },
@@ -96,6 +99,22 @@ const StockItemGroup = ({ dataRow }) => {
     setIsShowWebsite(event.target.checked)
   }
 
+  const handleTextChange = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+  }
+
+  const handleCheckbox = event => {
+    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
+  }
+
+  const checkboxStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  }
+
   return (
     <Card>
       <CardContent>
@@ -104,13 +123,19 @@ const StockItemGroup = ({ dataRow }) => {
             <Typography variant='h6'>General Settings</Typography>
 
             <Typography sx={{ margin: 1 }}>Parent Item Group</Typography>
-            <TextField size='small' variant='filled' value={dataRow.parent_item_group || ''} fullWidth />
-
-            <FormControlLabel
-              sx={{ mt: 2 }}
-              control={<Checkbox checked={Boolean(dataRow[0]?.is_group) || false} />}
-              label='Is Group'
+            <TextField
+              size='small'
+              variant='filled'
+              value={dataRow.parent_item_group || ''}
+              fullWidth
+              onChange={handleTextChange}
+              name='parent_item_group'
             />
+            <Grid item xs={12} sx={checkboxStyle}>
+              <Checkbox checked={dataRow.is_group === 1 ? true : false} name='is_group' onChange={handleCheckbox} />
+              <Typography variant='subtitle2'>Is Group</Typography>
+            </Grid>
+
             <Typography variant='subtitle2'>Only leaf nodes are allowed in transaction</Typography>
           </Grid>
 
@@ -162,10 +187,25 @@ const StockItemGroup = ({ dataRow }) => {
                 <Grid container spacing={3}>
                   <Grid item xs={12} sm={12} md={6} lg={6} sx={{ mt: 4 }}>
                     <Typography sx={{ margin: 1 }}>Route</Typography>
-                    <TextField size='small' variant='filled' value={dataRow.route || ''} fullWidth />
+                    <TextField
+                      size='small'
+                      variant='filled'
+                      value={dataRow.route || ''}
+                      fullWidth
+                      onChange={handleTextChange}
+                      name='route'
+                    />
 
                     <Typography sx={{ marginBottom: 2 }}>Weightage</Typography>
-                    <TextField size='small' variant='filled' label='' value={dataRow.weightage || ''} fullWidth />
+                    <TextField
+                      size='small'
+                      variant='filled'
+                      label=''
+                      value={dataRow.weightage || ''}
+                      fullWidth
+                      onChange={handleTextChange}
+                      name='weightage'
+                    />
 
                     <Typography sx={{ mt: 8 }}>Description</Typography>
                     <TextareaAutosize
@@ -174,22 +214,42 @@ const StockItemGroup = ({ dataRow }) => {
                       variant='filled'
                       label=''
                       value={dataRow.description}
+                      onChange={handleTextChange}
+                      name='description'
                     />
+                    <Grid item xs={12} sx={checkboxStyle}>
+                      <Checkbox
+                        checked={dataRow.include_descendants === 1 ? true : false}
+                        name='include_descendants'
+                        onChange={handleCheckbox}
+                      />
+                      <Typography variant='subtitle2'>Include Descendants</Typography>
+                    </Grid>
 
-                    <FormControlLabel
-                      sx={{ mt: 2 }}
-                      control={<Checkbox checked={Boolean(dataRow[0]?.include_descendants) || false} />}
-                      label='Include Descendants'
-                    />
                     <Typography variant='subtitle2'>Include Website Items belonging to child Item Groups</Typography>
                   </Grid>
 
                   <Grid item xs={12} sm={12} md={6} lg={6} sx={{ mt: 4 }}>
                     <Typography sx={{ margin: 1 }}>Title</Typography>
-                    <TextField size='small' variant='filled' value={dataRow.website_title || ''} fullWidth />
+                    <TextField
+                      size='small'
+                      variant='filled'
+                      value={dataRow.website_title || ''}
+                      fullWidth
+                      onChange={handleTextChange}
+                      name='website_title'
+                    />
 
                     <Typography sx={{ marginBottom: 2 }}>Slideshow</Typography>
-                    <TextField size='small' variant='filled' label='' value={dataRow.slideshow || ''} fullWidth />
+                    <TextField
+                      size='small'
+                      variant='filled'
+                      label=''
+                      value={dataRow.slideshow || ''}
+                      fullWidth
+                      onChange={handleTextChange}
+                      name='slideshow'
+                    />
                     <Typography variant='subtitle2'>Show this slideshow at the top of the page</Typography>
 
                     <Typography sx={{ mt: 4 }}>Website Specifications</Typography>
