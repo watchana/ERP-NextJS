@@ -3,7 +3,7 @@ import { DataGrid } from '@mui/x-data-grid'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
-const SalesTeamCustomer = ({ dataRow }) => {
+const SalesTeamCustomer = ({ dataRow, setDataRow }) => {
   const columns = [
     { field: 'idx', headerName: 'No', width: 70 },
     { field: 'sales_person', headerName: 'Sales Person', width: 150 },
@@ -36,6 +36,11 @@ const SalesTeamCustomer = ({ dataRow }) => {
     return 'waiting...'
   }
 
+  const handleTextChange = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+  }
+
   return (
     <Grid>
       <Card sx={{ width: '100%', p: 5 }}>
@@ -61,11 +66,27 @@ const SalesTeamCustomer = ({ dataRow }) => {
           <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
           <Grid item xs={12}>
             <Typography sx={{ marginBottom: 2 }}>Sales Partner</Typography>
-            <TextField size='small' variant='filled' label='' value={dataRow.default_sales_partner} fullWidth />
+            <TextField
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow.default_sales_partner}
+              fullWidth
+              onChange={handleTextChange}
+              name='default_sales_partner'
+            />
           </Grid>
           <Grid item xs={12}>
             <Typography sx={{ marginBottom: 2 }}>Commission Rate</Typography>
-            <TextField size='small' variant='filled' label='' value={dataRow.default_commission_rate} fullWidth />
+            <TextField
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow.default_commission_rate}
+              fullWidth
+              onChange={handleTextChange}
+              name='default_commission_rate'
+            />
           </Grid>
         </Grid>
       </Card>

@@ -20,7 +20,7 @@ import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 import axios from 'axios'
 
-const AccountingCustomer = ({ dataRow }) => {
+const AccountingCustomer = ({ dataRow, setDataRow }) => {
   const [collapseInformation, setCollapseInformation] = useState()
 
   const columnsCredit = [
@@ -74,6 +74,11 @@ const AccountingCustomer = ({ dataRow }) => {
     setCollapseInformation(!collapseInformation)
   }
 
+  const handleTextChange = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+  }
+
   return (
     <Box>
       <Card
@@ -87,7 +92,14 @@ const AccountingCustomer = ({ dataRow }) => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography sx={{ marginBottom: 2 }}>Default Payment Terms Template</Typography>
-            <TextField size='small' variant='filled' value={dataRow.payment_terms || ''} fullWidth />
+            <TextField
+              size='small'
+              variant='filled'
+              value={dataRow.payment_terms || ''}
+              fullWidth
+              onChange={handleTextChange}
+              name='payment_terms'
+            />
           </Grid>
         </Grid>
 
@@ -151,7 +163,14 @@ const AccountingCustomer = ({ dataRow }) => {
             <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
               <Grid item xs={12}>
                 <Typography sx={{ marginBottom: 2 }}>Loyalty Program</Typography>
-                <TextField size='small' variant='filled' value={dataRow.loyalty_program || ''} fullWidth />
+                <TextField
+                  size='small'
+                  variant='filled'
+                  value={dataRow.loyalty_program || ''}
+                  fullWidth
+                  onChange={handleTextChange}
+                  name='loyalty_program'
+                />
               </Grid>
             </Grid>
           </Collapse>
