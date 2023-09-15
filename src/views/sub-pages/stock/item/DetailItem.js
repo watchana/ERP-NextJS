@@ -11,6 +11,8 @@ import {
   Checkbox,
   Collapse,
   Divider,
+  FormControlLabel,
+  FormGroup,
   Grid,
   IconButton,
   TextField,
@@ -57,8 +59,8 @@ const DetailItem = ({ dataRow, setDataRow }) => {
           mb: 2
         }}
       >
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
+        <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%', display: 'flex' }}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
             <Typography sx={{ margin: 1 }}>Item Name</Typography>
             <TextField
               fullWidth
@@ -68,8 +70,6 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               name='item_name'
               onChange={handleTextChange}
             />
-          </Grid>
-          <Grid item xs={12} sm={6}>
             <Typography sx={{ marginBottom: 2 }}>Item Group</Typography>
             <TextField
               fullWidth
@@ -80,36 +80,6 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               name='item_group'
               onChange={handleTextChange}
             />
-          </Grid>
-          <Grid item xs={12} sm={6} sx={checkboxStyle}>
-            <Checkbox checked={dataRow.disabled === 1 ? true : false} name='disabled' onChange={handleCheckboxChange} />
-            <Typography variant='subtitle2'>Disabled</Typography>
-          </Grid>
-          <Grid item xs={12} sm={6} sx={checkboxStyle}>
-            <Checkbox
-              checked={dataRow.allow_alternative_item === 1 ? true : false}
-              name='allow_alternative_item'
-              onChange={handleCheckboxChange}
-            />
-            <Typography variant='subtitle2'>Allow Alternative Item</Typography>
-          </Grid>
-          <Grid item xs={12} sm={6} sx={checkboxStyle}>
-            <Checkbox
-              checked={dataRow.is_stock_item === 1 ? true : false}
-              name='is_stock_item'
-              onChange={handleCheckboxChange}
-            />
-            <Typography variant='subtitle2'>Maintain Stock</Typography>
-          </Grid>
-          <Grid item xs={12} sm={6} sx={checkboxStyle}>
-            <Checkbox
-              checked={dataRow.has_variants === 1 ? true : false}
-              name='has_variants'
-              onChange={handleCheckboxChange}
-            />
-            <Typography variant='subtitle2'>Has Variants</Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
             <Typography sx={{ marginBottom: 2 }}>Default Unit of Measure</Typography>
             <TextField
               fullWidth
@@ -121,7 +91,23 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               onChange={handleTextChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <FormControlLabel control={<Checkbox checked={dataRow.disabled || false} />} label='Disabled' />
+            <FormControlLabel
+              control={<Checkbox checked={dataRow.allow_alternative_item || false} />}
+              label='Allow Alternative Item'
+            />
+
+            <FormControlLabel
+              control={<Checkbox checked={Boolean(dataRow.is_stock_item) || false} />}
+              label='is_stock_item'
+            />
+            <FormControlLabel
+              control={<Checkbox checked={Boolean(dataRow.has_variants) || false} />}
+              label='has_variants'
+            />
+
             <Typography sx={{ marginBottom: 2 }}>Valuation Rate</Typography>
             <TextField
               fullWidth
@@ -140,8 +126,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               />
               <Typography sx={{ m: 2 }}>Is Fixed Asset</Typography>
             </Box>
-          </Grid>
-          <Grid item xs={12} sm={6}>
+
             <Typography sx={{ marginBottom: 2 }}>Over Delivery / Receipt Allowance (%)</Typography>
             <TextField
               fullWidth
@@ -151,8 +136,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               name='over_delivery_receipt_allowance'
               onChange={handleTextChange}
             />
-          </Grid>
-          <Grid item xs={12} sm={6} sx={{ alignSelf: 'flex-end' }}>
+
             <Typography sx={{ marginBottom: 2 }}>Over Billing Allowance (%)</Typography>
             <TextField
               fullWidth
@@ -164,36 +148,37 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               onChange={handleTextChange}
             />
           </Grid>
-          <Grid item xs={12} sx={{ display: 'flex', marginBlock: 2 }}>
-            <Box onClick={handleClickDescription} sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-              <Typography sx={{ fontWeight: 'medium' }}>Description</Typography>
-              <IconButton size='small' disabled>
-                {collapseDescription ? <ChevronUp /> : <ChevronDown />}
-              </IconButton>
-            </Box>
-          </Grid>
-          <Grid item xs={12}>
-            <Collapse in={collapseDescription}>
-              <Divider sx={{ margin: 0 }} />
-              <CardContent>
-                <Box>
-                  <Typography variant='subtitle2'>Description</Typography>
-                  <TextField
-                    fullWidth
-                    multiline
-                    rows={4}
-                    value={dataRow.description || ''}
-                    name='description'
-                    onChange={handleTextChange}
-                  />
-                </Box>
-                <Box>
-                  <Typography variant='subtitle1'>Brand</Typography>
-                  <TextField fullWidth size='small' variant='filled' />
-                </Box>
-              </CardContent>
-            </Collapse>
-          </Grid>
+        </Grid>
+        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
+        <Grid item xs={12} sx={{ display: 'flex', marginBlock: 2 }}>
+          <Box onClick={handleClickDescription} sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+            <Typography sx={{ fontWeight: 'medium' }}>Description</Typography>
+            <IconButton size='small' disabled>
+              {collapseDescription ? <ChevronUp /> : <ChevronDown />}
+            </IconButton>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Collapse in={collapseDescription}>
+            <Divider sx={{ margin: 0 }} />
+            <CardContent>
+              <Typography variant='subtitle2'>Description</Typography>
+              <TextField
+                fullWidth
+                multiline
+                rows={4}
+                value={dataRow.description || ''}
+                name='description'
+                onChange={handleTextChange}
+              />
+
+              <Box>
+                <Typography variant='subtitle1'>Brand</Typography>
+                <TextField fullWidth size='small' variant='filled' />
+              </Box>
+            </CardContent>
+          </Collapse>
         </Grid>
       </Card>
     </Box>

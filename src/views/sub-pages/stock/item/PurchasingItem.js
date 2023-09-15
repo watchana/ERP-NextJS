@@ -15,14 +15,16 @@ import {
   TextField,
   Typography,
   FormGroup,
-  FormControlLabel
+  FormControlLabel,
+  Card,
+  Grid
 } from '@mui/material'
 
 //Icon
 import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 
-const PurchasingItem = ({ dataRow }) => {
+const PurchasingItem = ({ dataRow, setDataRow }) => {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 
   const [collapseSupplier, setCollapseSupplier] = useState(false)
@@ -48,6 +50,12 @@ const PurchasingItem = ({ dataRow }) => {
 
   const handleCheckboxChange = event => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.checked })
+  }
+
+  const handleTextChange = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
   }
 
   const Columns = [
@@ -72,82 +80,113 @@ const PurchasingItem = ({ dataRow }) => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex' }}>
-        <Box>
-          <Typography sx={{ marginBottom: 2 }}>Default Purchase Unit of Measure:</Typography>
-          <TextField variant='filled' value={dataRow.purchase_uom || ''} />
-        </Box>
-        <Box sx={{ ml: 20 }}>
-          <Typography sx={{ marginBottom: 2 }}>Lead Time in days :</Typography>
-          <TextField variant='filled' label='' value={dataRow.lead_time_days || ''} />
-        </Box>
-      </Box>
-      <Box sx={{ display: 'flex', mt: 6 }}>
-        <Box>
-          <Typography sx={{ marginBottom: 2 }} variant='subtitle1'>
-            Minimum Order Qty:
-          </Typography>
-          <TextField variant='filled' label='' value={dataRow.min_order_qty || ''} />
-          <Typography sx={{ marginBottom: 2 }} variant='subtitle2'>
-            Minimum quantity should be as per Stock UOM:
-          </Typography>
-        </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Box sx={{ ml: 6 }}>
-            <Typography sx={{ marginBottom: 2 }}>Last Purchase Rate:</Typography>
-            <TextField variant='filled' label='' value={dataRow.last_purchase_rate || ''} />
-          </Box>
-          <Box sx={{ display: 'flex', ml: 3 }}>
-            <Checkbox {...label} checked={dataRow.is_customer_provided_item} onChange={handleCheckboxChange} />
-            <Typography sx={{ mt: 2 }}>Is Customer Provided Item</Typography>
-          </Box>
-        </Box>
-      </Box>
-      <Box sx={{ display: 'flex', mt: 6 }}>
-        <Box>
-          <Box>
-            <Typography sx={{ marginBottom: 2 }}>Safety Stock:</Typography>
-            <TextField variant='filled' label='' value={dataRow.safety_stock || ''} />
-          </Box>
-          <Box sx={{ display: 'flex' }}>
-            <Checkbox {...label} checked={dataRow.is_customer_provided_item} onChange={handleCheckboxChange} />
-            <Typography variant='subtitle1' sx={{ mt: 2 }}>
-              Allow Purchase
+      <Card
+        sx={{
+          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
+          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
+          p: 2,
+          mb: 2
+        }}
+      >
+        <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Typography sx={{ marginBottom: 2 }}>Default Purchase Unit of Measure</Typography>
+            <TextField
+              fullWidth
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow.purchase_uom || ''}
+              name='purchase_uom'
+              onChange={handleTextChange}
+            />
+
+            <Typography sx={{ marginBottom: 2 }} variant='subtitle1'>
+              Minimum Order Qty
             </Typography>
-          </Box>
-        </Box>
-      </Box>
-      <Box sx={{ mt: 10, display: 'flex' }}>
-        <Button size='small' variant='filled' label='' onClick={handleSupplier}>
-          <Typography variant='h6'>Supplier Details</Typography>
+            <TextField
+              fullWidth
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow.min_order_qty || ''}
+              name='min_order_qty'
+              onChange={handleTextChange}
+            />
+            <Typography sx={{ marginBottom: 2 }} variant='subtitle2'>
+              Minimum quantity should be as per Stock UOM
+            </Typography>
+            <Typography sx={{ marginBottom: 2 }}>Safety Stock</Typography>
+            <TextField
+              fullWidth
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow.safety_stock || ''}
+              name='safety_stock'
+              onChange={handleTextChange}
+            />
+
+            <FormControlLabel
+              control={<Checkbox checked={Boolean(dataRow.is_purchase_item) || false} />}
+              label=' Allow Purchase'
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Typography sx={{ marginBottom: 2 }}>Lead Time in days </Typography>
+            <TextField
+              fullWidth
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow.lead_time_days || ''}
+              name='lead_time_days'
+              onChange={handleTextChange}
+            />
+
+            <Typography sx={{ marginBottom: 2 }} variant='subtitle2'>
+              Average time taken by the supplier to deliver
+            </Typography>
+            <Typography sx={{ marginBottom: 2 }}>Last Purchase Rate</Typography>
+            <TextField
+              fullWidth
+              size='small'
+              variant='filled'
+              label=''
+              value={dataRow.last_purchase_rate || ''}
+              name='last_purchase_rate'
+              onChange={handleTextChange}
+            />
+
+            <FormControlLabel
+              control={<Checkbox checked={Boolean(dataRow.is_customer_provided_item) || false} />}
+              label=' Is Customer Provided Item'
+            />
+          </Grid>
+        </Grid>
+        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
+        <Button variant='filled' label='' onClick={handleSupplier} sx={{ fontWeight: 'bold' }}>
+          Supplier Details
         </Button>
-        <Box>
-          <CardActions className='card-action-dense'>
-            <IconButton size='small' onClick={handleSupplier}>
-              {collapseSupplier ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
-          </CardActions>
-        </Box>
-      </Box>
-      <Box>
+        <IconButton size='small' onClick={handleSupplier}>
+          {collapseSupplier ? (
+            <ChevronUp sx={{ fontSize: '1.875rem' }} />
+          ) : (
+            <ChevronDown sx={{ fontSize: '1.875rem' }} />
+          )}
+        </IconButton>
         <Collapse in={collapseSupplier}>
           <Divider sx={{ margin: 0 }} />
           <CardContent>
-            <Box sx={{ display: 'flex' }}>
-              <Box sx={{ display: 'flex', width: '40%' }}>
-                <Checkbox
-                  {...label}
-                  checked={dataRow.delivered_by_supplier}
-                  onChange={handleCheckboxChange}
-                  sx={{ height: 30 }}
+            <Grid container spacing={3}>
+              <Grid item xs={12} sx={{ display: 'flex', mb: '5' }}>
+                <FormControlLabel
+                  control={<Checkbox checked={Boolean(dataRow.delivered_by_supplier) || false} />}
+                  label=' Delivered by Supplier (Drop Ship)'
                 />
-                <Typography variant='subtitle1'>Delivered by Supplier (Drop Ship)</Typography>
-              </Box>
-              <Box sx={{ width: '60%' }}>
+              </Grid>
+              <Grid item xs={12} sx={{ mb: '5' }}>
                 <DataGrid
                   rows={Rows}
                   columns={Columns}
@@ -160,100 +199,100 @@ const PurchasingItem = ({ dataRow }) => {
                   checkboxSelection
                 />
                 <Button>Add Row</Button>
-              </Box>
-            </Box>
+              </Grid>
+            </Grid>
           </CardContent>
         </Collapse>
-      </Box>
-      <Box sx={{ mt: 5, display: 'flex' }}>
-        <Button size='small' variant='filled' label='' onClick={handleDeferred}>
-          <Typography variant='h6'>Deferred Expense</Typography>
+
+        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
+
+        <Button variant='filled' type='text' onClick={handleDeferred} sx={{ fontWeight: 'bold' }} s>
+          Deferred Expense
         </Button>
-        <Box>
-          <CardActions className='card-action-dense'>
-            <IconButton size='small' onClick={handleDeferred}>
-              {collapseDeferred ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
-          </CardActions>
-        </Box>
-      </Box>
-      <Box>
+        <IconButton size='small' onClick={handleDeferred}>
+          {collapseDeferred ? (
+            <ChevronUp sx={{ fontSize: '1.875rem' }} />
+          ) : (
+            <ChevronDown sx={{ fontSize: '1.875rem' }} />
+          )}
+        </IconButton>
+
         <Collapse in={collapseDeferred}>
           <Divider sx={{ margin: 0 }} />
-          <CardContent>
-            <Box sx={{ display: 'flex' }}>
-              <FormGroup>
-                <FormControlLabel
-                  control={<Checkbox checked={IsDeferredCheck} onChange={handleDeferredCheck} />}
-                  variant='body2'
-                  label='Enable Deferred Expense'
-                />
-                {IsDeferredCheck && (
-                  <Box>
-                    <Box sx={{ mt: 4 }}>
-                      <Typography>Deferred Expense Account</Typography>
-                      <TextField label='' value={dataRow.deferred_expense_account || ''} variant='outlined' fullWidth />
-                    </Box>
-                    <Box sx={{ mt: 4 }}>
-                      <Typography>No of Months (Expense)</Typography>
-                      <TextField label='' value={dataRow.no_of_months_exp || ''} variant='outlined' fullWidth />
-                    </Box>
-                  </Box>
-                )}
-              </FormGroup>
-            </Box>
-          </CardContent>
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox checked={IsDeferredCheck} onChange={handleDeferredCheck} />}
+              variant='body2'
+              label='Enable Deferred Expense'
+            />
+            {IsDeferredCheck && (
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={12} md={6} lg={6}>
+                  <Typography sx={{ marginBottom: 2 }}>Deferred Expense Account</Typography>
+                  <TextField
+                    fullWidth
+                    size='small'
+                    variant='filled'
+                    value={dataRow.deferred_expense_account || ''}
+                    name='deferred_expense_account'
+                    onChange={handleTextChange}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={6}>
+                  <Typography sx={{ marginBottom: 2 }}>No of Months (Expense)</Typography>
+                  <TextField
+                    fullWidth
+                    size='small'
+                    variant='filled'
+                    value={dataRow.no_of_months_exp || ''}
+                    name='no_of_months_exp'
+                    onChange={handleTextChange}
+                  />
+                </Grid>
+              </Grid>
+            )}
+          </FormGroup>
         </Collapse>
-      </Box>
-      <Box sx={{ mt: 5, display: 'flex' }}>
-        <Button size='small' variant='filled' label='' onClick={handleForeign}>
-          <Typography variant='h6'>Foreign Trade Details</Typography>
+        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
+
+        <Button variant='filled' type='text' onClick={handleForeign} sx={{ fontWeight: 'bold' }}>
+          Foreign Trade Details
         </Button>
-        <Box>
-          <CardActions className='card-action-dense'>
-            <IconButton size='small' onClick={handleForeign}>
-              {collapseForeign ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
-          </CardActions>
-        </Box>
-      </Box>
-      <Box>
+        <IconButton size='small' onClick={handleForeign}>
+          {collapseForeign ? (
+            <ChevronUp sx={{ fontSize: '1.875rem' }} />
+          ) : (
+            <ChevronDown sx={{ fontSize: '1.875rem' }} />
+          )}
+        </IconButton>
+
         <Collapse in={collapseForeign}>
-          <Divider sx={{ margin: 0 }} />
-          <CardContent>
-            <Box sx={{ display: 'flex' }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Typography variant='subtitle1' sx={{ mt: 1.5 }}>
-                  Country of Origin
-                </Typography>
-                <TextField variant='filled' label='' value={dataRow.country_of_origin || ''} />
-              </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'column', ml: 20 }}>
-                <Typography variant='subtitle1' sx={{ mt: 1.5 }}>
-                  Customs Tariff Number
-                </Typography>
-                <TextField variant='filled' label='' value={dataRow.customs_tariff_number || ''} />
-              </Box>
-            </Box>
-          </CardContent>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12} md={6} lg={6}>
+              <Typography sx={{ marginBottom: 2 }}>Country of Origin</Typography>
+              <TextField
+                fullWidth
+                size='small'
+                variant='filled'
+                value={dataRow.country_of_origin || ''}
+                name='country_of_origin'
+                onChange={handleTextChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} lg={6}>
+              <Typography sx={{ marginBottom: 2 }}>Customs Tariff Number</Typography>
+              <TextField
+                fullWidth
+                size='small'
+                variant='filled'
+                value={dataRow.customs_tariff_number || ''}
+                name='customs_tariff_number'
+                onChange={handleTextChange}
+              />
+            </Grid>
+          </Grid>
         </Collapse>
-      </Box>
-      <Box>
-        <Typography variant='h6' sx={{ m: 2 }}>
-          Add Comment
-        </Typography>
-        <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
-        <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-        <Button>add comment</Button>
-      </Box>
+      </Card>
     </Box>
   )
 }

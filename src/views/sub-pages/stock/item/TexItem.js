@@ -42,12 +42,6 @@ const TexItem = () => {
         <Box sx={{ mt: 4 }}>
           <DataGrid rows={rowTax} columns={columnsTax} checkboxSelection disableRowSelectionOnClick />
         </Box>
-        <Box sx={{ mt: 10 }}>
-          <Typography>Add a comment</Typography>
-          <TextField variant='filled' label='' multiline rows={6} fullWidth />
-          <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-          <Button>add comment</Button>
-        </Box>
       </Card>
     </Box>
   )
