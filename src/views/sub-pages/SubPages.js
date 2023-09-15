@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
 // ** MUI Imports
-import { Box, Button, Card, Divider, Grid, IconButton, Tab, Tabs, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, Chip, Divider, Grid, IconButton, Tab, Tabs, TextField, Typography } from '@mui/material'
 import { TabPanel, TabContext } from '@mui/lab' // Import TabContext
 
 // ** Icons Imports
@@ -32,6 +32,7 @@ const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow
   const [sideContentOpen, setSideContentOpen] = useState(false)
   const [tabValue, setTabValue] = useState(1)
   const [buttonArrow, setButtonArrow] = useState(true)
+  const colorEnabled = blue[100]
 
   useEffect(() => {
     const handleResize = () => {
@@ -178,10 +179,15 @@ const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow
                       mb: 2
                     }}
                   >
-                    <Box>
-                      <Typography variant='h6' sx={{ fontWeight: 'bold', display: 'flex', alignSelf: 'center' }}>
+                    <Box sx={{ display: 'flex' }}>
+                      <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
                         {dataRow.name}
                       </Typography>
+                      {dataRow[docStatusName] === 0 ? (
+                        <Chip label='• Enabled' color='statusEnabled' sx={{ ml: 1 }} />
+                      ) : (
+                        <Chip label='• Disabled' color='error' sx={{ ml: 1 }} />
+                      )}
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'row', mr: 3 }}>
                       <IconButton onClick={() => handleArrowLeft()} sx={IconButtonStyle}>
