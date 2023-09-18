@@ -13,21 +13,24 @@ import { loginSuccess } from 'src/redux/userSlice'
 import axios from 'axios'
 
 // ** MUI Components
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Divider from '@mui/material/Divider'
-import Checkbox from '@mui/material/Checkbox'
-import TextField from '@mui/material/TextField'
-import InputLabel from '@mui/material/InputLabel'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import CardContent from '@mui/material/CardContent'
-import FormControl from '@mui/material/FormControl'
-import OutlinedInput from '@mui/material/OutlinedInput'
 import { styled, useTheme } from '@mui/material/styles'
-import MuiCard from '@mui/material/Card'
-import InputAdornment from '@mui/material/InputAdornment'
-import MuiFormControlLabel from '@mui/material/FormControlLabel'
+import {
+  Box,
+  Card as MuiCard,
+  CardContent,
+  Checkbox,
+  Divider,
+  FormControl as MuiFormControl,
+  FormControlLabel as MuiFormControlLabel,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+  Typography,
+  FormControl,
+  Button
+} from '@mui/material'
 
 // ** Icons Imports
 import Google from 'mdi-material-ui/Google'
@@ -127,7 +130,15 @@ const LoginPage = () => {
   }, [values])
 
   return (
-    <Box className='content-center'>
+    <Box
+      className='content-center'
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh' // กำหนดความสูงของ Box เพื่อจัดให้ Card อยู่ตรงกลางหน้าจอ
+      }}
+    >
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
           <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
