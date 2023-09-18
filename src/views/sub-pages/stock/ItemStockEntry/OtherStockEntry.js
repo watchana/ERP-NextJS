@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Card,
   CardActions,
   CardContent,
   Checkbox,
@@ -17,7 +18,7 @@ import { useState } from 'react'
 import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 
-const OtherStockEntry = ({ dataRow }) => {
+const OtherStockEntry = ({ dataRow, setDataRow }) => {
   const [collapsePrinting, setCollapsePrinting] = useState(false)
   const [collapseInformation, setCollapseInformation] = useState(false)
 
@@ -29,13 +30,18 @@ const OtherStockEntry = ({ dataRow }) => {
     setCollapseInformation(!collapseInformation)
   }
 
+  const handleTextChange = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+  }
+
   return (
     <Grid>
-      <Box sx={{ width: 1080 }}>
+      <Card>
         <Box sx={{ display: 'flex' }}>
           <Box sx={{ display: 'flex' }}>
             <Button size='small' variant='filled' label='' onClick={handleClickPrinting}>
-              <Typography variant='h6'>Printing Settings</Typography>
+              <Typography>Printing Settings</Typography>
             </Button>
           </Box>
           <Box>
@@ -54,10 +60,19 @@ const OtherStockEntry = ({ dataRow }) => {
           <Collapse in={collapsePrinting}>
             <Divider sx={{ margin: 0 }} />
             <CardContent>
-              <Box>
-                <Typography sx={{ margin: 1 }}>Print Heading</Typography>
-                <TextField size='small' variant='filled' value={dataRow.select_print_heading} />
-              </Box>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Typography sx={{ margin: 1 }}>Print Heading</Typography>
+                  <TextField
+                    size='small'
+                    variant='filled'
+                    value={dataRow.select_print_heading}
+                    fullWidth
+                    onChange={handleTextChange}
+                    name='select_print_heading'
+                  />
+                </Grid>
+              </Grid>
             </CardContent>
           </Collapse>
         </Box>
@@ -65,7 +80,7 @@ const OtherStockEntry = ({ dataRow }) => {
         <Box sx={{ display: 'flex' }}>
           <Box sx={{ display: 'flex' }}>
             <Button size='small' variant='filled' label='' onClick={handleClickInformation}>
-              <Typography variant='h6'>More Information</Typography>
+              <Typography>More Information</Typography>
             </Button>
           </Box>
           <Box>
@@ -84,35 +99,44 @@ const OtherStockEntry = ({ dataRow }) => {
           <Collapse in={collapseInformation}>
             <Divider sx={{ margin: 0 }} />
             <CardContent>
-              <Box sx={{ display: 'flex' }}>
-                <Box>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
                   <Typography sx={{ margin: 1 }}>Is Opening</Typography>
-                  <TextField size='small' variant='filled' value={dataRow.is_opening} />
-                </Box>
-                <Box sx={{ ml: 38 }}>
+                  <TextField
+                    size='small'
+                    variant='filled'
+                    value={dataRow.is_opening}
+                    fullWidth
+                    onChange={handleTextChange}
+                    name='is_opening'
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
                   <Typography sx={{ margin: 1 }}>Per Transferred</Typography>
-                  <TextField size='small' variant='filled' value={dataRow.per_transferred} />
-                </Box>
-              </Box>
-              <Box sx={{ width: '100%', display: 'flex', mt: 4 }}>
-                <Box sx={{ width: '38%' }}></Box>
-                <Box sx={{ width: '62%' }}>
+                  <TextField
+                    size='small'
+                    variant='filled'
+                    value={dataRow.per_transferred}
+                    fullWidth
+                    onChange={handleTextChange}
+                    name='per_transferred'
+                  />
+
                   <Typography sx={{ margin: 1 }}>Total Amount</Typography>
-                  <TextField size='small' variant='filled' value={dataRow.total_amount} />
-                </Box>
-              </Box>
+                  <TextField
+                    size='small'
+                    variant='filled'
+                    value={dataRow.total_amount}
+                    fullWidth
+                    onChange={handleTextChange}
+                    name='total_amount'
+                  />
+                </Grid>
+              </Grid>
             </CardContent>
           </Collapse>
         </Box>
-      </Box>
-      <Box>
-        <Typography variant='h6' sx={{ m: 2 }}>
-          Add Comment
-        </Typography>
-        <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
-        <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-        <Button>add comment</Button>
-      </Box>
+      </Card>
     </Grid>
   )
 }
