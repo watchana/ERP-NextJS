@@ -1,5 +1,5 @@
 // ** React Imports
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // ** Axios Imports
 import axios from 'axios'
@@ -17,7 +17,7 @@ import SubPageLayout from 'src/@core/layouts/SubPageLayout'
 const ItemGroupPage = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
 
-  const showContent = [<StockItemGroup key='detail' dataRow={dataRow} setDataRow={setDataRow} />]
+  const showContent = [<StockItemGroup key='ItemGroup' dataRow={dataRow} setDataRow={setDataRow} />]
 
   return (
     <SubPages
@@ -26,7 +26,7 @@ const ItemGroupPage = ({ data }) => {
       showContent={showContent}
       dataRow={dataRow}
       setDataRow={setDataRow}
-      doctype='ItemGroup'
+      doctype='Item Group'
       docStatusName='disabled'
     />
   )
