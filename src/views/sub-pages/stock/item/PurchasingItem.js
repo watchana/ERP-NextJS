@@ -6,7 +6,6 @@ import { DataGrid } from '@mui/x-data-grid'
 import {
   Box,
   Button,
-  CardActions,
   CardContent,
   Checkbox,
   Collapse,
@@ -109,7 +108,10 @@ const PurchasingItem = ({ dataRow, setDataRow }) => {
               size='small'
               variant='filled'
               label=''
-              value={dataRow.min_order_qty || ''}
+              value={parseFloat(dataRow.min_order_qty).toLocaleString('en-US', {
+                minimumFractionDigits: 3,
+                maximumFractionDigits: 3
+              })}
               name='min_order_qty'
               onChange={handleTextChange}
             />
@@ -122,7 +124,14 @@ const PurchasingItem = ({ dataRow, setDataRow }) => {
               size='small'
               variant='filled'
               label=''
-              value={dataRow.safety_stock || ''}
+              value={
+                dataRow?.safety_stock === '0'
+                  ? ' 0'
+                  : parseFloat(dataRow.safety_stock).toLocaleString('en-US', {
+                      minimumFractionDigits: 3,
+                      maximumFractionDigits: 3
+                    })
+              }
               name='safety_stock'
               onChange={handleTextChange}
             />
@@ -139,8 +148,14 @@ const PurchasingItem = ({ dataRow, setDataRow }) => {
               fullWidth
               size='small'
               variant='filled'
-              label=''
-              value={dataRow.lead_time_days || ''}
+              value={
+                dataRow?.lead_time_days === '0'
+                  ? ' 0'
+                  : parseFloat(dataRow.lead_time_days).toLocaleString('en-US', {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0
+                    })
+              }
               name='lead_time_days'
               onChange={handleTextChange}
             />
@@ -153,8 +168,14 @@ const PurchasingItem = ({ dataRow, setDataRow }) => {
               fullWidth
               size='small'
               variant='filled'
-              label=''
-              value={dataRow.last_purchase_rate || ''}
+              value={
+                dataRow?.last_purchase_rate === '0'
+                  ? ' 0'
+                  : parseFloat(dataRow.last_purchase_rate).toLocaleString('en-US', {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0
+                    })
+              }
               name='last_purchase_rate'
               onChange={handleTextChange}
             />
@@ -244,7 +265,14 @@ const PurchasingItem = ({ dataRow, setDataRow }) => {
                     fullWidth
                     size='small'
                     variant='filled'
-                    value={dataRow.no_of_months_exp || ''}
+                    value={
+                      dataRow?.no_of_months_exp === '0.0'
+                        ? '฿ 0.0'
+                        : `฿ ${parseFloat(dataRow?.no_of_months_exp).toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                          })}`
+                    }
                     name='no_of_months_exp'
                     onChange={handleTextChange}
                   />

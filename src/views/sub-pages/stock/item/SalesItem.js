@@ -105,8 +105,14 @@ const SalesItem = ({ dataRow }) => {
               fullWidth
               size='small'
               variant='filled'
-              label=''
-              value={dataRow.max_discount || ''}
+              value={
+                dataRow?.max_discount === '0.0'
+                  ? ' 0.0'
+                  : parseFloat(dataRow?.max_discount).toLocaleString('en-US', {
+                      minimumFractionDigits: 3,
+                      maximumFractionDigits: 3
+                    })
+              }
               name='max_discount'
               onChange={handleTextChange}
             />
@@ -151,7 +157,14 @@ const SalesItem = ({ dataRow }) => {
                     fullWidth
                     size='small'
                     variant='filled'
-                    value={dataRow.no_of_months || ''}
+                    value={
+                      dataRow.no_of_months === '0.0'
+                        ? ' 0.0'
+                        : parseFloat(dataRow.no_of_months).toLocaleString('en-US', {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0
+                          })
+                    }
                     name='no_of_months'
                     onChange={handleTextChange}
                   />

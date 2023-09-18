@@ -14,7 +14,8 @@ import {
   Card,
   CardMedia,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  CardContent
 } from '@mui/material'
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
@@ -41,6 +42,11 @@ const DetailSalesInvoice = ({ dataRow }) => {
   const [stockDetails, setStockDetails] = useState(false)
   const [references, setReferences] = useState(false)
   const [accountingDimensions, setAccountingDimensions] = useState(false)
+  const [activity, setActivity] = useState(false)
+
+  const handleClickActivity = () => {
+    setActivity(!activity)
+  }
 
   const handleClickAdditionalDiscount = () => {
     setAdditionalDiscount(!additionalDiscount)
@@ -123,6 +129,12 @@ const DetailSalesInvoice = ({ dataRow }) => {
   const handleRowClicks = params => {
     setSelectedRowData(params.row)
     setOpenDialog(true) // เปิด Dialog เมื่อคลิกแถว
+  }
+
+  const styles = {
+    lineBreakText: {
+      whiteSpace: 'pre-line'
+    }
   }
 
   function formatDate(dateString) {
@@ -1417,6 +1429,25 @@ const DetailSalesInvoice = ({ dataRow }) => {
                   })}`}
                 />
               </Grid>
+            </Grid>
+          </Collapse>
+        </Grid>
+        <Grid container sx={{ mt: 10 }}>
+          <Grid item sx={{ width: '100%' }}>
+            <Button size='small' variant='filled' label='' onClick={handleClickActivity}>
+              Tax Breakup
+            </Button>
+            <IconButton size='small' onClick={handleClickActivity}>
+              {activity ? <ChevronUp sx={{ fontSize: '1.875rem' }} /> : <ChevronDown sx={{ fontSize: '1.875rem' }} />}
+            </IconButton>
+          </Grid>
+          <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
+          <Collapse in={activity} width={'100%'} style={{ width: '100%' }}>
+            <Divider sx={{ margin: 0 }} />
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <table style={{ width: '100%', fontSize: '14px' }}>
+                <tbody dangerouslySetInnerHTML={{ __html: dataRow.other_charges_calculation }} />
+              </table>
             </Grid>
           </Collapse>
         </Grid>

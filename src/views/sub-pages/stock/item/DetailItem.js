@@ -59,10 +59,11 @@ const DetailItem = ({ dataRow, setDataRow }) => {
           mb: 2
         }}
       >
-        <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%', display: 'flex' }}>
+        <Grid container spacing={2} style={{ width: '100%', display: 'flex' }}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Typography sx={{ margin: 1 }}>Item Name</Typography>
+            <Typography>Item Name</Typography>
             <TextField
+              sx={{ marginBottom: 5 }}
               fullWidth
               size='small'
               variant='filled'
@@ -70,8 +71,9 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               name='item_name'
               onChange={handleTextChange}
             />
-            <Typography sx={{ marginBottom: 2 }}>Item Group</Typography>
+            <Typography>Item Group</Typography>
             <TextField
+              sx={{ marginBottom: 5 }}
               fullWidth
               size='small'
               variant='filled'
@@ -80,8 +82,9 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               name='item_group'
               onChange={handleTextChange}
             />
-            <Typography sx={{ marginBottom: 2 }}>Default Unit of Measure</Typography>
+            <Typography>Default Unit of Measure</Typography>
             <TextField
+              sx={{ marginBottom: 5 }}
               fullWidth
               size='small'
               variant='filled'
@@ -91,14 +94,12 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               onChange={handleTextChange}
             />
           </Grid>
-
-          <Grid item xs={12} sm={12} md={6} lg={6}>
+          <Grid item xs={12} sm={12} md={6} lg={6} sx={{ display: 'flex', flexDirection: 'column' }}>
             <FormControlLabel control={<Checkbox checked={dataRow.disabled || false} />} label='Disabled' />
             <FormControlLabel
               control={<Checkbox checked={dataRow.allow_alternative_item || false} />}
               label='Allow Alternative Item'
             />
-
             <FormControlLabel
               control={<Checkbox checked={Boolean(dataRow.is_stock_item) || false} />}
               label='is_stock_item'
@@ -108,13 +109,16 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               label='has_variants'
             />
 
-            <Typography sx={{ marginBottom: 2 }}>Valuation Rate</Typography>
+            <Typography sx={{ mt: 4 }}>Valuation Rate</Typography>
             <TextField
+              sx={{ marginBottom: 5 }}
               fullWidth
               size='small'
               variant='filled'
-              label=''
-              value={dataRow.valuation_rate || ''}
+              value={parseFloat(dataRow.valuation_rate).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              })}
               name='valuation_rate'
               onChange={handleTextChange}
             />
@@ -127,23 +131,30 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               <Typography sx={{ m: 2 }}>Is Fixed Asset</Typography>
             </Box>
 
-            <Typography sx={{ marginBottom: 2 }}>Over Delivery / Receipt Allowance (%)</Typography>
+            <Typography>Over Delivery / Receipt Allowance (%)</Typography>
             <TextField
+              sx={{ marginBottom: 5 }}
               fullWidth
               size='small'
               variant='filled'
-              value={dataRow.over_delivery_receipt_allowance || ''}
+              value={parseFloat(dataRow.over_delivery_receipt_allowance).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              })}
               name='over_delivery_receipt_allowance'
               onChange={handleTextChange}
             />
 
-            <Typography sx={{ marginBottom: 2 }}>Over Billing Allowance (%)</Typography>
+            <Typography>Over Billing Allowance (%)</Typography>
             <TextField
+              sx={{ marginBottom: 5 }}
               fullWidth
               size='small'
               variant='filled'
-              label=''
-              value={dataRow.over_billing_allowance || ''}
+              value={parseFloat(dataRow.over_billing_allowance).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              })}
               name='over_billing_allowance'
               onChange={handleTextChange}
             />
