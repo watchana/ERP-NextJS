@@ -75,6 +75,12 @@ const DefaultPalette = (mode, themeColor) => {
       dark: '#139CE0',
       contrastText: '#FFF'
     },
+    statusEnabled: {
+      light: '#e3f2fd',
+      main: '#bbdefb',
+      dark: '#bbdefb',
+      contrastText: '#1565c0'
+    },
     grey: {
       50: '#FAFAFA',
       100: '#F5F5F5',

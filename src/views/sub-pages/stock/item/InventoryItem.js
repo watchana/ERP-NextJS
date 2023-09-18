@@ -20,7 +20,8 @@ import {
   DialogContent,
   DialogContentText,
   Card,
-  Grid
+  Grid,
+  Skeleton
 } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import React, { useEffect, useState } from 'react'
@@ -36,7 +37,7 @@ import { mdiChevronDown } from '@mdi/js'
 import { mdiKeyboardOutline } from '@mdi/js'
 import axios from 'axios'
 
-const InventoryItem = ({ dataRow, dropDowns }) => {
+const InventoryItem = ({ dataRow, dropDowns, setDataRow }) => {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
   console.log('1: ', dataRow.uoms)
   const [collapsePreOder, setCollapsePreOder] = useState(false)
@@ -88,6 +89,26 @@ const InventoryItem = ({ dataRow, dropDowns }) => {
     setOpen(true)
     setGetRowBarcodes(params.row)
   }
+
+  const handleCheckboxChange = event => {
+    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
+  }
+
+  const handleTextChange = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+  }
+
+  function formatDate(dateString) {
+    const dateObject = new Date(dateString)
+    const day = dateObject.getDate().toString().padStart(2, '0')
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0')
+    const year = dateObject.getFullYear()
+
+    return `${day}-${month}-${year}`
+  }
+  const formattedDate = formatDate(dataRow.end_of_life)
 
   const Columns = [
     { field: 'idx', headerName: 'No', width: 70 },
@@ -178,7 +199,7 @@ const InventoryItem = ({ dataRow, dropDowns }) => {
   }, [dataRow])
 
   if (getDataBarcodes.length === 0) {
-    return 'waiting...'
+    return <Skeleton variant='rounded' width={'100%'} height={'60vh'} />
   }
 
   return (
@@ -191,14 +212,28 @@ const InventoryItem = ({ dataRow, dropDowns }) => {
           mb: 2
         }}
       >
-        <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Grid container spacing={2} width={'100%'}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Typography sx={{ marginBottom: 2 }}> Shelf Life In Days </Typography>
-            <TextField fullWidth size='small' variant='filled' type='text' value={dataRow.shelf_life_in_days} />
-            <Typography sx={{ marginBottom: 2 }}>End of Life</Typography>
-            <TextField fullWidth size='small' variant='filled' type='text' value={dataRow.end_of_life} />
-            <Typography sx={{ marginBottom: 2 }}>default material request type-label:</Typography>
-            <FormControl variant='outlined' fullWidth sx={{ mb: 2 }}>
+            <Typography> Shelf Life In Days </Typography>
+            <TextField
+              sx={{ marginBottom: 5 }}
+              fullWidth
+              size='small'
+              variant='filled'
+              type='text'
+              value={dataRow.shelf_life_in_days}
+            />
+            <Typography>End of Life</Typography>
+            <TextField
+              sx={{ marginBottom: 5 }}
+              fullWidth
+              size='small'
+              variant='filled'
+              type='text'
+              value={formattedDate}
+            />
+            <Typography>Default material request type-label:</Typography>
+            <FormControl sx={{ marginBottom: 5 }} variant='outlined' fullWidth>
               <InputLabel id='default material request type-label'>default material request type:</InputLabel>
               <Select
                 required
@@ -214,8 +249,8 @@ const InventoryItem = ({ dataRow, dropDowns }) => {
                 ))}
               </Select>
             </FormControl>
-            <Typography sx={{ marginBottom: 2 }}>Valuation method:</Typography>
-            <FormControl variant='outlined' fullWidth sx={{ mb: 2 }}>
+            <Typography>Valuation method:</Typography>
+            <FormControl sx={{ marginBottom: 5 }} variant='outlined' fullWidth>
               <InputLabel id='valuation_method-label'>Valuation method:</InputLabel>
               <Select
                 required
@@ -234,13 +269,39 @@ const InventoryItem = ({ dataRow, dropDowns }) => {
           </Grid>
 
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Typography sx={{ marginBottom: 2 }}>Warranty Period (in days) </Typography>
-            <TextField fullWidth size='small' variant='filled' type='text' value={dataRow.warranty_period} />
+            <Typography>Warranty Period (in days) </Typography>
+            <TextField
+              sx={{ marginBottom: 5 }}
+              fullWidth
+              size='small'
+              variant='filled'
+              type='text'
+              value={dataRow.warranty_period}
+            />
 
-            <Typography sx={{ marginBottom: 2 }}>Weight Per Unit</Typography>
-            <TextField fullWidth size='small' variant='filled' type='text' value={dataRow.weight_per_unit} />
-            <Typography sx={{ marginBottom: 2 }}>Weight UOM:</Typography>
-            <TextField fullWidth size='small' variant='filled' type='text' value={dataRow.weight_uom} />
+            <Typography>Weight Per Unit</Typography>
+            <TextField
+              sx={{ marginBottom: 5 }}
+              fullWidth
+              size='small'
+              variant='filled'
+              type='text'
+              value={parseFloat(dataRow.weight_per_unit).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              })}
+              name='over_delivery_receipt_allowance'
+              onChange={handleTextChange}
+            />
+            <Typography>Weight UOM:</Typography>
+            <TextField
+              sx={{ marginBottom: 5 }}
+              fullWidth
+              size='small'
+              variant='filled'
+              type='text'
+              value={dataRow.weight_uom}
+            />
           </Grid>
         </Grid>
         <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
@@ -315,11 +376,11 @@ const InventoryItem = ({ dataRow, dropDowns }) => {
                 <Box sx={{ display: 'flex', width: 800 }}>
                   <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                     <Box sx={{ mt: 4 }}>
-                      <Typography sx={{ marginBottom: 2 }}>Barcode*</Typography>
+                      <Typography sx={{ marginBottom: 5 }}>Barcode*</Typography>
                       <TextField fullWidth size='small' variant='filled' type='text' value={getRowBarcodes.barcode} />
                     </Box>
                     <Box sx={{ mt: 4 }}>
-                      <Typography sx={{ marginBottom: 2 }}>Barcode Type</Typography>
+                      <Typography sx={{ marginBottom: 5 }}>Barcode Type</Typography>
                       <TextField
                         fullWidth
                         size='small'
@@ -329,7 +390,7 @@ const InventoryItem = ({ dataRow, dropDowns }) => {
                       />
                     </Box>
                     <Box sx={{ mt: 4 }}>
-                      <Typography sx={{ marginBottom: 2 }}>UOM</Typography>
+                      <Typography sx={{ marginBottom: 5 }}>UOM</Typography>
                       <TextField fullWidth size='small' variant='filled' type='text' value={getRowBarcodes.uom} />
                     </Box>
                   </Box>

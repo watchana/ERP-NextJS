@@ -45,6 +45,7 @@ const Dashboard_sup = ({ dataRow }) => {
             <CardContent></CardContent>
           </Collapse>
         </Grid>
+
         <Grid container>
           <Grid item sx={{ width: '100%' }}>
             <Button size='small' variant='filled' label='' onClick={handleClickConnections}>
