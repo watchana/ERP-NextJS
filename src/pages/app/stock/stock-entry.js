@@ -20,9 +20,9 @@ const StockEntry = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
 
   const showContent = [
-    <DetailStockEntry key='detail' dataRow={dataRow} />,
-    <AdditionalCosts key='additional' dataRow={dataRow} />,
-    <OtherStockEntry key='other' dataRow={dataRow} />
+    <DetailStockEntry key='detail' dataRow={dataRow} setDataRow={setDataRow} />,
+    <AdditionalCosts key='additional' dataRow={dataRow} setDataRow={setDataRow} />,
+    <OtherStockEntry key='other' dataRow={dataRow} setDataRow={setDataRow} />
   ]
 
   return (
@@ -32,7 +32,7 @@ const StockEntry = ({ data }) => {
       showContent={showContent}
       dataRow={dataRow}
       setDataRow={setDataRow}
-      doctype='StockEntry'
+      doctype='Stock Entry'
       docStatusName='disabled'
     />
   )
