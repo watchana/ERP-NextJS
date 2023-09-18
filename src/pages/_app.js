@@ -105,6 +105,9 @@ const App = ({ Component, initialIsLoggedIn, ...rest }) => {
 
   return (
     <Provider store={store}>
+      <Head>
+        <title>ERP NEXT.JS</title>
+      </Head>
       <InnerApp Component={Component} pageProps={pageProps} emotionCache={emotionCache} />
     </Provider>
   )
