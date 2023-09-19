@@ -33,9 +33,9 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
   // ** States
   const errorColor = red[500]
   const [showData, setShowData] = useState(data)
-  const [sort, setSort] = useState('desc')
 
   // ** Sort Type
+  const [sort, setSort] = useState('desc')
   const sortOptions = ['Last Updated On', `${doctype} Name`, 'ID', 'Created On', 'Most Used']
   const [anchorEl, setAnchorEl] = useState(null)
   const [sortOption, setSortOption] = useState('Last Updated On')
@@ -46,24 +46,23 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
   const [page, setPage] = useState(1)
   const totalPages = Math.ceil(showData.length / rowsPerPage)
 
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
-
+  // ** เรียงลำดับข้อมูล โดยใช้เงื่อนไข asc หรือ desc
   const handleSortClick = sort => {
     setSort(sort)
   }
 
+  // ** เปิดเมนูเลือกการเรียงลำดับ
   const handleSortOptionClick = event => {
     setAnchorEl(event.currentTarget)
   }
 
+  // ** ปิดเมนูเลือกการเรียงลำดับ
   const handleSortOptionClose = value => {
     setAnchorEl(null)
     setSortOption(value)
   }
 
+  // ** เรียงลำดับข้อมูล
   useEffect(() => {
     console.log('sort', sort)
     let copiedData = [...data] // สำเนาข้อมูล
@@ -101,6 +100,7 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
     }
   }, [sort, sortOption, doctype, data, setData])
 
+  // ** ค้นหาข้อมูล โดยใช้ชื่อเป็นเงื่อนไข
   const handleIDSearch = event => {
     console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
     const value = event.target.value
@@ -117,15 +117,17 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
     }
   }
 
+  // ** เลือกจำนวนแถวต่อหน้า
   const handleRowPerPageSelect = event => {
     setRowsPerPage(event.target.value)
   }
 
+  // ** เลือกหน้าที่จะแสดง
   const handlePageChange = (event, value) => {
     setPage(value)
   }
 
-  // ตัดข้อมูลให้เหลือเฉพาะข้อมูลในหน้าปัจจุบัน
+  // ** ตัดข้อมูลให้เหลือเฉพาะข้อมูลในหน้าปัจจุบัน
   const displayedData = showData.slice((page - 1) * rowsPerPage, page * rowsPerPage)
 
   return (
@@ -207,6 +209,7 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
             <Divider />
           </Grid>
 
+          {/* แสดงข้อมูล data row */}
           <Grid item xs={12} sx={{ p: 2, ml: 2, mb: -4 }}>
             <Box>
               {displayedData.map((item, index) => (
@@ -238,6 +241,7 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
         </Grid>
       </Box>
 
+      {/* แสดงผล page และ row per page */}
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <Box sx={{ display: 'flex', alignSelf: 'flex-end', alignItems: 'center', marginBlock: 2 }}>
@@ -254,7 +258,6 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
               <MenuItem value={100}>100</MenuItem>
             </Select>
           </Box>
-
           <Box sx={{ display: 'flex', alignSelf: 'flex-end', alignItems: 'center', marginBlock: 2 }}>
             <Pagination
               count={totalPages}
