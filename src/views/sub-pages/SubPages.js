@@ -137,6 +137,30 @@ const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow
     }
   }
 
+  const handleSaveClick = event => {
+    console.log('Save Clicked: ', dataRow)
+
+    if (Object.keys(dataRow).length !== 0) {
+      axios
+        .put(`${process.env.NEXT_PUBLIC_API_URL}${doctype}/${dataRow.name}`, dataRow, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(res => {
+          console.log('res', res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }
+
+  useEffect(() => {
+    console.log('dataRow', dataRow)
+  }, [dataRow])
+
   if (!data) {
     return <Box>Loading...</Box>
   }
@@ -190,16 +214,16 @@ const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow
                       )}
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'row', mr: 3 }}>
-                      <IconButton onClick={() => handleArrowLeft()} sx={IconButtonStyle}>
+                      <IconButton sx={IconButtonStyle} onClick={() => handleArrowLeft()}>
                         <KeyboardArrowLeftIcon />
                       </IconButton>
-                      <IconButton onClick={() => handleArrowRight()} sx={IconButtonStyle}>
+                      <IconButton sx={IconButtonStyle} onClick={() => handleArrowRight()}>
                         <KeyboardArrowRightIcon />
                       </IconButton>
                       <IconButton sx={IconButtonStyle}>
                         <MoreHorizIcon />
                       </IconButton>
-                      <IconButton color='success' sx={IconButtonStyle}>
+                      <IconButton color='success' sx={IconButtonStyle} onClick={handleSaveClick}>
                         <SaveIcon />
                       </IconButton>
                       <IconButton color='error' sx={IconButtonStyle} onClick={handleContentClose}>
