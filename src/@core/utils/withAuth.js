@@ -14,7 +14,6 @@ import ThemeComponent from 'src/@core/theme/ThemeComponent'
 import Cookies from 'js-cookie'
 
 // ** MUI
-import { Skeleton } from '@mui/material'
 import FullPageSkeleton from 'src/views/FullPageSkeleton'
 
 const withAuth = WrappedComponent => {

@@ -51,9 +51,18 @@ const UserDropdown = () => {
   }
 
   useEffect(() => {
-    const storedUserString = localStorage.getItem('userData')
-    const storedUser = JSON.parse(storedUserString)
-    setUserData(storedUser)
+    const fetchData = async () => {
+      const storedUserString = await localStorage.getItem('userData')
+      const storedUser = JSON.parse(storedUserString)
+
+      if (storedUser && Object.keys(storedUser).length > 0) {
+        setUserData(storedUser)
+      }
+
+      console.log('storedUser', storedUser)
+    }
+
+    fetchData()
   }, [])
 
   useEffect(() => {
