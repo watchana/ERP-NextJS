@@ -17,6 +17,7 @@ import OtherStockEntry from 'src/views/sub-pages/stock/ItemStockEntry/OtherStock
 import SubPageLayout from 'src/@core/layouts/SubPageLayout'
 
 const StockEntry = ({ data }) => {
+  const [dataList, setDataList] = React.useState(data)
   const [dataRow, setDataRow] = React.useState({})
 
   const showContent = [
@@ -28,6 +29,7 @@ const StockEntry = ({ data }) => {
   return (
     <SubPages
       data={data}
+      setData={setDataList}
       menuContent={itemStockEntry}
       showContent={showContent}
       dataRow={dataRow}

@@ -15,6 +15,7 @@ import StockItemGroup from 'src/views/sub-pages/stock/ItemGroup/StockItemGroup'
 import SubPageLayout from 'src/@core/layouts/SubPageLayout'
 
 const ItemGroupPage = ({ data }) => {
+  const [dataList, setDataList] = React.useState(data)
   const [dataRow, setDataRow] = React.useState({})
 
   const showContent = [<StockItemGroup key='ItemGroup' dataRow={dataRow} setDataRow={setDataRow} />]
@@ -22,6 +23,7 @@ const ItemGroupPage = ({ data }) => {
   return (
     <SubPages
       data={data}
+      setData={setDataList}
       menuContent={ItemGroup}
       showContent={showContent}
       dataRow={dataRow}
