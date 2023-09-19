@@ -10,24 +10,24 @@ import CardYourShortcut from 'src/components/Menu/CardYourShortcut'
 import CardReportMenu from 'src/components/Menu/CardReportMenu'
 
 // ** dummy data
-import { HomeMenuButton, HomeContent, HomeReport, HomeShortcut } from 'src/dummy/homePage'
+import { AccountingMenuButton, AccountingContent, AccountingYourShortcut, AccountingReport } from 'src/dummy/accounting'
 
-const HomePage = () => {
+const AccountPage = () => {
   return (
     <Box>
       <Grid container rowSpacing={5}>
-        <Grid item xs={12}>
-          <CardGuideVue MenuButton={HomeMenuButton} RightSideContent={HomeContent} />
+        <Grid item sm={12}>
+          <CardGuideVue MenuButton={AccountingMenuButton} RightSideContent={AccountingContent} />
         </Grid>
-        <Grid item xs={12}>
-          <CardYourShortcut menus={HomeShortcut} />
+        <Grid item sm={12}>
+          <CardYourShortcut menus={AccountingYourShortcut} />
         </Grid>
-        <Grid item xs={12}>
-          <CardReportMenu menus={HomeReport} />
+        <Grid item sm={12}>
+          <CardReportMenu menus={AccountingReport} />
         </Grid>
       </Grid>
     </Box>
   )
 }
 
-export default HomePage
+export default AccountPage

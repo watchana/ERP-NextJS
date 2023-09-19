@@ -1,19 +1,28 @@
 // ** React Imports
 import React, { useEffect, useState } from 'react'
 
+// ** Axios Imports
+import axios from 'axios'
+
 // ** MUI Imports
-import { Box, Card, Divider, Grid, IconButton, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Button, Card, Chip, Divider, Grid, IconButton, Tab, Tabs, TextField, Typography } from '@mui/material'
 import { TabPanel, TabContext } from '@mui/lab' // Import TabContext
 
 // ** Icons Imports
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft'
 import CloseIcon from '@mui/icons-material/Close'
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import SaveIcon from '@mui/icons-material/Save'
 
 // ** Custom Components
 import ContentLeft from 'src/views/sub-pages/ContentLeft'
 
-const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
+const IconButtonStyle = { bgcolor: 'white', borderRadius: 1, border: '1px solid #E0E0E0', mx: 0.5 }
+
+const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow, doctype, docStatusName }) => {
   const contentSizeInit = 7
 
   // ** States
@@ -46,6 +55,10 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
     }
   }, [])
 
+  useEffect(() => {
+    console.log('data', data)
+  }, [data])
+
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue)
   }
@@ -60,8 +73,31 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
     setButtonArrow(!buttonArrow)
   }
 
-  const handleRowClick = params => {
-    setDataRow(params)
+  const fetchData = (doctype, name) => {
+    return axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}${doctype}/${name}`, {
+        headers: {
+          Authorization: process.env.NEXT_PUBLIC_API_TOKEN
+        }
+      })
+      .then(res => res.data.data)
+      .catch(err => {
+        console.log(err)
+        throw err
+      })
+  }
+
+  const handleRowClick = async params => {
+    console.log('params:', params.name)
+    console.log('path: ', `${process.env.NEXT_PUBLIC_API_URL}${doctype}/${params.name}`)
+
+    try {
+      const dataRow = await fetchData(doctype, params.name)
+      setDataRow(dataRow)
+    } catch (err) {
+      console.log('Error fetching data:', err)
+    }
+
     setSideContentOpen(true)
     setScreenMDSelect(true)
   }
@@ -76,16 +112,72 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
     setScreenMDSelect(false)
   }
 
+  const handleArrowLeft = async () => {
+    let copiedData = [...data] // สำเนาข้อมูล
+    const index = copiedData.findIndex(item => item.name === dataRow.name)
+    if (index === 0) {
+      console.log('No further records')
+    } else {
+      console.log('test:', copiedData[index - 1].name)
+      let dataRow = await fetchData(doctype, copiedData[index - 1].name)
+      setDataRow(dataRow)
+    }
+  }
+
+  const handleArrowRight = async () => {
+    let copiedData = [...data] // สำเนาข้อมูล
+    const index = copiedData.findIndex(item => item.name === dataRow.name)
+    const lastIndex = copiedData.length - 1
+    if (index === lastIndex) {
+      console.log('No further records')
+    } else {
+      console.log('test:', copiedData[index + 1].name)
+      let dataRow = await fetchData(doctype, copiedData[index + 1].name)
+      setDataRow(dataRow)
+    }
+  }
+
+  const handleSaveClick = event => {
+    console.log('Save Clicked: ', dataRow)
+
+    if (Object.keys(dataRow).length !== 0) {
+      axios
+        .put(`${process.env.NEXT_PUBLIC_API_URL}${doctype}/${dataRow.name}`, dataRow, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(res => {
+          console.log('res', res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }
+
+  useEffect(() => {
+    console.log('dataRow', dataRow)
+  }, [dataRow])
+
   if (!data) {
     return <Box>Loading...</Box>
   }
 
   return (
     <Box>
+      {/* ข้อมูลที่แสดงผลข้างซ้าย */}
       <Grid container justifyContent='center' columnSpacing={4}>
         {(!screenMD || !screenMDSelect) && (
           <Grid item xs>
-            <ContentLeft dataRow={data} handleRowClick={handleRowClick} />
+            <ContentLeft
+              data={data}
+              setData={setData}
+              doctype={doctype}
+              docStatusName={docStatusName}
+              handleRowClick={handleRowClick}
+            />
           </Grid>
         )}
 
@@ -100,32 +192,46 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
             )}
 
             {(screenMDSelect || !screenMD) && (
-              <Grid item xs md={contentSize} sx={{ p: 5 }}>
+              <Grid item xs md={contentSize}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                   <Box
                     sx={{
                       flexDirection: 'row',
                       display: 'flex',
                       justifyContent: 'space-between',
+                      alignItems: 'center',
                       mb: 2
                     }}
                   >
-                    <Box>
-                      <Typography variant='h6' sx={{ fontWeight: 'bold', display: 'flex', alignSelf: 'center' }}>
+                    <Box sx={{ display: 'flex' }}>
+                      <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
                         {dataRow.name}
                       </Typography>
+                      {dataRow[docStatusName] === 0 ? (
+                        <Chip label='• Enabled' color='statusEnabled' sx={{ ml: 1 }} />
+                      ) : (
+                        <Chip label='• Disabled' color='error' sx={{ ml: 1 }} />
+                      )}
                     </Box>
-                    <Box>
-                      <IconButton
-                        color='error'
-                        sx={{ mr: 1, display: 'flex', alignItems: 'center' }}
-                        onClick={handleContentClose}
-                      >
+                    <Box sx={{ display: 'flex', flexDirection: 'row', mr: 3 }}>
+                      <IconButton sx={IconButtonStyle} onClick={() => handleArrowLeft()}>
+                        <KeyboardArrowLeftIcon />
+                      </IconButton>
+                      <IconButton sx={IconButtonStyle} onClick={() => handleArrowRight()}>
+                        <KeyboardArrowRightIcon />
+                      </IconButton>
+                      <IconButton sx={IconButtonStyle}>
+                        <MoreHorizIcon />
+                      </IconButton>
+                      <IconButton color='success' sx={IconButtonStyle} onClick={handleSaveClick}>
+                        <SaveIcon />
+                      </IconButton>
+                      <IconButton color='error' sx={IconButtonStyle} onClick={handleContentClose}>
                         <CloseIcon />
                       </IconButton>
                     </Box>
                   </Box>
-                  <Card>
+                  <Box sx={{ mr: 4 }}>
                     <TabContext value={tabValue.toString()}>
                       <Tabs
                         value={tabValue}
@@ -138,27 +244,34 @@ const SubPages = ({ data, menuContent, showContent, dataRow, setDataRow }) => {
                           '& .MuiTab-root.Mui-selected': {
                             color: 'white',
                             backgroundColor: 'primary.main'
-                          }
+                          },
+                          borderTopLeftRadius: '10px', // กำหนด borderRadius สำหรับมุมบนซ้าย
+                          borderTopRightRadius: '10px' // กำหนด borderRadius สำหรับมุมบนขวา
                         }}
-
-                        // TabIndicatorProps={{
-                        //   style: {
-                        //     backgroundColor: 'white',
-                        //     height: 3
-                        //   }
-                        // }}
                       >
                         {menuContent?.map(item => (
                           <Tab value={item.id} label={item.name} key={item.id} />
                         ))}
                       </Tabs>
                       {showContent.map((item, index) => (
-                        <TabPanel value={(index + 1).toString()} key={index + 1}>
+                        <TabPanel value={(index + 1).toString()} key={index + 1} sx={{ m: -3 }}>
                           {item}
                         </TabPanel>
                       ))}
                     </TabContext>
-                  </Card>
+                    <Card sx={{ marginBlock: 4, p: 2 }}>
+                      <Box sx={{ width: '100%' }}>
+                        <Typography variant='h6' sx={{ my: 2 }}>
+                          Add Comment
+                        </Typography>
+                        <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
+                        <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
+                        <Button variant='contained' sx={{ marginBlock: 2 }}>
+                          comment
+                        </Button>
+                      </Box>
+                    </Card>
+                  </Box>
                 </Box>
               </Grid>
             )}

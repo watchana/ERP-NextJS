@@ -14,6 +14,7 @@ import VerticalAppBarContent from './components/vertical/AppBarContent'
 
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
+import { useRouter } from 'next/router'
 
 const UserLayout = ({ children }) => {
   // ** Hooks
@@ -27,7 +28,18 @@ const UserLayout = ({ children }) => {
    *  to know more about what values can be passed to this hook.
    *  ! Do not change this value unless you know what you are doing. It can break the template.
    */
-  const hidden = useMediaQuery(theme => theme.breakpoints.down('lg'))
+
+  // ? เพิ่มเงื่อนไขให้ hidden เป็น true เมื่อเราอยู่ที่เส้นทาง /app/ ------------------------------------------------------------------------------------
+  const isSmScreen = useMediaQuery(theme => theme.breakpoints.down('lg'))
+  const router = useRouter()
+
+  // เพิ่มเงื่อนไขให้ hidden เป็น true เมื่อเราอยู่ที่เส้นทาง /app/
+  const isAppRoute = router.pathname.startsWith('/app/')
+
+  // ? ------------------------------------------------------------------------------------------------------------------------------
+
+  // const hidden = useMediaQuery(theme => theme.breakpoints.down('lg'))
+  const hidden = isSmScreen || isAppRoute
 
   return (
     <VerticalLayout

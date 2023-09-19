@@ -133,7 +133,7 @@ const StockReport = [
       {
         id: 2,
         name: 'Stock Entry',
-        route: '/app/stock/entry',
+        route: '/app/stock/stock-entry',
         imgIcon: 'MenuIcon'
       },
       {

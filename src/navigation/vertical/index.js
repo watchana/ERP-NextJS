@@ -14,15 +14,7 @@ import Cog from 'mdi-material-ui/Cog'
 const navigation = () => {
   return [
     {
-      title: 'Dashboard',
-      icon: HomeOutline,
-      path: '/'
-    },
-    {
-      sectionTitle: 'Pages'
-    },
-    {
-      title: 'HOME',
+      title: 'Home Page',
       icon: Cog,
       path: '/app'
     },
@@ -115,34 +107,6 @@ const navigation = () => {
       title: 'ERPNext Integrations',
       icon: Cog,
       path: '/app/erpnext-integrations'
-    },
-    {
-      sectionTitle: 'User Interface'
-    },
-    {
-      title: 'Typography',
-      icon: FormatLetterCase,
-      path: '/typography'
-    },
-    {
-      title: 'Icons',
-      path: '/icons',
-      icon: GoogleCirclesExtended
-    },
-    {
-      title: 'Cards',
-      icon: CreditCardOutline,
-      path: '/cards'
-    },
-    {
-      title: 'Tables',
-      icon: Table,
-      path: '/tables'
-    },
-    {
-      icon: CubeOutline,
-      title: 'Form Layouts',
-      path: '/form-layouts'
     }
   ]
 }

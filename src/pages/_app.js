@@ -4,14 +4,11 @@ import { Provider } from 'react-redux'
 import { CacheProvider } from '@emotion/react'
 
 // ** NextJS Imports
-import { useRouter, Router as NextRouter } from 'next/router'
+import { Router as NextRouter } from 'next/router'
 import Head from 'next/head'
 
-// ** Axios
-import axios from 'axios'
-
-// ** Cookies
-import Cookies from 'js-cookie'
+// ** Auth
+import WithAuth from 'src/@core/utils/withAuth'
 
 // ** redux wrapper
 import { wrapper } from 'src/redux/store'
@@ -41,55 +38,34 @@ if (themeConfig.routingLoader) {
   })
 }
 
-const InnerApp = ({ Component, pageProps, emotionCache }) => {
-  const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
-
-  return (
-    <CacheProvider value={emotionCache}>
-      <Head>{/* ... */}</Head>
-      <SettingsProvider>
-        <SettingsConsumer>
-          {({ settings }) => {
-            return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
-          }}
-        </SettingsConsumer>
-      </SettingsProvider>
-    </CacheProvider>
-  )
-}
-
 const App = ({ Component, initialIsLoggedIn, ...rest }) => {
   const { store, props } = wrapper.useWrappedStore(rest)
   const { emotionCache = clientSideEmotionCache, pageProps } = props
 
-  const router = useRouter()
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const token = Cookies.get('jwt')
-      try {
-        const res = await axios.post('/api/logger', { token: token })
-        if (res.status !== 200 && router.pathname !== '/pages/login') {
-          router.push('/pages/login')
-        } else if (res.status === 200 && router.pathname === '/pages/login') {
-          router.push('/')
-        }
-      } catch (error) {
-        console.error('ErrorApp:', error)
-        if (router.pathname !== '/pages/login') {
-          router.push('/pages/login')
-        }
-      }
-    }
-
-    checkAuth()
-  }, [router])
+  const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
 
   return (
     <Provider store={store}>
-      <InnerApp Component={Component} pageProps={pageProps} emotionCache={emotionCache} />
+      <CacheProvider value={emotionCache}>
+        <Head>
+          <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
+          <meta
+            name='description'
+            content={`${themeConfig.templateName} – Material Design React Admin Dashboard Template – is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.`}
+          />
+          <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
+          <meta name='viewport' content='initial-scale=1, width=device-width' />
+        </Head>
+        <SettingsProvider>
+          <SettingsConsumer>
+            {({ settings }) => {
+              return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
+            }}
+          </SettingsConsumer>
+        </SettingsProvider>
+      </CacheProvider>
     </Provider>
   )
 }
 
-export default App
+export default WithAuth(App)

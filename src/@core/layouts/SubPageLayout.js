@@ -32,6 +32,9 @@ import { Magnify } from 'mdi-material-ui'
 // ** Components
 import UserDropdown from './components/shared-components/UserDropdown'
 
+// ** dummy data
+import navigation from 'src/navigation/vertical'
+
 // Styled component for Blank Layout component
 const BlankLayoutWrapper = styled(Box)(({ theme }) => ({
   height: '100vh',
@@ -104,6 +107,7 @@ const SubPageLayout = ({ children }) => {
   const theme = useTheme()
   const router = useRouter()
   const [open, setOpen] = React.useState(false)
+  const menuItems = navigation()
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -175,22 +179,11 @@ const SubPageLayout = ({ children }) => {
           </DrawerHeader>
           <Divider />
           <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
+            {menuItems.map((menu, index) => (
+              <ListItem key={menu.title} disablePadding>
+                <ListItemButton onClick={() => router.push(menu.path)}>
                   <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                  <ListItemText primary={text} />
+                  <ListItemText primary={menu.title} />
                 </ListItemButton>
               </ListItem>
             ))}

@@ -24,35 +24,37 @@ import SubPageLayout from 'src/@core/layouts/SubPageLayout'
 
 const ItemPage = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
+  const [dataList, setDataList] = React.useState(data)
 
   const showContent = [
-    <DetailItem key='detail' dataRow={dataRow} />,
+    <DetailItem key='detail' dataRow={dataRow} setDataRow={setDataRow} />,
     <DashboardItem key='dashboard' />,
     <InventoryItem key='inventory' dataRow={dataRow} dropDowns={defaultMaterialRequestType} />,
-    <AccountingItem key='accounting' dataRow={dataRow} />,
-    <PurchasingItem key='purchasing' dataRow={dataRow} />,
+    <AccountingItem key='accounting' dataRow={dataRow} setDataRow={setDataRow} />,
+    <PurchasingItem key='purchasing' dataRow={dataRow} setDataRow={setDataRow} />,
     <SalesItem key='sales' dataRow={dataRow} />,
     <TexItem key='tex' />,
-    <QualityItem key='quality' dataRow={dataRow} />,
-    <ManufacturingItem key='manufacturing' dataRow={dataRow} />
+    <QualityItem key='quality' dataRow={dataRow} setDataRow={setDataRow} />,
+    <ManufacturingItem key='manufacturing' dataRow={dataRow} setDataRow={setDataRow} />
   ]
 
   return (
     <SubPages
-      data={data}
+      data={dataList}
+      setData={setDataList}
       menuContent={ItemContentMenu}
       showContent={showContent}
       dataRow={dataRow}
       setDataRow={setDataRow}
+      doctype='Item'
+      docStatusName='disabled'
     />
   )
 }
 
-ItemPage.getLayout = page => <SubPageLayout>{page}</SubPageLayout>
-
 // nextJS SSR
 export async function getServerSideProps() {
-  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}Item?fields=["*"]`, {
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}Item?fields=["*"]&order_by=creation`, {
     headers: {
       Authorization: process.env.NEXT_PUBLIC_API_TOKEN
     }
