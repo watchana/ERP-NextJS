@@ -22,6 +22,7 @@ import { SupplierContentMenu } from 'src/dummy/contentPages/supplierPage'
 
 const SupplierPage = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
+  const [dataList, setDataList] = React.useState(data)
 
   const showContent = [
     <DetailSupplier key={'detail'} dataRow={dataRow} />,
@@ -35,7 +36,8 @@ const SupplierPage = ({ data }) => {
 
   return (
     <SubPages
-      data={data}
+      data={dataList}
+      setData={setDataList}
       menuContent={SupplierContentMenu}
       showContent={showContent}
       dataRow={dataRow}

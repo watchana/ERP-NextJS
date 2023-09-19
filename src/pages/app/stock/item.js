@@ -23,8 +23,8 @@ import ManufacturingItem from 'src/views/sub-pages/stock/item/ManufacturingItem'
 import SubPageLayout from 'src/@core/layouts/SubPageLayout'
 
 const ItemPage = ({ data }) => {
-  const [dataList, setDataList] = React.useState(data)
   const [dataRow, setDataRow] = React.useState({})
+  const [dataList, setDataList] = React.useState(data)
 
   const showContent = [
     <DetailItem key='detail' dataRow={dataRow} setDataRow={setDataRow} />,

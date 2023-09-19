@@ -27,7 +27,7 @@ import Icon from '@mdi/react'
 import { mdiPencil } from '@mdi/js'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
-const DetailSalesInvoice = ({ dataRow }) => {
+const DetailSalesInvoice = ({ dataRow, setDataRow }) => {
   // ** State
 
   const [currencyPrice, setCurrencyPrice] = useState(false)
@@ -96,11 +96,6 @@ const DetailSalesInvoice = ({ dataRow }) => {
     setDiscountMargin(!discountMargin)
   }
 
-  /*  checkbox */
-  const handleCheckboxChange = event => {
-    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-  }
-
   const [selectedRow, setSelectedRow] = useState(null)
   const [openDialog, setOpenDialog] = useState(false)
   const [openDialogs, setOpenDialogs] = useState(false)
@@ -135,6 +130,16 @@ const DetailSalesInvoice = ({ dataRow }) => {
     lineBreakText: {
       whiteSpace: 'pre-line'
     }
+  }
+
+  const handleCheckboxChange = event => {
+    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
+  }
+
+  const handleTextChange = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
   }
 
   function formatDate(dateString) {
@@ -228,7 +233,15 @@ const DetailSalesInvoice = ({ dataRow }) => {
         <Grid container spacing={2} width={'100%'}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Typography>Customer</Typography>
-            <TextField sx={{ marginBottom: 5 }} size='small' variant='filled' fullWidth value={dataRow.customer} />
+            <TextField
+              sx={{ marginBottom: 5 }}
+              size='small'
+              variant='filled'
+              fullWidth
+              value={dataRow.customer}
+              name='customer'
+              onChange={handleTextChange}
+            />
             <Typography>Date * :</Typography>
             <TextField
               sx={{ marginBottom: 5 }}
@@ -237,6 +250,8 @@ const DetailSalesInvoice = ({ dataRow }) => {
               fullWidth
               label=''
               value={formattedDate}
+              name='formattedDate'
+              onChange={handleTextChange}
             />
             <Typography>Posting Time :</Typography>
             <TextField
@@ -246,6 +261,8 @@ const DetailSalesInvoice = ({ dataRow }) => {
               fullWidth
               label=''
               value={formattedTime}
+              name='formattedTime'
+              onChange={handleTextChange}
             />
             <Typography>Payment Due Date *</Typography>
             <TextField
@@ -256,6 +273,8 @@ const DetailSalesInvoice = ({ dataRow }) => {
               label=''
               value={formattedDateEnd}
               formatDate
+              name='formattedDateEnd'
+              onChange={handleTextChange}
             />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6} sx={{ mb: 5, display: 'flex', flexDirection: 'column' }}>
@@ -1048,7 +1067,15 @@ const DetailSalesInvoice = ({ dataRow }) => {
         <Grid container spacing={2} width={'100%'}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Typography>Total Quantity</Typography>
-            <TextField sx={{ marginBottom: 5 }} size='small' variant='filled' fullWidth value={dataRow.currency} />
+            <TextField
+              sx={{ marginBottom: 5 }}
+              size='small'
+              variant='filled'
+              fullWidth
+              value={dataRow.currency}
+              name='currency'
+              onChange={handleTextChange}
+            />
           </Grid>
 
           <Grid item xs={12} sm={12} md={6} lg={6}>
@@ -1062,6 +1089,8 @@ const DetailSalesInvoice = ({ dataRow }) => {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })}`}
+              name='total'
+              onChange={handleTextChange}
             />
             <Typography>Total Taxes and Charges (THB)</Typography>
             <TextField
@@ -1074,6 +1103,8 @@ const DetailSalesInvoice = ({ dataRow }) => {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })}`}
+              name='total_taxes_and_charges'
+              onChange={handleTextChange}
             />
           </Grid>
         </Grid>
