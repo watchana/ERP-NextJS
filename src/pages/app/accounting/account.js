@@ -17,17 +17,18 @@ import MoreinfoSalesinvoice from 'src/views/sub-pages/accounting/sales-invoice/M
 
 // ** Layouts
 import SubPageLayout from 'src/@core/layouts/SubPageLayout'
+import ChartofAccounts from 'src/views/sub-pages/accounting/account/ChartofAccounts'
 
-const SalesInvoice = ({ data }) => {
+const Account = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
   const [dataList, setDataList] = React.useState(data)
 
   const showContent = [
-    <DetailSalesInvoice key={'detail'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <Payments key={'payments'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <ContactAddressSalesinvoice key={'accounting'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <TermsSalesInvoice key={'trems'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <MoreinfoSalesinvoice key={'moerinfo'} dataRow={dataRow} setDataRow={setDataRow} />
+    <ChartofAccounts key={'detail'} dataRow={dataRow} />,
+    <Payments key={'payments'} dataRow={dataRow} />,
+    <ContactAddressSalesinvoice key={'accounting'} dataRow={dataRow} />,
+    <TermsSalesInvoice key={'trems'} dataRow={dataRow} />,
+    <MoreinfoSalesinvoice key={'moerinfo'} dataRow={dataRow} />
   ]
 
   return (
@@ -38,17 +39,17 @@ const SalesInvoice = ({ data }) => {
       showContent={showContent}
       dataRow={dataRow}
       setDataRow={setDataRow}
-      doctype='Sales Invoice'
+      doctype='Account'
       docStatusName='disabled'
     />
   )
 }
 
-SalesInvoice.getLayout = page => <SubPageLayout>{page}</SubPageLayout>
+Account.getLayout = page => <SubPageLayout>{page}</SubPageLayout>
 
 // nextJS SSR
 export async function getServerSideProps() {
-  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}Sales%20Invoice?fields=["*"]`, {
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}Account?fields=["*"]&limit=500`, {
     headers: {
       Authorization: 'token 5891d01ccc2961e:0e446b332dc22aa'
     }
@@ -60,4 +61,4 @@ export async function getServerSideProps() {
   }
 }
 
-export default SalesInvoice
+export default Account

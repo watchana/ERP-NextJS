@@ -192,7 +192,7 @@ const ContactAddressSalesinvoice = ({ dataRow }) => {
               <Typography>Customer Address</Typography>
               <Card sx={{ mb: 5 }}>
                 <CardContent sx={{ width: '100%' }}>
-                  <Typography variant='body2'>{dataAddress[0]?.name}</Typography>
+                  <Typography name='name' variant='body2'></Typography>
                 </CardContent>
                 <CardActions className='card-action-dense'>
                   <Button onClick={handleEditClickCustomerAddress}>แก้ไข</Button>
@@ -839,7 +839,7 @@ const ContactAddressSalesinvoice = ({ dataRow }) => {
                   <Typography variant='body2'>{dataAddress[0]?.name}</Typography>
                 </CardContent>
               </Card>
-              <Typography>Address</Typography>
+              <Typography>Shipping Address</Typography>
               <Card sx={{ mb: 5 }}>
                 <CardContent sx={{ width: '100%' }}>
                   <Typography variant='body2'>{dataAddress[0]?.address_line1 || ''}</Typography>

@@ -221,7 +221,9 @@ const Contact_Address = ({ dataRow }) => {
                   <Typography variant='body2'>{dataAddress[0]?.city}</Typography>
                   <Typography variant='body2'>{dataAddress[0]?.state}</Typography>
                   <Typography variant='body2'>{dataAddress[0]?.pincode}</Typography>
-                  <Typography variant='body2'>{dataAddress[0]?.country}</Typography>
+                  <Typography variant='body2' sx={{ mb: 5 }}>
+                    {dataAddress[0]?.country}
+                  </Typography>
                   <Typography variant='body2'>Phone: {dataAddress[0]?.phone} </Typography>
                   <Typography variant='body2'>Email: {dataAddress[0]?.email_id}</Typography>
                 </CardContent>
@@ -537,8 +539,15 @@ const Contact_Address = ({ dataRow }) => {
 
               <Card>
                 <CardContent sx={{ width: '100%' }}>
+                  <Grid container sx={{ display: 'flex', mb: 5 }}>
+                    <Typography variant='body2'>{dataContact[0]?.first_name}</Typography>
+                    <Typography variant='body2' sx={{ ml: 3 }}>
+                      {dataContact[0]?.last_name}
+                    </Typography>
+                  </Grid>
                   <Typography variant='body2'>{dataContact[0]?.address}</Typography>
-                  <Typography variant='body2'>{dataContact[0]?.address}</Typography>
+                  <Typography variant='body2'>{dataContact[0]?.mobile_no}</Typography>
+                  <Typography variant='body2'>{dataContact[0]?.email_id}</Typography>
                 </CardContent>
                 <CardActions className='card-action-dense'>
                   <Button onClick={handleEditClickDetailContact}>แก้ไข</Button>
@@ -589,6 +598,16 @@ const Contact_Address = ({ dataRow }) => {
                               type='text'
                               value={dataContact[0]?.last_name}
                               onChange={e => setLastName(e.target.value)}
+                            />
+
+                            <Typography sx={{ margin: 1 }}>Email Address </Typography>
+                            <TextField
+                              fullWidth
+                              size='small'
+                              variant='filled'
+                              type='text'
+                              value={dataContact[0]?.user_id}
+                              onChange={e => setUserId(e.target.value)}
                             />
 
                             <Typography sx={{ margin: 1 }}>User Id </Typography>
@@ -847,6 +866,16 @@ const Contact_Address = ({ dataRow }) => {
                               type='text'
                               value={dataContact[0]?.designation}
                               onChange={e => setDesignation(e.target.value)}
+                            />
+
+                            <Typography sx={{ margin: 1 }}>Gender </Typography>
+                            <TextField
+                              fullWidth
+                              size='small'
+                              variant='filled'
+                              type='text'
+                              value={dataContact[0]?.gender}
+                              onChange={e => setGender(e.target.value)}
                             />
 
                             <Typography sx={{ margin: 1 }}>Gender </Typography>

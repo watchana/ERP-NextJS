@@ -24,6 +24,7 @@ import SubPageLayout from 'src/@core/layouts/SubPageLayout'
 
 const CustomerPage = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
+  const [dataList, setDataList] = React.useState(data)
 
   useEffect(() => {
     console.log(dataRow)
@@ -42,7 +43,8 @@ const CustomerPage = ({ data }) => {
 
   return (
     <SubPages
-      data={data}
+      data={dataList}
+      setData={setDataList}
       menuContent={CustomerContentMenu}
       showContent={showContent}
       dataRow={dataRow}
