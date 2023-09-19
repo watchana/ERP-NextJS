@@ -10,7 +10,7 @@ import CardYourShortcut from 'src/components/Menu/CardYourShortcut'
 import CardReportMenu from 'src/components/Menu/CardReportMenu'
 
 // ** dummy data
-import { HomeMenuButton, HomeContent, HomeReport, HomeShortcut } from 'src/dummy/homepage'
+import { HomeMenuButton, HomeContent, HomeReport, HomeShortcut } from 'src/dummy/homePage'
 
 const HomePage = () => {
   return (
