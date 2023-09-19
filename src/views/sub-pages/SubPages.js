@@ -143,6 +143,7 @@ const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow
 
   return (
     <Box>
+      {/* ข้อมูลที่แสดงผลข้างซ้าย */}
       <Grid container justifyContent='center' columnSpacing={4}>
         {(!screenMD || !screenMDSelect) && (
           <Grid item xs>

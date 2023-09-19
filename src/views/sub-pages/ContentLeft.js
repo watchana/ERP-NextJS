@@ -17,7 +17,10 @@ import {
   SvgIcon,
   IconButton,
   Menu,
-  MenuItem
+  MenuItem,
+  TablePagination,
+  Pagination,
+  Select
 } from '@mui/material'
 import { red } from '@mui/material/colors'
 
@@ -37,6 +40,16 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
   const [anchorEl, setAnchorEl] = useState(null)
   const [sortOption, setSortOption] = useState('Last Updated On')
   const sortOptionOpen = Boolean(anchorEl)
+
+  // ** Pagination
+  const [rowsPerPage, setRowsPerPage] = useState(25)
+  const [page, setPage] = useState(1)
+  const totalPages = Math.ceil(showData.length / rowsPerPage)
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
 
   const handleSortClick = sort => {
     setSort(sort)
@@ -73,6 +86,8 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
       }
     }
 
+    setPage(1)
+
     if (sort === 'asc') {
       copiedData.sort(sortData())
     } else {
@@ -102,6 +117,17 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
     }
   }
 
+  const handleRowPerPageSelect = event => {
+    setRowsPerPage(event.target.value)
+  }
+
+  const handlePageChange = (event, value) => {
+    setPage(value)
+  }
+
+  // ตัดข้อมูลให้เหลือเฉพาะข้อมูลในหน้าปัจจุบัน
+  const displayedData = showData.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+
   return (
     <Box sx={{ px: 2 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2, mb: 5 }}>
@@ -112,12 +138,12 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
           Create {doctype}
         </Button>
       </Box>
-      <Box sx={{ backgroundColor: 'background.paper', borderTopRightRadius: '10px', borderTopLeftRadius: '10px' }}>
-        <Grid container spacing={2}>
+      <Box sx={{ backgroundColor: 'background.paper', borderRadius: '10px', pb: -1 }}>
+        <Grid container spacing={2} rowSpacing={2}>
           <Grid item xs={12} sm={6} sx={{ p: 2, ml: 2 }}>
             <TextField fullWidth variant='outlined' size='small' label='ID Search' onChange={handleIDSearch} />
           </Grid>
-          <Grid item xs sx={{ p: 2, ml: 2, justifyContent: 'end', display: 'flex' }}>
+          <Grid item xs sx={{ p: 2, justifyContent: 'end', display: 'flex' }}>
             <ButtonGroup variant='outlined'>
               {sort === 'asc' ? (
                 <IconButton
@@ -176,32 +202,70 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
               </Menu>
             </ButtonGroup>
           </Grid>
-        </Grid>
-        <Divider />
-        {showData.map((item, index) => (
-          <Box key={item.name}>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                cursor: 'pointer',
-                px: 2
-              }}
-              onClick={() => handleRowClick(item)}
-            >
-              <Typography variant='body1' sx={{ fontWeight: 'Bold' }}>
-                {item.name}
-              </Typography>
-              {item[docStatusName] === 0 ? (
-                <Chip label='Enable' color='success' size='small' />
-              ) : (
-                <Chip label='Disable' size='small' sx={{ bgcolor: errorColor, color: 'white' }} />
-              )}
-            </Box>
+
+          <Grid item xs={12}>
             <Divider />
+          </Grid>
+
+          <Grid item xs={12} sx={{ p: 2, ml: 2, mb: -4 }}>
+            <Box>
+              {displayedData.map((item, index) => (
+                <Box key={item.name} sx={{ pb: -1 }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      px: 2
+                    }}
+                    onClick={() => handleRowClick(item)}
+                  >
+                    <Typography variant='body1' sx={{ fontWeight: 'Bold' }}>
+                      {item.name}
+                    </Typography>
+                    {item[docStatusName] === 0 ? (
+                      <Chip label='Enable' color='success' size='small' />
+                    ) : (
+                      <Chip label='Disable' size='small' sx={{ bgcolor: errorColor, color: 'white' }} />
+                    )}
+                  </Box>
+                  <Divider />
+                </Box>
+              ))}
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
+
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Box sx={{ display: 'flex', alignSelf: 'flex-end', alignItems: 'center', marginBlock: 2 }}>
+            <Typography variant='body2'>Row per page:</Typography>
+            <Select
+              sx={{ width: 70, ml: 2 }}
+              size='small'
+              value={rowsPerPage}
+              onChange={handleRowPerPageSelect}
+              color='primary'
+            >
+              <MenuItem value={25}>25</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
+              <MenuItem value={100}>100</MenuItem>
+            </Select>
           </Box>
-        ))}
+
+          <Box sx={{ display: 'flex', alignSelf: 'flex-end', alignItems: 'center', marginBlock: 2 }}>
+            <Pagination
+              count={totalPages}
+              variant='outlined'
+              shape='rounded'
+              page={page}
+              onChange={handlePageChange}
+              color={'primary'}
+            />
+          </Box>
+        </Box>
       </Box>
     </Box>
   )
