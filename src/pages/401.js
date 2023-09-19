@@ -1,5 +1,6 @@
 // ** Next Import
-import Link from 'next/link'
+import React from 'react'
+import { useRouter } from 'next/router'
 
 // ** MUI Components
 import Button from '@mui/material/Button'
@@ -35,6 +36,8 @@ const Img = styled('img')(({ theme }) => ({
 }))
 
 const Error401 = () => {
+  const router = useRouter()
+
   return (
     <Box className='content-center'>
       <Box sx={{ p: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
@@ -46,11 +49,9 @@ const Error401 = () => {
           <Typography variant='body2'>You don&prime;t have permission to access this page. Go Home!</Typography>
         </BoxWrapper>
         <Img height='487' alt='error-illustration' src='/images/pages/401.png' />
-        <Link passHref href='/'>
-          <Button component='a' variant='contained' sx={{ px: 5.5 }}>
-            Back to Home
-          </Button>
-        </Link>
+        <Button component='a' variant='contained' sx={{ px: 5.5 }} onClick={() => router.push('/')}>
+          Back to Home
+        </Button>
       </Box>
       <FooterIllustrations />
     </Box>
