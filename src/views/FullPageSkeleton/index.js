@@ -7,8 +7,7 @@ const FullPageSkeleton = () => {
   const headerSkeleton = (
     <header>
       <Skeleton variant='text' animation='wave' width={'100%'} />
-      <Skeleton variant='rectangular' animation='wave' width={'100%'} height={200} />{' '}
-      {/* ปรับความสูงตามที่คุณต้องการ */}
+      <Skeleton variant='rectangular' animation='wave' width={'100%'} height={'100vh'} />
     </header>
   )
 
@@ -17,8 +16,7 @@ const FullPageSkeleton = () => {
     <main>
       <Skeleton variant='text' animation='wave' width={'100%'} />
       <Skeleton variant='text' animation='wave' width={'100%'} />
-      <Skeleton variant='rectangular' animation='wave' width={'100%'} height={400} />{' '}
-      {/* ปรับความสูงตามที่คุณต้องการ */}
+      <Skeleton variant='rectangular' animation='wave' width={'100%'} height={'100vh'} />
     </main>
   )
 
