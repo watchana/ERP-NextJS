@@ -19,6 +19,7 @@ import SaveIcon from '@mui/icons-material/Save'
 
 // ** Custom Components
 import ContentLeft from 'src/views/sub-pages/ContentLeft'
+import FullPageSkeleton from '../FullPageSkeleton'
 
 const IconButtonStyle = { bgcolor: 'white', borderRadius: 1, border: '1px solid #E0E0E0', mx: 0.5 }
 
@@ -162,7 +163,7 @@ const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow
   }, [dataRow])
 
   if (!data) {
-    return <Box>Loading...</Box>
+    return <FullPageSkeleton />
   }
 
   return (
