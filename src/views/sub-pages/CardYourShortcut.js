@@ -2,7 +2,7 @@
 import React from 'react'
 
 // ** next Imports
-import router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 
 // ** mui Imports
 import { useTheme } from '@mui/material/styles'
@@ -47,7 +47,7 @@ function CardYourShortcut({ menus }) {
                       color: 'common.white'
                     }
                   }}
-                  onClick={() => router.push(item.route)}
+                  onClick={() => router.replace(item.route)}
                 >
                   {item.name}
                 </Button>

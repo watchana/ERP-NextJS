@@ -5,12 +5,12 @@ import React from 'react'
 import { Grid, Box } from '@mui/material'
 
 // ** Components Imports
-import CardGuideVue from 'src/components/Menu/CardGuideVue'
-import CardYourShortcut from 'src/components/Menu/CardYourShortcut'
-import CardReportMenu from 'src/components/Menu/CardReportMenu'
+import CardGuideVue from 'src/views/sub-pages/CardGuideVue'
+import CardYourShortcut from 'src/views/sub-pages/CardYourShortcut'
+import CardReportMenu from 'src/views/sub-pages/CardReportMenu'
 
 // ** dummy data
-import { HomeMenuButton, HomeContent, HomeReport, HomeShortcut } from 'src/dummy/homePage'
+import { HomeMenuButton, HomeContent, HomeReport, HomeShortcut } from 'src/dummy/homepage'
 
 const HomePage = () => {
   return (

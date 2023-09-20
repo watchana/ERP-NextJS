@@ -1,26 +1,38 @@
 import Skeleton from '@mui/material/Skeleton'
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
+import Grid from '@mui/material/Grid'
 
 const FullPageSkeleton = () => {
-  // สร้างส่วนหัวของหน้าเว็บหรือแอปพลิเคชันที่คุณต้องการแสดงผล
+  // Header Skeleton
   const headerSkeleton = (
     <header>
-      <Skeleton variant='text' animation='wave' width={'100%'} />
-      <Skeleton variant='rectangular' animation='wave' width={'100%'} height={'100vh'} />
+      <Skeleton variant='text' animation='wave' />
+      <Skeleton variant='rectangular' animation='wave' height={'100vh'} />
     </header>
   )
 
-  // สร้างส่วนเนื้อหาหน้าเว็บหรือแอปพลิเคชันที่คุณต้องการแสดงผล
+  // Content Skeleton
   const contentSkeleton = (
     <main>
-      <Skeleton variant='text' animation='wave' width={'100%'} />
-      <Skeleton variant='text' animation='wave' width={'100%'} />
-      <Skeleton variant='rectangular' animation='wave' width={'100%'} height={'100vh'} />
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Skeleton variant='text' animation='wave' />
+          <Skeleton variant='text' animation='wave' />
+          <Skeleton variant='rectangular' animation='wave' height={'100vh'} />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Skeleton variant='text' animation='wave' />
+          <Skeleton variant='text' animation='wave' />
+          <Skeleton variant='rectangular' animation='wave' height={'100vh'} />
+        </Grid>
+
+        {/* You can duplicate <Grid item> to create more skeleton content */}
+      </Grid>
     </main>
   )
 
-  // สร้างโครงสร้างของหน้าเว็บหรือแอปพลิเคชันที่มี Skeleton
   return (
     <Container>
       <Box sx={{ mt: 4, mb: 4 }}>{headerSkeleton}</Box>
