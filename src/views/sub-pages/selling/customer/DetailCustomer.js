@@ -15,7 +15,8 @@ import {
   FormControlLabel,
   Grid,
   Card,
-  CardHeader
+  CardHeader,
+  Autocomplete
 } from '@mui/material'
 import Collapse from '@mui/material/Collapse'
 
@@ -53,6 +54,8 @@ const DetailCustomer = ({ dataRow, setDataRow }) => {
     console.log('data', dataRow)
   }, [dataRow])
 
+  const companyType = [{ label: 'Company' }, { label: 'Individual' }]
+
   return (
     <Box>
       <Card
@@ -76,16 +79,14 @@ const DetailCustomer = ({ dataRow, setDataRow }) => {
               fullWidth
             />
             <Typography>Customer Type</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              label=''
-              onChange={handleTextChange}
-              value={dataRow.customer_type || ''}
-              name='customer_type'
+            <Autocomplete
+              disablePortal
+              id='combo-box-demo'
               fullWidth
+              options={companyType}
+              renderInput={params => <TextField {...params} label='Customer Type' />}
             />
+
             <Typography>Customer Group</Typography>
             <TextField
               sx={{ marginBottom: 5 }}
