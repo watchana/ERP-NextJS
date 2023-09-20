@@ -34,7 +34,7 @@ const UserLayout = ({ children }) => {
   const router = useRouter()
 
   // เพิ่มเงื่อนไขให้ hidden เป็น true เมื่อเราอยู่ที่เส้นทาง /app/
-  const isAppRoute = router.pathname.startsWith('/app/')
+  const isAppRoute = router.pathname.startsWith('/app/') && router.pathname.split('/').length === 4
 
   // ? ------------------------------------------------------------------------------------------------------------------------------
 
