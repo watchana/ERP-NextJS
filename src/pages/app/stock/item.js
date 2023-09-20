@@ -1,5 +1,5 @@
 // ** React Imports
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // ** Axios Imports
 import axios from 'axios'
@@ -25,9 +25,21 @@ import SubPageLayout from 'src/@core/layouts/SubPageLayout'
 const ItemPage = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
   const [dataList, setDataList] = React.useState(data)
+  const [dataUpdate, setDataUpdate] = React.useState([])
+  const [editStatus, setEditStatus] = React.useState(false)
+
+  const handleUpdateData = async (field, value) => {
+    setDataRow({ ...dataRow, [field]: value })
+    setDataUpdate({ ...dataUpdate, [field]: value })
+    setEditStatus(true)
+  }
+
+  useEffect(() => {
+    console.log('dataUpdate: ', dataUpdate)
+  }, [dataUpdate])
 
   const showContent = [
-    <DetailItem key='detail' dataRow={dataRow} setDataRow={setDataRow} />,
+    <DetailItem key='detail' dataRow={dataRow} handleUpdateData={handleUpdateData} />,
     <DashboardItem key='dashboard' />,
     <InventoryItem key='inventory' dataRow={dataRow} dropDowns={defaultMaterialRequestType} />,
     <AccountingItem key='accounting' dataRow={dataRow} setDataRow={setDataRow} />,
@@ -48,6 +60,9 @@ const ItemPage = ({ data }) => {
       setDataRow={setDataRow}
       doctype='Item'
       docStatusName='disabled'
+      dataUpdate={dataUpdate}
+      editStatus={editStatus}
+      setEditStatus={setEditStatus}
     />
   )
 }
