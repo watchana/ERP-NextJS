@@ -213,6 +213,9 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
                   name='brand'
                   value={dataRow.brand}
                   onChange={handleTextChange}
+                  sx={{
+                    backgroundColor: 'theme.palette.background.paper'
+                  }}
                 />
               </Box>
             </CardContent>
