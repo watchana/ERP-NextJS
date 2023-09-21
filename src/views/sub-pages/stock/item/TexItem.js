@@ -2,10 +2,10 @@
 import React from 'react'
 
 // MUI imports
-import { Box, Typography, TextField, Button, Card } from '@mui/material'
+import { Box, Typography, Button, Card } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
-const TexItem = () => {
+const TexItem = ({ dataRow }) => {
   const columnsTax = [
     { field: 'id', headerName: 'No', width: 70 },
     { field: 'ItemTaxTemplate', headerName: 'Item Tax Template', width: 150 },
@@ -13,17 +13,6 @@ const TexItem = () => {
     { field: 'ValidFrom', headerName: 'Valid From', width: 200 },
     { field: 'Minimum', headerName: 'Minimum Net Rate', width: 200 },
     { field: 'Maximum', headerName: 'Maximum Net Rate', width: 200 }
-  ]
-
-  const rowTax = [
-    {
-      id: 1,
-      ItemTaxTemplate: 'Targaryen',
-      TaxCategory: 'Daenerys',
-      ValidFrom: 'daeams',
-      Minimum: 'dasd',
-      Maximum: 'sssss'
-    }
   ]
 
   return (
@@ -40,8 +29,11 @@ const TexItem = () => {
         <Typography variant='subtitle2'>Taxes</Typography>
         <Typography variant='subtitle2'>Will also apply for variants</Typography>
         <Box sx={{ mt: 4 }}>
-          <DataGrid rows={rowTax} columns={columnsTax} checkboxSelection disableRowSelectionOnClick />
+          <DataGrid rows={dataRow.taxes} columns={columnsTax} checkboxSelection disableRowSelectionOnClick />
         </Box>
+        <Button variant='contained' sx={{ mt: 2 }}>
+          Add Row
+        </Button>
       </Card>
     </Box>
   )
