@@ -26,7 +26,7 @@ const QualityItem = ({ dataRow, handleUpdateData }) => {
           <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
             <Checkbox
               {...label}
-              checked={dataRow.inspection_required_before_purchase === 1 ? true : false}
+              checked={Boolean(dataRow.inspection_required_before_purchase)}
               name='inspection_required_before_purchase'
               onChange={handleCheckboxChange}
             />
@@ -47,7 +47,7 @@ const QualityItem = ({ dataRow, handleUpdateData }) => {
           <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
             <Checkbox
               {...label}
-              checked={dataRow.inspection_required_before_delivery === 1 ? true : false}
+              checked={Boolean(dataRow.inspection_required_before_delivery)}
               name='inspection_required_before_delivery'
               onChange={handleCheckboxChange}
             />

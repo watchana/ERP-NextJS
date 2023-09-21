@@ -27,7 +27,7 @@ const ManufacturingItem = ({ dataRow, handleUpdateData }) => {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center', alignContent: 'flex-start' }}>
             <Checkbox
-              checked={dataRow.include_item_in_manufacturing === 1 ? true : false}
+              checked={Boolean(dataRow.include_item_in_manufacturing)}
               name='include_item_in_manufacturing'
               onChange={handleCheckboxChange}
             />
@@ -36,7 +36,7 @@ const ManufacturingItem = ({ dataRow, handleUpdateData }) => {
 
           <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center', alignContent: 'flex-start' }}>
             <Checkbox
-              checked={dataRow.published_in_website === 1 ? true : false}
+              checked={Boolean(dataRow.published_in_website)}
               name='published_in_website'
               onChange={handleCheckboxChange}
             />
@@ -47,7 +47,7 @@ const ManufacturingItem = ({ dataRow, handleUpdateData }) => {
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Checkbox
                 name='is_sub_contracted_item'
-                checked={dataRow.is_sub_contracted_item === 1 ? true : false}
+                checked={Boolean(dataRow.is_sub_contracted_item)}
                 onChange={handleCheckboxChange}
               />
               <Typography variant='subtitle1'>Supply Raw Materials for Purchase</Typography>
