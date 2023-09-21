@@ -4,51 +4,41 @@ import React, { useEffect, useState } from 'react'
 // ** Mui Import
 import {
   Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
   Checkbox,
   Collapse,
   Divider,
   FormControlLabel,
-  FormGroup,
   Grid,
   IconButton,
   Skeleton,
   TextField,
-  TextareaAutosize,
   Typography
 } from '@mui/material'
 import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 
-const DetailItem = ({ dataRow, setDataRow }) => {
-  const [collapseDescription, setCollapseDescription] = useState(false)
+const DetailItem = ({ dataRow, handleUpdateData }) => {
+  const [descriptionOpen, setDescriptionOpen] = useState(false)
 
   const handleClickDescription = () => {
-    setCollapseDescription(!collapseDescription)
+    setDescriptionOpen(!descriptionOpen)
   }
 
   const handleCheckboxChange = event => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
+    handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
   }
 
   const handleTextChange = event => {
     console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+    handleUpdateData(event.target.name, event.target.value)
   }
 
   useEffect(() => {
     console.log('dataRow', dataRow)
   }, [dataRow])
-
-  const checkboxStyle = {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
-  }
 
   if (!dataRow) return <Skeleton variant='rounded' width={210} height={60} />
 
@@ -63,7 +53,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
         }}
       >
         <Grid container spacing={2} style={{ width: '100%', display: 'flex' }}>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
+          <Grid item sm={12} md={6}>
             <Typography>Item Name</Typography>
             <TextField
               sx={{ marginBottom: 5 }}
@@ -76,6 +66,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
             />
             <Typography>Item Group</Typography>
             <TextField
+              disabled
               sx={{ marginBottom: 5 }}
               fullWidth
               size='small'
@@ -87,6 +78,7 @@ const DetailItem = ({ dataRow, setDataRow }) => {
             />
             <Typography>Default Unit of Measure</Typography>
             <TextField
+              disabled
               sx={{ marginBottom: 5 }}
               fullWidth
               size='small'
@@ -98,18 +90,39 @@ const DetailItem = ({ dataRow, setDataRow }) => {
             />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-            <FormControlLabel control={<Checkbox checked={dataRow.disabled || false} />} label='Disabled' />
             <FormControlLabel
-              control={<Checkbox checked={dataRow.allow_alternative_item || false} />}
+              control={
+                <Checkbox
+                  checked={dataRow.disabled === 1 ? true : false}
+                  name='disabled'
+                  onChange={handleCheckboxChange}
+                />
+              }
+              label='Disabled'
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={dataRow.allow_alternative_item === 1 ? true : false}
+                  name='allow_alternative_item'
+                  onChange={handleCheckboxChange}
+                />
+              }
               label='Allow Alternative Item'
             />
             <FormControlLabel
-              control={<Checkbox checked={Boolean(dataRow.is_stock_item) || false} />}
-              label='is_stock_item'
+              control={
+                <Checkbox
+                  checked={dataRow.is_stock_item === 1 ? true : false}
+                  name='is_stock_item'
+                  onChange={handleCheckboxChange}
+                />
+              }
+              label='Maintain Stock'
             />
             <FormControlLabel
-              control={<Checkbox checked={Boolean(dataRow.has_variants) || false} />}
-              label='has_variants'
+              control={<Checkbox disabled checked={Boolean(dataRow.has_variants) === 1 ? true : false} />}
+              label='Has Variants'
             />
 
             <Typography sx={{ mt: 4 }}>Valuation Rate</Typography>
@@ -118,10 +131,8 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               fullWidth
               size='small'
               variant='filled'
-              value={parseFloat(dataRow.valuation_rate).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}
+              type='number'
+              value={dataRow.valuation_rate || ''}
               name='valuation_rate'
               onChange={handleTextChange}
             />
@@ -140,10 +151,8 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               fullWidth
               size='small'
               variant='filled'
-              value={parseFloat(dataRow.over_delivery_receipt_allowance).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}
+              type='number'
+              value={dataRow.over_delivery_receipt_allowance}
               name='over_delivery_receipt_allowance'
               onChange={handleTextChange}
             />
@@ -154,10 +163,8 @@ const DetailItem = ({ dataRow, setDataRow }) => {
               fullWidth
               size='small'
               variant='filled'
-              value={parseFloat(dataRow.over_billing_allowance).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}
+              type='number'
+              value={dataRow.over_billing_allowance}
               name='over_billing_allowance'
               onChange={handleTextChange}
             />
@@ -168,13 +175,13 @@ const DetailItem = ({ dataRow, setDataRow }) => {
           <Box onClick={handleClickDescription} sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
             <Typography sx={{ fontWeight: 'medium' }}>Description</Typography>
             <IconButton size='small' disabled>
-              {collapseDescription ? <ChevronUp /> : <ChevronDown />}
+              {descriptionOpen ? <ChevronUp /> : <ChevronDown />}
             </IconButton>
           </Box>
         </Grid>
 
         <Grid item xs={12}>
-          <Collapse in={collapseDescription}>
+          <Collapse in={descriptionOpen}>
             <Divider sx={{ margin: 0 }} />
             <CardContent>
               <Typography variant='subtitle2'>Description</Typography>
@@ -189,7 +196,14 @@ const DetailItem = ({ dataRow, setDataRow }) => {
 
               <Box>
                 <Typography variant='subtitle1'>Brand</Typography>
-                <TextField fullWidth size='small' variant='filled' />
+                <TextField
+                  fullWidth
+                  size='small'
+                  variant='filled'
+                  name='brand'
+                  value={dataRow.brand}
+                  onChange={handleTextChange}
+                />
               </Box>
             </CardContent>
           </Collapse>

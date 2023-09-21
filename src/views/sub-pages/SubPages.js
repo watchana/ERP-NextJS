@@ -23,7 +23,19 @@ import FullPageSkeleton from '../FullPageSkeleton'
 
 const IconButtonStyle = { bgcolor: 'white', borderRadius: 1, border: '1px solid #E0E0E0', mx: 0.5 }
 
-const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow, doctype, docStatusName }) => {
+const SubPages = ({
+  data,
+  setData,
+  menuContent,
+  showContent,
+  dataRow,
+  setDataRow,
+  doctype,
+  docStatusName,
+  editStatus,
+  setEditStatus,
+  dataUpdate
+}) => {
   const contentSizeInit = 7
 
   // ** States
@@ -95,6 +107,7 @@ const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow
     try {
       const dataRow = await fetchData(doctype, params.name)
       setDataRow(dataRow)
+      setEditStatus(false)
     } catch (err) {
       console.log('Error fetching data:', err)
     }
@@ -143,14 +156,16 @@ const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow
 
     if (Object.keys(dataRow).length !== 0) {
       axios
-        .put(`${process.env.NEXT_PUBLIC_API_URL}${doctype}/${dataRow.name}`, dataRow, {
+        .put(`${process.env.NEXT_PUBLIC_API_URL}${doctype}/${dataRow.name}`, dataUpdate, {
           headers: {
             Accept: 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: process.env.NEXT_PUBLIC_API_TOKEN
           }
         })
         .then(res => {
           console.log('res', res)
+          setEditStatus(false)
         })
         .catch(err => {
           console.log(err)
@@ -161,6 +176,10 @@ const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow
   useEffect(() => {
     console.log('dataRow', dataRow)
   }, [dataRow])
+
+  useEffect(() => {
+    console.log('dataUpdate', dataUpdate)
+  }, [dataUpdate])
 
   if (!data) {
     return <FullPageSkeleton />
@@ -208,7 +227,10 @@ const SubPages = ({ data, setData, menuContent, showContent, dataRow, setDataRow
                       <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
                         {dataRow.name}
                       </Typography>
-                      {dataRow[docStatusName] === 0 ? (
+
+                      {editStatus === true ? (
+                        <Chip label='• Edit' color='warning' sx={{ ml: 1 }} />
+                      ) : dataRow[docStatusName] === 0 ? (
                         <Chip label='• Enabled' color='statusEnabled' sx={{ ml: 1 }} />
                       ) : (
                         <Chip label='• Disabled' color='error' sx={{ ml: 1 }} />
