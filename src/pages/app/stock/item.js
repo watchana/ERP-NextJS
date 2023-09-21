@@ -42,7 +42,7 @@ const ItemPage = ({ data }) => {
   const showContent = [
     <DetailItem key='detail' dataRow={dataRow} handleUpdateData={handleUpdateData} />,
     <DashboardItem key='dashboard' />,
-    <InventoryItem key='inventory' dataRow={dataRow} dropDowns={defaultMaterialRequestType} />,
+    <InventoryItem key='inventory' dataRow={dataRow} handleUpdateData={handleUpdateData} />,
     <AccountingItem key='accounting' dataRow={dataRow} setDataRow={setDataRow} />,
     <PurchasingItem key='purchasing' dataRow={dataRow} handleUpdateData={handleUpdateData} />,
     <SalesItem key='sales' dataRow={dataRow} handleUpdateData={handleUpdateData} />,

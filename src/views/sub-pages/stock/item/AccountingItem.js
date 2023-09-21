@@ -31,7 +31,7 @@ const AccountingItem = ({ dataRow }) => {
         </Typography>
         <Box>
           <DataGrid
-            style={{ height: dataRow.taxes.length === 0 ? 300 : 'auto' }}
+            sx={{ height: dataRow.taxes.length === 0 ? 300 : 'auto' }}
             rows={dataRow.item_defaults}
             columns={columnsAcc}
             getRowId={row => row.name} // ระบุ id โดยใช้ค่า name
