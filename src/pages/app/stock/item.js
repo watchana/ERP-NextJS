@@ -28,6 +28,7 @@ const ItemPage = ({ data }) => {
   const [dataUpdate, setDataUpdate] = React.useState([])
   const [editStatus, setEditStatus] = React.useState(false)
 
+  // ? function to update dataRow and store the required values in dataUpdated.
   const handleUpdateData = async (field, value) => {
     setDataRow({ ...dataRow, [field]: value })
     setDataUpdate({ ...dataUpdate, [field]: value })
