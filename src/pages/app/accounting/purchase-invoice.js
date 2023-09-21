@@ -14,6 +14,7 @@ import PaymentsPurchaseInvoice from 'src/views/sub-pages/accounting/purchase-inv
 import ContactAndAddressPurchaseInvoice from 'src/views/sub-pages/accounting/purchase-invoice/contact-and-address'
 import TermsPurchaseInvoice from 'src/views/sub-pages/accounting/purchase-invoice/termsPurchaseInvoice'
 import MoreInfoPurchaseInvoice from 'src/views/sub-pages/accounting/purchase-invoice/more-infoPurchaseInvoice'
+import ConnectionPurchaseInvoice from 'src/views/sub-pages/accounting/purchase-invoice/connectionPurchaseInvoice'
 
 // ** Layouts
 import SubPageLayout from 'src/@core/layouts/SubPageLayout'
@@ -27,7 +28,8 @@ const PurchaseInvoice = ({ data }) => {
     <PaymentsPurchaseInvoice key={'payments'} dataRow={dataRow} setDataRow={setDataRow} />,
     <ContactAndAddressPurchaseInvoice key={'contact'} dataRow={dataRow} setDataRow={setDataRow} />,
     <TermsPurchaseInvoice key={'terms'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <MoreInfoPurchaseInvoice key={'terms'} dataRow={dataRow} setDataRow={setDataRow} />
+    <MoreInfoPurchaseInvoice key={'moreinfo'} dataRow={dataRow} setDataRow={setDataRow} />,
+    <ConnectionPurchaseInvoice key={'connect'} dataRow={dataRow} setDataRow={setDataRow} />
   ]
 
   return (
