@@ -24,48 +24,33 @@ import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 import { DataGrid } from '@mui/x-data-grid'
 
-const SalesItem = ({ dataRow }) => {
-  const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-  const [collapseDeferred, setCollapseDeferred] = useState(false)
-  const [collapseCustomer, setCollapseCustomer] = useState(false)
-  const [IsDeferredCheck, setIsDeferredCheck] = useState(false)
+const SalesItem = ({ dataRow, handleUpdateData }) => {
+  const [collapseDeferredOpen, setCollapseDeferredOpen] = useState(false)
+  const [collapseCustomerOpen, setCollapseCustomerOpen] = useState(false)
 
   const handleDeferred = () => {
-    setCollapseDeferred(!collapseDeferred)
+    setCollapseDeferredOpen(!collapseDeferredOpen)
   }
 
   const handleCustomer = () => {
-    setCollapseCustomer(!collapseCustomer)
-  }
-
-  const handleDeferredCheck = event => {
-    setIsDeferredCheck(event.target.checked)
+    setCollapseCustomerOpen(!collapseCustomerOpen)
   }
 
   const handleCheckboxChange = event => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.checked })
+    handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
   }
 
   const handleTextChange = event => {
     console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+    handleUpdateData(event.target.name, event.target.value)
   }
 
-  const columnsCus = [
-    { field: 'id', headerName: 'No', width: 70 },
-    { field: 'CustomerName', headerName: 'Customer Name', width: 150 },
-    { field: 'CustomerGroup', headerName: 'Customer Group', width: 200 },
-    { field: 'RefCode', headerName: 'Ref Code', width: 200 }
-  ]
-
-  const rowCus = [
-    {
-      id: 1,
-      CustomerName: 'Targaryen',
-      CustomerGroup: 'Daenerys',
-      RefCode: 'daeams'
-    }
+  const columnsCustomer = [
+    { field: 'idx', headerName: 'No', width: 70 },
+    { field: 'customer_name', headerName: 'Customer Name', width: 150 },
+    { field: 'customer_group', headerName: 'Customer Group', width: 200 },
+    { field: 'ref_code', headerName: 'Ref Code', width: 200 }
   ]
 
   return (
@@ -83,6 +68,7 @@ const SalesItem = ({ dataRow }) => {
             <Typography sx={{ marginBottom: 2 }}>Default Sales Unit of Measure</Typography>
             <TextField
               fullWidth
+              disabled
               size='small'
               variant='filled'
               label=''
@@ -91,11 +77,23 @@ const SalesItem = ({ dataRow }) => {
               onChange={handleTextChange}
             />
             <FormControlLabel
-              control={<Checkbox checked={Boolean(dataRow.grant_commission) || false} />}
+              control={
+                <Checkbox
+                  name='grant_commission'
+                  checked={Boolean(dataRow.grant_commission)}
+                  onChange={handleCheckboxChange}
+                />
+              }
               label=' Grant Commission'
             />
             <FormControlLabel
-              control={<Checkbox checked={Boolean(dataRow.is_sales_item) || false} />}
+              control={
+                <Checkbox
+                  name='is_sales_item'
+                  checked={Boolean(dataRow.is_sales_item)}
+                  onChange={handleCheckboxChange}
+                />
+              }
               label='  Allow Sales'
             />
           </Grid>
@@ -105,14 +103,7 @@ const SalesItem = ({ dataRow }) => {
               fullWidth
               size='small'
               variant='filled'
-              value={
-                dataRow?.max_discount === '0.0'
-                  ? ' 0.0'
-                  : parseFloat(dataRow?.max_discount).toLocaleString('en-US', {
-                      minimumFractionDigits: 3,
-                      maximumFractionDigits: 3
-                    })
-              }
+              value={dataRow.max_discount}
               name='max_discount'
               onChange={handleTextChange}
             />
@@ -123,55 +114,58 @@ const SalesItem = ({ dataRow }) => {
           Deferred Revenue
         </Button>
         <IconButton size='small' onClick={handleDeferred}>
-          {collapseDeferred ? (
+          {collapseDeferredOpen ? (
             <ChevronUp sx={{ fontSize: '1.875rem' }} />
           ) : (
             <ChevronDown sx={{ fontSize: '1.875rem' }} />
           )}
         </IconButton>
 
-        <Collapse in={collapseDeferred}>
+        <Collapse in={collapseDeferredOpen}>
           <Divider sx={{ margin: 0 }} />
-          <FormGroup>
-            <FormControlLabel
-              control={<Checkbox checked={IsDeferredCheck} onChange={handleDeferredCheck} />}
-              variant='body2'
-              label='Enable Deferred Expense'
-            />
-            {IsDeferredCheck && (
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography sx={{ marginBottom: 2 }}>Deferred Expense Account</Typography>
-                  <TextField
-                    fullWidth
-                    size='small'
-                    variant='filled'
-                    value={dataRow.deferred_revenue_account || ''}
-                    name='deferred_revenue_account'
-                    onChange={handleTextChange}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography sx={{ marginBottom: 2 }}>No of Months (Expense)</Typography>
-                  <TextField
-                    fullWidth
-                    size='small'
-                    variant='filled'
-                    value={
-                      dataRow.no_of_months === '0.0'
-                        ? ' 0.0'
-                        : parseFloat(dataRow.no_of_months).toLocaleString('en-US', {
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0
-                          })
-                    }
-                    name='no_of_months'
-                    onChange={handleTextChange}
-                  />
-                </Grid>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name='enable_deferred_expense'
+                checked={Boolean(dataRow.enable_deferred_expense)}
+                onChange={handleCheckboxChange}
+              />
+            }
+            label='Enable Deferred Expense'
+          />
+          {dataRow.enable_deferred_expense === 1 && (
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography sx={{ marginBottom: 2 }}>Deferred Expense Account</Typography>
+                <TextField
+                  fullWidth
+                  size='small'
+                  variant='filled'
+                  value={dataRow.deferred_revenue_account || ''}
+                  name='deferred_revenue_account'
+                  onChange={handleTextChange}
+                />
               </Grid>
-            )}
-          </FormGroup>
+              <Grid item xs={12}>
+                <Typography sx={{ marginBottom: 2 }}>No of Months (Expense)</Typography>
+                <TextField
+                  fullWidth
+                  size='small'
+                  variant='filled'
+                  value={
+                    dataRow.no_of_months === '0.0'
+                      ? ' 0.0'
+                      : parseFloat(dataRow.no_of_months).toLocaleString('en-US', {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0
+                        })
+                  }
+                  name='no_of_months'
+                  onChange={handleTextChange}
+                />
+              </Grid>
+            </Grid>
+          )}
         </Collapse>
         <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
         <Button size='small' variant='filled' label='' onClick={handleCustomer} sx={{ fontWeight: 'bold' }}>
@@ -179,14 +173,14 @@ const SalesItem = ({ dataRow }) => {
         </Button>
 
         <IconButton size='small' onClick={handleCustomer}>
-          {collapseCustomer ? (
+          {collapseCustomerOpen ? (
             <ChevronUp sx={{ fontSize: '1.875rem' }} />
           ) : (
             <ChevronDown sx={{ fontSize: '1.875rem' }} />
           )}
         </IconButton>
 
-        <Collapse in={collapseCustomer}>
+        <Collapse in={collapseCustomerOpen}>
           <Divider sx={{ margin: 0 }} />
           <CardContent>
             <Typography variant='subtitle2' sx={{ marginBottom: 2 }}>
@@ -194,8 +188,9 @@ const SalesItem = ({ dataRow }) => {
             </Typography>
 
             <DataGrid
-              rows={rowCus}
-              columns={columnsCus}
+              rows={dataRow.customer_items}
+              columns={columnsCustomer}
+              getRowId={row => row.name} // ระบุ id โดยใช้ค่า name
               initialState={{
                 pagination: {
                   paginationModel: { page: 0, pageSize: 5 }
@@ -205,7 +200,9 @@ const SalesItem = ({ dataRow }) => {
               checkboxSelection
             />
 
-            <Button>Add row</Button>
+            <Button variant='contained' sx={{ marginTop: 2 }}>
+              Add Row
+            </Button>
           </CardContent>
         </Collapse>
       </Card>
