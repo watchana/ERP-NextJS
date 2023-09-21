@@ -46,6 +46,23 @@ const SubPages = ({
   const [tabValue, setTabValue] = useState(1)
   const [buttonArrow, setButtonArrow] = useState(true)
 
+  const tabStyles = {
+    backgroundColor: 'primary.light',
+    '& .MuiTab-root.Mui-selected': {
+      color: 'white',
+      backgroundColor: 'primary.main'
+    },
+    borderTopLeftRadius: '10px',
+    borderTopRightRadius: '10px'
+  }
+
+  const StatusChip = ({ editStatus, docStatus, docStatusName }) => {
+    if (editStatus) return <Chip label='• Edit' color='warning' sx={{ ml: 1 }} />
+    if (docStatus === 0) return <Chip label='• Enabled' color='statusEnabled' sx={{ ml: 1 }} />
+
+    return <Chip label='• Disabled' color='error' sx={{ ml: 1 }} />
+  }
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 1000) {
@@ -186,7 +203,7 @@ const SubPages = ({
   }
 
   return (
-    <Box>
+    <Box sx={{ width: '100%', height: '100%' }}>
       {/* ข้อมูลที่แสดงผลข้างซ้าย */}
       <Grid container justifyContent='center' columnSpacing={4}>
         {(!screenMD || !screenMDSelect) && (
@@ -213,86 +230,83 @@ const SubPages = ({
 
             {(screenMDSelect || !screenMD) && (
               <Grid item xs md={contentSize}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                  <Box
-                    sx={{
-                      flexDirection: 'row',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      mb: 2
-                    }}
-                  >
-                    <Box sx={{ display: 'flex' }}>
-                      <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-                        {dataRow.name}
-                      </Typography>
-
-                      {editStatus === true ? (
-                        <Chip label='• Edit' color='warning' sx={{ ml: 1 }} />
-                      ) : dataRow[docStatusName] === 0 ? (
-                        <Chip label='• Enabled' color='statusEnabled' sx={{ ml: 1 }} />
-                      ) : (
-                        <Chip label='• Disabled' color='error' sx={{ ml: 1 }} />
-                      )}
-                    </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', mr: 3 }}>
-                      <IconButton sx={IconButtonStyle} onClick={() => handleArrowLeft()}>
-                        <KeyboardArrowLeftIcon />
-                      </IconButton>
-                      <IconButton sx={IconButtonStyle} onClick={() => handleArrowRight()}>
-                        <KeyboardArrowRightIcon />
-                      </IconButton>
-                      <IconButton sx={IconButtonStyle}>
-                        <MoreHorizIcon />
-                      </IconButton>
-                      <IconButton color='success' sx={IconButtonStyle} onClick={handleSaveClick}>
-                        <SaveIcon />
-                      </IconButton>
-                      <IconButton color='error' sx={IconButtonStyle} onClick={handleContentClose}>
-                        <CloseIcon />
-                      </IconButton>
-                    </Box>
-                  </Box>
-
-                  <TabContext value={tabValue.toString()}>
-                    <Tabs
-                      value={tabValue}
-                      onChange={handleTabChange}
-                      variant='scrollable'
-                      scrollButtons
-                      allowScrollButtonsMobile
+                <Grid container>
+                  <Grid item xs={12}>
+                    <Box
                       sx={{
-                        backgroundColor: 'primary.light',
-                        '& .MuiTab-root.Mui-selected': {
-                          color: 'white',
-                          backgroundColor: 'primary.main'
-                        },
-                        borderTopLeftRadius: '10px', // กำหนด borderRadius สำหรับมุมบนซ้าย
-                        borderTopRightRadius: '10px' // กำหนด borderRadius สำหรับมุมบนขวา
+                        flexDirection: 'row',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        mb: 2
                       }}
                     >
-                      {menuContent?.map(item => (
-                        <Tab value={item.id} label={item.name} key={item.id} />
+                      <Box sx={{ display: 'flex' }}>
+                        <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
+                          {dataRow.name}
+                        </Typography>
+
+                        <StatusChip
+                          editStatus={editStatus}
+                          docStatus={dataRow[docStatusName]}
+                          docStatusName={docStatusName}
+                        />
+                      </Box>
+                      <Box sx={{ display: 'flex', flexDirection: 'row', mr: 3 }}>
+                        <IconButton sx={IconButtonStyle} onClick={() => handleArrowLeft()}>
+                          <KeyboardArrowLeftIcon />
+                        </IconButton>
+                        <IconButton sx={IconButtonStyle} onClick={() => handleArrowRight()}>
+                          <KeyboardArrowRightIcon />
+                        </IconButton>
+                        <IconButton sx={IconButtonStyle}>
+                          <MoreHorizIcon />
+                        </IconButton>
+                        <IconButton color='success' sx={IconButtonStyle} onClick={handleSaveClick}>
+                          <SaveIcon />
+                        </IconButton>
+                        <IconButton color='error' sx={IconButtonStyle} onClick={handleContentClose}>
+                          <CloseIcon />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TabContext value={tabValue.toString()}>
+                      <Tabs
+                        value={tabValue}
+                        onChange={handleTabChange}
+                        variant='scrollable'
+                        scrollButtons
+                        allowScrollButtonsMobile
+                        sx={tabStyles}
+                      >
+                        {menuContent?.map(item => (
+                          <Tab value={item.id} label={item.name} key={item.id} />
+                        ))}
+                      </Tabs>
+                      {showContent.map((component, index) => (
+                        <TabPanel value={(index + 1).toString()} key={index + 1}>
+                          <Box sx={{ m: -3 }}>{component}</Box>
+                        </TabPanel>
                       ))}
-                    </Tabs>
-                    {showContent.map((item, index) => (
-                      <TabPanel value={(index + 1).toString()} key={index + 1} sx={{ mt: -3, mx: -3, height: '100%' }}>
-                        {item}
-                      </TabPanel>
-                    ))}
-                  </TabContext>
-                  <Card sx={{ marginBlock: 4, p: 2 }}>
-                    <Typography variant='h6' sx={{ my: 2 }}>
-                      Add Comment
-                    </Typography>
-                    <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
-                    <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-                    <Button variant='contained' sx={{ marginBlock: 2 }}>
-                      comment
-                    </Button>
-                  </Card>
-                </Box>
+                    </TabContext>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Card sx={{ marginBlock: 4, p: 2 }}>
+                      <Typography variant='h6' sx={{ my: 2 }}>
+                        Add Comment
+                      </Typography>
+                      <TextField size='small' variant='filled' multiline rows={4} fullWidth />
+                      <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
+                      <Button variant='contained' sx={{ marginBlock: 2 }}>
+                        comment
+                      </Button>
+                    </Card>
+                  </Grid>
+                </Grid>
               </Grid>
             )}
           </>

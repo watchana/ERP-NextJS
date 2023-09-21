@@ -51,10 +51,9 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
     <Box>
       <Card
         sx={{
-          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
-          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
-          p: 2,
-          mb: 2
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
+          p: 2
         }}
       >
         <Grid container spacing={2} style={{ width: '100%', display: 'flex' }}>
@@ -181,27 +180,28 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
           </Grid>
         </Grid>
         <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-        <Grid item xs={12} sx={{ display: 'flex', marginBlock: 2 }}>
+        <Grid item xs={12} sx={{ display: 'flex', marginBlock: 2, flexDirection: 'column' }}>
           <Box onClick={handleClickDescription} sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
             <Typography sx={{ fontWeight: 'medium' }}>Description</Typography>
             <IconButton size='small' disabled>
               {descriptionOpen ? <ChevronUp /> : <ChevronDown />}
             </IconButton>
           </Box>
-        </Grid>
-
-        <Grid item xs={12}>
           <Collapse in={descriptionOpen}>
-            <Divider sx={{ margin: 0 }} />
-            <CardContent>
+            <Box sx={{ p: 2 }}>
+              <Divider />
               <Typography variant='subtitle2'>Description</Typography>
               <TextField
                 fullWidth
                 multiline
+                variant='filled'
                 rows={4}
                 value={dataRow.description || ''}
                 name='description'
                 onChange={handleTextChange}
+                sx={{
+                  bgcolor: 'theme.palette.background.paper'
+                }}
               />
 
               <Box>
@@ -218,7 +218,7 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
                   }}
                 />
               </Box>
-            </CardContent>
+            </Box>
           </Collapse>
         </Grid>
       </Card>
