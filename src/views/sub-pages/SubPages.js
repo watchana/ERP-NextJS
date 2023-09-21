@@ -254,47 +254,44 @@ const SubPages = ({
                       </IconButton>
                     </Box>
                   </Box>
-                  <Box sx={{ mr: 4 }}>
-                    <TabContext value={tabValue.toString()}>
-                      <Tabs
-                        value={tabValue}
-                        onChange={handleTabChange}
-                        variant='scrollable'
-                        scrollButtons
-                        allowScrollButtonsMobile
-                        sx={{
-                          backgroundColor: 'primary.light',
-                          '& .MuiTab-root.Mui-selected': {
-                            color: 'white',
-                            backgroundColor: 'primary.main'
-                          },
-                          borderTopLeftRadius: '10px', // กำหนด borderRadius สำหรับมุมบนซ้าย
-                          borderTopRightRadius: '10px' // กำหนด borderRadius สำหรับมุมบนขวา
-                        }}
-                      >
-                        {menuContent?.map(item => (
-                          <Tab value={item.id} label={item.name} key={item.id} />
-                        ))}
-                      </Tabs>
-                      {showContent.map((item, index) => (
-                        <TabPanel value={(index + 1).toString()} key={index + 1} sx={{ m: -3 }}>
-                          {item}
-                        </TabPanel>
+
+                  <TabContext value={tabValue.toString()}>
+                    <Tabs
+                      value={tabValue}
+                      onChange={handleTabChange}
+                      variant='scrollable'
+                      scrollButtons
+                      allowScrollButtonsMobile
+                      sx={{
+                        backgroundColor: 'primary.light',
+                        '& .MuiTab-root.Mui-selected': {
+                          color: 'white',
+                          backgroundColor: 'primary.main'
+                        },
+                        borderTopLeftRadius: '10px', // กำหนด borderRadius สำหรับมุมบนซ้าย
+                        borderTopRightRadius: '10px' // กำหนด borderRadius สำหรับมุมบนขวา
+                      }}
+                    >
+                      {menuContent?.map(item => (
+                        <Tab value={item.id} label={item.name} key={item.id} />
                       ))}
-                    </TabContext>
-                    <Card sx={{ marginBlock: 4, p: 2 }}>
-                      <Box sx={{ width: '100%' }}>
-                        <Typography variant='h6' sx={{ my: 2 }}>
-                          Add Comment
-                        </Typography>
-                        <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
-                        <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-                        <Button variant='contained' sx={{ marginBlock: 2 }}>
-                          comment
-                        </Button>
-                      </Box>
-                    </Card>
-                  </Box>
+                    </Tabs>
+                    {showContent.map((item, index) => (
+                      <TabPanel value={(index + 1).toString()} key={index + 1} sx={{ mt: -3, mx: -3, height: '100%' }}>
+                        {item}
+                      </TabPanel>
+                    ))}
+                  </TabContext>
+                  <Card sx={{ marginBlock: 4, p: 2 }}>
+                    <Typography variant='h6' sx={{ my: 2 }}>
+                      Add Comment
+                    </Typography>
+                    <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
+                    <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
+                    <Button variant='contained' sx={{ marginBlock: 2 }}>
+                      comment
+                    </Button>
+                  </Card>
                 </Box>
               </Grid>
             )}

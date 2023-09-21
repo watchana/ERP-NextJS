@@ -23,38 +23,33 @@ import {
 import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 
-const PurchasingItem = ({ dataRow, setDataRow }) => {
+const PurchasingItem = ({ dataRow, handleUpdateData }) => {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 
-  const [collapseSupplier, setCollapseSupplier] = useState(false)
-  const [collapseDeferred, setCollapseDeferred] = useState(false)
-  const [collapseForeign, setCollapseForeign] = useState(false)
-  const [IsDeferredCheck, setIsDeferredCheck] = useState(false)
+  const [collapseSupplierDetailsOpen, setCollapseSupplierDetailsOpen] = useState(false)
+  const [collapseDeferredExpenseOpen, setCollapseDeferredExpenseOpen] = useState(false)
+  const [collapseForeignTradeDetailsOpen, setCollapseForeignTradeDetailsOpen] = useState(false)
 
-  const handleSupplier = () => {
-    setCollapseSupplier(!collapseSupplier)
+  const handleSupplierDetails = () => {
+    setCollapseSupplierDetailsOpen(!collapseSupplierDetailsOpen)
   }
 
-  const handleDeferred = () => {
-    setCollapseDeferred(!collapseDeferred)
+  const handleDeferredExpense = () => {
+    setCollapseDeferredExpenseOpen(!collapseDeferredExpenseOpen)
   }
 
-  const handleForeign = () => {
-    setCollapseForeign(!collapseForeign)
-  }
-
-  const handleDeferredCheck = event => {
-    setIsDeferredCheck(event.target.checked)
+  const handleForeignTradeDetails = () => {
+    setCollapseForeignTradeDetailsOpen(!collapseForeignTradeDetailsOpen)
   }
 
   const handleCheckboxChange = event => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.checked })
+    handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
   }
 
   const handleTextChange = event => {
     console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+    handleUpdateData(event.target.name, event.target.value)
   }
 
   const Columns = [
@@ -92,6 +87,7 @@ const PurchasingItem = ({ dataRow, setDataRow }) => {
             <Typography sx={{ marginBottom: 2 }}>Default Purchase Unit of Measure</Typography>
             <TextField
               fullWidth
+              disabled
               size='small'
               variant='filled'
               label=''
@@ -100,7 +96,7 @@ const PurchasingItem = ({ dataRow, setDataRow }) => {
               onChange={handleTextChange}
             />
 
-            <Typography sx={{ marginBottom: 2 }} variant='subtitle1'>
+            <Typography sx={{ my: 2 }} variant='subtitle1'>
               Minimum Order Qty
             </Typography>
             <TextField
@@ -108,36 +104,25 @@ const PurchasingItem = ({ dataRow, setDataRow }) => {
               size='small'
               variant='filled'
               label=''
-              value={parseFloat(dataRow.min_order_qty).toLocaleString('en-US', {
-                minimumFractionDigits: 3,
-                maximumFractionDigits: 3
-              })}
+              value={dataRow.min_order_qty}
               name='min_order_qty'
               onChange={handleTextChange}
             />
             <Typography sx={{ marginBottom: 2 }} variant='subtitle2'>
               Minimum quantity should be as per Stock UOM
             </Typography>
-            <Typography sx={{ marginBottom: 2 }}>Safety Stock</Typography>
+            <Typography sx={{ my: 2 }}>Safety Stock</Typography>
             <TextField
               fullWidth
               size='small'
               variant='filled'
-              label=''
-              value={
-                dataRow?.safety_stock === '0'
-                  ? ' 0'
-                  : parseFloat(dataRow.safety_stock).toLocaleString('en-US', {
-                      minimumFractionDigits: 3,
-                      maximumFractionDigits: 3
-                    })
-              }
+              value={dataRow?.safety_stock}
               name='safety_stock'
               onChange={handleTextChange}
             />
 
             <FormControlLabel
-              control={<Checkbox checked={Boolean(dataRow.is_purchase_item) || false} />}
+              control={<Checkbox checked={Boolean(dataRow.is_purchase_item)} />}
               label=' Allow Purchase'
             />
           </Grid>
@@ -148,14 +133,7 @@ const PurchasingItem = ({ dataRow, setDataRow }) => {
               fullWidth
               size='small'
               variant='filled'
-              value={
-                dataRow?.lead_time_days === '0'
-                  ? ' 0'
-                  : parseFloat(dataRow.lead_time_days).toLocaleString('en-US', {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0
-                    })
-              }
+              value={dataRow?.lead_time_days}
               name='lead_time_days'
               onChange={handleTextChange}
             />
@@ -166,50 +144,71 @@ const PurchasingItem = ({ dataRow, setDataRow }) => {
             <Typography sx={{ marginBottom: 2 }}>Last Purchase Rate</Typography>
             <TextField
               fullWidth
+              disabled
               size='small'
               variant='filled'
-              value={
-                dataRow?.last_purchase_rate === '0'
-                  ? ' 0'
-                  : parseFloat(dataRow.last_purchase_rate).toLocaleString('en-US', {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0
-                    })
-              }
+              value={dataRow?.last_purchase_rate}
               name='last_purchase_rate'
               onChange={handleTextChange}
             />
 
             <FormControlLabel
-              control={<Checkbox checked={Boolean(dataRow.is_customer_provided_item) || false} />}
+              control={
+                <Checkbox
+                  name='is_customer_provided_item'
+                  checked={Boolean(dataRow.is_customer_provided_item)}
+                  onChange={handleCheckboxChange}
+                />
+              }
               label=' Is Customer Provided Item'
             />
+            {dataRow.is_customer_provided_item && (
+              <>
+                <Typography sx={{ marginBottom: 2 }}>Customer</Typography>
+                <TextField
+                  fullWidth
+                  disabled
+                  size='small'
+                  variant='filled'
+                  value={dataRow?.customer}
+                  name='last_purchase_rate'
+                  onChange={handleTextChange}
+                />
+              </>
+            )}
           </Grid>
         </Grid>
         <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-        <Button variant='filled' label='' onClick={handleSupplier} sx={{ fontWeight: 'bold' }}>
+        <Button variant='filled' label='' onClick={handleSupplierDetails} sx={{ fontWeight: 'bold' }}>
           Supplier Details
         </Button>
-        <IconButton size='small' onClick={handleSupplier}>
-          {collapseSupplier ? (
+        <IconButton size='small' onClick={handleSupplierDetails}>
+          {collapseSupplierDetailsOpen ? (
             <ChevronUp sx={{ fontSize: '1.875rem' }} />
           ) : (
             <ChevronDown sx={{ fontSize: '1.875rem' }} />
           )}
         </IconButton>
-        <Collapse in={collapseSupplier}>
+        <Collapse in={collapseSupplierDetailsOpen}>
           <Divider sx={{ margin: 0 }} />
           <CardContent>
             <Grid container spacing={3}>
               <Grid item xs={12} sx={{ display: 'flex', mb: '5' }}>
                 <FormControlLabel
-                  control={<Checkbox checked={Boolean(dataRow.delivered_by_supplier) || false} />}
+                  control={
+                    <Checkbox
+                      name='delivered_by_supplier'
+                      checked={Boolean(dataRow.delivered_by_supplier)}
+                      onChange={handleCheckboxChange}
+                    />
+                  }
                   label=' Delivered by Supplier (Drop Ship)'
                 />
               </Grid>
               <Grid item xs={12} sx={{ mb: '5' }}>
+                <Typography sx={{ marginBottom: 2 }}>Supplier Items</Typography>
                 <DataGrid
-                  rows={Rows}
+                  rows={dataRow.supplier_items}
                   columns={Columns}
                   initialState={{
                     pagination: {
@@ -227,26 +226,26 @@ const PurchasingItem = ({ dataRow, setDataRow }) => {
 
         <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
 
-        <Button variant='filled' type='text' onClick={handleDeferred} sx={{ fontWeight: 'bold' }} s>
+        <Button variant='filled' type='text' onClick={handleDeferredExpense} sx={{ fontWeight: 'bold' }} s>
           Deferred Expense
         </Button>
-        <IconButton size='small' onClick={handleDeferred}>
-          {collapseDeferred ? (
+        <IconButton size='small' onClick={handleDeferredExpense}>
+          {collapseDeferredExpenseOpen ? (
             <ChevronUp sx={{ fontSize: '1.875rem' }} />
           ) : (
             <ChevronDown sx={{ fontSize: '1.875rem' }} />
           )}
         </IconButton>
 
-        <Collapse in={collapseDeferred}>
+        <Collapse in={collapseDeferredExpenseOpen}>
           <Divider sx={{ margin: 0 }} />
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox checked={IsDeferredCheck} onChange={handleDeferredCheck} />}
+              control={<Checkbox checked={Boolean(dataRow.enable_deferred_expense)} onChange={handleCheckboxChange} />}
               variant='body2'
               label='Enable Deferred Expense'
             />
-            {IsDeferredCheck && (
+            {dataRow.enable_deferred_expense && (
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
                   <Typography sx={{ marginBottom: 2 }}>Deferred Expense Account</Typography>
@@ -283,18 +282,18 @@ const PurchasingItem = ({ dataRow, setDataRow }) => {
         </Collapse>
         <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
 
-        <Button variant='filled' type='text' onClick={handleForeign} sx={{ fontWeight: 'bold' }}>
+        <Button variant='filled' type='text' onClick={handleForeignTradeDetails} sx={{ fontWeight: 'bold' }}>
           Foreign Trade Details
         </Button>
-        <IconButton size='small' onClick={handleForeign}>
-          {collapseForeign ? (
+        <IconButton size='small' onClick={handleForeignTradeDetails}>
+          {collapseForeignTradeDetailsOpen ? (
             <ChevronUp sx={{ fontSize: '1.875rem' }} />
           ) : (
             <ChevronDown sx={{ fontSize: '1.875rem' }} />
           )}
         </IconButton>
 
-        <Collapse in={collapseForeign}>
+        <Collapse in={collapseForeignTradeDetailsOpen}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <Typography sx={{ marginBottom: 2 }}>Country of Origin</Typography>
