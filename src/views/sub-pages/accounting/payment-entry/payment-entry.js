@@ -1,0 +1,549 @@
+import { DataGrid } from '@mui/x-data-grid'
+import axios from 'axios'
+import { ChevronDown, ChevronUp } from 'mdi-material-ui'
+import { useEffect, useState } from 'react'
+
+const {
+  Grid,
+  Card,
+  Typography,
+  TextField,
+  Divider,
+  Box,
+  Button,
+  CardActions,
+  IconButton,
+  Collapse,
+  Checkbox,
+  InputAdornment
+} = require('@mui/material')
+
+const PaymentEntry = ({ dataRow, setDataRow }) => {
+  const [collapseAccount, setCollapseAccount] = useState(false)
+  const [getDataPayment, setGetDataPayment] = useState([])
+  const [collapseMoreInfo, setCollapseMoreInfo] = useState(false)
+
+  const handleCollapseAccount = () => {
+    setCollapseAccount(!collapseAccount)
+  }
+
+  const handleCollapseMoreInfo = () => {
+    setCollapseMoreInfo(!collapseMoreInfo)
+  }
+
+  const checkboxStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  }
+
+  const handleTextChange = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+  }
+
+  const handleCheckbox = event => {
+    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
+    setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
+  }
+
+  const columnsPayment = [
+    { field: 'idx', headerName: 'No', width: 150 },
+    { field: 'reference_doctype', headerName: 'Type', width: 150 },
+    { field: 'reference_name', headerName: 'Name', width: 300 },
+    { field: 'total_amount', headerName: 'Grand Total (THB)', width: 150 },
+    { field: 'outstanding_amount', headerName: 'Outstanding (THB)', width: 300 },
+    { field: 'allocated_amount', headerName: 'Allocated (THB)', width: 300 }
+  ]
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}Payment Entry/${dataRow.name}`, {
+        headers: {
+          Authorization: 'token 5891d01ccc2961e:0e446b332dc22aa'
+        }
+      })
+      .then(res => {
+        setGetDataPayment(res.data.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [dataRow])
+
+  if (Object.values(getDataPayment)?.length === 0) {
+    return 'waiting...'
+  }
+
+  function formatDate(dateString) {
+    const dateObject = new Date(dateString)
+    const day = dateObject.getDate().toString().padStart(2, '0')
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0')
+    const year = dateObject.getFullYear()
+
+    return `${day}-${month}-${year}`
+  }
+  const formattedDate = formatDate(dataRow.posting_date)
+  const formattedDateEnd = formatDate(dataRow.due_date)
+
+  function formatTime(timeString) {
+    const timeParts = timeString.split(':')
+    const hours = timeParts[0]
+    const minutes = timeParts[1]
+    const formattedTime = `${hours}:${minutes}`
+
+    return formattedTime
+  }
+  const formattedTime = formatTime(dataRow?.posting_time || '')
+
+  function formatCurrency(params) {
+    const formattedValue = new Intl.NumberFormat('th-TH', {
+      style: 'currency',
+      currency: 'THB',
+      minimumFractionDigits: 2
+    }).format(params.value)
+
+    return formattedValue
+  }
+
+  return (
+    <Card sx={{ p: 4 }}>
+      <Typography variant='h6' sx={{ mb: 2 }}>
+        Type of Payment
+      </Typography>
+      <Grid container spacing={3} sx={{ mb: 6 }}>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <Typography sx={{ margin: 1 }}>Payment Type</Typography>
+          <TextField
+            size='small'
+            variant='filled'
+            value={dataRow.payment_type}
+            fullWidth
+            onChange={handleTextChange}
+            name='payment_type'
+            disabled
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <Typography sx={{ margin: 1 }}>Posting Date</Typography>
+          <TextField
+            size='small'
+            variant='filled'
+            value={formattedDate}
+            fullWidth
+            onChange={handleTextChange}
+            name='posting_date'
+            disabled
+          />
+        </Grid>
+      </Grid>
+      <Divider sx={{ margin: 0 }} />
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <Typography sx={{ margin: 1 }}>Party</Typography>
+          <TextField size='small' variant='filled' value={dataRow.party} fullWidth name='party' />
+
+          <Typography sx={{ margin: 1 }}>Party Name</Typography>
+          <TextField
+            size='small'
+            variant='filled'
+            value={dataRow.party_name}
+            fullWidth
+            onChange={handleTextChange}
+            name='party_name'
+            disabled
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
+          <Typography sx={{ margin: 1 }}>Contact</Typography>
+          <TextField
+            size='small'
+            variant='filled'
+            value={dataRow.contact_person}
+            fullWidth
+            onChange={handleTextChange}
+            name='contact_person'
+          />
+
+          <Typography sx={{ margin: 1 }}>Email</Typography>
+          <TextField
+            size='small'
+            variant='filled'
+            value={dataRow.contact_email}
+            fullWidth
+            onChange={handleTextChange}
+            name='contact_email'
+            disabled
+          />
+        </Grid>
+      </Grid>
+      <Grid>
+        <Box sx={{ display: 'flex' }}>
+          <Button size='small' variant='filled' label='' onClick={handleCollapseAccount}>
+            Accounts
+          </Button>
+          <Box>
+            <CardActions className='card-action-dense'>
+              <IconButton size='small' onClick={handleCollapseAccount}>
+                {collapseAccount ? (
+                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
+                ) : (
+                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
+                )}
+              </IconButton>
+            </CardActions>
+          </Box>
+        </Box>
+
+        <Collapse in={collapseAccount}>
+          <Divider sx={{ margin: 0 }} />
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={12} md={6} lg={6}>
+              <Typography sx={{ margin: 1 }}>Party Balance</Typography>
+              <TextField
+                size='small'
+                variant='filled'
+                value={
+                  dataRow?.party_balance === '0.0'
+                    ? '฿0.0'
+                    : dataRow?.party_balance.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                      })
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <Typography>฿</Typography>
+                    </InputAdornment>
+                  )
+                }}
+                onChange={handleTextChange}
+                fullWidth
+                disabled
+                name='party_balance'
+              />
+
+              <Typography sx={{ margin: 1 }}>Account Paid From</Typography>
+              <TextField size='small' variant='filled' value={dataRow.paid_from} fullWidth name='paid_from' />
+
+              <Typography sx={{ margin: 1 }}>Account Currency (From)</Typography>
+              <TextField
+                size='small'
+                variant='filled'
+                value={dataRow.paid_from_account_currency}
+                onChange={handleTextChange}
+                fullWidth
+                name='paid_from_account_currency'
+                disabled
+              />
+
+              <Typography sx={{ margin: 1 }}>Account Balance (From)</Typography>
+              <TextField
+                size='small'
+                variant='filled'
+                value={
+                  dataRow?.paid_from_account_balance === '0.0'
+                    ? '฿0.0'
+                    : dataRow?.paid_from_account_balance.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                      })
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <Typography>฿</Typography>
+                    </InputAdornment>
+                  )
+                }}
+                onChange={handleTextChange}
+                fullWidth
+                name='paid_from_account_balance'
+                disabled
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={12} md={6} lg={6}>
+              <Typography sx={{ margin: 1 }}>Account Paid To</Typography>
+              <TextField size='small' variant='filled' value={dataRow.paid_to} fullWidth name='paid_to' />
+
+              <Typography sx={{ margin: 1 }}>Account Currency (To)</Typography>
+              <TextField
+                size='small'
+                variant='filled'
+                value={dataRow.paid_to_account_currency}
+                fullWidth
+                name='paid_to_account_currency'
+              />
+
+              <Typography sx={{ margin: 1 }}>Account Balance (To)</Typography>
+              <TextField
+                size='small'
+                variant='filled'
+                value={
+                  dataRow?.paid_to_account_balance === '0.0'
+                    ? '฿0.0'
+                    : dataRow?.paid_to_account_balance.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                      })
+                }
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <Typography>฿</Typography>
+                    </InputAdornment>
+                  )
+                }}
+                onChange={handleTextChange}
+                fullWidth
+                name='paid_to_account_balance'
+                disabled
+              />
+            </Grid>
+          </Grid>
+        </Collapse>
+        <Divider sx={{ margin: 0, my: 6 }} />
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography sx={{ margin: 1 }} variant='h6'>
+              Amount
+            </Typography>
+
+            <Typography sx={{ margin: 1 }}>Paid Amount (THB)</Typography>
+            <TextField
+              size='small'
+              variant='filled'
+              value={
+                dataRow?.total_allocated_amount === '0.0'
+                  ? '฿0.0'
+                  : dataRow?.total_allocated_amount.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })
+              }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Typography>฿</Typography>
+                  </InputAdornment>
+                )
+              }}
+              onChange={handleTextChange}
+              fullWidth
+              name='paid_amount'
+              disabled
+            />
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography sx={{ margin: 1, my: 6 }} variant='h6'>
+              Reference
+            </Typography>
+
+            <Typography variant='subtitle2'>Payment References</Typography>
+            <DataGrid
+              rows={getDataPayment.references}
+              columns={columnsPayment}
+              getRowId={row => row.name}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 }
+                }
+              }}
+              pageSizeOptions={[5, 10]}
+              checkboxSelection
+            />
+          </Grid>
+        </Grid>
+        <Typography sx={{ margin: 1, mt: 30 }} variant='h6'>
+          Writeoff
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <Typography sx={{ margin: 1 }}>Total Allocated Amount (THB)</Typography>
+            <TextField
+              size='small'
+              variant='filled'
+              value={
+                dataRow?.total_allocated_amount === '0.0'
+                  ? '฿0.0'
+                  : dataRow?.total_allocated_amount.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })
+              }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Typography>฿</Typography>
+                  </InputAdornment>
+                )
+              }}
+              onChange={handleTextChange}
+              fullWidth
+              name='total_allocated_amount'
+              disabled
+            />
+
+            <Typography sx={{ margin: 1 }}>Difference Amount (THB)</Typography>
+            <TextField
+              size='small'
+              variant='filled'
+              value={
+                dataRow?.difference_amount === '0.0'
+                  ? '฿0.0'
+                  : dataRow?.difference_amount.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })
+              }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Typography>฿</Typography>
+                  </InputAdornment>
+                )
+              }}
+              onChange={handleTextChange}
+              fullWidth
+              name='difference_amount'
+              disabled
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Typography sx={{ margin: 1 }}>Unallocated Amount (THB)</Typography>
+            <TextField
+              size='small'
+              variant='filled'
+              value={
+                dataRow?.difference_amount === '0.0'
+                  ? '฿0.0'
+                  : dataRow?.difference_amount.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })
+              }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Typography>฿</Typography>
+                  </InputAdornment>
+                )
+              }}
+              onChange={handleTextChange}
+              fullWidth
+              name='unallocated_amount'
+              disabled
+            />
+
+            <Typography sx={{ margin: 1 }}>Total Taxes and Charges (THB)</Typography>
+            <TextField
+              size='small'
+              variant='filled'
+              value={
+                dataRow?.total_taxes_and_charges === '0.0'
+                  ? '฿0.0'
+                  : dataRow?.total_taxes_and_charges.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })
+              }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Typography>฿</Typography>
+                  </InputAdornment>
+                )
+              }}
+              onChange={handleTextChange}
+              fullWidth
+              name='total_taxes_and_charges'
+              disabled
+            />
+          </Grid>
+        </Grid>
+        <Typography sx={{ margin: 1, mt: 10 }} variant='h6'>
+          Transaction ID
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography sx={{ margin: 1 }}>Cheque/Reference Date</Typography>
+            <TextField
+              size='small'
+              variant='filled'
+              value={formattedDate}
+              onChange={handleTextChange}
+              fullWidth
+              name='reference_date'
+              disabled
+            />
+          </Grid>
+        </Grid>
+        <Box sx={{ display: 'flex' }}>
+          <Button size='small' variant='filled' label='' onClick={handleCollapseMoreInfo}>
+            More Information
+          </Button>
+          <Box>
+            <CardActions className='card-action-dense'>
+              <IconButton size='small' onClick={handleCollapseMoreInfo}>
+                {collapseMoreInfo ? (
+                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
+                ) : (
+                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
+                )}
+              </IconButton>
+            </CardActions>
+          </Box>
+        </Box>
+
+        <Collapse in={collapseMoreInfo}>
+          <Divider sx={{ margin: 0 }} />
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={12}>
+              <Typography sx={{ margin: 1 }}>Status</Typography>
+              <TextField
+                size='small'
+                variant='filled'
+                value={dataRow.status}
+                onChange={handleTextChange}
+                fullWidth
+                disabled
+                name='status'
+              />
+
+              <Grid sx={checkboxStyle}>
+                <Checkbox
+                  checked={dataRow.custom_remarks === 1 ? true : false}
+                  name='custom_remarks'
+                  onChange={handleCheckbox}
+                  disabled
+                />
+                <Typography variant='subtitle2'>Is Subcontracted</Typography>
+              </Grid>
+
+              <Typography sx={{ margin: 1 }}>Status</Typography>
+              <TextField
+                size='small'
+                variant='filled'
+                value={dataRow.remarks}
+                onChange={handleTextChange}
+                fullWidth
+                disabled
+                multiline
+                rows={3}
+                name='remarks'
+              />
+            </Grid>
+          </Grid>
+        </Collapse>
+      </Grid>
+    </Card>
+  )
+}
+
+export default PaymentEntry
