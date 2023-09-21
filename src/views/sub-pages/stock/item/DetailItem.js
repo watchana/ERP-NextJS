@@ -21,14 +21,19 @@ import ChevronDown from 'mdi-material-ui/ChevronDown'
 
 const DetailItem = ({ dataRow, handleUpdateData }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false)
+  const [valuationRateOpen, setValuationRateOpen] = useState(dataRow.is_stock_item === 1 ? true : false)
 
   const handleClickDescription = () => {
     setDescriptionOpen(!descriptionOpen)
   }
 
   const handleCheckboxChange = event => {
+    const { name } = event.target
+    if (name === 'is_stock_item') {
+      setValuationRateOpen(!valuationRateOpen)
+    }
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-    handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
+    handleUpdateData(name, event.target.checked === true ? 1 : 0)
   }
 
   const handleTextChange = event => {
@@ -125,17 +130,22 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
               label='Has Variants'
             />
 
-            <Typography sx={{ mt: 4 }}>Valuation Rate</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              fullWidth
-              size='small'
-              variant='filled'
-              type='number'
-              value={dataRow.valuation_rate || ''}
-              name='valuation_rate'
-              onChange={handleTextChange}
-            />
+            {valuationRateOpen && (
+              <>
+                <Typography sx={{ mt: 4 }}>Valuation Rate</Typography>
+                <TextField
+                  sx={{ marginBottom: 5 }}
+                  fullWidth
+                  size='small'
+                  variant='filled'
+                  type='number'
+                  value={dataRow.valuation_rate || ''}
+                  name='valuation_rate'
+                  onChange={handleTextChange}
+                />
+              </>
+            )}
+
             <Box sx={{ display: 'flex' }}>
               <Checkbox
                 checked={dataRow.is_fixed_asset === 1 ? true : false}
