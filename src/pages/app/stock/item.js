@@ -28,6 +28,7 @@ const ItemPage = ({ data }) => {
   const [dataUpdate, setDataUpdate] = React.useState([])
   const [editStatus, setEditStatus] = React.useState(false)
 
+  // ? function to update dataRow and store the required values in dataUpdated.
   const handleUpdateData = async (field, value) => {
     setDataRow({ ...dataRow, [field]: value })
     setDataUpdate({ ...dataUpdate, [field]: value })
@@ -43,11 +44,11 @@ const ItemPage = ({ data }) => {
     <DashboardItem key='dashboard' />,
     <InventoryItem key='inventory' dataRow={dataRow} dropDowns={defaultMaterialRequestType} />,
     <AccountingItem key='accounting' dataRow={dataRow} setDataRow={setDataRow} />,
-    <PurchasingItem key='purchasing' dataRow={dataRow} setDataRow={setDataRow} />,
-    <SalesItem key='sales' dataRow={dataRow} />,
-    <TexItem key='tex' />,
-    <QualityItem key='quality' dataRow={dataRow} setDataRow={setDataRow} />,
-    <ManufacturingItem key='manufacturing' dataRow={dataRow} setDataRow={setDataRow} />
+    <PurchasingItem key='purchasing' dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <SalesItem key='sales' dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <TexItem key='tex' dataRow={dataRow} />,
+    <QualityItem key='quality' dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <ManufacturingItem key='manufacturing' dataRow={dataRow} handleUpdateData={handleUpdateData} />
   ]
 
   return (

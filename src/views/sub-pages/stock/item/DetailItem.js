@@ -21,14 +21,19 @@ import ChevronDown from 'mdi-material-ui/ChevronDown'
 
 const DetailItem = ({ dataRow, handleUpdateData }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false)
+  const [valuationRateOpen, setValuationRateOpen] = useState(dataRow.is_stock_item === 1 ? true : false)
 
   const handleClickDescription = () => {
     setDescriptionOpen(!descriptionOpen)
   }
 
   const handleCheckboxChange = event => {
+    const { name } = event.target
+    if (name === 'is_stock_item') {
+      setValuationRateOpen(!valuationRateOpen)
+    }
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-    handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
+    handleUpdateData(name, event.target.checked === true ? 1 : 0)
   }
 
   const handleTextChange = event => {
@@ -46,10 +51,9 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
     <Box>
       <Card
         sx={{
-          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
-          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
-          p: 2,
-          mb: 2
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
+          p: 2
         }}
       >
         <Grid container spacing={2} style={{ width: '100%', display: 'flex' }}>
@@ -125,17 +129,22 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
               label='Has Variants'
             />
 
-            <Typography sx={{ mt: 4 }}>Valuation Rate</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              fullWidth
-              size='small'
-              variant='filled'
-              type='number'
-              value={dataRow.valuation_rate || ''}
-              name='valuation_rate'
-              onChange={handleTextChange}
-            />
+            {valuationRateOpen && (
+              <>
+                <Typography sx={{ mt: 4 }}>Valuation Rate</Typography>
+                <TextField
+                  sx={{ marginBottom: 5 }}
+                  fullWidth
+                  size='small'
+                  variant='filled'
+                  type='number'
+                  value={dataRow.valuation_rate || ''}
+                  name='valuation_rate'
+                  onChange={handleTextChange}
+                />
+              </>
+            )}
+
             <Box sx={{ display: 'flex' }}>
               <Checkbox
                 checked={dataRow.is_fixed_asset === 1 ? true : false}
@@ -171,27 +180,28 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
           </Grid>
         </Grid>
         <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-        <Grid item xs={12} sx={{ display: 'flex', marginBlock: 2 }}>
+        <Grid item xs={12} sx={{ display: 'flex', marginBlock: 2, flexDirection: 'column' }}>
           <Box onClick={handleClickDescription} sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
             <Typography sx={{ fontWeight: 'medium' }}>Description</Typography>
             <IconButton size='small' disabled>
               {descriptionOpen ? <ChevronUp /> : <ChevronDown />}
             </IconButton>
           </Box>
-        </Grid>
-
-        <Grid item xs={12}>
           <Collapse in={descriptionOpen}>
-            <Divider sx={{ margin: 0 }} />
-            <CardContent>
+            <Box sx={{ p: 2 }}>
+              <Divider />
               <Typography variant='subtitle2'>Description</Typography>
               <TextField
                 fullWidth
                 multiline
+                variant='filled'
                 rows={4}
                 value={dataRow.description || ''}
                 name='description'
                 onChange={handleTextChange}
+                sx={{
+                  bgcolor: 'theme.palette.background.paper'
+                }}
               />
 
               <Box>
@@ -203,9 +213,12 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
                   name='brand'
                   value={dataRow.brand}
                   onChange={handleTextChange}
+                  sx={{
+                    backgroundColor: 'theme.palette.background.paper'
+                  }}
                 />
               </Box>
-            </CardContent>
+            </Box>
           </Collapse>
         </Grid>
       </Card>

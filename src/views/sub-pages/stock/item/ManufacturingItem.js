@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react'
 // MUI imports
 import { Box, Typography, Checkbox, Card, Grid, TextField, Skeleton } from '@mui/material'
 
-const ManufacturingItem = ({ dataRow, setDataRow = { setDataRow } }) => {
+const ManufacturingItem = ({ dataRow, handleUpdateData }) => {
   const handleCheckboxChange = event => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
 
-    setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
+    handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
   }
 
   if (!dataRow) return <Skeleton variant='rounded' width={210} height={60} />
@@ -27,17 +27,27 @@ const ManufacturingItem = ({ dataRow, setDataRow = { setDataRow } }) => {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center', alignContent: 'flex-start' }}>
             <Checkbox
-              checked={dataRow.include_item_in_manufacturing === 1 ? true : false}
+              checked={Boolean(dataRow.include_item_in_manufacturing)}
               name='include_item_in_manufacturing'
               onChange={handleCheckboxChange}
             />
             <Typography variant='subtitle1'>Include Item In Manufacturing</Typography>
           </Grid>
+
+          <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center', alignContent: 'flex-start' }}>
+            <Checkbox
+              checked={Boolean(dataRow.published_in_website)}
+              name='published_in_website'
+              onChange={handleCheckboxChange}
+            />
+            <Typography variant='subtitle1'>Published in Website</Typography>
+          </Grid>
+
           <Grid item xs={12} sm={6} sx={{ display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Checkbox
                 name='is_sub_contracted_item'
-                checked={dataRow.is_sub_contracted_item === 1 ? true : false}
+                checked={Boolean(dataRow.is_sub_contracted_item)}
                 onChange={handleCheckboxChange}
               />
               <Typography variant='subtitle1'>Supply Raw Materials for Purchase</Typography>
@@ -45,14 +55,6 @@ const ManufacturingItem = ({ dataRow, setDataRow = { setDataRow } }) => {
             <Typography variant='subtitle2' sx={{ ml: 4 }}>
               If subcontracted to a vendor
             </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center', alignContent: 'flex-start' }}>
-            <Checkbox
-              checked={dataRow.published_in_website === 1 ? true : false}
-              name='published_in_website'
-              onChange={handleCheckboxChange}
-            />
-            <Typography variant='subtitle1'>Published in Website</Typography>
           </Grid>
 
           <Grid item xs={12}>

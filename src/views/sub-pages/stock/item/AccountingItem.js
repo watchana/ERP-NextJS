@@ -1,8 +1,8 @@
 // ** React Imports
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 // ** MUI Imports
-import { Box, Button, TextField, Typography, Card } from '@mui/material'
+import { Box, Button, Typography, Card, Skeleton } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import axios from 'axios'
 
@@ -14,23 +14,7 @@ const AccountingItem = ({ dataRow }) => {
     { field: 'default_price_list', headerName: 'Default Price List', width: 200 }
   ]
 
-  const [dataItemAccouting, setDataItemAccouting] = useState('')
-
-  useEffect(() => {
-    axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}Item/${dataRow.name}`, {
-        headers: {
-          Authorization: 'token 5891d01ccc2961e:0e446b332dc22aa'
-        }
-      })
-      .then(res => {
-        setDataItemAccouting(res.data.data)
-      })
-  }, [dataRow])
-
-  if (dataItemAccouting.length === 0) {
-    return 'waiting...'
-  }
+  if (!dataRow) return <Skeleton variant='rounded' width={210} height={60} />
 
   return (
     <Box>
@@ -47,6 +31,7 @@ const AccountingItem = ({ dataRow }) => {
         </Typography>
         <Box>
           <DataGrid
+            style={{ height: dataRow.taxes.length === 0 ? 300 : 'auto' }}
             rows={dataRow.item_defaults}
             columns={columnsAcc}
             getRowId={row => row.name} // ระบุ id โดยใช้ค่า name
@@ -59,6 +44,9 @@ const AccountingItem = ({ dataRow }) => {
             checkboxSelection
           />
         </Box>
+        <Button variant='contained' sx={{ marginTop: 2 }}>
+          Add Row
+        </Button>
       </Card>
     </Box>
   )

@@ -4,19 +4,19 @@ import React from 'react'
 // MUI Imports
 import { Box, Typography, Checkbox, TextField, Card, Grid } from '@mui/material'
 
-const QualityItem = ({ dataRow, setDataRow }) => {
+const QualityItem = ({ dataRow, handleUpdateData }) => {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 
   const handleCheckboxChange = event => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
 
-    setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
+    handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
   }
 
   const handleTextChange = event => {
     console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
 
-    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+    handleUpdateData(event.target.name, event.target.value)
   }
 
   return (
@@ -26,7 +26,7 @@ const QualityItem = ({ dataRow, setDataRow }) => {
           <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
             <Checkbox
               {...label}
-              checked={dataRow.inspection_required_before_purchase === 1 ? true : false}
+              checked={Boolean(dataRow.inspection_required_before_purchase)}
               name='inspection_required_before_purchase'
               onChange={handleCheckboxChange}
             />
@@ -36,6 +36,7 @@ const QualityItem = ({ dataRow, setDataRow }) => {
             <Typography variant='subtitle2'>Quality Inspection Template</Typography>
             <TextField
               fullWidth
+              disabled
               variant='filled'
               size='small'
               value={dataRow.quality_inspection_template}
@@ -46,7 +47,7 @@ const QualityItem = ({ dataRow, setDataRow }) => {
           <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
             <Checkbox
               {...label}
-              checked={dataRow.inspection_required_before_delivery === 1 ? true : false}
+              checked={Boolean(dataRow.inspection_required_before_delivery)}
               name='inspection_required_before_delivery'
               onChange={handleCheckboxChange}
             />
