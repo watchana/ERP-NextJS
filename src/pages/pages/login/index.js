@@ -5,10 +5,6 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-// ** redux
-import { useDispatch } from 'react-redux'
-import { loginSuccess } from 'src/redux/userSlice'
-
 // ** axios
 import axios from 'axios'
 

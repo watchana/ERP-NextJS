@@ -13,6 +13,11 @@ const ManufacturingItem = ({ dataRow, handleUpdateData }) => {
 
   if (!dataRow) return <Skeleton variant='rounded' width={210} height={60} />
 
+  const handleTextChange = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    handleUpdateData(event.target.name, event.target.value)
+  }
+
   return (
     <Box>
       <Card
@@ -59,7 +64,17 @@ const ManufacturingItem = ({ dataRow, handleUpdateData }) => {
 
           <Grid item xs={12}>
             <Typography sx={{ marginBottom: 2 }}>Default BOM</Typography>
-            <TextField fullWidth size='small' variant='filled' value={dataRow.default_bom || ''} />
+            <TextField
+              fullWidth
+              disabled
+              variant='outlined'
+              name='default_bom'
+              value={dataRow.default_bom}
+              onChange={handleTextChange}
+              sx={{
+                backgroundColor: 'grey.100'
+              }}
+            />
           </Grid>
         </Grid>
       </Card>
