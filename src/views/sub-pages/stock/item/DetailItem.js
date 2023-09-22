@@ -205,14 +205,13 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
               <TextField
                 fullWidth
                 multiline
-                variant='filled'
+                size='small'
+                variant='outlined'
                 rows={4}
-                value={dataRow.description || ''}
+                value={dataRow.description}
                 name='description'
                 onChange={handleTextChange}
-                sx={{
-                  bgcolor: 'theme.palette.background.paper'
-                }}
+                sx={styles.textField}
               />
 
               <Box>
@@ -221,13 +220,11 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
                   fullWidth
                   disabled
                   size='small'
-                  variant='filled'
+                  variant='outlined'
                   name='brand'
                   value={dataRow.brand}
                   onChange={handleTextChange}
-                  sx={{
-                    backgroundColor: 'theme.palette.background.paper'
-                  }}
+                  sx={styles.textField}
                 />
               </Box>
             </Box>
