@@ -29,7 +29,7 @@ import Image from 'next/image'
 import sortAscending from 'public/images/icons/sort-ascending.png'
 import sortDescending from 'public/images/icons/sort-descending.png'
 
-const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) => {
+const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName, sideContentOpen }) => {
   // ** States
   const errorColor = red[500]
   const [showData, setShowData] = useState(data)
@@ -137,18 +137,18 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
           {doctype}
         </Typography>
         <Button variant='contained' color='primary' size='small'>
-          Create {doctype}
+          + Add {doctype}
         </Button>
       </Box>
       <Box sx={{ backgroundColor: 'background.paper', borderRadius: '10px', pb: -1 }}>
         <Grid container spacing={3} rowSpacing={2}>
-          <Grid item sm={12} md={6}>
-            <Box sx={{ ml: 4 }}>
+          <Grid item xs={sideContentOpen !== true ? 6 : 12}>
+            <Box sx={{ mx: 2 }}>
               <TextField fullWidth variant='outlined' size='small' label='ID Search' onChange={handleIDSearch} />
             </Box>
           </Grid>
-          <Grid item sm={12} md={6}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mr: 2, width: 'auto' }}>
+          <Grid item xs={sideContentOpen !== true ? 6 : 12}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mx: 2 }}>
               {sort === 'asc' ? (
                 <IconButton
                   color='primary'
@@ -183,6 +183,7 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
                 </IconButton>
               )}
               <Button
+                fullWidth={sideContentOpen !== true ? false : true}
                 aria-controls={sortOptionOpen ? 'basic-menu' : undefined}
                 aria-haspopup='true'
                 aria-expanded={sortOptionOpen ? 'true' : undefined}

@@ -214,6 +214,7 @@ const SubPages = ({
               doctype={doctype}
               docStatusName={docStatusName}
               handleRowClick={handleRowClick}
+              sideContentOpen={sideContentOpen}
             />
           </Grid>
         )}
