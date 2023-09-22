@@ -137,12 +137,11 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
           </Box>
 
           <Grid container>
-            <Collapse in={customerPOdetails} width={'100%'} style={{ width: '100%' }}>
+            <Collapse in={customerPOdetails} style={{ width: '100%' }}>
               <Divider sx={{ margin: 0, width: '100%' }} />
               <Grid container>
                 <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Typography>Debit To *</Typography>
-
+                  <Typography sx={{ margin: 1 }}>Debit To *</Typography>
                   <TextField
                     sx={{ marginBottom: 5 }}
                     size='small'
@@ -151,7 +150,7 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
                     value={dataRow?.po_no || `${inputValue}`}
                     onChange={handleInputChange}
                   />
-                  <Typography>Customer's Purchase Order Date</Typography>
+                  <Typography sx={{ margin: 1 }}>Customer's Purchase Order Date</Typography>
                   <TextField
                     onClick={handleOpenCalendar}
                     sx={{ marginBottom: 5 }}
@@ -209,7 +208,7 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
               <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
                   {' '}
-                  <Typography>Debit To *</Typography>
+                  <Typography sx={{ margin: 1 }}>Debit To *</Typography>
                   <TextField
                     sx={{ marginBottom: 5 }}
                     size='small'
@@ -219,7 +218,7 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography>Is Opening Entry</Typography>
+                  <Typography sx={{ margin: 1 }}>Is Opening Entry</Typography>
                   <TextField
                     sx={{ marginBottom: 5 }}
                     size='small'
@@ -248,7 +247,7 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
               <Divider sx={{ margin: 0, width: '100%' }} />
               <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography>Amount Eligible for Commission</Typography>
+                  <Typography sx={{ margin: 1 }}>Amount Eligible for Commission</Typography>
                   <TextField
                     sx={{ marginBottom: 5 }}
                     size='small'
@@ -265,7 +264,7 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography>Commission Rate (%)</Typography>
+                  <Typography sx={{ margin: 1 }}>Commission Rate (%)</Typography>
                   <TextField
                     sx={{ marginBottom: 5 }}
                     size='small'
@@ -273,7 +272,7 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
                     fullWidth
                     value={dataRow?.commission_rate || ''}
                   />
-                  <Typography>Total Commission</Typography>
+                  <Typography sx={{ margin: 1 }}>Total Commission</Typography>
                   <TextField
                     sx={{ marginBottom: 5 }}
                     size='small'
@@ -343,7 +342,7 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
               <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
                   {' '}
-                  <Typography>Letter Head </Typography>
+                  <Typography sx={{ margin: 1 }}>Letter Head </Typography>
                   <TextField
                     sx={{ marginBottom: 5 }}
                     size='small'
@@ -357,7 +356,7 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography>Print Heading</Typography>
+                  <Typography sx={{ margin: 1 }}>Print Heading</Typography>
                   <TextField
                     sx={{ marginBottom: 5 }}
                     size='small'
@@ -366,7 +365,7 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
                     value={dataRow?.select_print_heading}
                   />
 
-                  <Typography>Print Language</Typography>
+                  <Typography sx={{ margin: 1 }}>Print Language</Typography>
                   <TextField
                     sx={{ marginBottom: 5 }}
                     size='small'
@@ -400,7 +399,7 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
               <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
                   {' '}
-                  <Typography>From Date</Typography>
+                  <Typography sx={{ margin: 1 }}>From Date</Typography>
                   <TextField
                     sx={{ marginBottom: 5 }}
                     size='small'
@@ -410,7 +409,7 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography>To Date</Typography>
+                  <Typography sx={{ margin: 1 }}>To Date</Typography>
                   <TextField
                     sx={{ marginBottom: 5 }}
                     size='small'
@@ -445,7 +444,7 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
               <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
                   {' '}
-                  <Typography>Status </Typography>
+                  <Typography sx={{ margin: 1 }}>Status </Typography>
                   <TextField sx={{ marginBottom: 5 }} size='small' variant='filled' fullWidth value={dataRow?.status} />
                 </Grid>
                 <Grid item xs={12} sm={12} md={6} lg={6}>
@@ -457,7 +456,7 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
                     control={<Checkbox checked={dataRow?.is_discounted === 1} onChange={handleCheckboxChange} />}
                     label='Allow Zero Valuation Rate'
                   />
-                  <Typography>Remarks</Typography>
+                  <Typography sx={{ margin: 1 }}>Remarks</Typography>
                   <TextField
                     sx={{ marginBottom: 5 }}
                     size='small'

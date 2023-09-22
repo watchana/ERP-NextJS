@@ -1,125 +1,141 @@
+// ** React Import
+import React from 'react'
+
+// ** Mui Import
 import {
+  Grid,
   Box,
   Button,
   Card,
-  CardActions,
-  Checkbox,
+  IconButton,
   Collapse,
   Divider,
-  Grid,
-  IconButton,
+  FormControlLabel,
+  Checkbox,
+  Typography,
   TextField,
-  Typography
+  InputAdornment
 } from '@mui/material'
-import { ChevronDown, ChevronUp } from 'mdi-material-ui'
+import ChevronUp from 'mdi-material-ui/ChevronUp'
+import ChevronDown from 'mdi-material-ui/ChevronDown'
 import { useState } from 'react'
+import Btn from 'src/components/Button/Button'
 
-const PaymentsPurchaseInvoice = ({ dataRow, setDataRow }) => {
-  const [collapsePayments, setCollapsePayments] = useState(false)
-  const [collapseWriteOff, setCollapseWriteOff] = useState(false)
+const PaymentsPurchaseInvoice = ({ dataRow }) => {
+  // ** State
+  const [advancePayments, setAdvancepayments] = useState(false)
+  const [loyailtyPointsRedemption, setloyailtyPointsRedemption] = useState(false)
 
-  const handleCollapsePayments = () => {
-    setCollapsePayments(!collapsePayments)
+  const handleClickAdvancePayments = () => {
+    setAdvancepayments(!advancePayments)
   }
 
-  const handleWriteOff = () => {
-    setCollapseWriteOff(!collapseWriteOff)
+  const handleClickLoyailtyPointsRedemption = () => {
+    setloyailtyPointsRedemption(!loyailtyPointsRedemption)
   }
 
-  const handleCheckbox = event => {
+  /*  checkbox */
+  const handleCheckboxChange = event => {
+    // เมื่อ Checkbox ถูกเปลี่ยนแปลงสถานะ
+    // คุณสามารถทำสิ่งที่คุณต้องการเมื่อ Checkbox ถูกเปิดหรือปิดที่นี่
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
-  }
-
-  const handleTextChange = event => {
-    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
-  }
-
-  const checkboxStyle = {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
   }
 
   return (
-    <Card sx={{ p: 4 }}>
-      <Grid>
-        <Grid>
-          <Box sx={{ display: 'flex' }}>
-            <Button size='small' variant='filled' label='' onClick={handleCollapsePayments}>
-              Additional Discount
+    <Box>
+      <Card
+        sx={{
+          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
+          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
+          p: 2,
+          mb: 2
+        }}
+      >
+        <Grid container sx={{ mt: 7 }}>
+          <Box sx={{ width: '100%' }}>
+            <Button size='small' variant='filled' label='' onClick={handleClickAdvancePayments}>
+              Advance Payments
             </Button>
-            <Box>
-              <CardActions className='card-action-dense'>
-                <IconButton size='small' onClick={handleCollapsePayments}>
-                  {collapsePayments ? (
-                    <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                  ) : (
-                    <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                  )}
-                </IconButton>
-              </CardActions>
-            </Box>
+            <IconButton size='small' onClick={handleClickAdvancePayments}>
+              {advancePayments ? (
+                <ChevronUp sx={{ fontSize: '1.875rem' }} />
+              ) : (
+                <ChevronDown sx={{ fontSize: '1.875rem' }} />
+              )}
+            </IconButton>
           </Box>
 
-          <Collapse in={collapsePayments}>
-            <Divider sx={{ margin: 0 }} />
-            <Grid container spacing={3}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid sx={checkboxStyle}>
-                  <Checkbox
-                    checked={dataRow.allocate_advances_automatically === 1 ? true : false}
-                    name='allocate_advances_automatically'
-                    onChange={handleCheckbox}
-                    disabled
-                  />
-                  <Typography variant='subtitle2'>Set Advances and Allocate (FIFO)</Typography>
-                </Grid>
-
-                <Button onClick={() => handleCollapsePayments()}>Get Advance Paid</Button>
+          <Collapse in={advancePayments} style={{ width: '100%' }}>
+            <Divider sx={{ margin: 0, width: '100%' }} />
+            <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={dataRow?.allocate_advances_automatically === 1}
+                      onChange={handleCheckboxChange}
+                    />
+                  }
+                  label='Allocate Advances Automatically (FIFO)
+'
+                />
               </Grid>
-            </Grid>
-          </Collapse>
-        </Grid>
-        <Grid>
-          <Box sx={{ display: 'flex' }}>
-            <Button size='small' variant='filled' label='' onClick={handleWriteOff}>
-              Write Off
-            </Button>
-            <Box>
-              <CardActions className='card-action-dense'>
-                <IconButton size='small' onClick={handleWriteOff}>
-                  {collapseWriteOff ? (
-                    <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                  ) : (
-                    <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                  )}
-                </IconButton>
-              </CardActions>
-            </Box>
-          </Box>
 
-          <Collapse in={collapseWriteOff}>
-            <Divider sx={{ margin: 0 }} />
-            <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Typography sx={{ margin: 1 }}>Write Off Amount (THB)</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={dataRow.write_off_amount}
-                  fullWidth
-                  onChange={handleTextChange}
-                  name='write_off_amount'
-                  disabled
+                <Btn
+                  detailbutton={' Get Advances Automatically'}
+                  bgcolorbutton={'white'}
+                  numminwid={'auto'}
+                  handleButtonClick={() => router.push()}
                 />
               </Grid>
             </Grid>
           </Collapse>
         </Grid>
-      </Grid>
-    </Card>
+        <Divider sx={{ margin: 0, my: 5 }} />
+
+        <Grid container>
+          <Box sx={{ width: '100%' }}>
+            <Button size='small' variant='filled' label='' onClick={handleClickLoyailtyPointsRedemption}>
+              Write Off
+            </Button>
+            <IconButton size='small' onClick={handleClickLoyailtyPointsRedemption}>
+              {loyailtyPointsRedemption ? (
+                <ChevronUp sx={{ fontSize: '1.875rem' }} />
+              ) : (
+                <ChevronDown sx={{ fontSize: '1.875rem' }} />
+              )}
+            </IconButton>
+          </Box>
+
+          <Collapse in={loyailtyPointsRedemption} style={{ width: '100%' }}>
+            <Divider sx={{ margin: 0, width: '100%' }} />
+            <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Typography>Write Off Amount (THB)</Typography>
+                <TextField
+                  sx={{ marginBottom: 5 }}
+                  size='small'
+                  variant='filled'
+                  fullWidth
+                  value={dataRow.write_off_amount.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  })}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <Typography>฿</Typography>
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Grid>
+            </Grid>
+          </Collapse>
+        </Grid>
+      </Card>
+    </Box>
   )
 }
 

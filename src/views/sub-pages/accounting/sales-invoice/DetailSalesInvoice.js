@@ -1465,7 +1465,7 @@ const DetailSalesInvoice = ({ dataRow, setDataRow }) => {
         </Grid>
         <Grid container sx={{ mt: 10 }}>
           <Grid item sx={{ width: '100%' }}>
-            <Button size='small' variant='filled' label='' onClick={handleClickActivity}>
+            <Button size='small' variant='filled' sx={{ fontWeight: 'bold' }} onClick={handleClickActivity}>
               Tax Breakup
             </Button>
             <IconButton size='small' onClick={handleClickActivity}>
@@ -1476,7 +1476,7 @@ const DetailSalesInvoice = ({ dataRow, setDataRow }) => {
           <Collapse in={activity} width={'100%'} style={{ width: '100%' }}>
             <Divider sx={{ margin: 0 }} />
             <Grid item xs={12} sm={12} md={12} lg={12}>
-              <table style={{ width: '100%', fontSize: '14px' }}>
+              <table style={{ width: '100%', fontSize: '14px', textAlign: 'left' }}>
                 <tbody dangerouslySetInnerHTML={{ __html: dataRow.other_charges_calculation }} />
               </table>
             </Grid>

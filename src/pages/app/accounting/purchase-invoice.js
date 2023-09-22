@@ -50,7 +50,7 @@ PurchaseInvoice.getLayout = page => <SubPageLayout>{page}</SubPageLayout>
 
 // nextJS SSR
 export async function getServerSideProps() {
-  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}Purchase Invoice?fields=["*"]`, {
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}Purchase%20Invoice?fields=["*"]`, {
     headers: {
       Authorization: 'token 5891d01ccc2961e:0e446b332dc22aa'
     }
