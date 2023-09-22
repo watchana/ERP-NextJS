@@ -16,8 +16,7 @@ import {
   MenuItem,
   Select,
   TextField,
-  Typography,
-  useTheme
+  Typography
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
@@ -56,8 +55,6 @@ const columnsUOM = [
 import { defaultMaterialRequestType, valuationMethod } from 'src/dummy/sub-pages/stock/itemPage'
 
 const InventoryItem = ({ dataRow, handleUpdateData }) => {
-  const theme = useTheme()
-
   const [openAutoReorder, setOpenAutoReorder] = React.useState(false)
   const [openUnitsOfMeasure, setOpenUnitsOfMeasure] = React.useState(false)
   const [openSerialNosBatches, setOpenSerialNosBatches] = React.useState(false)
@@ -114,7 +111,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                     value={dataRow.shelf_life_in_days}
                     onChange={handleTextChange}
                     sx={{
-                      backgroundColor: theme.palette.grey[100]
+                      backgroundColor: 'grey.100'
                     }}
                   />
                 </Box>
@@ -130,7 +127,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                     value={dataRow.end_of_life}
                     onChange={handleTextChange}
                     sx={{
-                      backgroundColor: theme.palette.grey[100]
+                      backgroundColor: 'grey.100'
                     }}
                   />
                 </Box>
@@ -145,7 +142,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                     value={dataRow.default_material_request_type}
                     onChange={handleSelectChange}
                     sx={{
-                      backgroundColor: theme.palette.grey[100]
+                      backgroundColor: 'grey.100'
                     }}
                   >
                     {defaultMaterialRequestType.map(item => (
@@ -166,7 +163,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                     value={dataRow.valuation_method}
                     onChange={handleSelectChange}
                     sx={{
-                      backgroundColor: theme.palette.grey[100]
+                      backgroundColor: 'grey.100'
                     }}
                   >
                     {valuationMethod.map(item => (
@@ -186,7 +183,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                     fullWidth
                     variant='outlined'
                     sx={{
-                      backgroundColor: theme.palette.grey[100]
+                      backgroundColor: 'grey.100'
                     }}
                   />
                 </Box>
@@ -202,7 +199,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                     value={dataRow.weight_per_unit}
                     onChange={handleTextChange}
                     sx={{
-                      backgroundColor: theme.palette.grey[100]
+                      backgroundColor: 'grey.100'
                     }}
                   />
                 </Box>
@@ -219,7 +216,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                     value={dataRow.weight_uom}
                     onChange={handleTextChange}
                     sx={{
-                      backgroundColor: theme.palette.grey[100]
+                      backgroundColor: 'grey.100'
                     }}
                   />
                 </Box>

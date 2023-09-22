@@ -32,16 +32,18 @@ const QualityItem = ({ dataRow, handleUpdateData }) => {
             />
             <Typography variant='subtitle2'>Inspection Required before Purchase</Typography>
           </Grid>
-          <Grid item xs={12} sx={{ ml: 3 }}>
+          <Grid item xs={12} sx={{ mx: 3 }}>
             <Typography variant='subtitle2'>Quality Inspection Template</Typography>
             <TextField
               fullWidth
               disabled
-              variant='filled'
-              size='small'
-              value={dataRow.quality_inspection_template}
+              variant='outlined'
               name='quality_inspection_template'
+              value={dataRow.quality_inspection_template}
               onChange={handleTextChange}
+              sx={{
+                backgroundColor: 'grey.100'
+              }}
             />
           </Grid>
           <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
