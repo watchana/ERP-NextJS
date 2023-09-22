@@ -2,6 +2,9 @@ import React from 'react'
 
 // ** MUI Imports
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
   Card,
@@ -10,15 +13,20 @@ import {
   Divider,
   FormControlLabel,
   Grid,
+  MenuItem,
+  Select,
   TextField,
   Typography,
   useTheme
 } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+
 import { DataGrid } from '@mui/x-data-grid'
 
 // ** MDI Imports
 import { ChevronDown, ChevronUp } from 'mdi-material-ui'
 
+// ** Columns for DataGrid
 const columnsBarcode = [
   { field: 'idx', headerName: 'No', width: 70 },
   { field: 'barcode', headerName: 'Barcode', width: 150 },
@@ -44,6 +52,9 @@ const columnsUOM = [
   { field: 'edit', headerName: 'Edit', width: 200, renderCell: () => <Button>Edit</Button> }
 ]
 
+// ** data selection
+import { defaultMaterialRequestType, valuationMethod } from 'src/dummy/sub-pages/stock/itemPage'
+
 const InventoryItem = ({ dataRow, handleUpdateData }) => {
   const theme = useTheme()
 
@@ -51,9 +62,14 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
   const [openUnitsOfMeasure, setOpenUnitsOfMeasure] = React.useState(false)
   const [openSerialNosBatches, setOpenSerialNosBatches] = React.useState(false)
 
-  const BoxStyle = {
-    marginBlock: 2,
-    mt: 4
+  const styles = {
+    dataGridHeight: {
+      height: '300px'
+    },
+    BoxStyle: {
+      marginBlock: 2,
+      mt: 4
+    }
   }
 
   const handleCheckboxChange = event => {
@@ -63,6 +79,11 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
 
   const handleTextChange = event => {
     console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    handleUpdateData(event.target.name, event.target.value)
+  }
+
+  const handleSelectChange = event => {
+    console.log('Select ถูกเปลี่ยนแปลงเป็น:', event.target.value)
     handleUpdateData(event.target.name, event.target.value)
   }
 
@@ -82,7 +103,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
             </Typography>
             <Grid container spacing={4}>
               <Grid item xs={12} md={6}>
-                <Box sx={BoxStyle}>
+                <Box sx={styles.BoxStyle}>
                   <Typography variant='subtitle2' sx={{ my: 2 }}>
                     Shelf Life In Days
                   </Typography>
@@ -98,7 +119,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                   />
                 </Box>
 
-                <Box sx={BoxStyle}>
+                <Box sx={styles.BoxStyle}>
                   <Typography variant='subtitle2' sx={{ my: 2 }}>
                     End of Life
                   </Typography>
@@ -114,34 +135,50 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                   />
                 </Box>
 
-                <Box sx={BoxStyle}>
+                <Box sx={styles.BoxStyle}>
                   <Typography variant='subtitle2' sx={{ my: 2 }}>
                     Default Material Request Type
                   </Typography>
-                  <TextField
+                  <Select
                     fullWidth
-                    variant='outlined'
+                    name='default_material_request_type'
+                    value={dataRow.default_material_request_type}
+                    onChange={handleSelectChange}
                     sx={{
                       backgroundColor: theme.palette.grey[100]
                     }}
-                  />
+                  >
+                    {defaultMaterialRequestType.map(item => (
+                      <MenuItem key={item.id} value={item.name}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </Box>
 
-                <Box sx={BoxStyle}>
+                <Box sx={styles.BoxStyle}>
                   <Typography variant='subtitle2' sx={{ my: 2 }}>
                     Valuation Method
                   </Typography>
-                  <TextField
+                  <Select
                     fullWidth
-                    variant='outlined'
+                    name='valuation_method'
+                    value={dataRow.valuation_method}
+                    onChange={handleSelectChange}
                     sx={{
                       backgroundColor: theme.palette.grey[100]
                     }}
-                  />
+                  >
+                    {valuationMethod.map(item => (
+                      <MenuItem key={item.id} value={item.name}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
-                <Box sx={BoxStyle}>
+                <Box sx={styles.BoxStyle}>
                   <Typography variant='subtitle2' sx={{ my: 2 }}>
                     Warranty Period (in days)
                   </Typography>
@@ -154,7 +191,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                   />
                 </Box>
 
-                <Box sx={BoxStyle}>
+                <Box sx={styles.BoxStyle}>
                   <Typography variant='subtitle2' sx={{ my: 2 }}>
                     Weight Per Unit
                   </Typography>
@@ -170,7 +207,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                   />
                 </Box>
 
-                <Box sx={BoxStyle}>
+                <Box sx={styles.BoxStyle}>
                   <Typography variant='subtitle2' sx={{ my: 2 }}>
                     Weight UOM
                   </Typography>
@@ -187,7 +224,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                   />
                 </Box>
 
-                <Box sx={BoxStyle}>
+                <Box sx={styles.BoxStyle}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -201,180 +238,114 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                 </Box>
               </Grid>
             </Grid>
-
-            <Divider />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Typography variant='body1' sx={{ marginBlock: 2 }}>
-              Barcodes
-            </Typography>
-            <Box sx={{ mt: 3 }}>
-              <Typography variant='subtitle2' sx={{ my: 2 }}>
-                Barcode
-              </Typography>
-              <DataGrid
-                sx={{ height: dataRow.taxes.length === 0 ? 300 : 'auto' }}
-                rows={dataRow.barcodes}
-                columns={columnsBarcode}
-                getRowId={row => row.name}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 }
-                  }
-                }}
-                pageSizeOptions={[5, 10]}
-                checkboxSelection
-              />
-            </Box>
-            <Button variant='contained' size='small' sx={{ my: 2 }}>
-              Add Row
-            </Button>
-            <Divider />
-          </Grid>
-
-          {/* Auto Reorder */}
-          <Grid item xs={12}>
-            <Box
-              display='flex'
-              alignItems='center'
-              onClick={() => setOpenAutoReorder(prev => !prev)}
-              style={{ cursor: 'pointer' }}
-            >
-              Auto re-order
-              {openAutoReorder ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </Box>
-            <Collapse in={openAutoReorder}>
-              <Box sx={{ p: 2 }}>
-                <Typography variant='subtitle2' sx={{ my: 2 }}>
-                  Reorder level based on Warehouse
-                </Typography>
-                <Typography variant='subtitle2' sx={{ my: 2 }}>
-                  Will also apply for variants unless overrridden
-                </Typography>
-                <Box>
-                  <DataGrid
-                    sx={{ height: dataRow.taxes.length === 0 ? 300 : 'auto' }}
-                    rows={[]}
-                    columns={columnsAutoReorder}
-                    getRowId={row => row.name}
-                    initialState={{
-                      pagination: {
-                        paginationModel: { page: 0, pageSize: 5 }
-                      }
-                    }}
-                    pageSizeOptions={[5, 10]}
-                    checkboxSelection
-                  />
-                </Box>
-                <Button variant='contained' size='small' sx={{ my: 2 }}>
-                  Add Row
-                </Button>
-              </Box>
-            </Collapse>
-
-            <Divider />
-          </Grid>
-
-          {/*  Units of Measure */}
-          <Grid item xs={12}>
-            <Box
-              display='flex'
-              alignItems='center'
-              onClick={() => setOpenUnitsOfMeasure(prev => !prev)}
-              style={{ cursor: 'pointer' }}
-            >
-              Units of Measure
-              {openUnitsOfMeasure ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </Box>
-            <Collapse in={openUnitsOfMeasure}>
-              <Box sx={{ p: 2 }}>
-                <Typography variant='subtitle2' sx={{ my: 2 }}>
-                  UOMs
-                </Typography>
-                <Typography variant='subtitle2' sx={{ my: 2 }}>
-                  Will also apply for variants
-                </Typography>
-                <Box>
-                  <DataGrid
-                    sx={{ height: dataRow.taxes.length === 0 ? 300 : 'auto' }}
-                    rows={dataRow.uoms}
-                    columns={columnsUOM}
-                    getRowId={row => row.name}
-                    initialState={{
-                      pagination: {
-                        paginationModel: { page: 0, pageSize: 5 }
-                      }
-                    }}
-                    pageSizeOptions={[5, 10]}
-                    checkboxSelection
-                  />
-                </Box>
-                <Button variant='contained' size='small' sx={{ my: 2 }}>
-                  Add Row
-                </Button>
-              </Box>
-            </Collapse>
-
-            <Divider />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Box
-              display='flex'
-              alignItems='center'
-              onClick={() => setOpenSerialNosBatches(prev => !prev)}
-              style={{ cursor: 'pointer' }}
-            >
-              Serial Nos and Batches
-              {openSerialNosBatches ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </Box>
-            <Collapse in={openSerialNosBatches}>
-              <Box sx={{ mt: 3 }}>
-                <Divider />
-                <Grid container spacing={4}>
-                  <Grid item xs={12} md={6}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={Boolean(dataRow.has_batch_no)}
-                          name='has_batch_no'
-                          onChange={handleCheckboxChange}
-                        />
-                      }
-                      label='Has Batch No'
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} md={6}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={Boolean(dataRow.has_serial_no)}
-                          name='has_serial_no'
-                          onChange={handleCheckboxChange}
-                        />
-                      }
-                      label='Has Serial No'
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-            </Collapse>
           </Grid>
         </Grid>
+
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Auto re-order</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Divider />
+            <Box sx={{ p: 2 }}>
+              <Typography variant='subtitle2' sx={{ my: 2 }}>
+                Reorder level based on Warehouse
+              </Typography>
+              <Typography variant='subtitle2' sx={{ my: 2 }}>
+                Will also apply for variants unless overrridden
+              </Typography>
+              <Box>
+                <DataGrid
+                  sx={{ height: dataRow.taxes.length === 0 ? 300 : 'auto' }}
+                  rows={[]}
+                  columns={columnsAutoReorder}
+                  getRowId={row => row.name}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { page: 0, pageSize: 5 }
+                    }
+                  }}
+                  pageSizeOptions={[5, 10]}
+                  checkboxSelection
+                />
+              </Box>
+              <Button variant='contained' size='small' sx={{ my: 2 }}>
+                Add Row
+              </Button>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Units of Measure</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Divider />
+            <Box sx={{ p: 2 }}>
+              <Typography variant='subtitle2' sx={{ my: 2 }}>
+                UOMs
+              </Typography>
+              <Typography variant='subtitle2' sx={{ my: 2 }}>
+                Will also apply for variants
+              </Typography>
+              <Box>
+                <DataGrid
+                  className={dataRow.taxes.length === 0 ? 'dataGridHeight' : ''}
+                  rows={dataRow.uoms}
+                  columns={columnsUOM}
+                  getRowId={row => row.name}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { page: 0, pageSize: 5 }
+                    }
+                  }}
+                  pageSizeOptions={[5, 10]}
+                  checkboxSelection
+                />
+              </Box>
+              <Button variant='contained' size='small' sx={{ my: 2 }}>
+                Add Row
+              </Button>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Serial Nos and Batches</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Divider />
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-start', flexGrow: 1 }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={Boolean(dataRow.has_batch_no)}
+                      name='has_batch_no'
+                      onChange={handleCheckboxChange}
+                    />
+                  }
+                  label='Has Batch No'
+                />
+              </Box>
+
+              <Box sx={{ display: 'flex', justifyContent: 'flex-start', flexGrow: 1 }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={Boolean(dataRow.has_serial_no)}
+                      name='has_serial_no'
+                      onChange={handleCheckboxChange}
+                    />
+                  }
+                  label='Has Serial No'
+                />
+              </Box>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
       </Card>
     </Box>
   )
