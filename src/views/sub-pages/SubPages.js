@@ -5,7 +5,21 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
 // ** MUI Imports
-import { Box, Button, Card, Chip, Divider, Grid, IconButton, Tab, Tabs, TextField, Typography } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Chip,
+  Divider,
+  Grid,
+  IconButton,
+  Snackbar,
+  Tab,
+  Tabs,
+  TextField,
+  Typography
+} from '@mui/material'
 import { TabPanel, TabContext } from '@mui/lab' // Import TabContext
 
 // ** Icons Imports
@@ -45,6 +59,8 @@ const SubPages = ({
   const [sideContentOpen, setSideContentOpen] = useState(false)
   const [tabValue, setTabValue] = useState(1)
   const [buttonArrow, setButtonArrow] = useState(true)
+  const [saveWarning, setSaveWarning] = useState(false)
+  const [dataRowModified, setDataRowModified] = useState(null)
 
   const tabStyles = {
     backgroundColor: 'primary.light',
@@ -168,10 +184,12 @@ const SubPages = ({
     }
   }
 
-  const handleSaveClick = event => {
+  const handleSaveClick = async event => {
     console.log('Save Clicked: ', dataRow)
+    const dataUpdate = await fetchData(doctype, dataRow.name)
+    setDataRowModified(dataUpdate.modified)
 
-    if (Object.keys(dataRow).length !== 0) {
+    if (Object.keys(dataRow).length !== 0 && dataRow.modified === dataUpdate.modified) {
       axios
         .put(`${process.env.NEXT_PUBLIC_API_URL}${doctype}/${dataRow.name}`, dataUpdate, {
           headers: {
@@ -187,6 +205,8 @@ const SubPages = ({
         .catch(err => {
           console.log(err)
         })
+    } else {
+      setSaveWarning(true)
     }
   }
 
@@ -204,6 +224,28 @@ const SubPages = ({
 
   return (
     <Box sx={{ width: '100%', height: '100%' }}>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={saveWarning}
+        onClose={() => setSaveWarning(false)}
+        key={'top' + 'center'}
+        autoHideDuration={5000}
+      >
+        <Alert
+          onClose={() => setSaveWarning(false)}
+          severity='warning'
+          sx={{
+            width: '100%',
+            color: 'black',
+            backgroundColor: '#ffdd00',
+            '& .MuiAlert-icon': { color: 'black' }
+          }}
+        >
+          Error: Document has been modified after you have opened it (`${dataRow.modified}`, `${dataRow.modified}`).
+          Please refresh to get the latest document.
+        </Alert>
+      </Snackbar>
+
       {/* ข้อมูลที่แสดงผลข้างซ้าย */}
       <Grid container justifyContent='center' columnSpacing={4}>
         {(!screenMD || !screenMDSelect) && (
@@ -263,6 +305,7 @@ const SubPages = ({
                         <IconButton sx={IconButtonStyle}>
                           <MoreHorizIcon />
                         </IconButton>
+                        {/* Save Button */}
                         <IconButton color='success' sx={IconButtonStyle} onClick={handleSaveClick}>
                           <SaveIcon />
                         </IconButton>
