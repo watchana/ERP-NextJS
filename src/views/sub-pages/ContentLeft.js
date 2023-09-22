@@ -141,64 +141,69 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
         </Button>
       </Box>
       <Box sx={{ backgroundColor: 'background.paper', borderRadius: '10px', pb: -1 }}>
-        <Grid container spacing={2} rowSpacing={2}>
-          <Grid item xs={12} sm={6} sx={{ p: 2, ml: 2 }}>
-            <TextField fullWidth variant='outlined' size='small' label='ID Search' onChange={handleIDSearch} />
+        <Grid container spacing={3} rowSpacing={2}>
+          <Grid item sm={12} md={6}>
+            <Box sx={{ ml: 4 }}>
+              <TextField fullWidth variant='outlined' size='small' label='ID Search' onChange={handleIDSearch} />
+            </Box>
           </Grid>
-          <Grid item xs sx={{ p: 2, justifyContent: 'flex-end', display: 'flex', mr: 2 }}>
-            {sort === 'asc' ? (
-              <IconButton
-                color='primary'
+          <Grid item sm={12} md={6}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mr: 2, width: 'auto' }}>
+              {sort === 'asc' ? (
+                <IconButton
+                  color='primary'
+                  sx={{
+                    width: 40,
+                    height: 40,
+                    borderTopLeftRadius: '4px',
+                    borderBottomLeftRadius: '4px',
+                    borderBottomRightRadius: '0',
+                    borderTopRightRadius: '0',
+                    border: 1
+                  }}
+                  onClick={() => handleSortClick('desc')}
+                >
+                  <Image src={sortAscending} alt='sortAscending' />
+                </IconButton>
+              ) : (
+                <IconButton
+                  color='primary'
+                  sx={{
+                    width: 40,
+                    height: 40,
+                    borderTopLeftRadius: '4px',
+                    borderBottomLeftRadius: '4px',
+                    borderBottomRightRadius: '0',
+                    borderTopRightRadius: '0',
+                    border: 1
+                  }}
+                  onClick={() => handleSortClick('asc')}
+                >
+                  <Image src={sortDescending} alt='sortDescending' />
+                </IconButton>
+              )}
+              <Button
+                aria-controls={sortOptionOpen ? 'basic-menu' : undefined}
+                aria-haspopup='true'
+                aria-expanded={sortOptionOpen ? 'true' : undefined}
+                onClick={handleSortOptionClick}
+                variant='outlined'
                 sx={{
-                  width: 40,
-                  height: 40,
-                  borderTopLeftRadius: '4px',
-                  borderBottomLeftRadius: '4px',
-                  borderBottomRightRadius: '0',
-                  borderTopRightRadius: '0',
-                  border: 1
+                  borderTopLeftRadius: '0',
+                  borderBottomLeftRadius: '0',
+                  height: 40
                 }}
-                onClick={() => handleSortClick('desc')}
               >
-                <Image src={sortAscending} alt='sortAscending' />
-              </IconButton>
-            ) : (
-              <IconButton
-                color='primary'
-                sx={{
-                  width: 40,
-                  height: 40,
-                  borderTopLeftRadius: '4px',
-                  borderBottomLeftRadius: '4px',
-                  borderBottomRightRadius: '0',
-                  borderTopRightRadius: '0',
-                  border: 1
-                }}
-                onClick={() => handleSortClick('asc')}
-              >
-                <Image src={sortDescending} alt='sortDescending' />
-              </IconButton>
-            )}
-            <Button
-              aria-controls={sortOptionOpen ? 'basic-menu' : undefined}
-              aria-haspopup='true'
-              aria-expanded={sortOptionOpen ? 'true' : undefined}
-              onClick={handleSortOptionClick}
-              variant='outlined'
-              sx={{
-                borderTopLeftRadius: '0',
-                borderBottomLeftRadius: '0'
-              }}
-            >
-              {sortOption}
-            </Button>
-            <Menu anchorEl={anchorEl} open={sortOptionOpen} onClose={() => handleSortOptionClose(sortOption)}>
-              {sortOptions.map(option => (
-                <MenuItem key={option} onClick={() => handleSortOptionClose(option)}>
-                  {option}
-                </MenuItem>
-              ))}
-            </Menu>
+                {sortOption}
+              </Button>
+              <Menu anchorEl={anchorEl} open={sortOptionOpen} onClose={() => handleSortOptionClose(sortOption)}>
+                {sortOptions.map(option => (
+                  <MenuItem key={option} onClick={() => handleSortOptionClose(option)}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
           </Grid>
 
           <Grid item xs={12}>
