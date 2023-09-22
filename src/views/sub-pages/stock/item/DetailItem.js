@@ -219,6 +219,7 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
                 <Typography variant='subtitle1'>Brand</Typography>
                 <TextField
                   fullWidth
+                  disabled
                   size='small'
                   variant='filled'
                   name='brand'
