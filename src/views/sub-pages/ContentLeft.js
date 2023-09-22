@@ -145,64 +145,60 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
           <Grid item xs={12} sm={6} sx={{ p: 2, ml: 2 }}>
             <TextField fullWidth variant='outlined' size='small' label='ID Search' onChange={handleIDSearch} />
           </Grid>
-          <Grid item xs sx={{ p: 2, justifyContent: 'end', display: 'flex' }}>
-            <ButtonGroup variant='outlined'>
-              {sort === 'asc' ? (
-                <IconButton
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderTopLeftRadius: '4px',
-                    borderBottomLeftRadius: '4px',
-                    borderBottomRightRadius: '0',
-                    borderTopRightRadius: '0',
-                    border: 1
-                  }}
-                  onClick={() => handleSortClick('desc')}
-                >
-                  <Image src={sortAscending} alt='sortAscending' />
-                </IconButton>
-              ) : (
-                <IconButton
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderTopLeftRadius: '4px',
-                    borderBottomLeftRadius: '4px',
-                    borderBottomRightRadius: '0',
-                    borderTopRightRadius: '0',
-                    border: 1
-                  }}
-                  onClick={() => handleSortClick('asc')}
-                >
-                  <Image src={sortDescending} alt='sortDescending' />
-                </IconButton>
-              )}
-              <Button
-                id='basic-button'
-                aria-controls={sortOptionOpen ? 'basic-menu' : undefined}
-                aria-haspopup='true'
-                aria-expanded={sortOptionOpen ? 'true' : undefined}
-                onClick={handleSortOptionClick}
-              >
-                {sortOption}
-              </Button>
-              <Menu
-                id='basic-menu'
-                anchorEl={anchorEl}
-                open={sortOptionOpen}
-                onClose={() => handleSortOptionClose(sortOption)}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button'
+          <Grid item xs sx={{ p: 2, justifyContent: 'flex-end', display: 'flex', mr: 2 }}>
+            {sort === 'asc' ? (
+              <IconButton
+                color='primary'
+                sx={{
+                  width: 40,
+                  height: 40,
+                  borderTopLeftRadius: '4px',
+                  borderBottomLeftRadius: '4px',
+                  borderBottomRightRadius: '0',
+                  borderTopRightRadius: '0',
+                  border: 1
                 }}
+                onClick={() => handleSortClick('desc')}
               >
-                {sortOptions.map(option => (
-                  <MenuItem key={option} onClick={() => handleSortOptionClose(option)}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </Menu>
-            </ButtonGroup>
+                <Image src={sortAscending} alt='sortAscending' />
+              </IconButton>
+            ) : (
+              <IconButton
+                color='primary'
+                sx={{
+                  width: 40,
+                  height: 40,
+                  borderTopLeftRadius: '4px',
+                  borderBottomLeftRadius: '4px',
+                  borderBottomRightRadius: '0',
+                  borderTopRightRadius: '0',
+                  border: 1
+                }}
+                onClick={() => handleSortClick('asc')}
+              >
+                <Image src={sortDescending} alt='sortDescending' />
+              </IconButton>
+            )}
+            <Button
+              aria-controls={sortOptionOpen ? 'basic-menu' : undefined}
+              aria-haspopup='true'
+              aria-expanded={sortOptionOpen ? 'true' : undefined}
+              onClick={handleSortOptionClick}
+              variant='outlined'
+              sx={{
+                borderTopLeftRadius: '0',
+                borderBottomLeftRadius: '0'
+              }}
+            >
+              {sortOption}
+            </Button>
+            <Menu anchorEl={anchorEl} open={sortOptionOpen} onClose={() => handleSortOptionClose(sortOption)}>
+              {sortOptions.map(option => (
+                <MenuItem key={option} onClick={() => handleSortOptionClose(option)}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Menu>
           </Grid>
 
           <Grid item xs={12}>
