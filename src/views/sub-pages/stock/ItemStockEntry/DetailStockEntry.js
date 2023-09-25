@@ -16,6 +16,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  InputAdornment,
   TextField,
   Typography
 } from '@mui/material'
@@ -28,7 +29,6 @@ import { DataGrid } from '@mui/x-data-grid'
 import axios from 'axios'
 
 const DetailStockEntry = ({ dataRow, setDataRow }) => {
-  const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
   const [collapseBOM, setCollapseBOM] = useState(false)
   const [collapseWarehouse, setCollapseWarehouse] = useState(false)
   const [collapseDiscription, setCollapseDiscription] = useState(false)
@@ -66,6 +66,36 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
     setGetItem(params.row)
   }
 
+  function formatDate(dateString) {
+    const dateObject = new Date(dateString)
+    const day = dateObject.getDate().toString().padStart(2, '0')
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0')
+    const year = dateObject.getFullYear()
+
+    return `${day}-${month}-${year}`
+  }
+  const formattedDate = formatDate(dataRow.posting_date)
+
+  function formatTime(timeString) {
+    const timeParts = timeString.split(':')
+    const hours = timeParts[0]
+    const minutes = timeParts[1]
+    const formattedTime = `${hours}:${minutes}`
+
+    return formattedTime
+  }
+  const formattedTime = formatTime(dataRow?.posting_time || '')
+
+  function formatCurrency(params) {
+    const formattedValue = new Intl.NumberFormat('th-TH', {
+      style: 'currency',
+      currency: 'THB',
+      minimumFractionDigits: 2
+    }).format(params.value)
+
+    return formattedValue
+  }
+
   const [getDataItem, setGetDataItem] = useState('')
   const [getItem, setGetItem] = useState('')
 
@@ -94,7 +124,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
     { field: 't_warehouse', headerName: 'Target Warehouse', width: 150 },
     { field: 'item_code', headerName: 'Item Code*', width: 150 },
     { field: 'qty', headerName: 'Qty*', width: 150 },
-    { field: 'basic_rate', headerName: 'Basic Rate(as per Stock UOM)', width: 150 },
+    { field: 'basic_rate', headerName: 'Basic Rate(as per Stock UOM)', width: 150, valueFormatter: formatCurrency },
     {
       field: 'Edit',
       headerName: 'Edit',
@@ -138,80 +168,65 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
   }
 
   return (
-    <Card>
+    <Card sx={{ p: 4 }}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Typography sx={{ margin: 1 }}>Stock Entry Type</Typography>
-          <TextField
-            size='small'
-            variant='filled'
-            value={dataRow.stock_entry_type}
-            fullWidth
-            onChange={handleTextChange}
-            name='stock_entry_type'
-          />
+          <TextField size='small' variant='filled' value={dataRow.stock_entry_type} fullWidth name='stock_entry_type' />
 
           <Typography sx={{ margin: 1 }}>Work Order</Typography>
-          <TextField
-            size='small'
-            variant='filled'
-            value={dataRow.work_order}
-            fullWidth
-            onChange={handleTextChange}
-            name='work_order'
-          />
+          <TextField size='small' variant='filled' value={dataRow.work_order} fullWidth name='work_order' />
+
+          <Grid sx={checkboxStyle}>
+            <Checkbox
+              checked={dataRow.inspection_required === 1 ? true : false}
+              name='inspection_required'
+              onChange={handleCheckbox}
+              disabled
+            />
+            <Typography variant='subtitle2'>Inspection Required</Typography>
+          </Grid>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Typography sx={{ margin: 1 }}>Posting Date</Typography>
           <TextField
             size='small'
             variant='filled'
-            value={dataRow.posting_date}
+            value={formattedDate}
             fullWidth
             onChange={handleTextChange}
-            name='posting_date'
+            name='formattedDate'
+            disabled
           />
 
           <Typography sx={{ margin: 1 }}>Posting Time</Typography>
           <TextField
             size='small'
             variant='filled'
-            value={dataRow.posting_time}
+            value={formattedTime}
             fullWidth
             onChange={handleTextChange}
-            name='posting_time'
+            name='formattedTime'
+            disabled
           />
           <Typography sx={{ margin: 1 }}>Asia/Kolkata</Typography>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Grid item xs={12} sx={checkboxStyle}>
-            <Checkbox
-              checked={dataRow.inspection_required === 1 ? true : false}
-              name='inspection_required'
-              onChange={handleCheckbox}
-            />
-            <Typography variant='subtitle2'>Inspection Required</Typography>
-          </Grid>
         </Grid>
       </Grid>
 
       <Grid>
         <Grid sx={{ mt: 10, display: 'flex' }}>
-          <Button size='small' variant='filled' label='' onClick={handleClickBOM}>
+          <Button size='small' variant='filled' label='' onClick={handleClickBOM} sx={{ fontWeight: 'bold' }}>
             BOM Info
           </Button>
           <Box>
-            <CardActions className='card-action-dense'>
-              <IconButton size='small' onClick={handleClickBOM}>
-                {collapseBOM ? (
-                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                ) : (
-                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                )}
-              </IconButton>
-            </CardActions>
+            <IconButton size='small' onClick={handleClickBOM}>
+              {collapseBOM ? (
+                <ChevronUp sx={{ fontSize: '1.875rem' }} />
+              ) : (
+                <ChevronDown sx={{ fontSize: '1.875rem' }} />
+              )}
+            </IconButton>
           </Box>
         </Grid>
         <Collapse in={collapseBOM}>
@@ -220,7 +235,12 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
                 <Grid item xs={12} sx={checkboxStyle}>
-                  <Checkbox checked={dataRow.from_bom === 1 ? true : false} name='from_bom' onChange={handleCheckbox} />
+                  <Checkbox
+                    checked={dataRow.from_bom === 1 ? true : false}
+                    name='from_bom'
+                    onChange={handleCheckbox}
+                    disabled
+                  />
                   <Typography variant='subtitle2'>From BOM</Typography>
                 </Grid>
 
@@ -229,6 +249,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                     checked={dataRow.use_multi_level_bom === 1 ? true : false}
                     name='use_multi_level_bom'
                     onChange={handleCheckbox}
+                    disabled
                   />
                   <Typography variant='subtitle2'>Use Multi-Level BOM</Typography>
                 </Grid>
@@ -244,6 +265,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                   fullWidth
                   onChange={handleTextChange}
                   name='fg_completed_qty'
+                  disabled
                 />
 
                 <Typography>As per Stock UOM</Typography>
@@ -251,14 +273,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
               </Grid>
               <Grid item xs={12}>
                 <Typography sx={{ margin: 1 }}>BOM No</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={dataRow.bom_no}
-                  fullWidth
-                  onChange={handleTextChange}
-                  name='bom_no'
-                />
+                <TextField size='small' variant='filled' value={dataRow.bom_no} fullWidth name='bom_no' />
               </Grid>
             </Grid>
           </CardContent>
@@ -267,19 +282,17 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
 
       <Grid>
         <Box sx={{ mt: 5, display: 'flex' }}>
-          <Button size='small' variant='filled' label='' onClick={handleClickWarehouse}>
-            <Typography>Default Warehouse</Typography>
+          <Button size='small' variant='filled' label='' onClick={handleClickWarehouse} sx={{ fontWeight: 'bold' }}>
+            Default Warehouse
           </Button>
           <Box>
-            <CardActions className='card-action-dense'>
-              <IconButton size='small' onClick={handleClickWarehouse}>
-                {collapseWarehouse ? (
-                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                ) : (
-                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                )}
-              </IconButton>
-            </CardActions>
+            <IconButton size='small' onClick={handleClickWarehouse}>
+              {collapseWarehouse ? (
+                <ChevronUp sx={{ fontSize: '1.875rem' }} />
+              ) : (
+                <ChevronDown sx={{ fontSize: '1.875rem' }} />
+              )}
+            </IconButton>
           </Box>
         </Box>
         <Grid>
@@ -288,14 +301,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
             <CardContent>
               <Grid item xs={12}>
                 <Typography sx={{ margin: 1 }}>Default Target Warehouse</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={dataRow.to_warehouse}
-                  fullWidth
-                  onChange={handleTextChange}
-                  name='to_warehouse'
-                />
+                <TextField size='small' variant='filled' value={dataRow.to_warehouse} fullWidth name='to_warehouse' />
                 <Typography variant='subtitle2' sx={{ margin: 1 }}>
                   Sets 'Target Warehouse' in each row of the items table.
                 </Typography>
@@ -305,7 +311,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
         </Grid>
       </Grid>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{ mt: 4 }}>
         <Grid item xs={12}>
           <Typography variant='h6' sx={{ ml: 2 }}>
             Items
@@ -339,10 +345,25 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
           <TextField
             size='small'
             variant='filled'
-            value={dataRow.total_outgoing_value}
+            value={
+              dataRow?.total_outgoing_value === '0.0'
+                ? '฿0.0'
+                : dataRow?.total_outgoing_value.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  })
+            }
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position='start'>
+                  <Typography>฿</Typography>
+                </InputAdornment>
+              )
+            }}
             fullWidth
             onChange={handleTextChange}
-            name='total_outgoing_value'
+            name='total_incoming_value'
+            disabled
           />
         </Grid>
         <Grid item xs={12} lg={6}>
@@ -350,20 +371,50 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
           <TextField
             size='small'
             variant='filled'
-            value={dataRow.total_incoming_value}
+            value={
+              dataRow?.total_incoming_value === '0.0'
+                ? '฿0.0'
+                : dataRow?.total_incoming_value.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  })
+            }
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position='start'>
+                  <Typography>฿</Typography>
+                </InputAdornment>
+              )
+            }}
             fullWidth
             onChange={handleTextChange}
             name='total_incoming_value'
+            disabled
           />
 
-          <Typography sx={{ margin: 1 }}>otal Value Difference (Incoming - Outgoing)</Typography>
+          <Typography sx={{ margin: 1 }}>Total Value Difference (Incoming - Outgoing)</Typography>
           <TextField
             size='small'
             variant='filled'
-            value={dataRow.value_difference}
-            fullWidth
-            onChange={handleTextChange}
+            value={
+              dataRow?.value_difference === '0.0'
+                ? '฿0.0'
+                : dataRow?.value_difference.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  })
+            }
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position='start'>
+                  <Typography>฿</Typography>
+                </InputAdornment>
+              )
+            }}
             name='value_difference'
+            onChange={handleTextChange}
+            fullWidth
+            disabled
           />
         </Grid>
       </Grid>
@@ -391,26 +442,12 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
             <Grid container spacing={3} sx={{ mt: 6 }}>
               <Grid item xs={12} md={6}>
                 <Typography variant='subtitle1'>Source Warehouse</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={getItem.s_warehouse}
-                  fullWidth
-                  onChange={handleTextChangeItem}
-                  name='s_warehouse'
-                />
+                <TextField size='small' variant='filled' value={getItem.s_warehouse} fullWidth name='s_warehouse' />
               </Grid>
 
               <Grid item xs={12} md={6}>
                 <Typography variant='subtitle1'>Target Warehouse</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={getItem.t_warehouse}
-                  fullWidth
-                  onChange={handleTextChangeItem}
-                  name='t_warehouse'
-                />
+                <TextField size='small' variant='filled' value={getItem.t_warehouse} fullWidth name='t_warehouse' />
               </Grid>
             </Grid>
             <Divider sx={{ margin: 0, mt: 10 }} />
@@ -418,14 +455,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
             <Grid container spacing={3} sx={{ mt: 6 }}>
               <Grid item xs={12} md={6}>
                 <Typography variant='subtitle1'>Item Code</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={getItem.item_code}
-                  fullWidth
-                  onChange={handleTextChangeItem}
-                  name='item_code'
-                />
+                <TextField size='small' variant='filled' value={getItem.item_code} fullWidth name='item_code' />
 
                 <Typography variant='subtitle1'>Item Name</Typography>
                 <TextField
@@ -435,6 +465,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                   fullWidth
                   onChange={handleTextChangeItem}
                   name='item_name'
+                  disabled
                 />
               </Grid>
 
@@ -444,6 +475,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                     checked={dataRow.is_finished_item === 1 ? true : false}
                     name='is_finished_item'
                     onChange={handleCheckbox}
+                    disabled
                   />
                   <Typography variant='subtitle2'>Is Finished Item</Typography>
                 </Grid>
@@ -453,6 +485,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                     checked={dataRow.is_scrap_item === 1 ? true : false}
                     name='is_scrap_item'
                     onChange={handleCheckbox}
+                    disabled
                   />
                   <Typography variant='subtitle2'>Is Scrap Item</Typography>
                 </Grid>
@@ -461,19 +494,23 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
 
             <Box>
               <Box sx={{ mt: 5, display: 'flex' }}>
-                <Button size='small' variant='filled' label='' onClick={handleClickDiscription}>
-                  <Typography>Default Warehouse</Typography>
+                <Button
+                  size='small'
+                  variant='filled'
+                  label=''
+                  onClick={handleClickDiscription}
+                  sx={{ fontWeight: 'bold' }}
+                >
+                  Default Warehouse
                 </Button>
 
-                <CardActions className='card-action-dense'>
-                  <IconButton size='small' onClick={handleClickDiscription}>
-                    {collapseDiscription ? (
-                      <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                    ) : (
-                      <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                    )}
-                  </IconButton>
-                </CardActions>
+                <IconButton size='small' onClick={handleClickDiscription}>
+                  {collapseDiscription ? (
+                    <ChevronUp sx={{ fontSize: '1.875rem' }} />
+                  ) : (
+                    <ChevronDown sx={{ fontSize: '1.875rem' }} />
+                  )}
+                </IconButton>
               </Box>
             </Box>
 
@@ -491,6 +528,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                         fullWidth
                         onChange={handleTextChangeItem}
                         name='description'
+                        disabled
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -502,6 +540,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                         fullWidth
                         onChange={handleTextChangeItem}
                         name='item_group'
+                        disabled
                       />
 
                       <Box sx={{ width: 100, height: 100, backgroundColor: '#e0e0e0', mt: 6 }}></Box>
@@ -511,7 +550,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
               </Collapse>
             </Box>
 
-            <Typography variant='h6'>Quantity</Typography>
+            <Typography sx={{ fontWeight: 'bold', mt: 6 }}>Quantity</Typography>
             <Grid container spacing={3} sx={{ mt: 6 }}>
               <Grid item xs={12} md={6}>
                 <Typography variant='subtitle1'>Qty*</Typography>
@@ -522,6 +561,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                   fullWidth
                   onChange={handleTextChangeItem}
                   name='qty'
+                  disabled
                 />
 
                 <Grid item xs={12} sx={checkboxStyle}>
@@ -529,6 +569,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                     checked={dataRow.retain_sample === 1 ? true : false}
                     name='retain_sample'
                     onChange={handleCheckbox}
+                    disabled
                   />
                   <Typography variant='subtitle2'>Retain Sample</Typography>
                 </Grid>
@@ -547,7 +588,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
             </Grid>
 
             <Grid sx={{ mt: 6 }}>
-              <Typography variant='h6'>Rates</Typography>
+              <Typography sx={{ fontWeight: 'bold' }}>Rates</Typography>
             </Grid>
 
             <Grid container spacing={3} sx={{ mt: 4 }}>
@@ -556,32 +597,53 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                 <TextField
                   size='small'
                   variant='filled'
-                  value={getItem.basic_rate}
+                  value={
+                    getItem?.basic_rate === '0.0'
+                      ? '฿ 0.0'
+                      : `฿ ${parseFloat(getItem?.basic_rate).toLocaleString('en-US', {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2
+                        })}`
+                  }
                   fullWidth
                   onChange={handleTextChangeItem}
                   name='basic_rate'
+                  disabled
                 />
-
                 <Typography variant='subtitle1'>Additional Cost</Typography>
                 <TextField
                   size='small'
                   variant='filled'
-                  value={getItem.additional_cost}
+                  value={
+                    getItem?.additional_cost === '0.0'
+                      ? '฿ 0.0'
+                      : `฿ ${parseFloat(getItem?.additional_cost).toLocaleString('en-US', {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2
+                        })}`
+                  }
                   fullWidth
                   onChange={handleTextChangeItem}
                   name='additional_cost'
+                  disabled
                 />
-
                 <Typography variant='subtitle1'>Valuation Rate</Typography>
                 <TextField
                   size='small'
                   variant='filled'
-                  value={getItem.valuation_rate}
+                  value={
+                    getItem?.valuation_rate === '0.0'
+                      ? '฿ 0.0'
+                      : `฿ ${parseFloat(getItem?.valuation_rate).toLocaleString('en-US', {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2
+                        })}`
+                  }
                   fullWidth
                   onChange={handleTextChangeItem}
                   name='valuation_rate'
+                  disabled
                 />
-
                 <Grid item xs={12} sx={checkboxStyle}>
                   <Checkbox
                     checked={dataRow.allow_zero_valuation_rate === 1 ? true : false}
@@ -596,28 +658,42 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                 <TextField
                   size='small'
                   variant='filled'
-                  value={getItem.basic_amount}
+                  value={
+                    getItem?.basic_amount === '0.0'
+                      ? '฿ 0.0'
+                      : `฿ ${parseFloat(getItem?.basic_amount).toLocaleString('en-US', {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2
+                        })}`
+                  }
                   fullWidth
                   onChange={handleTextChangeItem}
                   name='basic_amount'
+                  disabled
                 />
 
                 <Typography variant='subtitle1'>Amount</Typography>
                 <TextField
                   size='small'
                   variant='filled'
-                  value={getItem.amount}
+                  value={
+                    getItem?.amount === '0.0'
+                      ? '฿ 0.0'
+                      : `฿ ${parseFloat(getItem?.amount).toLocaleString('en-US', {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2
+                        })}`
+                  }
                   fullWidth
                   onChange={handleTextChangeItem}
                   name='amount'
+                  disabled
                 />
               </Grid>
             </Grid>
 
             <Box>
-              <Typography variant='h6' sx={{ mt: 6 }}>
-                Serial No / Batch
-              </Typography>
+              <Typography sx={{ fontWeight: 'bold', mt: 6 }}>Serial No / Batch</Typography>
             </Box>
             <Box>
               <Chip label='Add Serial / Batch No' />
@@ -625,9 +701,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
 
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
-                <Typography variant='h6' sx={{ mt: 6 }}>
-                  Accounting
-                </Typography>
+                <Typography sx={{ fontWeight: 'bold', mt: 6 }}>Accounting</Typography>
                 <Typography variant='subtitle1' sx={{ mt: 2 }}>
                   Difference Account
                 </Typography>
@@ -636,25 +710,23 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                   variant='filled'
                   value={getItem.expense_account}
                   fullWidth
-                  onChange={handleTextChangeItem}
                   name='expense_account'
                 />
               </Grid>
             </Grid>
             <Box>
               <Box sx={{ mt: 5, display: 'flex' }}>
-                <Button size='small' variant='filled' label='' onClick={handleAccouting}>
-                  <Typography>Accounting</Typography>
+                <Button size='small' variant='filled' label='' onClick={handleAccouting} sx={{ fontWeight: 'bold' }}>
+                  Accounting
                 </Button>
-                <CardActions className='card-action-dense'>
-                  <IconButton size='small' onClick={handleAccouting}>
-                    {collapseAccouting ? (
-                      <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                    ) : (
-                      <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                    )}
-                  </IconButton>
-                </CardActions>
+
+                <IconButton size='small' onClick={handleAccouting}>
+                  {collapseAccouting ? (
+                    <ChevronUp sx={{ fontSize: '1.875rem' }} />
+                  ) : (
+                    <ChevronDown sx={{ fontSize: '1.875rem' }} />
+                  )}
+                </IconButton>
               </Box>
             </Box>
             <Box>
@@ -669,7 +741,6 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                         variant='filled'
                         value={getItem.cost_center}
                         fullWidth
-                        onChange={handleTextChangeItem}
                         name='cost_center'
                       />
                     </Grid>
@@ -679,18 +750,23 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
             </Box>
             <Box>
               <Box sx={{ mt: 5, display: 'flex' }}>
-                <Button size='small' variant='filled' label='' onClick={handleClickMoreInfo}>
-                  <Typography>More Information</Typography>
+                <Button
+                  size='small'
+                  variant='filled'
+                  label=''
+                  onClick={handleClickMoreInfo}
+                  sx={{ fontWeight: 'bold' }}
+                >
+                  More Information
                 </Button>
-                <CardActions className='card-action-dense'>
-                  <IconButton size='small' onClick={handleClickMoreInfo}>
-                    {collapseMoreInfo ? (
-                      <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                    ) : (
-                      <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                    )}
-                  </IconButton>
-                </CardActions>
+
+                <IconButton size='small' onClick={handleClickMoreInfo}>
+                  {collapseMoreInfo ? (
+                    <ChevronUp sx={{ fontSize: '1.875rem' }} />
+                  ) : (
+                    <ChevronDown sx={{ fontSize: '1.875rem' }} />
+                  )}
+                </IconButton>
               </Box>
             </Box>
             <Box>
@@ -707,6 +783,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                         fullWidth
                         onChange={handleTextChangeItem}
                         name='actual_qty'
+                        disabled
                       />
 
                       <Typography variant='subtitle1'>Transferred Qty</Typography>
@@ -717,6 +794,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                         fullWidth
                         onChange={handleTextChangeItem}
                         name='transferred_qty'
+                        disabled
                       />
 
                       <Grid item xs={12} sx={checkboxStyle}>
@@ -724,6 +802,7 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
                           checked={dataRow.allow_alternative_item === 1 ? true : false}
                           name='allow_alternative_item'
                           onChange={handleCheckbox}
+                          disabled
                         />
                         <Typography variant='subtitle2'>Allow Alternative Item</Typography>
                       </Grid>

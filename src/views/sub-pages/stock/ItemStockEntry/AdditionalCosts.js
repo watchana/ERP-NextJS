@@ -1,4 +1,4 @@
-import { Box, Button, Grid, TextField, Typography, Card } from '@mui/material'
+import { Box, Button, Grid, TextField, Typography, Card, InputAdornment } from '@mui/material'
 
 const AdditionalCosts = ({ dataRow, setDataRow }) => {
   const handleTextChange = event => {
@@ -7,17 +7,32 @@ const AdditionalCosts = ({ dataRow, setDataRow }) => {
   }
 
   return (
-    <Card>
+    <Card sx={{ p: 4 }}>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <Typography sx={{ margin: 1 }}>Total Additional Costs</Typography>
           <TextField
             size='small'
             variant='filled'
-            value={dataRow.total_additional_costs}
-            fullWidth
-            onChange={handleTextChange}
+            value={
+              dataRow?.total_additional_costs === '0.0'
+                ? '฿0.0'
+                : dataRow?.total_additional_costs.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  })
+            }
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position='start'>
+                  <Typography>฿</Typography>
+                </InputAdornment>
+              )
+            }}
             name='total_additional_costs'
+            onChange={handleTextChange}
+            fullWidth
+            disabled
           />
         </Grid>
       </Grid>
