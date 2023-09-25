@@ -6,7 +6,7 @@ import axios from 'axios'
 import SubPages from 'src/views/sub-pages/SubPages'
 
 // ** Dummy Data
-import { ItemContentMenu, defaultMaterialRequestType, ItemGroup } from 'src/dummy/contentPages/itemPage'
+import { ItemContentMenu, defaultMaterialRequestType, ItemGroup } from 'src/dummy/sub-pages/stock/itemPage'
 
 // ** Custom Components
 import StockItemGroup from 'src/views/sub-pages/stock/ItemGroup/StockItemGroup'

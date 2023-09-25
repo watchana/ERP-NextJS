@@ -6,7 +6,7 @@ import axios from 'axios'
 import SubPages from 'src/views/sub-pages/SubPages'
 
 // ** Dummy Data
-import { ItemContentMenu, defaultMaterialRequestType } from 'src/dummy/contentPages/itemPage'
+import { ItemContentMenu, defaultMaterialRequestType } from 'src/dummy/sub-pages/stock/itemPage'
 
 // ** Custom Components
 import DetailItem from 'src/views/sub-pages/stock/item/DetailItem'
@@ -42,7 +42,7 @@ const ItemPage = ({ data }) => {
   const showContent = [
     <DetailItem key='detail' dataRow={dataRow} handleUpdateData={handleUpdateData} />,
     <DashboardItem key='dashboard' />,
-    <InventoryItem key='inventory' dataRow={dataRow} dropDowns={defaultMaterialRequestType} />,
+    <InventoryItem key='inventory' dataRow={dataRow} handleUpdateData={handleUpdateData} />,
     <AccountingItem key='accounting' dataRow={dataRow} setDataRow={setDataRow} />,
     <PurchasingItem key='purchasing' dataRow={dataRow} handleUpdateData={handleUpdateData} />,
     <SalesItem key='sales' dataRow={dataRow} handleUpdateData={handleUpdateData} />,

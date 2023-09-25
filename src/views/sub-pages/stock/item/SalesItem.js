@@ -8,21 +8,31 @@ import {
   TextField,
   Checkbox,
   Button,
-  CardActions,
   IconButton,
   Collapse,
   Divider,
   CardContent,
-  FormGroup,
   FormControlLabel,
   Card,
-  Grid
+  Grid,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary
 } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 //Icon MUI
 import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 import { DataGrid } from '@mui/x-data-grid'
+
+// ** Column for DataGrid
+const columnsCustomer = [
+  { field: 'idx', headerName: 'No', width: 70 },
+  { field: 'customer_name', headerName: 'Customer Name', width: 150 },
+  { field: 'customer_group', headerName: 'Customer Group', width: 200 },
+  { field: 'ref_code', headerName: 'Ref Code', width: 200 }
+]
 
 const SalesItem = ({ dataRow, handleUpdateData }) => {
   const [collapseDeferredOpen, setCollapseDeferredOpen] = useState(false)
@@ -46,12 +56,11 @@ const SalesItem = ({ dataRow, handleUpdateData }) => {
     handleUpdateData(event.target.name, event.target.value)
   }
 
-  const columnsCustomer = [
-    { field: 'idx', headerName: 'No', width: 70 },
-    { field: 'customer_name', headerName: 'Customer Name', width: 150 },
-    { field: 'customer_group', headerName: 'Customer Group', width: 200 },
-    { field: 'ref_code', headerName: 'Ref Code', width: 200 }
-  ]
+  const styles = {
+    dataGrid: {
+      height: dataRow.supplier_items.length === 0 ? 300 : 'auto'
+    }
+  }
 
   return (
     <Box>
@@ -69,12 +78,13 @@ const SalesItem = ({ dataRow, handleUpdateData }) => {
             <TextField
               fullWidth
               disabled
-              size='small'
-              variant='filled'
-              label=''
-              value={dataRow.sales_uom || ''}
+              variant='outlined'
               name='sales_uom'
+              value={dataRow.sales_uom}
               onChange={handleTextChange}
+              sx={{
+                backgroundColor: 'grey.100'
+              }}
             />
             <FormControlLabel
               control={
@@ -101,93 +111,78 @@ const SalesItem = ({ dataRow, handleUpdateData }) => {
             <Typography sx={{ marginBottom: 2 }}>Max Discount (%)</Typography>
             <TextField
               fullWidth
-              size='small'
-              variant='filled'
-              value={dataRow.max_discount}
+              variant='outlined'
               name='max_discount'
+              value={dataRow.max_discount}
               onChange={handleTextChange}
+              sx={{
+                backgroundColor: 'grey.100'
+              }}
             />
           </Grid>
         </Grid>
-        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-        <Button variant='filled' label='' onClick={handleDeferred} sx={{ fontWeight: 'bold' }}>
-          Deferred Revenue
-        </Button>
-        <IconButton size='small' onClick={handleDeferred}>
-          {collapseDeferredOpen ? (
-            <ChevronUp sx={{ fontSize: '1.875rem' }} />
-          ) : (
-            <ChevronDown sx={{ fontSize: '1.875rem' }} />
-          )}
-        </IconButton>
 
-        <Collapse in={collapseDeferredOpen}>
-          <Divider sx={{ margin: 0 }} />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name='enable_deferred_expense'
-                checked={Boolean(dataRow.enable_deferred_expense)}
-                onChange={handleCheckboxChange}
-              />
-            }
-            label='Enable Deferred Expense'
-          />
-          {dataRow.enable_deferred_expense === 1 && (
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography sx={{ marginBottom: 2 }}>Deferred Expense Account</Typography>
-                <TextField
-                  fullWidth
-                  size='small'
-                  variant='filled'
-                  value={dataRow.deferred_revenue_account || ''}
-                  name='deferred_revenue_account'
-                  onChange={handleTextChange}
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Deferred Revenue</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Divider sx={{ margin: 0 }} />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name='enable_deferred_expense'
+                  checked={Boolean(dataRow.enable_deferred_expense)}
+                  onChange={handleCheckboxChange}
                 />
+              }
+              label='Enable Deferred Expense'
+            />
+            {dataRow.enable_deferred_expense === 1 && (
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography sx={{ marginBottom: 2 }}>Deferred Expense Account</Typography>
+                  <TextField
+                    fullWidth
+                    disabled
+                    variant='outlined'
+                    name='deferred_revenue_account'
+                    value={dataRow.deferred_revenue_account}
+                    onChange={handleTextChange}
+                    sx={{
+                      backgroundColor: 'grey.100'
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography sx={{ marginBottom: 2 }}>No of Months (Expense)</Typography>
+                  <TextField
+                    fullWidth
+                    variant='outlined'
+                    name='no_of_months'
+                    value={dataRow.no_of_months}
+                    onChange={handleTextChange}
+                    sx={{
+                      backgroundColor: 'grey.100'
+                    }}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <Typography sx={{ marginBottom: 2 }}>No of Months (Expense)</Typography>
-                <TextField
-                  fullWidth
-                  size='small'
-                  variant='filled'
-                  value={
-                    dataRow.no_of_months === '0.0'
-                      ? ' 0.0'
-                      : parseFloat(dataRow.no_of_months).toLocaleString('en-US', {
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 0
-                        })
-                  }
-                  name='no_of_months'
-                  onChange={handleTextChange}
-                />
-              </Grid>
-            </Grid>
-          )}
-        </Collapse>
-        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-        <Button size='small' variant='filled' label='' onClick={handleCustomer} sx={{ fontWeight: 'bold' }}>
-          Customer Details
-        </Button>
+            )}
+          </AccordionDetails>
+        </Accordion>
 
-        <IconButton size='small' onClick={handleCustomer}>
-          {collapseCustomerOpen ? (
-            <ChevronUp sx={{ fontSize: '1.875rem' }} />
-          ) : (
-            <ChevronDown sx={{ fontSize: '1.875rem' }} />
-          )}
-        </IconButton>
-
-        <Collapse in={collapseCustomerOpen}>
-          <Divider sx={{ margin: 0 }} />
-          <CardContent>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography> Customer Details</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Divider />
             <Typography variant='subtitle2' sx={{ marginBottom: 2 }}>
               Customer Items
             </Typography>
-
             <DataGrid
+              style={styles.dataGrid}
               rows={dataRow.customer_items}
               columns={columnsCustomer}
               getRowId={row => row.name} // ระบุ id โดยใช้ค่า name
@@ -203,8 +198,8 @@ const SalesItem = ({ dataRow, handleUpdateData }) => {
             <Button variant='contained' sx={{ marginTop: 2 }}>
               Add Row
             </Button>
-          </CardContent>
-        </Collapse>
+          </AccordionDetails>
+        </Accordion>
       </Card>
     </Box>
   )

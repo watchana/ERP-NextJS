@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react'
 
 // ** Mui Import
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Card,
   CardContent,
@@ -16,6 +19,9 @@ import {
   TextField,
   Typography
 } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+
+// ** Mdi Import
 import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 
@@ -47,180 +53,183 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
 
   if (!dataRow) return <Skeleton variant='rounded' width={210} height={60} />
 
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
+
   return (
     <Box>
-      <Card
-        sx={{
-          borderTopLeftRadius: 0,
-          borderTopRightRadius: 0,
-          p: 2
-        }}
-      >
-        <Grid container spacing={2} style={{ width: '100%', display: 'flex' }}>
+      <Card sx={styles.card}>
+        <Grid container spacing={3}>
           <Grid item sm={12} md={6}>
-            <Typography>Item Name</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              fullWidth
-              size='small'
-              variant='filled'
-              value={dataRow.item_name || ''}
-              name='item_name'
-              onChange={handleTextChange}
-            />
-            <Typography>Item Group</Typography>
-            <TextField
-              disabled
-              sx={{ marginBottom: 5 }}
-              fullWidth
-              size='small'
-              variant='filled'
-              label=''
-              value={dataRow.item_group || ''}
-              name='item_group'
-              onChange={handleTextChange}
-            />
-            <Typography>Default Unit of Measure</Typography>
-            <TextField
-              disabled
-              sx={{ marginBottom: 5 }}
-              fullWidth
-              size='small'
-              variant='filled'
-              label=''
-              value={dataRow.stock_uom || ''}
-              name='stock_uom'
-              onChange={handleTextChange}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} lg={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={dataRow.disabled === 1 ? true : false}
-                  name='disabled'
-                  onChange={handleCheckboxChange}
-                />
-              }
-              label='Disabled'
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={dataRow.allow_alternative_item === 1 ? true : false}
-                  name='allow_alternative_item'
-                  onChange={handleCheckboxChange}
-                />
-              }
-              label='Allow Alternative Item'
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={dataRow.is_stock_item === 1 ? true : false}
-                  name='is_stock_item'
-                  onChange={handleCheckboxChange}
-                />
-              }
-              label='Maintain Stock'
-            />
-            <FormControlLabel
-              control={<Checkbox disabled checked={Boolean(dataRow.has_variants) === 1 ? true : false} />}
-              label='Has Variants'
-            />
-
-            {valuationRateOpen && (
-              <>
-                <Typography sx={{ mt: 4 }}>Valuation Rate</Typography>
-                <TextField
-                  sx={{ marginBottom: 5 }}
-                  fullWidth
-                  size='small'
-                  variant='filled'
-                  type='number'
-                  value={dataRow.valuation_rate || ''}
-                  name='valuation_rate'
-                  onChange={handleTextChange}
-                />
-              </>
-            )}
-
-            <Box sx={{ display: 'flex' }}>
-              <Checkbox
-                checked={dataRow.is_fixed_asset === 1 ? true : false}
-                name='is_fixed_asset'
-                onChange={handleCheckboxChange}
+            <Box sx={styles.box}>
+              <Typography>Item Name</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='item_name'
+                value={dataRow.item_name}
+                onChange={handleTextChange}
+                sx={styles.textField}
               />
-              <Typography sx={{ m: 2 }}>Is Fixed Asset</Typography>
             </Box>
 
-            <Typography>Over Delivery / Receipt Allowance (%)</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              fullWidth
-              size='small'
-              variant='filled'
-              type='number'
-              value={dataRow.over_delivery_receipt_allowance}
-              name='over_delivery_receipt_allowance'
-              onChange={handleTextChange}
-            />
+            <Box sx={styles.box}>
+              <Typography>Item Group</Typography>
+              <TextField
+                fullWidth
+                disabled
+                variant='outlined'
+                name='item_group'
+                value={dataRow.item_group}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
 
-            <Typography>Over Billing Allowance (%)</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              fullWidth
-              size='small'
-              variant='filled'
-              type='number'
-              value={dataRow.over_billing_allowance}
-              name='over_billing_allowance'
-              onChange={handleTextChange}
-            />
+            <Box sx={styles.box}>
+              <Typography>Default Unit of Measure</Typography>
+              <TextField
+                fullWidth
+                disabled
+                variant='outlined'
+                name='stock_uom'
+                value={dataRow.stock_uom}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
+          </Grid>
+
+          <Grid item sm={12} md={6} sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Box sx={styles.box}>
+              <FormControlLabel
+                control={
+                  <Checkbox checked={Boolean(dataRow.disabled)} name='disabled' onChange={handleCheckboxChange} />
+                }
+                label='Disabled'
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={Boolean(dataRow.allow_alternative_item)}
+                    name='allow_alternative_item'
+                    onChange={handleCheckboxChange}
+                  />
+                }
+                label='Allow Alternative Item'
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={Boolean(dataRow.is_stock_item)}
+                    name='is_stock_item'
+                    onChange={handleCheckboxChange}
+                  />
+                }
+                label='Maintain Stock'
+              />
+              <FormControlLabel
+                control={<Checkbox disabled checked={Boolean(dataRow.has_variants)} />}
+                label='Has Variants'
+              />
+            </Box>
+
+            {valuationRateOpen && (
+              <Box sx={styles.box}>
+                <Typography>Valuation Rate</Typography>
+                <TextField
+                  fullWidth
+                  variant='outlined'
+                  type='number'
+                  name='valuation_rate'
+                  value={dataRow.valuation_rate}
+                  onChange={handleTextChange}
+                  sx={styles.textField}
+                />
+              </Box>
+            )}
+
+            <Box sx={styles.box}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    disabled
+                    checked={Boolean(dataRow.is_fixed_asset)}
+                    name='is_fixed_asset'
+                    onChange={handleCheckboxChange}
+                  />
+                }
+                label='Has Variants'
+              />
+            </Box>
+
+            <Box sx={styles.box}>
+              <Typography>Over Delivery / Receipt Allowance (%)</Typography>
+            </Box>
+
+            <Box sx={styles.box}>
+              <Typography>Over Billing Allowance (%)</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                type='number'
+                name='over_billing_allowance'
+                value={dataRow.over_billing_allowance}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
           </Grid>
         </Grid>
-        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-        <Grid item xs={12} sx={{ display: 'flex', marginBlock: 2, flexDirection: 'column' }}>
-          <Box onClick={handleClickDescription} sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ fontWeight: 'medium' }}>Description</Typography>
-            <IconButton size='small' disabled>
-              {descriptionOpen ? <ChevronUp /> : <ChevronDown />}
-            </IconButton>
-          </Box>
-          <Collapse in={descriptionOpen}>
+
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Description</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <Box sx={{ p: 2 }}>
               <Divider />
               <Typography variant='subtitle2'>Description</Typography>
               <TextField
                 fullWidth
                 multiline
-                variant='filled'
+                size='small'
+                variant='outlined'
                 rows={4}
-                value={dataRow.description || ''}
+                value={dataRow.description}
                 name='description'
                 onChange={handleTextChange}
-                sx={{
-                  bgcolor: 'theme.palette.background.paper'
-                }}
+                sx={styles.textField}
               />
 
               <Box>
                 <Typography variant='subtitle1'>Brand</Typography>
                 <TextField
                   fullWidth
+                  disabled
                   size='small'
-                  variant='filled'
+                  variant='outlined'
                   name='brand'
                   value={dataRow.brand}
                   onChange={handleTextChange}
-                  sx={{
-                    backgroundColor: 'theme.palette.background.paper'
-                  }}
+                  sx={styles.textField}
                 />
               </Box>
             </Box>
-          </Collapse>
-        </Grid>
+          </AccordionDetails>
+        </Accordion>
       </Card>
     </Box>
   )

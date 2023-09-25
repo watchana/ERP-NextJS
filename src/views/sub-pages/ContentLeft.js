@@ -29,7 +29,7 @@ import Image from 'next/image'
 import sortAscending from 'public/images/icons/sort-ascending.png'
 import sortDescending from 'public/images/icons/sort-descending.png'
 
-const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) => {
+const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName, sideContentOpen }) => {
   // ** States
   const errorColor = red[500]
   const [showData, setShowData] = useState(data)
@@ -137,18 +137,21 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
           {doctype}
         </Typography>
         <Button variant='contained' color='primary' size='small'>
-          Create {doctype}
+          + Add {doctype}
         </Button>
       </Box>
       <Box sx={{ backgroundColor: 'background.paper', borderRadius: '10px', pb: -1 }}>
-        <Grid container spacing={2} rowSpacing={2}>
-          <Grid item xs={12} sm={6} sx={{ p: 2, ml: 2 }}>
-            <TextField fullWidth variant='outlined' size='small' label='ID Search' onChange={handleIDSearch} />
+        <Grid container spacing={3} rowSpacing={2}>
+          <Grid item xs={sideContentOpen !== true ? 6 : 12}>
+            <Box sx={{ mx: 2 }}>
+              <TextField fullWidth variant='outlined' size='small' label='ID Search' onChange={handleIDSearch} />
+            </Box>
           </Grid>
-          <Grid item xs sx={{ p: 2, justifyContent: 'end', display: 'flex' }}>
-            <ButtonGroup variant='outlined'>
+          <Grid item xs={sideContentOpen !== true ? 6 : 12}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mx: 2 }}>
               {sort === 'asc' ? (
                 <IconButton
+                  color='primary'
                   sx={{
                     width: 40,
                     height: 40,
@@ -164,6 +167,7 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
                 </IconButton>
               ) : (
                 <IconButton
+                  color='primary'
                   sx={{
                     width: 40,
                     height: 40,
@@ -179,30 +183,28 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName }) 
                 </IconButton>
               )}
               <Button
-                id='basic-button'
+                fullWidth={sideContentOpen !== true ? false : true}
                 aria-controls={sortOptionOpen ? 'basic-menu' : undefined}
                 aria-haspopup='true'
                 aria-expanded={sortOptionOpen ? 'true' : undefined}
                 onClick={handleSortOptionClick}
+                variant='outlined'
+                sx={{
+                  borderTopLeftRadius: '0',
+                  borderBottomLeftRadius: '0',
+                  height: 40
+                }}
               >
                 {sortOption}
               </Button>
-              <Menu
-                id='basic-menu'
-                anchorEl={anchorEl}
-                open={sortOptionOpen}
-                onClose={() => handleSortOptionClose(sortOption)}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button'
-                }}
-              >
+              <Menu anchorEl={anchorEl} open={sortOptionOpen} onClose={() => handleSortOptionClose(sortOption)}>
                 {sortOptions.map(option => (
                   <MenuItem key={option} onClick={() => handleSortOptionClose(option)}>
                     {option}
                   </MenuItem>
                 ))}
               </Menu>
-            </ButtonGroup>
+            </Box>
           </Grid>
 
           <Grid item xs={12}>
