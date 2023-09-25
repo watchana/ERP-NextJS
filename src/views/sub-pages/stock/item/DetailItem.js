@@ -8,42 +8,28 @@ import {
   AccordionSummary,
   Box,
   Card,
-  CardContent,
   Checkbox,
-  Collapse,
   Divider,
   FormControlLabel,
   Grid,
-  IconButton,
   Skeleton,
   TextField,
   Typography
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-// ** Mdi Import
-import ChevronUp from 'mdi-material-ui/ChevronUp'
-import ChevronDown from 'mdi-material-ui/ChevronDown'
-
 const DetailItem = ({ dataRow, handleUpdateData }) => {
-  const [descriptionOpen, setDescriptionOpen] = useState(false)
   const [valuationRateOpen, setValuationRateOpen] = useState(dataRow.is_stock_item === 1 ? true : false)
-
-  const handleClickDescription = () => {
-    setDescriptionOpen(!descriptionOpen)
-  }
 
   const handleCheckboxChange = event => {
     const { name } = event.target
     if (name === 'is_stock_item') {
       setValuationRateOpen(!valuationRateOpen)
     }
-    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
     handleUpdateData(name, event.target.checked === true ? 1 : 0)
   }
 
   const handleTextChange = event => {
-    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
     handleUpdateData(event.target.name, event.target.value)
   }
 

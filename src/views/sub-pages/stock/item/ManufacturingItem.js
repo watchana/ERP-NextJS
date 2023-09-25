@@ -1,29 +1,26 @@
 // ** React Imports
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 // MUI imports
 import { Box, Typography, Checkbox, Card, Grid, TextField, Skeleton } from '@mui/material'
 
 const ManufacturingItem = ({ dataRow, handleUpdateData }) => {
   const handleCheckboxChange = event => {
-    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-
     handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
   }
 
-  if (!dataRow) return <Skeleton variant='rounded' width={210} height={60} />
-
   const handleTextChange = event => {
-    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
     handleUpdateData(event.target.name, event.target.value)
   }
+
+  if (!dataRow) return <Skeleton variant='rounded' width={210} height={60} />
 
   return (
     <Box>
       <Card
         sx={{
-          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
-          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
           p: 2,
           mb: 2,
           width: '100%'

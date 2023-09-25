@@ -8,10 +8,7 @@ import {
   TextField,
   Checkbox,
   Button,
-  IconButton,
-  Collapse,
   Divider,
-  CardContent,
   FormControlLabel,
   Card,
   Grid,
@@ -35,24 +32,11 @@ const columnsCustomer = [
 ]
 
 const SalesItem = ({ dataRow, handleUpdateData }) => {
-  const [collapseDeferredOpen, setCollapseDeferredOpen] = useState(false)
-  const [collapseCustomerOpen, setCollapseCustomerOpen] = useState(false)
-
-  const handleDeferred = () => {
-    setCollapseDeferredOpen(!collapseDeferredOpen)
-  }
-
-  const handleCustomer = () => {
-    setCollapseCustomerOpen(!collapseCustomerOpen)
-  }
-
   const handleCheckboxChange = event => {
-    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
     handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
   }
 
   const handleTextChange = event => {
-    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
     handleUpdateData(event.target.name, event.target.value)
   }
 

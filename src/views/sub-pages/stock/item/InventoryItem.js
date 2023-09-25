@@ -9,21 +9,24 @@ import {
   Button,
   Card,
   Checkbox,
-  Collapse,
   Divider,
   FormControlLabel,
   Grid,
   MenuItem,
   Select,
+  Skeleton,
   TextField,
   Typography
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
+// ** MUI X Imports
 import { DataGrid } from '@mui/x-data-grid'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs from 'dayjs'
 
-// ** MDI Imports
-import { ChevronDown, ChevronUp } from 'mdi-material-ui'
+// import isBefore from 'dayjs/plugin/isBefore'
 
 // ** Columns for DataGrid
 const columnsBarcode = [
@@ -55,9 +58,7 @@ const columnsUOM = [
 import { defaultMaterialRequestType, valuationMethod } from 'src/dummy/sub-pages/stock/itemPage'
 
 const InventoryItem = ({ dataRow, handleUpdateData }) => {
-  const [openAutoReorder, setOpenAutoReorder] = React.useState(false)
-  const [openUnitsOfMeasure, setOpenUnitsOfMeasure] = React.useState(false)
-  const [openSerialNosBatches, setOpenSerialNosBatches] = React.useState(false)
+  const endOfLifeDate = dayjs(dataRow.end_of_life)
 
   const styles = {
     dataGridHeight: {
@@ -70,19 +71,23 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
   }
 
   const handleCheckboxChange = event => {
-    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
     handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
   }
 
   const handleTextChange = event => {
-    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
     handleUpdateData(event.target.name, event.target.value)
   }
 
   const handleSelectChange = event => {
-    console.log('Select ถูกเปลี่ยนแปลงเป็น:', event.target.value)
     handleUpdateData(event.target.name, event.target.value)
   }
+
+  const handleDateChange = (name, date) => {
+    const formattedDate = dayjs(date).format('YYYY-MM-DD')
+    handleUpdateData(name, formattedDate)
+  }
+
+  if (!dataRow) return <Skeleton variant='rounded' width={210} height={60} />
 
   return (
     <Box>
@@ -93,150 +98,184 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
           p: 2
         }}
       >
-        <Grid container rowSpacing={2}>
-          <Grid item xs={12}>
-            <Typography variant='body1' sx={{ marginBlock: 2 }}>
-              Inventory Settings
-            </Typography>
-            <Grid container spacing={4}>
-              <Grid item xs={12} md={6}>
-                <Box sx={styles.BoxStyle}>
-                  <Typography variant='subtitle2' sx={{ my: 2 }}>
-                    Shelf Life In Days
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    variant='outlined'
-                    name='shelf_life_in_days'
-                    value={dataRow.shelf_life_in_days}
-                    onChange={handleTextChange}
-                    sx={{
-                      backgroundColor: 'grey.100'
-                    }}
-                  />
-                </Box>
-
-                <Box sx={styles.BoxStyle}>
-                  <Typography variant='subtitle2' sx={{ my: 2 }}>
-                    End of Life
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    variant='outlined'
-                    name='end_of_life'
-                    value={dataRow.end_of_life}
-                    onChange={handleTextChange}
-                    sx={{
-                      backgroundColor: 'grey.100'
-                    }}
-                  />
-                </Box>
-
-                <Box sx={styles.BoxStyle}>
-                  <Typography variant='subtitle2' sx={{ my: 2 }}>
-                    Default Material Request Type
-                  </Typography>
-                  <Select
-                    fullWidth
-                    name='default_material_request_type'
-                    value={dataRow.default_material_request_type}
-                    onChange={handleSelectChange}
-                    sx={{
-                      backgroundColor: 'grey.100'
-                    }}
-                  >
-                    {defaultMaterialRequestType.map(item => (
-                      <MenuItem key={item.id} value={item.name}>
-                        {item.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </Box>
-
-                <Box sx={styles.BoxStyle}>
-                  <Typography variant='subtitle2' sx={{ my: 2 }}>
-                    Valuation Method
-                  </Typography>
-                  <Select
-                    fullWidth
-                    name='valuation_method'
-                    value={dataRow.valuation_method}
-                    onChange={handleSelectChange}
-                    sx={{
-                      backgroundColor: 'grey.100'
-                    }}
-                  >
-                    {valuationMethod.map(item => (
-                      <MenuItem key={item.id} value={item.name}>
-                        {item.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </Box>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Box sx={styles.BoxStyle}>
-                  <Typography variant='subtitle2' sx={{ my: 2 }}>
-                    Warranty Period (in days)
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    variant='outlined'
-                    sx={{
-                      backgroundColor: 'grey.100'
-                    }}
-                  />
-                </Box>
-
-                <Box sx={styles.BoxStyle}>
-                  <Typography variant='subtitle2' sx={{ my: 2 }}>
-                    Weight Per Unit
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    variant='outlined'
-                    name='weight_per_unit'
-                    value={dataRow.weight_per_unit}
-                    onChange={handleTextChange}
-                    sx={{
-                      backgroundColor: 'grey.100'
-                    }}
-                  />
-                </Box>
-
-                <Box sx={styles.BoxStyle}>
-                  <Typography variant='subtitle2' sx={{ my: 2 }}>
-                    Weight UOM
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    disabled
-                    variant='outlined'
-                    name='weight_uom'
-                    value={dataRow.weight_uom}
-                    onChange={handleTextChange}
-                    sx={{
-                      backgroundColor: 'grey.100'
-                    }}
-                  />
-                </Box>
-
-                <Box sx={styles.BoxStyle}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={Boolean(dataRow.allow_negative_stock)}
-                        name='allow_negative_stock'
-                        onChange={handleCheckboxChange}
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Inventory Settings</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid container rowSpacing={2}>
+              <Grid item xs={12}>
+                <Grid container spacing={4}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.BoxStyle}>
+                      <Typography variant='subtitle2' sx={{ my: 2 }}>
+                        Shelf Life In Days
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        variant='outlined'
+                        name='shelf_life_in_days'
+                        value={dataRow.shelf_life_in_days}
+                        onChange={handleTextChange}
+                        sx={{
+                          backgroundColor: 'grey.100'
+                        }}
                       />
-                    }
-                    label='Allow Negative Stock'
-                  />
-                </Box>
+                    </Box>
+
+                    <Box sx={styles.BoxStyle}>
+                      <Typography variant='subtitle2' sx={{ my: 2 }}>
+                        End of Life
+                      </Typography>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                          sx={{
+                            backgroundColor: 'grey.100',
+                            width: '100%'
+                          }}
+                          views={['year', 'month', 'day']}
+                          value={endOfLifeDate}
+                          onChange={date => handleDateChange('end_of_life', date)}
+                        />
+                      </LocalizationProvider>
+                    </Box>
+
+                    <Box sx={styles.BoxStyle}>
+                      <Typography variant='subtitle2' sx={{ my: 2 }}>
+                        Default Material Request Type
+                      </Typography>
+                      <Select
+                        fullWidth
+                        name='default_material_request_type'
+                        value={dataRow.default_material_request_type}
+                        onChange={handleSelectChange}
+                        sx={{
+                          backgroundColor: 'grey.100'
+                        }}
+                      >
+                        {defaultMaterialRequestType.map(item => (
+                          <MenuItem key={item.id} value={item.name}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </Box>
+
+                    <Box sx={styles.BoxStyle}>
+                      <Typography variant='subtitle2' sx={{ my: 2 }}>
+                        Valuation Method
+                      </Typography>
+                      <Select
+                        fullWidth
+                        name='valuation_method'
+                        value={dataRow.valuation_method}
+                        onChange={handleSelectChange}
+                        sx={{
+                          backgroundColor: 'grey.100'
+                        }}
+                      >
+                        {valuationMethod.map(item => (
+                          <MenuItem key={item.id} value={item.name}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.BoxStyle}>
+                      <Typography variant='subtitle2' sx={{ my: 2 }}>
+                        Warranty Period (in days)
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        variant='outlined'
+                        sx={{
+                          backgroundColor: 'grey.100'
+                        }}
+                      />
+                    </Box>
+
+                    <Box sx={styles.BoxStyle}>
+                      <Typography variant='subtitle2' sx={{ my: 2 }}>
+                        Weight Per Unit
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        variant='outlined'
+                        name='weight_per_unit'
+                        value={dataRow.weight_per_unit}
+                        onChange={handleTextChange}
+                        sx={{
+                          backgroundColor: 'grey.100'
+                        }}
+                      />
+                    </Box>
+
+                    <Box sx={styles.BoxStyle}>
+                      <Typography variant='subtitle2' sx={{ my: 2 }}>
+                        Weight UOM
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        disabled
+                        variant='outlined'
+                        name='weight_uom'
+                        value={dataRow.weight_uom}
+                        onChange={handleTextChange}
+                        sx={{
+                          backgroundColor: 'grey.100'
+                        }}
+                      />
+                    </Box>
+
+                    <Box sx={styles.BoxStyle}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={Boolean(dataRow.allow_negative_stock)}
+                            name='allow_negative_stock'
+                            onChange={handleCheckboxChange}
+                          />
+                        }
+                        label='Allow Negative Stock'
+                      />
+                    </Box>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Grid>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Barcodes</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box sx={{ p: 2 }}>
+              <Typography variant='subtitle2' sx={{ my: 2 }}>
+                Barcodes
+              </Typography>
+              <DataGrid
+                sx={{ height: dataRow.taxes.length === 0 ? 300 : 'auto' }}
+                rows={[]}
+                columns={columnsBarcode}
+                getRowId={row => row.name}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 }
+                  }
+                }}
+                pageSizeOptions={[5, 10]}
+                checkboxSelection
+              />
+              <Button variant='contained' size='small' sx={{ my: 2 }}>
+                Add Row
+              </Button>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
 
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
