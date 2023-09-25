@@ -99,38 +99,49 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
           </Grid>
 
           <Grid item sm={12} md={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Box sx={styles.box}>
-              <FormControlLabel
-                control={
-                  <Checkbox checked={Boolean(dataRow.disabled)} name='disabled' onChange={handleCheckboxChange} />
-                }
-                label='Disabled'
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={Boolean(dataRow.allow_alternative_item)}
-                    name='allow_alternative_item'
-                    onChange={handleCheckboxChange}
-                  />
-                }
-                label='Allow Alternative Item'
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={Boolean(dataRow.is_stock_item)}
-                    name='is_stock_item'
-                    onChange={handleCheckboxChange}
-                  />
-                }
-                label='Maintain Stock'
-              />
-              <FormControlLabel
-                control={<Checkbox disabled checked={Boolean(dataRow.has_variants)} />}
-                label='Has Variants'
-              />
-            </Box>
+            <Grid container>
+              <Grid item xs={12} sm={6} md={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox checked={Boolean(dataRow.disabled)} name='disabled' onChange={handleCheckboxChange} />
+                  }
+                  label='Disabled'
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={Boolean(dataRow.allow_alternative_item)}
+                      name='allow_alternative_item'
+                      onChange={handleCheckboxChange}
+                    />
+                  }
+                  label='Allow Alternative Item'
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={Boolean(dataRow.is_stock_item)}
+                      name='is_stock_item'
+                      onChange={handleCheckboxChange}
+                    />
+                  }
+                  label='Maintain Stock'
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={12}>
+                <FormControlLabel
+                  control={<Checkbox disabled checked={Boolean(dataRow.has_variants)} />}
+                  label='Has Variants'
+                />
+              </Grid>
+            </Grid>
 
             {valuationRateOpen && (
               <Box sx={styles.box}>
