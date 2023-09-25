@@ -42,6 +42,7 @@ const SubPages = ({
   setData,
   menuContent,
   showContent,
+  noTabContent,
   dataRow,
   setDataRow,
   doctype,
@@ -317,25 +318,29 @@ const SubPages = ({
                   </Grid>
 
                   <Grid item xs={12}>
-                    <TabContext value={tabValue.toString()}>
-                      <Tabs
-                        value={tabValue}
-                        onChange={handleTabChange}
-                        variant='scrollable'
-                        scrollButtons
-                        allowScrollButtonsMobile
-                        sx={tabStyles}
-                      >
-                        {menuContent?.map(item => (
-                          <Tab value={item.id} label={item.name} key={item.id} />
+                    {menuContent.length > 0 ? (
+                      <TabContext value={tabValue.toString()}>
+                        <Tabs
+                          value={tabValue}
+                          onChange={handleTabChange}
+                          variant='scrollable'
+                          scrollButtons
+                          allowScrollButtonsMobile
+                          sx={tabStyles}
+                        >
+                          {menuContent?.map(item => (
+                            <Tab value={item.id} label={item.name} key={item.id} />
+                          ))}
+                        </Tabs>
+                        {showContent.map((component, index) => (
+                          <TabPanel value={(index + 1).toString()} key={index + 1}>
+                            <Box sx={{ m: -3 }}>{component}</Box>
+                          </TabPanel>
                         ))}
-                      </Tabs>
-                      {showContent.map((component, index) => (
-                        <TabPanel value={(index + 1).toString()} key={index + 1}>
-                          <Box sx={{ m: -3 }}>{component}</Box>
-                        </TabPanel>
-                      ))}
-                    </TabContext>
+                      </TabContext>
+                    ) : (
+                      { noTabContent }
+                    )}
                   </Grid>
 
                   <Grid item xs={12}>
