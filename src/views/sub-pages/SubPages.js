@@ -329,7 +329,7 @@ const SubPages = ({
                   </Grid>
 
                   <Grid item xs={12}>
-                    {menuContent.length > 0 ? (
+                    {menuContent !== undefined && menuContent.length > 0 ? (
                       <TabContext value={tabValue.toString()}>
                         <Tabs
                           value={tabValue}

@@ -147,8 +147,6 @@ const ChartofAccounts = ({ dataRow, setDataRow }) => {
     <Box>
       <Card
         sx={{
-          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
-          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
           p: 2,
           mb: 2
         }}
