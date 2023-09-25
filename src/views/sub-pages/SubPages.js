@@ -63,14 +63,25 @@ const SubPages = ({
   const [saveWarning, setSaveWarning] = useState(false)
   const [dataRowModified, setDataRowModified] = useState(null)
 
-  const tabStyles = {
-    backgroundColor: 'primary.light',
-    '& .MuiTab-root.Mui-selected': {
-      color: 'white',
-      backgroundColor: 'primary.main'
+  const getCardCommentStyle = menuContentLength => {
+    if (menuContentLength > 0) {
+      return { marginBlock: 4, p: 2 }
+    }
+
+    return { marginBlock: 4, p: 2, mr: 3 }
+  }
+
+  const styles = {
+    tabPanel: {
+      backgroundColor: 'primary.light',
+      '& .MuiTab-root.Mui-selected': {
+        color: 'white',
+        backgroundColor: 'primary.main'
+      },
+      borderTopLeftRadius: '10px',
+      borderTopRightRadius: '10px'
     },
-    borderTopLeftRadius: '10px',
-    borderTopRightRadius: '10px'
+    cardComment: getCardCommentStyle(menuContent.length)
   }
 
   const StatusChip = ({ editStatus, docStatus, docStatusName }) => {
@@ -326,7 +337,7 @@ const SubPages = ({
                           variant='scrollable'
                           scrollButtons
                           allowScrollButtonsMobile
-                          sx={tabStyles}
+                          sx={styles.tabPanel}
                         >
                           {menuContent?.map(item => (
                             <Tab value={item.id} label={item.name} key={item.id} />
@@ -339,12 +350,12 @@ const SubPages = ({
                         ))}
                       </TabContext>
                     ) : (
-                      { noTabContent }
+                      <Box sx={{ mr: 3 }}>{noTabContent}</Box>
                     )}
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Card sx={{ marginBlock: 4, p: 2 }}>
+                    <Card sx={styles.cardComment}>
                       <Typography variant='h6' sx={{ my: 2 }}>
                         Add Comment
                       </Typography>
