@@ -15,13 +15,13 @@ const Account = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
   const [dataList, setDataList] = React.useState(data)
 
-  const showContent = [<ChartofAccounts key={'detail'} dataRow={dataRow} setDataRow={setDataRow} />]
-
   return (
     <SubPages
       data={dataList}
       setData={setDataList}
-      showContent={showContent}
+      menuContent={[]}
+      showContent={[]}
+      noTabContent={<ChartofAccounts dataRow={dataRow} setDataRow={setDataRow} />}
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='Account'

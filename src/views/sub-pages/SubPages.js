@@ -42,6 +42,7 @@ const SubPages = ({
   setData,
   menuContent,
   showContent,
+  noTabContent,
   dataRow,
   setDataRow,
   doctype,
@@ -62,14 +63,25 @@ const SubPages = ({
   const [saveWarning, setSaveWarning] = useState(false)
   const [dataRowModified, setDataRowModified] = useState(null)
 
-  const tabStyles = {
-    backgroundColor: 'primary.light',
-    '& .MuiTab-root.Mui-selected': {
-      color: 'white',
-      backgroundColor: 'primary.main'
+  const getCardCommentStyle = menuContentLength => {
+    if (menuContentLength > 0) {
+      return { marginBlock: 4, p: 2 }
+    }
+
+    return { marginBlock: 4, p: 2, mr: 3 }
+  }
+
+  const styles = {
+    tabPanel: {
+      backgroundColor: 'primary.light',
+      '& .MuiTab-root.Mui-selected': {
+        color: 'white',
+        backgroundColor: 'primary.main'
+      },
+      borderTopLeftRadius: '10px',
+      borderTopRightRadius: '10px'
     },
-    borderTopLeftRadius: '10px',
-    borderTopRightRadius: '10px'
+    cardComment: getCardCommentStyle(menuContent.length)
   }
 
   const StatusChip = ({ editStatus, docStatus, docStatusName }) => {
@@ -317,29 +329,33 @@ const SubPages = ({
                   </Grid>
 
                   <Grid item xs={12}>
-                    <TabContext value={tabValue.toString()}>
-                      <Tabs
-                        value={tabValue}
-                        onChange={handleTabChange}
-                        variant='scrollable'
-                        scrollButtons
-                        allowScrollButtonsMobile
-                        sx={tabStyles}
-                      >
-                        {menuContent?.map(item => (
-                          <Tab value={item.id} label={item.name} key={item.id} />
+                    {menuContent !== undefined && menuContent.length > 0 ? (
+                      <TabContext value={tabValue.toString()}>
+                        <Tabs
+                          value={tabValue}
+                          onChange={handleTabChange}
+                          variant='scrollable'
+                          scrollButtons
+                          allowScrollButtonsMobile
+                          sx={styles.tabPanel}
+                        >
+                          {menuContent?.map(item => (
+                            <Tab value={item.id} label={item.name} key={item.id} />
+                          ))}
+                        </Tabs>
+                        {showContent.map((component, index) => (
+                          <TabPanel value={(index + 1).toString()} key={index + 1}>
+                            <Box sx={{ m: -3 }}>{component}</Box>
+                          </TabPanel>
                         ))}
-                      </Tabs>
-                      {showContent.map((component, index) => (
-                        <TabPanel value={(index + 1).toString()} key={index + 1}>
-                          <Box sx={{ m: -3 }}>{component}</Box>
-                        </TabPanel>
-                      ))}
-                    </TabContext>
+                      </TabContext>
+                    ) : (
+                      <Box sx={{ mr: 3 }}>{noTabContent}</Box>
+                    )}
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Card sx={{ marginBlock: 4, p: 2 }}>
+                    <Card sx={styles.cardComment}>
                       <Typography variant='h6' sx={{ my: 2 }}>
                         Add Comment
                       </Typography>

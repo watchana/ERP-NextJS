@@ -4,16 +4,15 @@ import React from 'react'
 // ** MUI Imports
 import { Box, Button, Typography, Card, Skeleton } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
-import axios from 'axios'
+
+const columnsAcc = [
+  { field: 'idx', headerName: 'No', width: 70 },
+  { field: 'company', headerName: 'Company', width: 150 },
+  { field: 'default_warehouse', headerName: 'Default Warehouse', width: 200 },
+  { field: 'default_price_list', headerName: 'Default Price List', width: 200 }
+]
 
 const AccountingItem = ({ dataRow }) => {
-  const columnsAcc = [
-    { field: 'idx', headerName: 'No', width: 70 },
-    { field: 'company', headerName: 'Company', width: 150 },
-    { field: 'default_warehouse', headerName: 'Default Warehouse', width: 200 },
-    { field: 'default_price_list', headerName: 'Default Price List', width: 200 }
-  ]
-
   if (!dataRow) return <Skeleton variant='rounded' width={210} height={60} />
 
   return (

@@ -1,46 +1,11 @@
 // ** React Imports
 import React from 'react'
 
-import { useState } from 'react'
-
 // ** MUI imports
-import {
-  Box,
-  Button,
-  CardContent,
-  Collapse,
-  Divider,
-  IconButton,
-  Grid,
-  Card,
-  Accordion,
-  AccordionSummary,
-  Typography,
-  AccordionDetails,
-  TextField
-} from '@mui/material'
+import { Box, Grid, Card, Accordion, AccordionSummary, Typography, AccordionDetails } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-// ** Mdi Imports
-import { ChevronDown, ChevronUp } from 'mdi-material-ui'
-
 const DashboardItem = ({ dataRow }) => {
-  const [acrivity, setInternalActivity] = useState(false)
-  const [stats, setInternalStats] = useState(false)
-  const [connections, setInternalConnections] = useState(false)
-
-  const handleClickAcrivity = () => {
-    setInternalActivity(!acrivity)
-  }
-
-  const handleClickStats = () => {
-    setInternalStats(!stats)
-  }
-
-  const handleClickConnections = () => {
-    setInternalConnections(!connections)
-  }
-
   return (
     <Box>
       <Card

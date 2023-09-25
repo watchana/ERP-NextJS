@@ -6,14 +6,9 @@ import { DataGrid } from '@mui/x-data-grid'
 import {
   Box,
   Button,
-  CardContent,
   Checkbox,
-  Collapse,
-  Divider,
-  IconButton,
   TextField,
   Typography,
-  FormGroup,
   FormControlLabel,
   Card,
   Grid,
@@ -23,10 +18,6 @@ import {
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-//Icon
-import ChevronUp from 'mdi-material-ui/ChevronUp'
-import ChevronDown from 'mdi-material-ui/ChevronDown'
-
 const columnsSupplierItem = [
   { field: 'id', headerName: 'No', width: 70 },
   { field: 'Barcodes', headerName: 'Barcodes', width: 150 },
@@ -34,26 +25,11 @@ const columnsSupplierItem = [
 ]
 
 const PurchasingItem = ({ dataRow, handleUpdateData }) => {
-  const [collapseStates, setCollapseStates] = useState({
-    supplierDetails: false,
-    deferredExpense: false,
-    foreignTradeDetails: false
-  })
-
-  const toggleCollapse = useCallback(section => {
-    setCollapseStates(prevState => ({
-      ...prevState,
-      [section]: !prevState[section]
-    }))
-  }, [])
-
   const handleCheckboxChange = event => {
-    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
     handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
   }
 
   const handleTextChange = event => {
-    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
     handleUpdateData(event.target.name, event.target.value)
   }
 
