@@ -27,7 +27,7 @@ import { ChevronDown, ChevronUp } from 'mdi-material-ui'
 const JournalEntryComp = ({ dataRow, setDataRow }) => {
   const [openCalendar, setOpenCalendar] = useState(false)
   const [selectedDate, setSelectedDate] = useState(null)
-  const [getDataAccounting, setDataAccounting] = useState([])
+  const [getDataAccounting, setGetDataAccounting] = useState([])
   const [selectedToEnd, setSelectedDateToEnd] = useState(null)
   const [openCalendarToEnd, setOpenCalendarToEnd] = useState(false)
   const [selectedBillDate, setSelectedBillDate] = useState(null)
@@ -50,12 +50,16 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
         }
       })
       .then(res => {
-        setDataAccounting(res.data.data)
+        setGetDataAccounting(res.data.data)
       })
       .catch(err => {
         console.log(err)
       })
   }, [dataRow])
+
+  if (Object.values(getDataAccounting)?.length === 0) {
+    return 'waiting...'
+  }
 
   function formatCurrency(params) {
     const formattedValue = new Intl.NumberFormat('th-TH', {
