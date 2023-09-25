@@ -9,9 +9,10 @@ import {
   Typography,
   TextareaAutosize,
   Box,
-  CardActions,
   Collapse,
-  Divider
+  Divider,
+  Menu,
+  MenuItem
 } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete'
 import EventIcon from '@mui/icons-material/Event'
@@ -23,6 +24,8 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { ChevronDown, ChevronUp } from 'mdi-material-ui'
+import Icon from '@mdi/react'
+import { mdiMenuDown } from '@mdi/js'
 
 const JournalEntryComp = ({ dataRow, setDataRow }) => {
   const [openCalendar, setOpenCalendar] = useState(false)
@@ -41,6 +44,40 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
   const handleCollapseRefer = () => {
     setCollapseRefer(!collapseRefer)
   }
+  const [anchorElType, setAnchorElType] = useState(null)
+  const [selectedType, setSelectedType] = useState('')
+
+  const handleMenuOpenType = event => {
+    setAnchorElType(event.currentTarget)
+  }
+
+  const handleMenuCloseType = () => {
+    setAnchorElType(null)
+  }
+
+  const handleTypeChange = value => {
+    setSelectedType(value)
+    handleMenuCloseType()
+  }
+
+  const accountDorpdownType = [
+    { value: '', label: 'None' },
+    { value: 'Journal Entry', label: 'Journal Entry' },
+    { value: 'Inter Company Journal Entry', label: 'Inter Company Journal Entry' },
+    { value: 'Bank Entry', label: 'Bank Entry' },
+    { value: 'Cash Entry', label: 'Cash Entry' },
+    { value: 'Credit Card Entry', label: 'Credit Card Entry' },
+    { value: 'Debit Note', label: 'Debit Note' },
+    { value: 'Credit Note', label: 'Credit Note' },
+    { value: 'Contra Entry', label: 'Contra Entry' },
+    { value: 'Excise Entry', label: 'Excise Entry' },
+    { value: 'Write Entry', label: 'Write Entry' },
+    { value: 'Depreciation Entry', label: 'Depreciation Entry' },
+    { value: 'Exchange Rate Revaluation', label: 'Exchange Rate Revaluation' },
+    { value: 'Exchange Gain Or Loss', label: 'Exchange Gain Or Loss' },
+    { value: 'Deferred Revenue', label: 'Deferred Revenue' },
+    { value: 'Deferred Expense', label: 'Deferred Expense' }
+  ]
 
   useEffect(() => {
     axios
@@ -78,24 +115,6 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
     { field: 'party', headerName: 'Party', width: 150 },
     { field: 'debit_in_account_currency', headerName: 'Debit', width: 150, valueFormatter: formatCurrency },
     { field: 'credit_in_account_currency', headerName: 'Credit', width: 150, valueFormatter: formatCurrency }
-  ]
-
-  const EntryType = [
-    { label: 'Journal Entry' },
-    { label: 'Inter Company Journal Entry' },
-    { label: 'Bank Entry' },
-    { label: 'Cash Entry' },
-    { label: 'Credit Card Entry' },
-    { label: 'Debit Note' },
-    { label: 'Credit Note' },
-    { label: 'Contra Entry' },
-    { label: 'Excise Entry' },
-    { label: 'Write Entry' },
-    { label: 'Depreciation Entry' },
-    { label: 'Exchange Rate Revaluation' },
-    { label: 'Exchange Gain Or Loss' },
-    { label: 'Deferred Revenue' },
-    { label: 'Deferred Expense' }
   ]
 
   const IsOpenting = [{ label: 'Yes' }, { label: 'No' }]
@@ -173,14 +192,38 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Typography>Entry Type</Typography>
-          <Autocomplete
-            disablePortal
-            id='combo-box-demo'
-            options={EntryType}
+          <TextField
+            sx={{ marginBottom: 5 }}
             fullWidth
-            renderInput={params => <TextField {...params} label='' />}
-            sx={{ marginBottom: 3 }}
+            size='small'
+            variant='filled'
+            value={selectedType || dataRow.voucher_type}
+            onClick={handleMenuOpenType}
+            InputProps={{
+              endAdornment: (
+                <span onClick={handleMenuOpenType} style={{ cursor: 'pointer' }}>
+                  <Icon path={mdiMenuDown} size={1} />
+                </span>
+              )
+            }}
           />
+          <Menu
+            anchorEl={anchorElType}
+            open={Boolean(anchorElType)}
+            onClose={handleMenuCloseType}
+            PaperProps={{
+              style: {
+                maxHeight: 250, // ความสูงสูงสุดของ dropdown
+                width: 350 // ความกว้างของ dropdown
+              }
+            }}
+          >
+            {accountDorpdownType.map(option => (
+              <MenuItem key={option.value} value={option.value} onClick={() => handleTypeChange(option.value)}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Menu>
 
           <Typography>Company</Typography>
           <TextField
@@ -207,7 +250,7 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
             onChange={handleTextChange}
           />
 
-          <Typography>From Date</Typography>
+          <Typography>Posting Date *</Typography>
           <TextField
             onClick={handleOpenCalendar}
             size='small'
@@ -241,6 +284,7 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
           )}
         </Grid>
       </Grid>
+      <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Typography>Accounting Entries</Typography>
@@ -262,7 +306,7 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
           <Button>Add Row</Button>
         </Grid>
       </Grid>
-
+      <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Typography>Reference Number</Typography>
@@ -378,22 +422,20 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
           </Grid>
         </Grid>
       </Grid>
+      <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
       <Grid>
         <Box sx={{ display: 'flex' }}>
           <Button size='small' variant='filled' label='' onClick={handleCollapseRefer} sx={{ fontWeight: 'bold' }}>
             Reference
           </Button>
-          <Box>
-            <CardActions className='card-action-dense'>
-              <IconButton size='small' onClick={handleCollapseRefer}>
-                {collapseRefer ? (
-                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                ) : (
-                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                )}
-              </IconButton>
-            </CardActions>
-          </Box>
+
+          <IconButton size='small' onClick={handleCollapseRefer}>
+            {collapseRefer ? (
+              <ChevronUp sx={{ fontSize: '1.875rem' }} />
+            ) : (
+              <ChevronDown sx={{ fontSize: '1.875rem' }} />
+            )}
+          </IconButton>
         </Box>
 
         <Collapse in={collapseRefer}>
@@ -479,21 +521,20 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
           </Grid>
         </Collapse>
       </Grid>
+      <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
       <Grid>
         <Box sx={{ display: 'flex' }}>
           <Button size='small' variant='filled' label='' onClick={handleOpenPrinting} sx={{ fontWeight: 'bold' }}>
             Printing Settings
           </Button>
           <Box>
-            <CardActions className='card-action-dense'>
-              <IconButton size='small' onClick={handleOpenPrinting}>
-                {collapsePrinting ? (
-                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                ) : (
-                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                )}
-              </IconButton>
-            </CardActions>
+            <IconButton size='small' onClick={handleOpenPrinting}>
+              {collapsePrinting ? (
+                <ChevronUp sx={{ fontSize: '1.875rem' }} />
+              ) : (
+                <ChevronDown sx={{ fontSize: '1.875rem' }} />
+              )}
+            </IconButton>
           </Box>
         </Box>
         <Collapse in={collapsePrinting}>
@@ -534,22 +575,20 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
           </Grid>
         </Collapse>
       </Grid>
+      <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
       <Grid>
         <Box sx={{ display: 'flex' }}>
           <Button size='small' variant='filled' label='' onClick={handleOpenMoreInfo} sx={{ fontWeight: 'bold' }}>
             More Information
           </Button>
-          <Box>
-            <CardActions className='card-action-dense'>
-              <IconButton size='small' onClick={handleOpenMoreInfo}>
-                {collapseMoreInfo ? (
-                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                ) : (
-                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                )}
-              </IconButton>
-            </CardActions>
-          </Box>
+
+          <IconButton size='small' onClick={handleOpenMoreInfo}>
+            {collapseMoreInfo ? (
+              <ChevronUp sx={{ fontSize: '1.875rem' }} />
+            ) : (
+              <ChevronDown sx={{ fontSize: '1.875rem' }} />
+            )}
+          </IconButton>
         </Box>
         <Collapse in={collapseMoreInfo}>
           <Divider sx={{ margin: 0 }} />
