@@ -1,6 +1,9 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
+// ** Next Imports
+import { useRouter } from 'next/router'
+
 // ** MUI Imports
 import {
   Box,
@@ -11,10 +14,6 @@ import {
   Divider,
   Grid,
   TextField,
-  ToggleButtonGroup,
-  ToggleButton,
-  ButtonGroup,
-  SvgIcon,
   IconButton,
   Menu,
   MenuItem,
@@ -33,6 +32,9 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName, si
   // ** States
   const errorColor = red[500]
   const [showData, setShowData] = useState(data)
+
+  // ** Hooks
+  const router = useRouter()
 
   // ** Sort Type
   const [sort, setSort] = useState('desc')
@@ -130,13 +132,17 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName, si
   // ** ตัดข้อมูลให้เหลือเฉพาะข้อมูลในหน้าปัจจุบัน
   const displayedData = showData.slice((page - 1) * rowsPerPage, page * rowsPerPage)
 
+  const handleNavigation = () => {
+    router.push(`${router.asPath}/add`)
+  }
+
   return (
     <Box sx={{ px: 2 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2, mb: 5 }}>
         <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
           {doctype}
         </Typography>
-        <Button variant='contained' color='primary' size='small'>
+        <Button variant='contained' color='primary' size='small' onClick={handleNavigation}>
           + Add {doctype}
         </Button>
       </Box>

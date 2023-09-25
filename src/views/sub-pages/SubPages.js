@@ -84,7 +84,7 @@ const SubPages = ({
     cardComment: getCardCommentStyle(menuContent.length)
   }
 
-  const StatusChip = ({ editStatus, docStatus, docStatusName }) => {
+  const StatusChip = ({ editStatus, docStatus }) => {
     if (editStatus) return <Chip label='• Edit' color='warning' sx={{ ml: 1 }} />
     if (docStatus === 0) return <Chip label='• Enabled' color='statusEnabled' sx={{ ml: 1 }} />
 
@@ -301,11 +301,7 @@ const SubPages = ({
                           {dataRow.name}
                         </Typography>
 
-                        <StatusChip
-                          editStatus={editStatus}
-                          docStatus={dataRow[docStatusName]}
-                          docStatusName={docStatusName}
-                        />
+                        <StatusChip editStatus={editStatus} docStatus={dataRow[docStatusName]} />
                       </Box>
                       <Box sx={{ display: 'flex', flexDirection: 'row', mr: 3 }}>
                         <IconButton sx={IconButtonStyle} onClick={() => handleArrowLeft()}>
