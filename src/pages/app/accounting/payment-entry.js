@@ -3,7 +3,7 @@ import React from 'react'
 
 // ** Axios Imports
 import axios from 'axios'
-import SubPages from 'src/views/sub-pages/SubPages'
+import LayoutTwoPage from 'src/views/sub-pages/LayoutTwoPage'
 
 // ** Dummy Data
 import { PaymentEntryMenu } from 'src/dummy/contentPages/paymentEntryPage'
@@ -21,7 +21,7 @@ const PurchaseInvoice = ({ data }) => {
   const showContent = [<PaymentEntry key={'detail'} dataRow={dataRow} setDataRow={setDataRow} />]
 
   return (
-    <SubPages
+    <LayoutTwoPage
       data={dataList}
       setData={setDataList}
       menuContent={PaymentEntryMenu}

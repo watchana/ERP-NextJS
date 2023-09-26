@@ -3,7 +3,7 @@ import React from 'react'
 
 // ** Axios Imports
 import axios from 'axios'
-import SubPages from 'src/views/sub-pages/SubPages'
+import LayoutTwoPage from 'src/views/sub-pages/LayoutTwoPage'
 
 // ** Dummy Data
 import { PurchaseInvoiceContentMenu } from 'src/dummy/contentPages/purchaseInvoice'
@@ -33,7 +33,7 @@ const PurchaseInvoice = ({ data }) => {
   ]
 
   return (
-    <SubPages
+    <LayoutTwoPage
       data={dataList}
       setData={setDataList}
       menuContent={PurchaseInvoiceContentMenu}

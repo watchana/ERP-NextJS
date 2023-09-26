@@ -3,7 +3,7 @@ import React from 'react'
 
 // ** Axios Imports
 import axios from 'axios'
-import SubPages from 'src/views/sub-pages/SubPages'
+import LayoutTwoPage from 'src/views/sub-pages/LayoutTwoPage'
 
 // ** Custom Components
 import ChartofAccounts from 'src/views/sub-pages/accounting/account/ChartofAccounts'
@@ -16,7 +16,7 @@ const Account = ({ data }) => {
   const [dataList, setDataList] = React.useState(data)
 
   return (
-    <SubPages
+    <LayoutTwoPage
       data={dataList}
       setData={setDataList}
       menuContent={[]}

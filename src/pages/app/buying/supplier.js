@@ -7,7 +7,7 @@ import axios from 'axios'
 // ** Dummy Data
 
 // ** Custom Components
-import SubPages from 'src/views/sub-pages/SubPages'
+import LayoutTwoPage from 'src/views/sub-pages/LayoutTwoPage'
 import DetailSupplier from 'src/views/sub-pages/buying/supplier/DetailSupplier'
 import Dashboard_sup from 'src/views/sub-pages/buying/supplier/DashboardSupplier'
 import TaxSupplier from 'src/views/sub-pages/buying/supplier/TaxSupplier'
@@ -35,7 +35,7 @@ const SupplierPage = ({ data }) => {
   ]
 
   return (
-    <SubPages
+    <LayoutTwoPage
       data={dataList}
       setData={setDataList}
       menuContent={SupplierContentMenu}
