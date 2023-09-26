@@ -37,7 +37,7 @@ import FullPageSkeleton from '../FullPageSkeleton'
 
 const IconButtonStyle = { bgcolor: 'white', borderRadius: 1, border: '1px solid #E0E0E0', mx: 0.5 }
 
-const SubPages = ({
+const LayoutTwoPage = ({
   data,
   setData,
   menuContent,
@@ -372,4 +372,4 @@ const SubPages = ({
   )
 }
 
-export default SubPages
+export default LayoutTwoPage
