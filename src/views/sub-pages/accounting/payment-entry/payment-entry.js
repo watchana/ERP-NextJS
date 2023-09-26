@@ -20,7 +20,8 @@ const {
   DialogTitle,
   DialogContent,
   DialogContentText,
-  Icon
+  Icon,
+  DialogActions
 } = require('@mui/material')
 
 import { mdiKeyboardOutline } from '@mdi/js'
@@ -660,27 +661,9 @@ const PaymentEntry = ({ dataRow, setDataRow }) => {
                   />
                 </Grid>
               </Grid>
-              <Grid container spacing={3} sx={{ display: 'flex' }}>
-                <Grid item xs={12} sx={{ mt: 4, display: 'flex', width: '100%' }}>
-                  <Icon path={mdiKeyboardOutline} size={1} />
-                  <Typography>Shortcuts:</Typography>
-                  <Button sx={{ width: 200, bgcolor: '#e0e0e0', ml: 2, height: 30 }}>
-                    <Typography variant='subtitle2'>Ctrl + Up</Typography>
-                  </Button>
-
-                  <Button sx={{ width: 200, bgcolor: '#e0e0e0', ml: 2, height: 30 }}>
-                    <Typography variant='subtitle2'>Ctrl + Down</Typography>
-                  </Button>
-
-                  <Button sx={{ width: 200, bgcolor: '#e0e0e0', ml: 2, height: 30 }}>
-                    <Typography variant='subtitle2'>ESC</Typography>
-                  </Button>
-
-                  <Button sx={{ width: 200, bgcolor: '#e0e0e0', ml: 100, height: 30 }}>
-                    <Typography variant='subtitle2'>Insert Below</Typography>
-                  </Button>
-                </Grid>
-              </Grid>
+              <DialogActions>
+                <Button onClick={handleClose}>Insert Below</Button>
+              </DialogActions>
             </DialogContentText>
           </DialogContent>
         </Dialog>

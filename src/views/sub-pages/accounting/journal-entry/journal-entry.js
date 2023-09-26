@@ -19,7 +19,8 @@ import {
   DialogContentText,
   FormControl,
   InputLabel,
-  Select
+  Select,
+  DialogActions
 } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete'
 import EventIcon from '@mui/icons-material/Event'
@@ -947,6 +948,9 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
             </Grid>
           </DialogContentText>
         </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Insert Below</Button>
+        </DialogActions>
       </Dialog>
     </Card>
   )
