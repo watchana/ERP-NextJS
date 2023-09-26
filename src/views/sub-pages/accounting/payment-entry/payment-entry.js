@@ -15,13 +15,23 @@ const {
   IconButton,
   Collapse,
   Checkbox,
-  InputAdornment
+  InputAdornment,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  Icon,
+  DialogActions
 } = require('@mui/material')
+
+import { mdiKeyboardOutline } from '@mdi/js'
 
 const PaymentEntry = ({ dataRow, setDataRow }) => {
   const [collapseAccount, setCollapseAccount] = useState(false)
   const [getDataPayment, setGetDataPayment] = useState([])
+  const [getPayment, setGetPayment] = useState([])
   const [collapseMoreInfo, setCollapseMoreInfo] = useState(false)
+  const [open, setOpen] = useState(false)
 
   const handleCollapseAccount = () => {
     setCollapseAccount(!collapseAccount)
@@ -75,6 +85,15 @@ const PaymentEntry = ({ dataRow, setDataRow }) => {
     return 'waiting...'
   }
 
+  const handleRowClick = params => {
+    setOpen(true)
+    setGetPayment(params.row)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   function formatDate(dateString) {
     const dateObject = new Date(dateString)
     const day = dateObject.getDate().toString().padStart(2, '0')
@@ -84,7 +103,8 @@ const PaymentEntry = ({ dataRow, setDataRow }) => {
     return `${day}-${month}-${year}`
   }
   const formattedDate = formatDate(dataRow.posting_date)
-  const formattedDateEnd = formatDate(dataRow.due_date)
+  const formattedDateRefer = formatDate(dataRow.reference_date)
+  const formattedDueData = formatDate(getPayment.due_date)
 
   function formatTime(timeString) {
     const timeParts = timeString.split(':')
@@ -178,20 +198,18 @@ const PaymentEntry = ({ dataRow, setDataRow }) => {
         </Grid>
       </Grid>
       <Grid>
-        <Box sx={{ display: 'flex' }}>
-          <Button size='small' variant='filled' label='' onClick={handleCollapseAccount}>
+        <Box sx={{ display: 'flex', my: 6 }}>
+          <Button size='small' variant='filled' label='' onClick={handleCollapseAccount} sx={{ fontWeight: 'bold' }}>
             Accounts
           </Button>
           <Box>
-            <CardActions className='card-action-dense'>
-              <IconButton size='small' onClick={handleCollapseAccount}>
-                {collapseAccount ? (
-                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                ) : (
-                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                )}
-              </IconButton>
-            </CardActions>
+            <IconButton size='small' onClick={handleCollapseAccount}>
+              {collapseAccount ? (
+                <ChevronUp sx={{ fontSize: '1.875rem' }} />
+              ) : (
+                <ChevronDown sx={{ fontSize: '1.875rem' }} />
+              )}
+            </IconButton>
           </Box>
         </Box>
 
@@ -349,6 +367,7 @@ const PaymentEntry = ({ dataRow, setDataRow }) => {
               rows={getDataPayment.references}
               columns={columnsPayment}
               getRowId={row => row.name}
+              onRowClick={handleRowClick}
               initialState={{
                 pagination: {
                   paginationModel: { page: 0, pageSize: 5 }
@@ -476,7 +495,7 @@ const PaymentEntry = ({ dataRow, setDataRow }) => {
             <TextField
               size='small'
               variant='filled'
-              value={formattedDate}
+              value={formattedDateRefer}
               onChange={handleTextChange}
               fullWidth
               name='reference_date'
@@ -484,20 +503,18 @@ const PaymentEntry = ({ dataRow, setDataRow }) => {
             />
           </Grid>
         </Grid>
-        <Box sx={{ display: 'flex' }}>
-          <Button size='small' variant='filled' label='' onClick={handleCollapseMoreInfo}>
+        <Box sx={{ display: 'flex', my: 6 }}>
+          <Button size='small' variant='filled' label='' onClick={handleCollapseMoreInfo} sx={{ fontWeight: 'bold' }}>
             More Information
           </Button>
           <Box>
-            <CardActions className='card-action-dense'>
-              <IconButton size='small' onClick={handleCollapseMoreInfo}>
-                {collapseMoreInfo ? (
-                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                ) : (
-                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                )}
-              </IconButton>
-            </CardActions>
+            <IconButton size='small' onClick={handleCollapseMoreInfo}>
+              {collapseMoreInfo ? (
+                <ChevronUp sx={{ fontSize: '1.875rem' }} />
+              ) : (
+                <ChevronDown sx={{ fontSize: '1.875rem' }} />
+              )}
+            </IconButton>
           </Box>
         </Box>
 
@@ -541,6 +558,115 @@ const PaymentEntry = ({ dataRow, setDataRow }) => {
             </Grid>
           </Grid>
         </Collapse>
+      </Grid>
+      <Grid>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'
+          maxWidth={'lg'}
+          fullScreen
+          PaperProps={{
+            style: {
+              width: '60%',
+              height: '60%',
+              margin: 0,
+              maxWidth: 'none',
+              maxHeight: 'none'
+            }
+          }}
+        >
+          <DialogTitle id='Editing Row #1'>
+            {'Editing Row #'}
+            {getPayment.idx}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id='alert-dialog-description'>
+              <Grid container spacing={3} sx={{ mt: 6 }}>
+                <Grid item xs={12} md={6}>
+                  <Typography variant='subtitle1'>Type</Typography>
+                  <TextField
+                    size='small'
+                    variant='filled'
+                    value={getPayment.reference_doctype}
+                    fullWidth
+                    name='reference_doctype'
+                    sx={{ mb: 4 }}
+                  />
+
+                  <Typography variant='subtitle1'>Name</Typography>
+                  <TextField
+                    size='small'
+                    variant='filled'
+                    value={getPayment.reference_name}
+                    fullWidth
+                    name='reference_name'
+                    sx={{ mb: 4 }}
+                  />
+
+                  <Typography variant='subtitle1'>Due Date</Typography>
+                  <TextField
+                    size='small'
+                    variant='filled'
+                    value={formattedDueData}
+                    fullWidth
+                    name='due_date'
+                    sx={{ mb: 4 }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Typography variant='subtitle1'>Grand Total (THB)</Typography>
+                  <TextField
+                    size='small'
+                    variant='filled'
+                    value={getPayment.total_amount}
+                    fullWidth
+                    name='total_amount'
+                    disabled
+                    sx={{ mb: 4 }}
+                  />
+
+                  <Typography variant='subtitle1'>Outstanding (THB)</Typography>
+                  <TextField
+                    size='small'
+                    variant='filled'
+                    value={getPayment.outstanding_amount}
+                    fullWidth
+                    name='outstanding_amount'
+                    disabled
+                    sx={{ mb: 4 }}
+                  />
+
+                  <Typography variant='subtitle1'>Allocated</Typography>
+                  <TextField
+                    size='small'
+                    variant='filled'
+                    value={getPayment.allocated_amount}
+                    fullWidth
+                    name='allocated_amount'
+                    sx={{ mb: 4 }}
+                    disabled
+                  />
+
+                  <Typography variant='subtitle1'>Account</Typography>
+                  <TextField
+                    size='small'
+                    variant='filled'
+                    value={getPayment.account}
+                    fullWidth
+                    name='account'
+                    sx={{ mb: 4 }}
+                  />
+                </Grid>
+              </Grid>
+              <DialogActions>
+                <Button onClick={handleClose}>Insert Below</Button>
+              </DialogActions>
+            </DialogContentText>
+          </DialogContent>
+        </Dialog>
       </Grid>
     </Card>
   )

@@ -436,7 +436,10 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
           }
         }}
       >
-        <DialogTitle id='Editing Row #1'>{'Editing Row #1'}</DialogTitle>
+        <DialogTitle id='Editing Row #1'>
+          {'Editing Row #'}
+          {getItem.idx}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
             <Grid container spacing={3} sx={{ mt: 6 }}>
