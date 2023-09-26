@@ -12,7 +12,14 @@ import {
   Collapse,
   Divider,
   Menu,
-  MenuItem
+  MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  FormControl,
+  InputLabel,
+  Select
 } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete'
 import EventIcon from '@mui/icons-material/Event'
@@ -40,6 +47,41 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
   const [collapseRefer, setCollapseRefer] = useState(false)
   const [collapsePrinting, setCollapsePrinting] = useState(false)
   const [collapseMoreInfo, setCollapseMoreInfo] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [getItem, setGetItem] = useState([])
+  const [collapseAccounting, setCollapseAccounting] = useState(false)
+  const [selectedRerferDueDate, setSelectedRerferDueDate] = useState(false)
+  const [openCalendarRerferDueDate, setOpenCalendarRerferDueDate] = useState(false)
+
+  // const [age, setAge] = useState('')
+
+  const handleDateChangeRerfer = date => {
+    if (date) {
+      setSelectedRerferDueDate(date)
+    }
+    setOpenCalendarRerferDueDate(false) // ปิดปฏิทินเสมอเมื่อมีการเลือกหรือไม่เลือก
+  }
+
+  const handleOpenCalendarRerfer = () => {
+    setOpenCalendarRerferDueDate(true)
+  }
+
+  const handleChange = event => {
+    setGetItem(event.target.value)
+  }
+
+  const handleCollapsAccouting = () => {
+    setCollapseAccounting(!collapseAccounting)
+  }
+
+  const handleRowClick = params => {
+    setOpen(true)
+    setGetItem(params.row)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
 
   const handleCollapseRefer = () => {
     setCollapseRefer(!collapseRefer)
@@ -127,6 +169,11 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
   const handleCheckbox = event => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
     setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
+  }
+
+  const handleTextChangeItem = event => {
+    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
+    setGetItem({ ...getItem, [event.target.name]: event.target.value })
   }
 
   const checkboxStyle = {
@@ -232,7 +279,7 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
             variant='filled'
             fullWidth
             label=''
-            value={dataRow.company}
+            value={dataRow.company || ''}
             name='company'
             onChange={handleTextChange}
           />
@@ -245,7 +292,7 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
             variant='filled'
             fullWidth
             label=''
-            value={dataRow.from_template}
+            value={dataRow.from_template || ''}
             name='from_template'
             onChange={handleTextChange}
           />
@@ -292,6 +339,7 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
             rows={getDataAccounting.accounts}
             columns={columns}
             getRowId={row => row.name}
+            onRowClick={handleRowClick}
             initialState={{
               pagination: {
                 paginationModel: { page: 0, pageSize: 5 }
@@ -316,7 +364,7 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
             variant='filled'
             fullWidth
             label=''
-            value={dataRow.cheque_no}
+            value={dataRow.cheque_no || ''}
             name='cheque_no'
             onChange={handleTextChange}
           />
@@ -360,7 +408,7 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
             size='small'
             variant='filled'
             label='User Remark'
-            value={dataRow.user_remark}
+            value={dataRow.user_remark || ''}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -388,6 +436,7 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
             }}
             name='total_debit'
             onChange={handleTextChange}
+            disabled
           />
 
           <Typography>Total Debit</Typography>
@@ -414,10 +463,15 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
             }}
             name='total_credit'
             onChange={handleTextChange}
+            disabled
           />
 
           <Grid sx={checkboxStyle}>
-            <Checkbox checked={dataRow.multi_currency === 1 ? true : false} name='on_hold' onChange={handleCheckbox} />
+            <Checkbox
+              checked={dataRow.multi_currency === 1 ? true : false}
+              name='multi_currency'
+              onChange={handleCheckbox}
+            />
             <Typography variant='subtitle2'>Multi Currency</Typography>
           </Grid>
         </Grid>
@@ -446,7 +500,7 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
               <TextField
                 size='small'
                 variant='filled'
-                value={dataRow.bill_no}
+                value={dataRow.bill_no || ''}
                 fullWidth
                 name='bill_no'
                 onChange={handleTextChange}
@@ -545,7 +599,7 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
               <TextField
                 size='small'
                 variant='filled'
-                value={dataRow.pay_to_recd_from}
+                value={dataRow.pay_to_recd_from || ''}
                 fullWidth
                 name='pay_to_recd_from'
                 onChange={handleTextChange}
@@ -555,7 +609,7 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
               <TextField
                 size='small'
                 variant='filled'
-                value={dataRow.select_print_heading}
+                value={dataRow.select_print_heading || ''}
                 fullWidth
                 name='select_print_heading'
                 onChange={handleTextChange}
@@ -566,7 +620,7 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
               <TextField
                 size='small'
                 variant='filled'
-                value={dataRow.letter_head}
+                value={dataRow.letter_head || ''}
                 fullWidth
                 name='letter_head'
                 onChange={handleTextChange}
@@ -598,26 +652,302 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
               <TextField
                 size='small'
                 variant='filled'
-                value={dataRow.mode_of_payment}
+                value={dataRow.mode_of_payment || ''}
                 fullWidth
                 name='mode_of_payment'
                 onChange={handleTextChange}
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <Typography>Is Opening</Typography>
-              <Autocomplete
-                disablePortal
-                id='combo-box-demo'
-                options={IsOpenting}
-                fullWidth
-                renderInput={params => <TextField {...params} label='' />}
-                sx={{ marginBottom: 3 }}
-              />
+              <FormControl variant='filled' fullWidth>
+                <Typography>Is Advance</Typography>
+                <InputLabel id='demo-simple-select-filled-label'></InputLabel>
+                <Select
+                  labelId='demo-simple-select-filled-label'
+                  id='demo-simple-select-filled'
+                  // value={getItem.is_advance}
+                  onChange={handleChange}
+                >
+                  <MenuItem value={1}>Yes</MenuItem>
+                  <MenuItem value={2}>No</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
           </Grid>
         </Collapse>
       </Grid>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+        maxWidth={'lg'}
+        fullScreen
+        PaperProps={{
+          style: {
+            width: '60%',
+            height: '60%',
+            margin: 0,
+            maxWidth: 'none',
+            maxHeight: 'none'
+          }
+        }}
+      >
+        <DialogTitle id='Editing Row #1'>
+          {'Editing Row #'}
+          {getItem.idx}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            <Grid container spacing={3} sx={{ mt: 6 }}>
+              <Grid item xs={12} md={6}>
+                <Typography sx={{ margin: 1 }}>Account</Typography>
+                <TextField
+                  size='small'
+                  variant='filled'
+                  value={getItem.account || ''}
+                  fullWidth
+                  name='account'
+                  onChange={handleTextChangeItem}
+                />
+
+                <Typography sx={{ margin: 1 }}>Account Balance</Typography>
+                <TextField
+                  size='small'
+                  variant='filled'
+                  value={
+                    getItem?.balance === '0.0'
+                      ? '฿ 0.0'
+                      : `฿ ${parseFloat(getItem?.balance).toLocaleString('en-US', {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2
+                        })}`
+                  }
+                  fullWidth
+                  name='balance'
+                  onChange={handleTextChangeItem}
+                  disabled
+                />
+
+                <Typography sx={{ margin: 1 }}>Party</Typography>
+                <TextField
+                  size='small'
+                  variant='filled'
+                  value={getItem.party || ''}
+                  fullWidth
+                  name='party'
+                  onChange={handleTextChangeItem}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <Typography sx={{ margin: 1 }}>Bank Account</Typography>
+                <TextField
+                  size='small'
+                  variant='filled'
+                  value={getItem.bank_account || ''}
+                  fullWidth
+                  name='bank_account'
+                  onChange={handleTextChangeItem}
+                />
+
+                <Typography sx={{ margin: 1 }}>Party Type</Typography>
+                <TextField
+                  size='small'
+                  variant='filled'
+                  value={getItem.party_type || ''}
+                  fullWidth
+                  name='party_type'
+                  disabled
+                  onChange={handleTextChangeItem}
+                />
+
+                <Typography sx={{ margin: 1 }}>Party Balance</Typography>
+                <TextField size='small' variant='filled' fullWidth name='party_type' onChange={handleTextChangeItem} />
+              </Grid>
+            </Grid>
+
+            <Box sx={{ width: '100%' }}>
+              <Button variant='filled' onClick={handleCollapsAccouting} sx={{ fontWeight: 'bold' }}>
+                Accounting Dimensions
+              </Button>
+              <IconButton size='small' onClick={handleCollapsAccouting}>
+                {collapseAccounting ? (
+                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
+                ) : (
+                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
+                )}
+              </IconButton>
+            </Box>
+
+            <Grid>
+              <Collapse in={collapseAccounting} width={'100%'}>
+                <Divider sx={{ margin: 0, width: '100%' }} />
+                <Grid container spacing={2} style={{ width: '100%' }}>
+                  <Grid item xs={12} sm={12} md={6} lg={6}>
+                    <Typography sx={{ margin: 1 }}>Cost Center</Typography>
+                    <TextField
+                      size='small'
+                      variant='filled'
+                      value={getItem.cost_center || ''}
+                      fullWidth
+                      name='cost_center'
+                      onChange={handleTextChangeItem}
+                    />
+                    <Typography sx={{ margin: 1 }} variant='subtitle2'>
+                      If Income or Expense
+                    </Typography>
+                  </Grid>
+
+                  <Grid item xs={12} sm={12} md={6} lg={6}>
+                    <Typography sx={{ margin: 1 }}>Project</Typography>
+                    <TextField
+                      size='small'
+                      variant='filled'
+                      value={getItem.project || ''}
+                      fullWidth
+                      name='project'
+                      onChange={handleTextChangeItem}
+                    />
+                  </Grid>
+                </Grid>
+              </Collapse>
+            </Grid>
+            <Grid>
+              <Typography sx={{ fontWeight: 'bold' }}> Amount</Typography>
+            </Grid>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <Typography sx={{ margin: 1 }}>Debit</Typography>
+                <TextField
+                  size='small'
+                  variant='filled'
+                  value={getItem.debit_in_account_currency || ''}
+                  fullWidth
+                  name='debit_in_account_currency'
+                  onChange={handleTextChangeItem}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Typography sx={{ margin: 1 }}>Credit</Typography>
+                <TextField
+                  size='small'
+                  variant='filled'
+                  value={getItem.debit_in_account_currency || ''}
+                  fullWidth
+                  name='debit_in_account_currency'
+                  onChange={handleTextChangeItem}
+                />
+              </Grid>
+            </Grid>
+            <Divider sx={{ m: 6, width: '100%' }} />
+            <Grid>
+              <Typography sx={{ fontWeight: 'bold' }}> Reference</Typography>
+            </Grid>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <FormControl variant='filled' fullWidth>
+                  <Typography>Reference Type</Typography>
+                  <InputLabel id='demo-simple-select-filled-label'></InputLabel>
+                  <Select
+                    labelId='demo-simple-select-filled-label'
+                    id='demo-simple-select-filled'
+                    // value={getItem.reference_type}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value=''>
+                      <em>{getItem.reference_type}</em>
+                    </MenuItem>
+                    <MenuItem value={1}>Sales Invoice </MenuItem>
+                    <MenuItem value={2}>Purchase Invoice</MenuItem>
+                    <MenuItem value={3}>Journal Entry</MenuItem>
+                    <MenuItem value={4}>Sales Order</MenuItem>
+                    <MenuItem value={5}>Purchase Order</MenuItem>
+                    <MenuItem value={6}>Expense Claim</MenuItem>
+                    <MenuItem value={7}>Asset</MenuItem>
+                    <MenuItem value={8}>Loan</MenuItem>
+                    <MenuItem value={9}>Payroll Entry</MenuItem>
+                    <MenuItem value={10}>Employee Advance</MenuItem>
+                    <MenuItem value={11}>Exchange Rate Revaluation</MenuItem>
+                    <MenuItem value={12}>Invoice Discounting</MenuItem>
+                    <MenuItem value={13}>Fees</MenuItem>
+                    <MenuItem value={14}>Full and Final Statement</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <Typography sx={{ margin: 1 }}>Reference Name</Typography>
+                <TextField
+                  size='small'
+                  variant='filled'
+                  value={getItem.reference_name || ''}
+                  fullWidth
+                  name='reference_name'
+                  onChange={handleTextChangeItem}
+                />
+
+                <Typography sx={{ margin: 1 }}>Reference Due Date</Typography>
+                <TextField
+                  onClick={handleOpenCalendarRerfer}
+                  sx={{ marginBottom: 5 }}
+                  size='small'
+                  variant='filled'
+                  fullWidth
+                  value={selectedRerferDueDate ? dayjs(selectedRerferDueDate).format('DD - MM - YYYY') : ''}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position='end'>
+                        <IconButton>
+                          <EventIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                />
+                {openCalendarRerferDueDate && (
+                  <Grid width={'100%'}>
+                    <Typography sx={{ marginBottom: 2 }}>Release Date </Typography>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <StaticDatePicker
+                        orientation='landscape'
+                        value={selectedDueDate}
+                        onChange={handleDateChangeRerfer}
+                        componentsProps={{ actionBar: { actions: [] } }}
+                        renderInput={params => <TextField {...params} variant='filled' fullWidth />}
+                      />
+                    </LocalizationProvider>
+                  </Grid>
+                )}
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <FormControl variant='filled' fullWidth>
+                  <Typography>Is Advance</Typography>
+                  <InputLabel id='demo-simple-select-filled-label'></InputLabel>
+                  <Select
+                    labelId='demo-simple-select-filled-label'
+                    id='demo-simple-select-filled'
+                    // value={getItem.is_advance}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={1}>Yes</MenuItem>
+                    <MenuItem value={2}>No</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <Typography>User Remark</Typography>
+                <TextareaAutosize
+                  style={{ minHeight: '150px', width: '100%' }}
+                  size='small'
+                  variant='filled'
+                  label=''
+                  value={getItem.user_remark || ''}
+                />
+              </Grid>
+            </Grid>
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
     </Card>
   )
 }
