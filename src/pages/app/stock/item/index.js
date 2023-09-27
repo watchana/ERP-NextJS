@@ -55,6 +55,7 @@ const ItemPage = ({ data }) => {
     <SubPages
       data={dataList}
       setData={setDataList}
+      statusUpdate={false}
       menuContent={ItemContentMenu}
       showContent={showContent}
       dataRow={dataRow}
