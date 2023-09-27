@@ -24,10 +24,17 @@ const button = [
 
 const columns = [
   { field: 'id', headerName: '', width: 70 },
-  { field: 'posting_date', headerName: 'Posting Date', width: 130 },
-  { field: 'company', headerName: 'Company', width: 130 },
-  { field: 'account', headerName: 'Receivable Account', width: 130 },
-  { field: 'customer', headerName: 'Customer', width: 130 },
+  {
+    field: 'posting_date',
+    headerName: 'Posting Date',
+    width: 130,
+    valueFormatter: params => {
+      return dayjs(params.value).format('DD-MM-YYYY')
+    }
+  },
+  { field: 'party', headerName: 'Customer', width: 250 },
+  { field: 'account', headerName: 'Receivable Account', width: 400 },
+  { field: 'customer_contact', headerName: 'Customer Contact', width: 130 },
   { field: 'cost_center', headerName: 'Cost Center', width: 130 },
   { field: 'voucher_type', headerName: 'Voucher Type', width: 130 },
   { field: 'voucher_no', headerName: 'Voucher No', width: 130 },
