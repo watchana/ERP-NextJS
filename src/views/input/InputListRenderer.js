@@ -17,7 +17,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs'
 import SelectCurrency from '../select/select-currency'
 
-const InputListRenderer = ({ inputConfigs, onDataChange }) => {
+const InputListRenderer = ({ inputConfigs, filterConfig, onDataChange }) => {
   const router = useRouter()
   const theme = useTheme()
 
@@ -46,7 +46,7 @@ const InputListRenderer = ({ inputConfigs, onDataChange }) => {
                 <TextField
                   size='small'
                   label={input.label}
-                  value={input.value}
+                  value={filterConfig[input.name]}
                   name={input.name}
                   onChange={event => onDataChange(event.target.name, event.target.value)}
                   fullWidth
@@ -61,7 +61,7 @@ const InputListRenderer = ({ inputConfigs, onDataChange }) => {
                   name={input.name}
                   ref={refs[input.name]}
                   size='small'
-                  value={input.value}
+                  value={filterConfig[input.name]}
                   onBlur={() => {
                     const inputValue = refs[input.name]?.current?.querySelector('input').value
                     if (!commonOptions.includes(inputValue)) {
@@ -138,7 +138,7 @@ const InputListRenderer = ({ inputConfigs, onDataChange }) => {
                       }
                     }}
                     format='DD-MM-YYYY'
-                    value={input.value}
+                    value={filterConfig[input.name]}
                     onChange={date => onDataChange(input.name, date.format('DD-MM-YYYY'))}
                     renderInput={params => <TextField {...params} size='small' variant='outlined' />}
                   />
@@ -150,11 +150,12 @@ const InputListRenderer = ({ inputConfigs, onDataChange }) => {
             return (
               <Grid item xs={12} sm={4} md={3} lg={2} key={input.label}>
                 <FormControl size='small' fullWidth>
-                  <InputLabel>{input.label}</InputLabel>
+                  <InputLabel id={input.label}>{input.label}</InputLabel>
                   <Select
+                    labelId={input.label}
                     name={input.name}
-                    value={input.value}
-                    onChange={event => onDataChange(event.target.name, event.target.value)}
+                    value={filterConfig[input.name]}
+                    onChange={event => onDataChange(input.name, event.target.value)}
                   >
                     {input.data.map(option => (
                       <MenuItem key={option.name} value={option.name}>
@@ -173,7 +174,7 @@ const InputListRenderer = ({ inputConfigs, onDataChange }) => {
                   control={
                     <Checkbox
                       name={input.name}
-                      checked={input.value}
+                      checked={filterConfig[input.name]}
                       onChange={event => onDataChange(event.target.name, event.target.checked)}
                     />
                   }
@@ -187,7 +188,7 @@ const InputListRenderer = ({ inputConfigs, onDataChange }) => {
               <Grid item xs={12} sm={4} md={3} lg={2} key={input.label}>
                 <SelectCurrency
                   label={input.label}
-                  value={input.value}
+                  value={filterConfig[input.name]}
                   onChange={value => onDataChange(input.name, value)}
                 />
               </Grid>
