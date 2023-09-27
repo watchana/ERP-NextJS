@@ -61,7 +61,8 @@ const LayoutTwoPage = ({
   docStatusName,
   editStatus,
   setEditStatus,
-  dataUpdate
+  dataUpdate,
+  setDataUpdate
 }) => {
   const contentSizeInit = 7
 
@@ -76,12 +77,16 @@ const LayoutTwoPage = ({
   const [buttonArrow, setButtonArrow] = useState(true)
   const [saveWarning, setSaveWarning] = useState(false)
 
+  useEffect(() => {
+    if (statusUpdate === true) {
+      dispatch(contentUpdate())
+    } else {
+      dispatch(contentDefault())
+    }
+  }, [statusUpdate, dispatch])
+
   const { contentLeftStatus, contentDividerStatus, contentRightStatus, contentLeftGrid, contentRightGrid } =
     useSelector(state => state.layoutPage) || {}
-
-  if (statusUpdate === true) {
-    dispatch(contentUpdate())
-  }
 
   const getCardCommentStyle = menuContentLength => {
     if (menuContentLength > 0) {
@@ -241,9 +246,10 @@ const LayoutTwoPage = ({
 
   const handleSaveClick = async event => {
     console.log('Save Clicked: ', dataRow)
-    const dataUpdate = await fetchData(doctype, dataRow.name)
+    const dataPreUpdate = await fetchData(doctype, dataRow.name)
+    console.log('dataUpdateAAA', dataUpdate)
 
-    if (Object.keys(dataRow).length !== 0 && dataRow.modified === dataUpdate.modified) {
+    if (Object.keys(dataRow).length !== 0 && dataRow.modified === dataPreUpdate.modified) {
       axios
         .put(`${process.env.NEXT_PUBLIC_API_URL}${doctype}/${dataRow.name}`, dataUpdate, {
           headers: {
@@ -259,6 +265,7 @@ const LayoutTwoPage = ({
         .catch(err => {
           console.log(err)
         })
+      setDataUpdate({})
     } else {
       setSaveWarning(true)
     }

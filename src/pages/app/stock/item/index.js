@@ -19,9 +19,6 @@ import TexItem from 'src/views/sub-pages/stock/item/TexItem'
 import QualityItem from 'src/views/sub-pages/stock/item/QualityItem'
 import ManufacturingItem from 'src/views/sub-pages/stock/item/ManufacturingItem'
 
-// ** Layouts
-import SubPageLayout from 'src/@core/layouts/SubPageLayout'
-
 const ItemPage = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
   const [dataList, setDataList] = React.useState(data)
@@ -63,6 +60,7 @@ const ItemPage = ({ data }) => {
       doctype='Item'
       docStatusName='disabled'
       dataUpdate={dataUpdate}
+      setDataUpdate={setDataUpdate}
       editStatus={editStatus}
       setEditStatus={setEditStatus}
     />
