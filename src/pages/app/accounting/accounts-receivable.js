@@ -1,18 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 // ** Mui Import
-import {
-  Box,
-  Button,
-  Checkbox,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  MenuItem,
-  Select,
-  TextField
-} from '@mui/material'
+import { Button, Divider } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import dayjs from 'dayjs'
 
@@ -33,7 +22,83 @@ const button = [
   }
 ]
 
+const columns = [
+  { field: 'id', headerName: '', width: 70 },
+  { field: 'posting_date', headerName: 'Posting Date', width: 130 },
+  { field: 'company', headerName: 'Company', width: 130 },
+  { field: 'account', headerName: 'Receivable Account', width: 130 },
+  { field: 'customer', headerName: 'Customer', width: 130 },
+  { field: 'cost_center', headerName: 'Cost Center', width: 130 },
+  { field: 'voucher_type', headerName: 'Voucher Type', width: 130 },
+  { field: 'voucher_no', headerName: 'Voucher No', width: 130 },
+  { field: 'due_date', headerName: 'Due Date', width: 130 },
+  {
+    field: 'invoiceAmount',
+    headerName: 'Invoice Amount',
+    width: 130,
+    valueGetter: params => (params.row.amount > 0 ? params.row.amount : '')
+  },
+  {
+    field: 'paidAmount',
+    headerName: 'Paid Amount',
+    width: 130,
+    valueGetter: params => (params.row.amount < 0 ? -params.row.amount : '')
+  },
+  { field: 'credit_Note', headerName: 'Credit Note', width: 130 },
+  {
+    field: 'outstanding_amount',
+    headerName: 'Outstanding Amount',
+    width: 130,
+    valueGetter: params => params.row.amount
+  },
+  {
+    field: 'age',
+    headerName: 'Age (Days)',
+    width: 130,
+    valueGetter: params => {
+      const dueDate = dayjs(params.row.due_date)
+      const today = dayjs()
+      const diff = today.diff(dueDate, 'day')
+
+      return diff
+    }
+  },
+  {
+    field: '0-30',
+    headerName: '0-30',
+    width: 130,
+    valueGetter: params => {
+      const dueDate = dayjs(params.row.due_date)
+      const today = dayjs()
+      const diff = today.diff(dueDate, 'day')
+
+      return diff >= 0 && diff <= 30 ? params.row.amount : ''
+    }
+  },
+  {
+    field: 'account_currency',
+    headerName: 'Currency',
+    width: 130
+  },
+  {
+    field: 'customer_lpo',
+    headerName: 'Customer LPO',
+    width: 130
+  },
+  {
+    field: 'territory',
+    headerName: 'Territory',
+    width: 130
+  },
+  {
+    field: 'customer_group',
+    headerName: 'Customer Group',
+    width: 130
+  }
+]
+
 const AccountsReceivable = ({
+  resData,
   dataCompany,
   dataFinanceBook,
   dataCostCenter,
@@ -72,7 +137,7 @@ const AccountsReceivable = ({
 
   // ? สำหรับเพิ่ม input ในหน้าต่าง
   const inputConfigs = [
-    { type: 'textDropdown', label: 'Company', data: dataCompany },
+    { type: 'textDropdown', label: 'Company', name: 'company', value: filterConfig.company, data: dataCompany },
     { type: 'date', label: 'Posting Date', value: filterConfig.postingDate },
     { type: 'textDropdown', label: 'Finance Book', data: dataFinanceBook },
     { type: 'textDropdown', label: 'Cost Center', data: dataCostCenter },
@@ -127,15 +192,18 @@ const AccountsReceivable = ({
 
   console.log('dataCompany:', dataCompany)
 
+  const data = resData.filter(row => row.delinked === 0)
+
   return (
     <LayoutOnePageFilter title='Accounts Receivable' buttonTopRight={button}>
       <InputListRenderer inputConfigs={inputConfigs} onDataChange={handleDataChange} />
       <Divider />
-      <DataGrid rows={[]} columns={[]} style={{ height: '50vh' }} />
+      <DataGrid rows={data} columns={columns} getRowId={row => row.name} />
     </LayoutOnePageFilter>
   )
 }
 
+// ? สำหรับเรียกข้อมูลจาก API
 const fetchData = endpoint => {
   return axios.get(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
     headers: { Authorization: process.env.NEXT_PUBLIC_API_TOKEN }
@@ -159,6 +227,15 @@ export async function getServerSideProps() {
 
     const responses = await Promise.all(endpoints.map(endpoint => fetchData(endpoint)))
 
+    const responsesData = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}api/method/frappe.erpapp.test.getAccountsReceivable`,
+      {
+        headers: { Authorization: process.env.NEXT_PUBLIC_API_TOKEN }
+      }
+    )
+
+    const resData = responsesData.data.message
+
     const [
       resDataCompany,
       resDataFinanceBook,
@@ -173,6 +250,7 @@ export async function getServerSideProps() {
 
     return {
       props: {
+        resData: resData,
         dataCompany: resDataCompany.data.data,
         dataFinanceBook: resDataFinanceBook.data.data,
         dataCostCenter: resDataCostCenter.data.data,
@@ -189,6 +267,7 @@ export async function getServerSideProps() {
 
     return {
       props: {
+        resData: [],
         dataCompany: [],
         dataFinanceBook: [],
         dataCostCenter: [],
