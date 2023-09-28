@@ -5,8 +5,22 @@ import { useState } from 'react'
 
 // ** MUI imports
 
-import { Box, Button, CardContent, Collapse, Divider, IconButton, Grid, Card } from '@mui/material'
+import {
+  Box,
+  Button,
+  CardContent,
+  Collapse,
+  Divider,
+  IconButton,
+  Grid,
+  Card,
+  Accordion,
+  AccordionSummary,
+  Typography,
+  AccordionDetails
+} from '@mui/material'
 import { ChevronDown, ChevronUp } from 'mdi-material-ui'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const DashboardCustomer = () => {
   const [acrivity, setInternalActivity] = useState(false)
@@ -37,55 +51,48 @@ const DashboardCustomer = () => {
       >
         <Grid container>
           <Box sx={{ width: '100%' }}>
-            <Button sx={{ fontWeight: 'bold', p: 0 }} variant='filled' onClick={handleClickAcrivity}>
-              Acrivity
-            </Button>
-            <IconButton size='small' onClick={handleClickAcrivity}>
-              {acrivity ? <ChevronUp sx={{ fontSize: '1.875rem' }} /> : <ChevronDown sx={{ fontSize: '1.875rem' }} />}
-            </IconButton>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography sx={{ fontWeight: 'bold', p: 0 }}> Acrivity</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Divider sx={{ margin: 0 }} />
+                <CardContent>test</CardContent>
+              </AccordionDetails>
+            </Accordion>
           </Box>
-          <Collapse in={acrivity}>
-            <Divider sx={{ margin: 0 }} />
-            <CardContent>test</CardContent>
-          </Collapse>
         </Grid>
 
         <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
 
         <Grid container>
           <Box sx={{ width: '100%' }}>
-            <Button sx={{ fontWeight: 'bold', p: 0 }} variant='filled' onClick={handleClickStats}>
-              Stats
-            </Button>
-            <IconButton size='small' onClick={handleClickStats}>
-              {stats ? <ChevronUp sx={{ fontSize: '1.875rem' }} /> : <ChevronDown sx={{ fontSize: '1.875rem' }} />}
-            </IconButton>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography sx={{ fontWeight: 'bold', p: 0 }}> Stats</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Divider sx={{ margin: 0 }} />
+                <CardContent>test</CardContent>
+              </AccordionDetails>
+            </Accordion>
           </Box>
-          <Collapse in={stats}>
-            <Divider sx={{ margin: 0 }} />
-            <CardContent>test</CardContent>
-          </Collapse>
-
-          <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-
-          <Box sx={{ width: '100%' }}>
-            <Button sx={{ fontWeight: 'bold', p: 0 }} variant='filled' onClick={handleClickConnections}>
-              Connections
-            </Button>
-            <IconButton size='small' onClick={handleClickConnections}>
-              {connections ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
-          </Box>
-
-          <Collapse in={connections}>
-            <Divider sx={{ margin: 0 }} />
-            <CardContent>test</CardContent>
-          </Collapse>
         </Grid>
+
+        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
+
+        <Box sx={{ width: '100%' }}>
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography sx={{ fontWeight: 'bold', p: 0 }}> Connections</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Divider sx={{ margin: 0 }} />
+              <CardContent>test</CardContent>
+            </AccordionDetails>
+          </Accordion>
+        </Box>
+
         <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
       </Card>
     </Box>

@@ -25,14 +25,18 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
 } from '@mui/material'
 
 import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid'
 import { ChevronDown, ChevronUp } from 'mdi-material-ui'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-const ContactAndAddress = ({ dataRow, setDataRow }) => {
+const ContactAndAddress = ({ dataRow, setDataRow, handleUpdateData }) => {
   const [isOpenAddress, setIsOpenAddress] = useState(false)
   const [address_title, setAddressTitle] = useState('')
   const [email_address, setEmailAddress] = useState('')
@@ -135,6 +139,12 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
   //   setDataContact(event.target.value)
   // }
 
+  const checkboxStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  }
+
   useEffect(() => {
     axios
       .get(`${process.env.NEXT_PUBLIC_API_URL}Address/${dataRow.customer_primary_address}`, {
@@ -191,7 +201,20 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
     setDataContact({ ...dataContact, [event.target.name]: event.target.value })
   }
 
-  0
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
 
   return (
     <Box>
@@ -235,165 +258,192 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                     }}
                   >
                     <DialogTitle>Edit</DialogTitle>
-                    <DialogContent sx={{ minWidth: 600, width: '100%', height: '100%' }}>
+                    <DialogContent>
                       <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <Typography sx={{ margin: 1 }}>Address Title</Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            value={dataAddr.address_title}
-                            fullWidth
-                            onChange={handleTextChangeAddress}
-                            name='address_title'
-                          />
-                          <Typography sx={{ marginBottom: 2 }}>Address Type</Typography>
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Address Title</Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              value={dataAddr.address_title}
+                              fullWidth
+                              onChange={handleTextChangeAddress}
+                              name='address_title'
+                            />
+                          </Box>
 
-                          <FormControl variant='filled' fullWidth size='small' sx={{ minHeight: 26 }}>
-                            <InputLabel id='demo-simple-select-filled-label'></InputLabel>
-                            <Select
-                              labelId='demo-simple-select-filled-label'
-                              id='demo-simple-select-filled'
-                              // value={age}
-                              // onChange={handleChangeAddress}
-                            >
-                              <MenuItem value={1}>Billing</MenuItem>
-                              <MenuItem value={2}>Shipping</MenuItem>
-                              <MenuItem value={3}>Office</MenuItem>
-                              <MenuItem value={4}>Personal</MenuItem>
-                              <MenuItem value={5}>Plant</MenuItem>
-                              <MenuItem value={6}>Postal</MenuItem>
-                              <MenuItem value={7}>Shop</MenuItem>
-                              <MenuItem value={8}>Subsidiary</MenuItem>
-                              <MenuItem value={9}>Warehouse</MenuItem>
-                              <MenuItem value={10}>Current</MenuItem>
-                              <MenuItem value={11}>Permanent</MenuItem>
-                              <MenuItem value={12}>Other</MenuItem>
-                            </Select>
-                          </FormControl>
+                          <Box sx={styles.box}>
+                            <Typography sx={{ marginBottom: 1 }}>Address Type</Typography>
+                            <FormControl variant='outlined' fullWidth sx={styles.textField}>
+                              <InputLabel id='demo-simple-select-filled-label'></InputLabel>
+                              <Select
+                                labelId='demo-simple-select-filled-label'
+                                id='demo-simple-select-filled'
+                                // value={age}
+                                // onChange={handleChangeAddress}
+                              >
+                                <MenuItem value={1}>Billing</MenuItem>
+                                <MenuItem value={2}>Shipping</MenuItem>
+                                <MenuItem value={3}>Office</MenuItem>
+                                <MenuItem value={4}>Personal</MenuItem>
+                                <MenuItem value={5}>Plant</MenuItem>
+                                <MenuItem value={6}>Postal</MenuItem>
+                                <MenuItem value={7}>Shop</MenuItem>
+                                <MenuItem value={8}>Subsidiary</MenuItem>
+                                <MenuItem value={9}>Warehouse</MenuItem>
+                                <MenuItem value={10}>Current</MenuItem>
+                                <MenuItem value={11}>Permanent</MenuItem>
+                                <MenuItem value={12}>Other</MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>Address Line 1 </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataAddr.address_line1}
-                            onChange={handleTextChangeAddress}
-                            name='address_line1'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Address Line 1 </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataAddr.address_line1}
+                              onChange={handleTextChangeAddress}
+                              name='address_line1'
+                            />
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>Address Line 2 </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataAddr.address_line2}
-                            onChange={handleTextChangeAddress}
-                            name='address_line2'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Address Line 2 </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataAddr.address_line2}
+                              onChange={handleTextChangeAddress}
+                              name='address_line2'
+                            />
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>City/Town </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataAddr.city}
-                            onChange={handleTextChangeAddress}
-                            name='city'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>City/Town </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataAddr.city}
+                              onChange={handleTextChangeAddress}
+                              name='city'
+                            />
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>County </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataAddr.county}
-                            onChange={handleTextChangeAddress}
-                            name='county'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>County </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataAddr.county}
+                              onChange={handleTextChangeAddress}
+                              name='county'
+                            />
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>State/Province </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataAddr.state}
-                            onChange={handleTextChangeAddress}
-                            name='state'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>State/Province </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataAddr.state}
+                              onChange={handleTextChangeAddress}
+                              name='state'
+                            />
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>Country </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataAddr.country}
-                            onChange={handleTextChangeAddress}
-                            name='country'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Country </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataAddr.country}
+                              onChange={handleTextChangeAddress}
+                              name='country'
+                            />
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>Postal Code </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataAddr.pincode}
-                            onChange={handleTextChangeAddress}
-                            name='pincode'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Postal Code </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataAddr.pincode}
+                              onChange={handleTextChangeAddress}
+                              name='pincode'
+                            />
+                          </Box>
                         </Grid>
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <Typography sx={{ marginBottom: 2 }}>Email Address</Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataAddr.email_id}
-                            onChange={handleTextChangeAddress}
-                            name='email_id'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Email Address</Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataAddr.email_id}
+                              onChange={handleTextChangeAddress}
+                              name='email_id'
+                            />
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>Phone </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataAddr.phone}
-                            onChange={handleTextChangeAddress}
-                            name='phone'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Phone </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataAddr.phone}
+                              onChange={handleTextChangeAddress}
+                              name='phone'
+                            />
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>Fax </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataAddr.fax}
-                            onChange={handleTextChangeAddress}
-                            name='fax'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Fax </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataAddr.fax}
+                              onChange={handleTextChangeAddress}
+                              name='fax'
+                            />
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>Tax Category </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataAddr.tax_category}
-                            onChange={handleTextChangeAddress}
-                            name='tax_category'
-                          />
-                          <Grid item xs={12} sx={checkboxStyle}>
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Tax Category </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataAddr.tax_category}
+                              onChange={handleTextChangeAddress}
+                              name='tax_category'
+                            />
+                          </Box>
+
+                          <Grid sx={checkboxStyle}>
                             <Checkbox
                               checked={dataAddr.is_primary_address === 1 ? true : false}
                               name='is_primary_address'
@@ -401,7 +451,8 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                             />
                             <Typography variant='subtitle2'>Preferred Billing Address</Typography>
                           </Grid>
-                          <Grid item xs={12} sx={checkboxStyle}>
+
+                          <Grid sx={checkboxStyle}>
                             <Checkbox
                               checked={dataAddr.is_shipping_address === 1 ? true : false}
                               name='is_shipping_address'
@@ -409,7 +460,7 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                             />
                             <Typography variant='subtitle2'>Preferred Shipping Address</Typography>
                           </Grid>
-                          <Grid item xs={12} sx={checkboxStyle}>
+                          <Grid sx={checkboxStyle}>
                             <Checkbox
                               checked={dataAddr.disabled === 1 ? true : false}
                               name='disabled'
@@ -423,7 +474,7 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                         <Grid item xs={12} sm={12} md={6} lg={6} sx={{ mt: 6 }}>
                           <Typography variant='h6'>Reference</Typography>
 
-                          <Grid item xs={12} sx={checkboxStyle}>
+                          <Grid sx={checkboxStyle}>
                             <Checkbox
                               checked={dataAddr.is_your_company_address === 1 ? true : false}
                               name='is_your_company_address'
@@ -488,121 +539,138 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                     <DialogContent sx={{ minWidth: 600, width: '100%', height: '100%' }}>
                       <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', p: 5 }}>
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <Typography sx={{ marginBottom: 2 }}>First Name</Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataContact.first_name}
-                            onChange={handleTextChangeContact}
-                            name='first_name'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ marginBottom: 1 }}>First Name</Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataContact.first_name}
+                              onChange={handleTextChangeContact}
+                              name='first_name'
+                            />
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>Middle Name </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataContact.middle_name}
-                            onChange={handleTextChangeContact}
-                            name='middle_name'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Middle Name </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataContact.middle_name}
+                              onChange={handleTextChangeContact}
+                              name='middle_name'
+                            />
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>Last Name </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataContact.last_name}
-                            onChange={handleTextChangeContact}
-                            name='last_name'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Last Name </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataContact.last_name}
+                              onChange={handleTextChangeContact}
+                              name='last_name'
+                            />
+                          </Box>
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>User Id </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataContact.user}
+                              onChange={handleTextChangeContact}
+                              name='user'
+                            />
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>User Id </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataContact.user}
-                            onChange={handleTextChangeContact}
-                            name='user'
-                          />
-
-                          <Typography sx={{ margin: 1 }}>Address</Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataContact.address}
-                            onChange={handleTextChangeContact}
-                            name='address'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Address</Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataContact.address}
+                              onChange={handleTextChangeContact}
+                              name='address'
+                            />
+                          </Box>
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <Typography sx={{ marginBottom: 2 }}>Status</Typography>
-                          <FormControl variant='filled' fullWidth size='small' sx={{ minHeight: 24 }}>
-                            <InputLabel id='demo-simple-select-filled-label'></InputLabel>
-                            <Select
-                              labelId='demo-simple-select-filled-label'
-                              id='demo-simple-select-filled'
-                              // value={age}
-                              // onChange={handleChangeContact}
-                            >
-                              <MenuItem value={1}>Passive</MenuItem>
-                              <MenuItem value={2}>Open</MenuItem>
-                              <MenuItem value={3}>Replied</MenuItem>
-                            </Select>
-                          </FormControl>
+                          <Box sx={styles.box}>
+                            <Typography sx={{ marginBottom: 1 }}>Status</Typography>
+                            <FormControl variant='outlined' fullWidth sx={styles.textField}>
+                              <InputLabel id='demo-simple-select-filled-label'></InputLabel>
+                              <Select
+                                labelId='demo-simple-select-filled-label'
+                                id='demo-simple-select-filled'
+                                // value={age}
+                                // onChange={handleChangeContact}
+                              >
+                                <MenuItem value={1}>Passive</MenuItem>
+                                <MenuItem value={2}>Open</MenuItem>
+                                <MenuItem value={3}>Replied</MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>Salutation </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataContact.salutation}
-                            onChange={handleTextChangeContact}
-                            name='salutation'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Salutation </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataContact.salutation}
+                              onChange={handleTextChangeContact}
+                              name='salutation'
+                            />
+                          </Box>
 
-                          <Typography sx={{ margin: 1 }}>Designation </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataContact.designation}
-                            onChange={handleTextChangeContact}
-                            name='designation'
-                          />
-
-                          <Typography sx={{ margin: 1 }}>Gender </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataContact.gender}
-                            onChange={handleTextChangeContact}
-                            name='gender'
-                          />
-
-                          <Typography sx={{ margin: 1 }}>Company Name </Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            type='text'
-                            fullWidth
-                            value={dataContact.company_name}
-                            onChange={handleTextChangeContact}
-                            name='company_name'
-                          />
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Designation </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataContact.designation}
+                              onChange={handleTextChangeContact}
+                              name='designation'
+                            />
+                          </Box>
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Gender </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataContact.gender}
+                              onChange={handleTextChangeContact}
+                              name='gender'
+                            />
+                          </Box>
+                          <Box sx={styles.box}>
+                            <Typography sx={{ margin: 1 }}>Company Name </Typography>
+                            <TextField
+                              sx={styles.textField}
+                              variant='outlined'
+                              type='text'
+                              fullWidth
+                              value={dataContact.company_name}
+                              onChange={handleTextChangeContact}
+                              name='company_name'
+                            />
+                          </Box>
                         </Grid>
                       </Grid>
                       <Grid>
@@ -616,42 +684,28 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                             />
                             {isSynGoogle && (
                               <Grid>
-                                <Grid>
-                                  <Box sx={{ mt: 10, display: 'flex', width: '100%' }}>
-                                    <Button size='small' variant='filled' label='' onClick={handleCollapseSynGoogle}>
-                                      <Typography>Google Contacts</Typography>
-                                    </Button>
-                                    <Box>
-                                      <CardActions className='card-action-dense'>
-                                        <IconButton size='small' onClick={handleCollapseSynGoogle}>
-                                          {collapseSynGoogle ? (
-                                            <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                                          ) : (
-                                            <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                                          )}
-                                        </IconButton>
-                                      </CardActions>
-                                    </Box>
-                                  </Box>
-                                  <Grid>
-                                    <Collapse in={collapseSynGoogle}>
-                                      <Divider sx={{ margin: 0 }} />
-                                      <CardContent>
-                                        <Grid container spacing={3}>
-                                          <Grid item xs={12} sm={12} md={6} lg={6}>
-                                            <Typography sx={{ margin: 1 }}>Google Contacts </Typography>
-                                            <TextField
-                                              fullWidth
-                                              size='small'
-                                              variant='filled'
-                                              type='text'
-                                              value={dataContact.google_contacts || ''}
-                                              onChange={handleTextChangeContact}
-                                              name='google_contacts'
-                                            />
-                                          </Grid>
+                                <Box>
+                                  <Accordion>
+                                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                      <Typography sx={{ fontWeight: 'bold', p: 0 }}>Google Contacts</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                      <Grid container spacing={3}>
+                                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                                          <Typography sx={{ margin: 1 }}>Google Contacts </Typography>
+                                          <TextField
+                                            fullWidth
+                                            size='small'
+                                            variant='filled'
+                                            type='text'
+                                            value={dataContact.google_contacts || ''}
+                                            onChange={handleTextChangeContact}
+                                            name='google_contacts'
+                                          />
+                                        </Grid>
 
-                                          <Grid item xs={12} sm={12} md={6} lg={6} sx={checkboxStyle}>
+                                        <Grid item xs={12} sm={12} md={6} lg={6} sx={{ mt: 4 }}>
+                                          <Grid sx={checkboxStyle}>
                                             <Checkbox
                                               checked={dataContact.pulled_from_google_contacts === 1 ? true : false}
                                               name='pulled_from_google_contacts'
@@ -660,10 +714,12 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                                             <Typography variant='subtitle2'>Pulled from Google Contacts</Typography>
                                           </Grid>
                                         </Grid>
-                                      </CardContent>
-                                    </Collapse>
-                                  </Grid>
-                                </Grid>
+                                      </Grid>
+                                    </AccordionDetails>
+                                  </Accordion>
+                                </Box>
+
+                                <Divider sx={{ margin: 0 }} />
                               </Grid>
                             )}
                           </FormGroup>
@@ -733,7 +789,7 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                               lg={12}
                               sx={{ mt: 26, display: 'flex', flexDirection: 'column' }}
                             >
-                              <Grid item xs={12} sm={12} md={6} lg={6} sx={checkboxStyle}>
+                              <Grid sx={checkboxStyle}>
                                 <Checkbox
                                   checked={dataContact.is_primary_contact === 1 ? true : false}
                                   name='is_primary_contact'
@@ -742,7 +798,7 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                                 <Typography variant='subtitle2'>Is Primary Contact</Typography>
                               </Grid>
 
-                              <Grid item xs={12} sm={12} md={6} lg={6} sx={checkboxStyle}>
+                              <Grid sx={checkboxStyle}>
                                 <Checkbox
                                   checked={dataContact.is_billing_contact === 1 ? true : false}
                                   name='is_billing_contact'
@@ -766,7 +822,7 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                               onChange={handleTextChangeContact}
                               name='department'
                             />
-                            <Grid item xs={12} sm={12} md={6} lg={6} sx={checkboxStyle}>
+                            <Grid sx={checkboxStyle}>
                               <Checkbox
                                 checked={dataContact.unsubscribed === 1 ? true : false}
                                 name='unsubscribed'
@@ -794,36 +850,40 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
               <Grid container spacing={2} sx={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
                 <Grid item>
                   <Grid>
-                    <Typography sx={{ margin: 1 }}>Customer Primary Contact</Typography>
-                    <TextField
-                      size='small'
-                      variant='filled'
-                      onChange={handleTextChangeContact}
-                      name='customer_primary_contact'
-                      fullWidth
-                      multiline
-                    />
-                    <Typography sx={{ marginBottom: 2 }}>
-                      Reselect, if the chosen contact is edited after save
-                    </Typography>
+                    <Box sx={styles.box}>
+                      <Typography sx={{ margin: 1 }}>Customer Primary Contact</Typography>
+                      <TextField
+                        sx={styles.TextField}
+                        variant='outlined'
+                        onChange={handleTextChangeContact}
+                        name='customer_primary_contact'
+                        fullWidth
+                        multiline
+                      />
+                      <Typography sx={{ marginBottom: 2 }}>
+                        Reselect, if the chosen contact is edited after save
+                      </Typography>
+                    </Box>
                   </Grid>
                 </Grid>
                 <Grid item>
                   {/* ////////////////////////////////////// แถวที่ 1 ///////////////////////////////////////////// */}
                   <Grid sx={{ mt: 4 }}>
-                    <Typography sx={{ marginBottom: 2 }}>Customer Primary Address</Typography>
-                    <TextField
-                      size='small'
-                      variant='filled'
-                      label=''
-                      onChange={handleTextChangeAddress}
-                      name='customer_primary_address'
-                      fullWidth
-                      multiline
-                    />
-                    <Typography sx={{ marginBottom: 2 }}>
-                      Reselect, if the chosen address is edited after save
-                    </Typography>
+                    <Box sx={styles.box}>
+                      <Typography sx={{ marginBottom: 2 }}>Customer Primary Address</Typography>
+                      <TextField
+                        sx={styles.TextField}
+                        variant='outlined'
+                        label=''
+                        onChange={handleTextChangeAddress}
+                        name='customer_primary_address'
+                        fullWidth
+                        multiline
+                      />
+                      <Typography sx={{ marginBottom: 2 }}>
+                        Reselect, if the chosen address is edited after save
+                      </Typography>
+                    </Box>
                   </Grid>
                 </Grid>
               </Grid>
