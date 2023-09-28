@@ -72,6 +72,7 @@ const CustomerPage = ({ data }) => {
       dataUpdate={dataUpdate}
       editStatus={editStatus}
       setEditStatus={setEditStatus}
+      noTabContent={[]}
     />
   )
 }

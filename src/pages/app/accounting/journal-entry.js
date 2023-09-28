@@ -30,6 +30,7 @@ const JournalEntry = ({ data }) => {
       setDataRow={setDataRow}
       doctype='Journal Entry'
       docStatusName='disabled'
+      noTabContent={[]}
     />
   )
 }
