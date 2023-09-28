@@ -1086,8 +1086,8 @@ const DetailSalesInvoice = ({ dataRow, handleUpdateData }) => {
                 fullWidth
                 disabled
                 variant='outlined'
-                name='currency'
-                value={dataRow.currency}
+                name='total_qty'
+                value={dataRow.total_qty}
                 onChange={handleTextChange}
                 sx={styles.textField}
               />
