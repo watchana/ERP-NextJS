@@ -87,6 +87,8 @@ const LayoutTwoPage = ({
   useEffect(() => {
     if (statusUpdate === true) {
       dispatch(contentUpdate())
+    } else {
+      dispatch(contentDefault())
     }
   }, [statusUpdate, dispatch])
 
@@ -105,14 +107,6 @@ const LayoutTwoPage = ({
     }
   }, [dispatch, router])
 
-  const getCardCommentStyle = menuContentLength => {
-    if (menuContentLength > 0) {
-      return { marginBlock: 4, p: 2 }
-    }
-
-    return { marginBlock: 4, p: 2, mr: 3 }
-  }
-
   const styles = {
     tabPanel: {
       backgroundColor: 'primary.light',
@@ -123,7 +117,9 @@ const LayoutTwoPage = ({
       borderTopLeftRadius: '10px',
       borderTopRightRadius: '10px'
     },
-    cardComment: getCardCommentStyle(menuContent.length)
+    cardComment: {
+      p: 2
+    }
   }
 
   const StatusChip = ({ editStatus, docStatus }) => {
@@ -166,7 +162,7 @@ const LayoutTwoPage = ({
     return () => {
       window.removeEventListener('resize', handleResize) // ลบตัวดักเมื่อ component ถูก unmount
     }
-  }, [contentRightStatus, dispatch])
+  }, [dispatch, contentRightStatus, contentLeftStatus])
 
   useEffect(() => {
     console.log('windowWidth', windowWidth)
@@ -181,13 +177,14 @@ const LayoutTwoPage = ({
   }
 
   const handleContentSizeChange = () => {
-    if (sideContentOpen === true && contentSize === 7) {
-      setContentSize(4)
-    } else {
-      setContentSize(7)
+    if (screenMD === false) {
+      if (contentRightGrid === 7) {
+        dispatch(contentDetailLeft())
+      } else {
+        dispatch(contentDetailRight())
+      }
+      setButtonArrow(!buttonArrow)
     }
-
-    setButtonArrow(!buttonArrow)
   }
 
   const fetchData = (doctype, name) => {
