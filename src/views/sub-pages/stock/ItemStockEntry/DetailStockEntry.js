@@ -34,7 +34,6 @@ const DetailStockEntry = ({ dataRow, setDataRow }) => {
   const [collapseDiscription, setCollapseDiscription] = useState(false)
   const [collapseAccouting, setCollapseAccouting] = useState(false)
   const [collapseMoreInfo, setCollpseMoreInfo] = useState(false)
-
   const [open, setOpen] = useState(false)
 
   const handleClose = () => {

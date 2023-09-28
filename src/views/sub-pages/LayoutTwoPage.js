@@ -4,6 +4,20 @@ import React, { useEffect, useState } from 'react'
 // ** Axios Imports
 import axios from 'axios'
 
+// ** Router Imports
+import { useRouter } from 'next/router'
+
+// ** Redux Imports
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  contentDefault,
+  contentDetailRight,
+  contentDetailLeft,
+  contentMiddleLeft,
+  contentMiddleRight,
+  contentUpdate
+} from 'src/redux/layoutPageSlice'
+
 // ** MUI Imports
 import {
   Alert,
@@ -40,6 +54,7 @@ const IconButtonStyle = { bgcolor: 'white', borderRadius: 1, border: '1px solid 
 const LayoutTwoPage = ({
   data,
   setData,
+  statusUpdate,
   menuContent,
   showContent,
   noTabContent,
@@ -49,27 +64,48 @@ const LayoutTwoPage = ({
   docStatusName,
   editStatus,
   setEditStatus,
-  dataUpdate
+  dataUpdate,
+  setDataUpdate
 }) => {
   const contentSizeInit = 7
+
+  const { contentLeftStatus, contentDividerStatus, contentRightStatus, contentLeftGrid, contentRightGrid } =
+    useSelector(state => state.layoutPage) || {}
+
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
   // ** States
   const [contentSize, setContentSize] = useState(contentSizeInit)
   const [screenMD, setScreenMD] = useState(false)
-  const [screenMDSelect, setScreenMDSelect] = useState(false)
   const [sideContentOpen, setSideContentOpen] = useState(false)
   const [tabValue, setTabValue] = useState(1)
   const [buttonArrow, setButtonArrow] = useState(true)
   const [saveWarning, setSaveWarning] = useState(false)
-  const [dataRowModified, setDataRowModified] = useState(null)
 
-  const getCardCommentStyle = menuContentLength => {
-    if (menuContentLength > 0) {
-      return { marginBlock: 4, p: 2 }
+  useEffect(() => {
+    if (statusUpdate === true) {
+      dispatch(contentUpdate())
+    } else {
+      dispatch(contentDefault())
+    }
+  }, [statusUpdate, dispatch])
+
+  useEffect(() => {
+    // เมื่อเปลี่ยน path ไปหน้าอื่น ให้ dispatch action contentDefault()
+    const handleRouteChange = url => {
+      dispatch(contentDefault())
     }
 
-    return { marginBlock: 4, p: 2, mr: 3 }
-  }
+    // เพิ่ม event listener เพื่อตรวจสอบการเปลี่ยน path
+    router.events.on('routeChangeComplete', handleRouteChange)
+
+    // ลบ event listener เมื่อคอมโพเนนต์ถูก unmount
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [dispatch, router])
 
   const styles = {
     tabPanel: {
@@ -81,7 +117,9 @@ const LayoutTwoPage = ({
       borderTopLeftRadius: '10px',
       borderTopRightRadius: '10px'
     },
-    cardComment: getCardCommentStyle(menuContent.length)
+    cardComment: {
+      p: 2
+    }
   }
 
   const StatusChip = ({ editStatus, docStatus }) => {
@@ -93,14 +131,27 @@ const LayoutTwoPage = ({
 
   useEffect(() => {
     const handleResize = () => {
+      const newWindowWidth = window.innerWidth
+      setWindowWidth(newWindowWidth)
+
       if (window.innerWidth <= 1000) {
         // กำหนดขนาดหน้าจอที่ต้องการให้แสดงเนื้อหาแท็บ
-        setScreenMD(true)
-        setContentSize(12)
+
+        if (contentRightStatus === true && contentLeftStatus === false) {
+          console.log('midRight')
+          dispatch(contentMiddleRight())
+        } else {
+          dispatch(contentMiddleLeft())
+        }
         setButtonArrow(true)
+        setScreenMD(true)
       } else {
+        if (contentRightStatus === true) {
+          dispatch(contentDetailRight())
+        } else {
+          dispatch(contentDefault())
+        }
         setScreenMD(false)
-        setContentSize(contentSizeInit)
       }
     }
 
@@ -111,7 +162,11 @@ const LayoutTwoPage = ({
     return () => {
       window.removeEventListener('resize', handleResize) // ลบตัวดักเมื่อ component ถูก unmount
     }
-  }, [])
+  }, [dispatch, contentRightStatus, contentLeftStatus])
+
+  useEffect(() => {
+    console.log('windowWidth', windowWidth)
+  }, [windowWidth])
 
   useEffect(() => {
     console.log('data', data)
@@ -122,13 +177,14 @@ const LayoutTwoPage = ({
   }
 
   const handleContentSizeChange = () => {
-    if (sideContentOpen === true && contentSize === 7) {
-      setContentSize(4)
-    } else {
-      setContentSize(7)
+    if (screenMD === false) {
+      if (contentRightGrid === 7) {
+        dispatch(contentDetailLeft())
+      } else {
+        dispatch(contentDetailRight())
+      }
+      setButtonArrow(!buttonArrow)
     }
-
-    setButtonArrow(!buttonArrow)
   }
 
   const fetchData = (doctype, name) => {
@@ -152,23 +208,29 @@ const LayoutTwoPage = ({
     try {
       const dataRow = await fetchData(doctype, params.name)
       setDataRow(dataRow)
-      setEditStatus(false)
     } catch (err) {
       console.log('Error fetching data:', err)
     }
 
-    setSideContentOpen(true)
-    setScreenMDSelect(true)
+    if (screenMD) {
+      console.log('a')
+      dispatch(contentMiddleRight())
+    } else {
+      console.log('b')
+      dispatch(contentDetailRight())
+    }
   }
 
   const handleContentClose = () => {
     if (screenMD) {
-      setContentSize(contentSizeInit)
+      if (contentRightStatus === true) {
+        dispatch(contentMiddleLeft())
+      } else {
+        dispatch(contentMiddleRight())
+      }
     } else {
-      setSideContentOpen(false)
-      setContentSize(contentSizeInit)
+      dispatch(contentDefault())
     }
-    setScreenMDSelect(false)
   }
 
   const handleArrowLeft = async () => {
@@ -198,10 +260,10 @@ const LayoutTwoPage = ({
 
   const handleSaveClick = async event => {
     console.log('Save Clicked: ', dataRow)
-    const dataUpdate = await fetchData(doctype, dataRow.name)
-    setDataRowModified(dataUpdate.modified)
+    const dataPreUpdate = await fetchData(doctype, dataRow.name)
+    console.log('dataUpdateAAA', dataUpdate)
 
-    if (Object.keys(dataRow).length !== 0 && dataRow.modified === dataUpdate.modified) {
+    if (Object.keys(dataRow).length !== 0 && dataRow.modified === dataPreUpdate.modified) {
       axios
         .put(`${process.env.NEXT_PUBLIC_API_URL}${doctype}/${dataRow.name}`, dataUpdate, {
           headers: {
@@ -217,6 +279,7 @@ const LayoutTwoPage = ({
         .catch(err => {
           console.log(err)
         })
+      setDataUpdate({})
     } else {
       setSaveWarning(true)
     }
@@ -229,6 +292,12 @@ const LayoutTwoPage = ({
   useEffect(() => {
     console.log('dataUpdate', dataUpdate)
   }, [dataUpdate])
+
+  useEffect(() => {
+    console.log('contentRightStatus', contentRightStatus)
+    console.log('contentLeftStatus', contentLeftStatus)
+    console.log('screenMD', screenMD)
+  }, [contentRightStatus, contentLeftStatus, screenMD])
 
   if (!data) {
     return <FullPageSkeleton />
@@ -260,7 +329,7 @@ const LayoutTwoPage = ({
 
       {/* ข้อมูลที่แสดงผลข้างซ้าย */}
       <Grid container justifyContent='center' columnSpacing={4}>
-        {(!screenMD || !screenMDSelect) && (
+        {contentLeftStatus && (
           <Grid item xs>
             <ContentLeft
               data={data}
@@ -273,99 +342,95 @@ const LayoutTwoPage = ({
           </Grid>
         )}
 
-        {sideContentOpen && (
-          <>
-            {!screenMD && (
-              <Divider orientation='vertical' flexItem onClick={() => handleContentSizeChange()}>
-                <IconButton aria-label='delete'>
-                  {buttonArrow ? <KeyboardDoubleArrowRightIcon /> : <KeyboardDoubleArrowLeftIcon />}
-                </IconButton>
-              </Divider>
-            )}
+        {contentDividerStatus && (
+          <Divider orientation='vertical' flexItem onClick={() => handleContentSizeChange()}>
+            <IconButton aria-label='delete'>
+              {buttonArrow ? <KeyboardDoubleArrowRightIcon /> : <KeyboardDoubleArrowLeftIcon />}
+            </IconButton>
+          </Divider>
+        )}
 
-            {(screenMDSelect || !screenMD) && (
-              <Grid item xs md={contentSize}>
-                <Grid container>
-                  <Grid item xs={12}>
-                    <Box
-                      sx={{
-                        flexDirection: 'row',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        mb: 2
-                      }}
-                    >
-                      <Box sx={{ display: 'flex' }}>
-                        <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-                          {dataRow.name}
-                        </Typography>
+        {contentRightStatus && (
+          <Grid item xs md={contentRightGrid}>
+            <Grid container>
+              <Grid item xs={12}>
+                <Box
+                  sx={{
+                    flexDirection: 'row',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    mb: 2
+                  }}
+                >
+                  <Box sx={{ display: 'flex' }}>
+                    <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
+                      {dataRow.name}
+                    </Typography>
 
-                        <StatusChip editStatus={editStatus} docStatus={dataRow[docStatusName]} />
-                      </Box>
-                      <Box sx={{ display: 'flex', flexDirection: 'row', mr: 3 }}>
-                        <IconButton sx={IconButtonStyle} onClick={() => handleArrowLeft()}>
-                          <KeyboardArrowLeftIcon />
-                        </IconButton>
-                        <IconButton sx={IconButtonStyle} onClick={() => handleArrowRight()}>
-                          <KeyboardArrowRightIcon />
-                        </IconButton>
-                        <IconButton sx={IconButtonStyle}>
-                          <MoreHorizIcon />
-                        </IconButton>
-                        {/* Save Button */}
-                        <IconButton color='success' sx={IconButtonStyle} onClick={handleSaveClick}>
-                          <SaveIcon />
-                        </IconButton>
-                        <IconButton color='error' sx={IconButtonStyle} onClick={handleContentClose}>
-                          <CloseIcon />
-                        </IconButton>
-                      </Box>
-                    </Box>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    {menuContent !== undefined && menuContent.length > 0 ? (
-                      <TabContext value={tabValue.toString()}>
-                        <Tabs
-                          value={tabValue}
-                          onChange={handleTabChange}
-                          variant='scrollable'
-                          scrollButtons
-                          allowScrollButtonsMobile
-                          sx={styles.tabPanel}
-                        >
-                          {menuContent?.map(item => (
-                            <Tab value={item.id} label={item.name} key={item.id} />
-                          ))}
-                        </Tabs>
-                        {showContent.map((component, index) => (
-                          <TabPanel value={(index + 1).toString()} key={index + 1}>
-                            <Box sx={{ m: -3 }}>{component}</Box>
-                          </TabPanel>
-                        ))}
-                      </TabContext>
-                    ) : (
-                      <Box sx={{ mr: 3 }}>{noTabContent}</Box>
-                    )}
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Card sx={styles.cardComment}>
-                      <Typography variant='h6' sx={{ my: 2 }}>
-                        Add Comment
-                      </Typography>
-                      <TextField size='small' variant='filled' multiline rows={4} fullWidth />
-                      <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-                      <Button variant='contained' sx={{ marginBlock: 2 }}>
-                        comment
-                      </Button>
-                    </Card>
-                  </Grid>
-                </Grid>
+                    <StatusChip editStatus={editStatus} docStatus={dataRow[docStatusName]} />
+                  </Box>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', mr: 3 }}>
+                    <IconButton sx={IconButtonStyle} onClick={() => handleArrowLeft()}>
+                      <KeyboardArrowLeftIcon />
+                    </IconButton>
+                    <IconButton sx={IconButtonStyle} onClick={() => handleArrowRight()}>
+                      <KeyboardArrowRightIcon />
+                    </IconButton>
+                    <IconButton sx={IconButtonStyle}>
+                      <MoreHorizIcon />
+                    </IconButton>
+                    {/* Save Button */}
+                    <IconButton color='success' sx={IconButtonStyle} onClick={handleSaveClick}>
+                      <SaveIcon />
+                    </IconButton>
+                    <IconButton color='error' sx={IconButtonStyle} onClick={handleContentClose}>
+                      <CloseIcon />
+                    </IconButton>
+                  </Box>
+                </Box>
               </Grid>
-            )}
-          </>
+
+              <Grid item xs={12}>
+                {menuContent !== undefined && menuContent.length > 0 ? (
+                  <TabContext value={tabValue.toString()}>
+                    <Tabs
+                      value={tabValue}
+                      onChange={handleTabChange}
+                      variant='scrollable'
+                      scrollButtons
+                      allowScrollButtonsMobile
+                      sx={styles.tabPanel}
+                    >
+                      {menuContent?.map(item => (
+                        <Tab value={item.id} label={item.name} key={item.id} />
+                      ))}
+                    </Tabs>
+                    {showContent.map((component, index) => (
+                      <TabPanel value={(index + 1).toString()} key={index + 1}>
+                        <Box sx={{ m: -3 }}>{component}</Box>
+                      </TabPanel>
+                    ))}
+                  </TabContext>
+                ) : (
+                  <Box sx={{ mr: 3 }}>{noTabContent}</Box>
+                )}
+              </Grid>
+
+              <Grid item xs={12}>
+                <Card sx={styles.cardComment}>
+                  <Typography variant='h6' sx={{ my: 2 }}>
+                    Add Comment
+                  </Typography>
+                  <TextField size='small' variant='filled' multiline rows={4} fullWidth />
+                  <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
+                  <Button variant='contained' sx={{ marginBlock: 2 }}>
+                    comment
+                  </Button>
+                </Card>
+              </Grid>
+            </Grid>
+          </Grid>
         )}
       </Grid>
     </Box>

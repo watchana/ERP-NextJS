@@ -1,5 +1,6 @@
 // ** Next Import
-import Link from 'next/link'
+import React from 'react'
+import { useRouter } from 'next/router'
 
 // ** MUI Components
 import Button from '@mui/material/Button'
@@ -11,7 +12,7 @@ import Box from '@mui/material/Box'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
-import FooterIllustrations from 'src/views/pages/misc/FooterIllustrations'
+// import FooterIllustrations from 'src/views/pages/misc/FooterIllustrations'
 
 // ** Styled Components
 const BoxWrapper = styled(Box)(({ theme }) => ({
@@ -20,21 +21,23 @@ const BoxWrapper = styled(Box)(({ theme }) => ({
   }
 }))
 
-const Img = styled('img')(({ theme }) => ({
-  marginBottom: theme.spacing(10),
-  [theme.breakpoints.down('lg')]: {
-    height: 450,
-    marginTop: theme.spacing(10)
-  },
-  [theme.breakpoints.down('md')]: {
-    height: 400
-  },
-  [theme.breakpoints.up('lg')]: {
-    marginTop: theme.spacing(13)
-  }
-}))
+// const Img = styled('img')(({ theme }) => ({
+//   marginBottom: theme.spacing(10),
+//   [theme.breakpoints.down('lg')]: {
+//     height: 450,
+//     marginTop: theme.spacing(10)
+//   },
+//   [theme.breakpoints.down('md')]: {
+//     height: 400
+//   },
+//   [theme.breakpoints.up('lg')]: {
+//     marginTop: theme.spacing(13)
+//   }
+// }))
 
 const Error401 = () => {
+  const router = useRouter()
+
   return (
     <Box className='content-center'>
       <Box sx={{ p: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
@@ -45,14 +48,12 @@ const Error401 = () => {
           </Typography>
           <Typography variant='body2'>You don&prime;t have permission to access this page. Go Home!</Typography>
         </BoxWrapper>
-        <Img height='487' alt='error-illustration' src='/images/pages/401.png' />
-        <Link passHref href='/'>
-          <Button component='a' variant='contained' sx={{ px: 5.5 }}>
-            Back to Home
-          </Button>
-        </Link>
+        {/* <Img height='487' alt='error-illustration' src='/images/pages/401.png' /> */}
+        <Button component='a' variant='contained' sx={{ px: 5.5 }} onClick={() => router.push('/')}>
+          Back to Home
+        </Button>
       </Box>
-      <FooterIllustrations />
+      {/* <FooterIllustrations /> */}
     </Box>
   )
 }

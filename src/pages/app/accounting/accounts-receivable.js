@@ -24,10 +24,17 @@ const button = [
 
 const columns = [
   { field: 'id', headerName: '', width: 70 },
-  { field: 'posting_date', headerName: 'Posting Date', width: 130 },
-  { field: 'company', headerName: 'Company', width: 130 },
-  { field: 'account', headerName: 'Receivable Account', width: 130 },
-  { field: 'customer', headerName: 'Customer', width: 130 },
+  {
+    field: 'posting_date',
+    headerName: 'Posting Date',
+    width: 130,
+    valueFormatter: params => {
+      return dayjs(params.value).format('DD-MM-YYYY')
+    }
+  },
+  { field: 'party', headerName: 'Customer', width: 250 },
+  { field: 'account', headerName: 'Receivable Account', width: 400 },
+  { field: 'customer_contact', headerName: 'Customer Contact', width: 130 },
   { field: 'cost_center', headerName: 'Cost Center', width: 130 },
   { field: 'voucher_type', headerName: 'Voucher Type', width: 130 },
   { field: 'voucher_no', headerName: 'Voucher No', width: 130 },
@@ -137,12 +144,12 @@ const AccountsReceivable = ({
 
   // ? สำหรับเพิ่ม input ในหน้าต่าง
   const inputConfigs = [
-    { type: 'textDropdown', label: 'Company', name: 'company', value: filterConfig.company, data: dataCompany },
-    { type: 'date', label: 'Posting Date', value: filterConfig.postingDate },
-    { type: 'textDropdown', label: 'Finance Book', data: dataFinanceBook },
-    { type: 'textDropdown', label: 'Cost Center', data: dataCostCenter },
-    { type: 'textDropdown', label: 'Customer', data: dataCustomer },
-    { type: 'textDropdown', label: 'Receivable Account', data: dataCustomer },
+    { type: 'textDropdown', label: 'Company', name: 'company', data: dataCompany },
+    { type: 'date', label: 'Posting Date', name: 'postingDate' },
+    { type: 'textDropdown', label: 'Finance Book', name: 'financeBook', data: dataFinanceBook },
+    { type: 'textDropdown', label: 'Cost Center', name: 'costCenter', data: dataCostCenter },
+    { type: 'textDropdown', label: 'Customer', name: 'customer', data: dataCustomer },
+    { type: 'textDropdown', label: 'Receivable Account', name: 'receivableAccount', data: dataCustomer },
     {
       type: 'select',
       label: 'Ageing Based On',
@@ -150,36 +157,33 @@ const AccountsReceivable = ({
       value: filterConfig.ageingBasedOn,
       data: [{ name: 'Posting Date' }, { name: 'Due Date' }]
     },
-    { type: 'text', label: 'Ageing Range 1', name: 'ageingRange1', value: filterConfig.ageingRange1 },
-    { type: 'text', label: 'Ageing Range 2', name: 'ageingRange2', value: filterConfig.ageingRange2 },
-    { type: 'text', label: 'Ageing Range 3', name: 'ageingRange3', value: filterConfig.ageingRange3 },
-    { type: 'text', label: 'Ageing Range 4', name: 'ageingRange4', value: filterConfig.ageingRange4 },
-    { type: 'textDropdown', label: 'Customer Group', data: dataCustomerGroup },
-    { type: 'textDropdown', label: 'Payment Terms Template', data: dataPaymentTerm },
-    { type: 'textDropdown', label: 'Sales Partner', data: dataSalesPartner },
-    { type: 'textDropdown', label: 'Sales Person', data: dataSalesPerson },
-    { type: 'textDropdown', label: 'Territory', data: dataTerritory },
-    { type: 'checkbox', label: 'Group By Customer', name: 'groupByCustomer', value: filterConfig.groupByCustomer },
+    { type: 'text', label: 'Ageing Range 1', name: 'ageingRange1' },
+    { type: 'text', label: 'Ageing Range 2', name: 'ageingRange2' },
+    { type: 'text', label: 'Ageing Range 3', name: 'ageingRange3' },
+    { type: 'text', label: 'Ageing Range 4', name: 'ageingRange4' },
+    { type: 'textDropdown', label: 'Customer Group', name: 'customerGroup', data: dataCustomerGroup },
+    { type: 'textDropdown', label: 'Payment Terms Template', name: 'paymentTermsTemplate', data: dataPaymentTerm },
+    { type: 'textDropdown', label: 'Sales Partner', name: 'salesPartner', data: dataSalesPartner },
+    { type: 'textDropdown', label: 'Sales Person', name: 'salesPerson', data: dataSalesPerson },
+    { type: 'textDropdown', label: 'Territory', name: 'territory', data: dataTerritory },
+    { type: 'checkbox', label: 'Group By Customer', name: 'groupByCustomer' },
     {
       type: 'checkbox',
       label: 'Based On Payment Terms',
-      name: 'basedOnPaymentTerms',
-      value: filterConfig.basedOnPaymentTerms
+      name: 'basedOnPaymentTerms'
     },
     {
       type: 'checkbox',
       label: 'Show Future Payments',
-      name: 'showFuturePayments',
-      value: filterConfig.showFuturePayments
+      name: 'showFuturePayments'
     },
     {
       type: 'checkbox',
       label: 'Show Linked Delivery Notes',
-      name: 'showLinkedDeliveryNotes',
-      value: filterConfig.showLinkedDeliveryNotes
+      name: 'showLinkedDeliveryNotes'
     },
-    { type: 'checkbox', label: 'Show Sales Person', name: 'showSalesPerson', value: filterConfig.showSalesPerson },
-    { type: 'checkbox', label: 'Show Remarks', name: 'showRemarks', value: filterConfig.showRemarks }
+    { type: 'checkbox', label: 'Show Sales Person', name: 'showSalesPerson' },
+    { type: 'checkbox', label: 'Show Remarks', name: 'showRemarks' }
   ]
 
   const handleDataChange = (name, value) => {
@@ -196,7 +200,7 @@ const AccountsReceivable = ({
 
   return (
     <LayoutOnePageFilter title='Accounts Receivable' buttonTopRight={button}>
-      <InputListRenderer inputConfigs={inputConfigs} onDataChange={handleDataChange} />
+      <InputListRenderer inputConfigs={inputConfigs} filterConfig={filterConfig} onDataChange={handleDataChange} />
       <Divider />
       <DataGrid rows={data} columns={columns} getRowId={row => row.name} />
     </LayoutOnePageFilter>

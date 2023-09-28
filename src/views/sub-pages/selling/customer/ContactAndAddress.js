@@ -21,7 +21,11 @@ import {
   FormGroup,
   Grid,
   IconButton,
-  TextField
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material'
 
 import axios from 'axios'
@@ -66,12 +70,6 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
   const handleSynGoogle = event => {
     setIsSymGoogle(event.target.checked)
   }
-
-  const top100Films = [
-    { label: 'The Shawshank Redemption', year: 1994 },
-    { label: 'The Godfather', year: 1972 },
-    { label: 'The Godfather: Part II', year: 1974 }
-  ]
 
   const columns = [
     { field: 'link_doctype', headerName: 'Doc Type', width: 150 },
@@ -129,6 +127,14 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
   const [getDataLinks, setGetDataLinks] = useState([])
   const [getDataContact, setGetDataContact] = useState([])
 
+  // const handleChangeAddress = event => {
+  //   setDataAddr(event.target.value)
+  // }
+
+  // const handleChangeContact = event => {
+  //   setDataContact(event.target.value)
+  // }
+
   useEffect(() => {
     axios
       .get(`${process.env.NEXT_PUBLIC_API_URL}Address/${dataRow.customer_primary_address}`, {
@@ -185,11 +191,7 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
     setDataContact({ ...dataContact, [event.target.name]: event.target.value })
   }
 
-  const checkboxStyle = {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
-  }
+  0
 
   return (
     <Box>
@@ -247,14 +249,28 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                           />
                           <Typography sx={{ marginBottom: 2 }}>Address Type</Typography>
 
-                          <Autocomplete
-                            sx={{ height: 50 }}
-                            disablePortal
-                            id='combo-box-demo'
-                            options={top100Films}
-                            fullWidth
-                            renderInput={params => <TextField {...params} label='Movie' />}
-                          />
+                          <FormControl variant='filled' fullWidth size='small' sx={{ minHeight: 26 }}>
+                            <InputLabel id='demo-simple-select-filled-label'></InputLabel>
+                            <Select
+                              labelId='demo-simple-select-filled-label'
+                              id='demo-simple-select-filled'
+                              // value={age}
+                              // onChange={handleChangeAddress}
+                            >
+                              <MenuItem value={1}>Billing</MenuItem>
+                              <MenuItem value={2}>Shipping</MenuItem>
+                              <MenuItem value={3}>Office</MenuItem>
+                              <MenuItem value={4}>Personal</MenuItem>
+                              <MenuItem value={5}>Plant</MenuItem>
+                              <MenuItem value={6}>Postal</MenuItem>
+                              <MenuItem value={7}>Shop</MenuItem>
+                              <MenuItem value={8}>Subsidiary</MenuItem>
+                              <MenuItem value={9}>Warehouse</MenuItem>
+                              <MenuItem value={10}>Current</MenuItem>
+                              <MenuItem value={11}>Permanent</MenuItem>
+                              <MenuItem value={12}>Other</MenuItem>
+                            </Select>
+                          </FormControl>
 
                           <Typography sx={{ margin: 1 }}>Address Line 1 </Typography>
                           <TextField
@@ -432,10 +448,6 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                           />
                         </Grid>
                       </Grid>
-                      <Card sx={{ width: '100%', p: 5 }}>
-                        <Typography variant=''>Add a comment:</Typography>
-                        <TextField size='small' variant='filled' label='' multiline rows={8} fullWidth />
-                      </Card>
                     </DialogContent>
 
                     <DialogActions>
@@ -533,15 +545,20 @@ const ContactAndAddress = ({ dataRow, setDataRow }) => {
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <Typography sx={{ marginBottom: 2 }}>{dataContact.status}</Typography>
-                          <Autocomplete
-                            sx={{ height: 50 }}
-                            disablePortal
-                            id='combo-box-demo'
-                            options={top100Films}
-                            fullWidth
-                            renderInput={params => <TextField {...params} label='Movie' />}
-                          />
+                          <Typography sx={{ marginBottom: 2 }}>Status</Typography>
+                          <FormControl variant='filled' fullWidth size='small' sx={{ minHeight: 24 }}>
+                            <InputLabel id='demo-simple-select-filled-label'></InputLabel>
+                            <Select
+                              labelId='demo-simple-select-filled-label'
+                              id='demo-simple-select-filled'
+                              // value={age}
+                              // onChange={handleChangeContact}
+                            >
+                              <MenuItem value={1}>Passive</MenuItem>
+                              <MenuItem value={2}>Open</MenuItem>
+                              <MenuItem value={3}>Replied</MenuItem>
+                            </Select>
+                          </FormControl>
 
                           <Typography sx={{ margin: 1 }}>Salutation </Typography>
                           <TextField
