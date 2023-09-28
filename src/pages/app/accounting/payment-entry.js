@@ -30,6 +30,7 @@ const PurchaseInvoice = ({ data }) => {
       setDataRow={setDataRow}
       doctype='Payment Entry'
       docStatusName='disabled'
+      noTabContent={[]}
     />
   )
 }
