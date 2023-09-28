@@ -352,7 +352,7 @@ const LayoutTwoPage = ({
         )}
 
         {contentRightStatus && (
-          <Grid item xs md={contentRightGrid}>
+          <Grid item xs md={noTabContent.length > 0 ? 12 : contentRightGrid}>
             <Grid container>
               <Grid item xs={12}>
                 <Box
