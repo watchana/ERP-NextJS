@@ -116,7 +116,7 @@ const LoginPage = () => {
         localStorage.setItem('userData', userString)
 
         Cookies.set('jwt', response.data.data.token, { expires: 1, path: '/' })
-        router.push('/app')
+        router.replace('/app')
       } else {
         console.error('Login failed')
       }

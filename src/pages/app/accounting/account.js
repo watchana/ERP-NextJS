@@ -3,40 +3,25 @@ import React from 'react'
 
 // ** Axios Imports
 import axios from 'axios'
-import SubPages from 'src/views/sub-pages/SubPages'
-
-// ** Dummy Data
-import { SalesInvoiceContentMenu } from 'src/dummy/contentPages/salesInvoice'
+import LayoutTwoPage from 'src/views/sub-pages/LayoutTwoPage'
 
 // ** Custom Components
-import DetailSalesInvoice from 'src/views/sub-pages/accounting/sales-invoice/DetailSalesInvoice'
-import Payments from 'src/views/sub-pages/accounting/sales-invoice/PaymentsSalesInvoice'
-import ContactAddressSalesinvoice from 'src/views/sub-pages/accounting/sales-invoice/ContactAddressSalesInvoice'
-import TermsSalesInvoice from 'src/views/sub-pages/accounting/sales-invoice/TermsSalesInvoice'
-import MoreinfoSalesinvoice from 'src/views/sub-pages/accounting/sales-invoice/MoreinfoSalesInvoice'
+import ChartofAccounts from 'src/views/sub-pages/accounting/account/ChartofAccounts'
 
 // ** Layouts
 import SubPageLayout from 'src/@core/layouts/SubPageLayout'
-import ChartofAccounts from 'src/views/sub-pages/accounting/account/ChartofAccounts'
 
 const Account = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
   const [dataList, setDataList] = React.useState(data)
 
-  const showContent = [
-    <ChartofAccounts key={'detail'} dataRow={dataRow} />,
-    <Payments key={'payments'} dataRow={dataRow} />,
-    <ContactAddressSalesinvoice key={'accounting'} dataRow={dataRow} />,
-    <TermsSalesInvoice key={'trems'} dataRow={dataRow} />,
-    <MoreinfoSalesinvoice key={'moerinfo'} dataRow={dataRow} />
-  ]
-
   return (
-    <SubPages
+    <LayoutTwoPage
       data={dataList}
       setData={setDataList}
-      menuContent={SalesInvoiceContentMenu}
-      showContent={showContent}
+      menuContent={[]}
+      showContent={[]}
+      noTabContent={<ChartofAccounts dataRow={dataRow} setDataRow={setDataRow} />}
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='Account'

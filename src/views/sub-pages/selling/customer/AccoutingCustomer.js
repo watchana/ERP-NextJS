@@ -122,7 +122,7 @@ const AccountingCustomer = ({ dataRow, setDataRow }) => {
 
         <Grid sx={{ mt: 15 }}>
           <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
-          <Typography variant='h6'>Default Accounts:</Typography>
+          <Typography sx={{ fontWeight: 'bold' }}>Default Accounts:</Typography>
         </Grid>
         <Grid container spacing={2} sx={{ mb: 20 }}>
           <Grid item xs={12}>
@@ -145,7 +145,7 @@ const AccountingCustomer = ({ dataRow, setDataRow }) => {
         <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
         <Grid container sx={{ mb: 5 }}>
           <Grid item sx={{ width: '100%' }}>
-            <Button size='small' variant='filled' onClick={handleClickInformation}>
+            <Button size='small' variant='filled' onClick={handleClickInformation} sx={{ fontWeight: 'bold' }}>
               More Infomation
             </Button>
 

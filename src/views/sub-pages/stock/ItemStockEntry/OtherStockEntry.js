@@ -9,6 +9,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  InputAdornment,
   TextField,
   Typography
 } from '@mui/material'
@@ -37,23 +38,21 @@ const OtherStockEntry = ({ dataRow, setDataRow }) => {
 
   return (
     <Grid>
-      <Card>
+      <Card sx={{ p: 4 }}>
         <Box sx={{ display: 'flex' }}>
           <Box sx={{ display: 'flex' }}>
-            <Button size='small' variant='filled' label='' onClick={handleClickPrinting}>
-              <Typography>Printing Settings</Typography>
+            <Button size='small' variant='filled' label='' onClick={handleClickPrinting} sx={{ fontWeight: 'bold' }}>
+              Printing Settings
             </Button>
           </Box>
           <Box>
-            <CardActions className='card-action-dense'>
-              <IconButton size='small' onClick={handleClickPrinting}>
-                {collapsePrinting ? (
-                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                ) : (
-                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                )}
-              </IconButton>
-            </CardActions>
+            <IconButton size='small' onClick={handleClickPrinting}>
+              {collapsePrinting ? (
+                <ChevronUp sx={{ fontSize: '1.875rem' }} />
+              ) : (
+                <ChevronDown sx={{ fontSize: '1.875rem' }} />
+              )}
+            </IconButton>
           </Box>
         </Box>
         <Box>
@@ -79,20 +78,18 @@ const OtherStockEntry = ({ dataRow, setDataRow }) => {
         {/* End Collapse Printing Settings */}
         <Box sx={{ display: 'flex' }}>
           <Box sx={{ display: 'flex' }}>
-            <Button size='small' variant='filled' label='' onClick={handleClickInformation}>
-              <Typography>More Information</Typography>
+            <Button size='small' variant='filled' label='' onClick={handleClickInformation} sx={{ fontWeight: 'bold' }}>
+              More Information
             </Button>
           </Box>
           <Box>
-            <CardActions className='card-action-dense'>
-              <IconButton size='small' onClick={handleClickInformation}>
-                {collapseInformation ? (
-                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                ) : (
-                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                )}
-              </IconButton>
-            </CardActions>
+            <IconButton size='small' onClick={handleClickInformation}>
+              {collapseInformation ? (
+                <ChevronUp sx={{ fontSize: '1.875rem' }} />
+              ) : (
+                <ChevronDown sx={{ fontSize: '1.875rem' }} />
+              )}
+            </IconButton>
           </Box>
         </Box>
         <Box>
@@ -109,6 +106,7 @@ const OtherStockEntry = ({ dataRow, setDataRow }) => {
                     fullWidth
                     onChange={handleTextChange}
                     name='is_opening'
+                    disabled
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -116,20 +114,36 @@ const OtherStockEntry = ({ dataRow, setDataRow }) => {
                   <TextField
                     size='small'
                     variant='filled'
-                    value={dataRow.per_transferred}
-                    fullWidth
-                    onChange={handleTextChange}
+                    value={`${dataRow?.per_transferred === '0.0' ? ' 0.0' : dataRow?.per_transferred}%`}
                     name='per_transferred'
+                    onChange={handleTextChange}
+                    fullWidth
+                    disabled
                   />
 
                   <Typography sx={{ margin: 1 }}>Total Amount</Typography>
                   <TextField
                     size='small'
                     variant='filled'
-                    value={dataRow.total_amount}
+                    value={
+                      dataRow?.total_amount === '0.0'
+                        ? '฿0.0'
+                        : dataRow?.total_amount.toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                          })
+                    }
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position='start'>
+                          <Typography>฿</Typography>
+                        </InputAdornment>
+                      )
+                    }}
                     fullWidth
                     onChange={handleTextChange}
                     name='total_amount'
+                    disabled
                   />
                 </Grid>
               </Grid>

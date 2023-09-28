@@ -3,10 +3,10 @@ import React, { useEffect } from 'react'
 
 // ** Axios Imports
 import axios from 'axios'
-import SubPages from 'src/views/sub-pages/SubPages'
+import LayoutTwoPage from 'src/views/sub-pages/LayoutTwoPage'
 
 // ** Dummy Data
-import { ItemContentMenu, defaultMaterialRequestType } from 'src/dummy/contentPages/itemPage'
+import { ItemContentMenu, defaultMaterialRequestType } from 'src/dummy/sub-pages/stock/itemPage'
 import { CustomerContentMenu } from 'src/dummy/contentPages/customerPage'
 
 // ** Custom Components
@@ -25,13 +25,21 @@ import SubPageLayout from 'src/@core/layouts/SubPageLayout'
 const CustomerPage = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
   const [dataList, setDataList] = React.useState(data)
+  const [dataUpdate, setDataUpdate] = React.useState([])
+  const [editStatus, setEditStatus] = React.useState(false)
+
+  const handleUpdateData = async (field, value) => {
+    setDataRow({ ...dataRow, [field]: value })
+    setDataUpdate({ ...dataUpdate, [field]: value })
+    setEditStatus(true)
+  }
 
   useEffect(() => {
     console.log(dataRow)
   }, [dataRow])
 
   const showContent = [
-    <DetailCustomer key='detail' dataRow={dataRow} setDataRow={setDataRow} />,
+    <DetailCustomer key='detail' dataRow={dataRow} setDataRow={setDataRow} handleUpdateData={handleUpdateData} />,
     <DashboardCustomer key='dashboard' dataRow={dataRow} />,
     <ContactAndAddress key='ContactAndAddress' dataRow={dataRow} setDataRow={setDataRow} />,
     <TaxCustomer key='Tax' dataRow={dataRow} setDataRow={setDataRow} />,
@@ -42,7 +50,7 @@ const CustomerPage = ({ data }) => {
   ]
 
   return (
-    <SubPages
+    <LayoutTwoPage
       data={dataList}
       setData={setDataList}
       menuContent={CustomerContentMenu}
@@ -51,6 +59,9 @@ const CustomerPage = ({ data }) => {
       setDataRow={setDataRow}
       doctype='Customer'
       docStatusName='disabled'
+      dataUpdate={dataUpdate}
+      editStatus={editStatus}
+      setEditStatus={setEditStatus}
     />
   )
 }

@@ -109,15 +109,16 @@ const ChartofAccounts = ({ dataRow, setDataRow }) => {
     { value: 'Yes', label: 'Yes' }
   ]
 
-  const [accountDropdownBalanceMustBe, setAccountDropdownBalanceMustBe] = useState('')
   const [anchorElBalanceMustBe, setAnchorElBalanceMustBe] = useState(null)
-
-  const handleAccountDropdownBalanceMustBeChange = event => {
-    setAccountDropdownBalanceMustBe(event.target.value)
-  }
+  const [selectedBalanceMustBe, setSelectedBalanceMustBe] = useState('')
 
   const handleMenuOpenBalanceMustBe = event => {
     setAnchorElBalanceMustBe(event.currentTarget)
+  }
+
+  const handleBalanceMustBe = value => {
+    setSelectedBalanceMustBe(value)
+    handleMenuCloseFrozen()
   }
 
   const handleMenuCloseBalanceMustBe = () => {
@@ -146,8 +147,6 @@ const ChartofAccounts = ({ dataRow, setDataRow }) => {
     <Box>
       <Card
         sx={{
-          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
-          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
           p: 2,
           mb: 2
         }}
@@ -163,7 +162,6 @@ const ChartofAccounts = ({ dataRow, setDataRow }) => {
               size='small'
               variant='filled'
               value={dataRow?.account_number || ''}
-              name='account_number'
               onChange={handleTextChange}
             />
 
@@ -175,7 +173,6 @@ const ChartofAccounts = ({ dataRow, setDataRow }) => {
               size='small'
               variant='filled'
               value={dataRow.company || ''}
-              name='company'
               onChange={handleTextChange}
             />
 
@@ -186,7 +183,6 @@ const ChartofAccounts = ({ dataRow, setDataRow }) => {
               size='small'
               variant='filled'
               value={dataRow.root_type || ''}
-              name='root_type'
               onChange={handleTextChange}
             />
 
@@ -198,7 +194,6 @@ const ChartofAccounts = ({ dataRow, setDataRow }) => {
               variant='filled'
               label=''
               value={dataRow.report_type || ''}
-              name='report_type'
               onChange={handleTextChange}
             />
 
@@ -307,21 +302,21 @@ const ChartofAccounts = ({ dataRow, setDataRow }) => {
               fullWidth
               size='small'
               variant='filled'
-              value={selectedFrozen || dataRow.freeze_account}
+              value={selectedBalanceMustBe || dataRow.freeze_account}
               name='description'
-              onClick={handleMenuOpenFrozen}
+              onClick={handleMenuOpenBalanceMustBe}
               InputProps={{
                 endAdornment: (
-                  <span onClick={handleMenuOpenFrozen} style={{ cursor: 'pointer' }}>
+                  <span onClick={handleMenuOpenBalanceMustBe} style={{ cursor: 'pointer' }}>
                     <Icon path={mdiMenuDown} size={1} />
                   </span>
                 )
               }}
             />
             <Menu
-              anchorEl={anchorElFrozen}
-              open={Boolean(anchorElFrozen)}
-              onClose={handleMenuCloseFrozen}
+              anchorEl={anchorElBalanceMustBe}
+              open={Boolean(anchorElBalanceMustBe)}
+              onClose={handleMenuCloseBalanceMustBe}
               PaperProps={{
                 style: {
                   maxHeight: 250, // ความสูงสูงสุดของ dropdown
@@ -329,48 +324,17 @@ const ChartofAccounts = ({ dataRow, setDataRow }) => {
                 }
               }}
             >
-              {accountDropdownFrozen.map(option => (
-                <MenuItem key={option.value} value={option.value} onClick={() => handleFrozenChange(option.value)}>
+              {accountDorpdownBalanceMustBe.map(option => (
+                <MenuItem key={option.value} value={option.value} onClick={() => handleBalanceMustBe(option.value)}>
                   {option.label}
                 </MenuItem>
               ))}
             </Menu>
             <FormControlLabel
-              control={<Checkbox checked={Boolean(dataRow.include_in_gross) || false} />}
+              control={<Checkbox checked={Boolean(dataRow.balance_must_be) || false} />}
               label='Include in gross'
             />
           </Grid>
-        </Grid>
-        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-        <Grid item xs={12} sx={{ display: 'flex', marginBlock: 2 }}>
-          <Box onClick={handleClickDescription} sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ fontWeight: 'medium' }}>Description</Typography>
-            <IconButton size='small' disabled>
-              {collapseDescription ? <ChevronUp /> : <ChevronDown />}
-            </IconButton>
-          </Box>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Collapse in={collapseDescription}>
-            <Divider sx={{ margin: 0 }} />
-            <CardContent>
-              <Typography variant='subtitle2'>Description</Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={4}
-                value={dataRow.description || ''}
-                name='description'
-                onChange={handleTextChange}
-              />
-
-              <Box>
-                <Typography variant='subtitle1'>Brand</Typography>
-                <TextField fullWidth size='small' variant='filled' />
-              </Box>
-            </CardContent>
-          </Collapse>
         </Grid>
       </Card>
     </Box>

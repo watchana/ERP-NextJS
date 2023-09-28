@@ -3,10 +3,10 @@ import React from 'react'
 
 // ** Axios Imports
 import axios from 'axios'
-import SubPages from 'src/views/sub-pages/SubPages'
+import LayoutTwoPage from 'src/views/sub-pages/LayoutTwoPage'
 
 // ** Dummy Data
-import { ItemContentMenu, defaultMaterialRequestType, itemStockEntry } from 'src/dummy/contentPages/itemPage'
+import { ItemContentMenu, defaultMaterialRequestType, itemStockEntry } from 'src/dummy/sub-pages/stock/itemPage'
 
 // ** Custom Components
 import DetailStockEntry from 'src/views/sub-pages/stock/ItemStockEntry/DetailStockEntry'
@@ -27,7 +27,7 @@ const StockEntry = ({ data }) => {
   ]
 
   return (
-    <SubPages
+    <LayoutTwoPage
       data={data}
       setData={setDataList}
       menuContent={itemStockEntry}

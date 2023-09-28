@@ -15,7 +15,12 @@ import {
   FormControlLabel,
   Grid,
   Card,
-  CardHeader
+  CardHeader,
+  Autocomplete,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material'
 import Collapse from '@mui/material/Collapse'
 
@@ -29,6 +34,11 @@ const DetailCustomer = ({ dataRow, setDataRow }) => {
 
   const [collapseInternal, setCollapseInternal] = useState(false)
   const [collapseMarket, setCollapseSecMarket] = useState(false)
+  const [dataCustomerType, setDataCustomerType] = useState(false)
+
+  const handleChange = event => {
+    setDataCustomerType(event.target.value)
+  }
 
   const handleClickMarket = () => {
     setCollapseSecMarket(!collapseMarket)
@@ -53,16 +63,26 @@ const DetailCustomer = ({ dataRow, setDataRow }) => {
     console.log('data', dataRow)
   }, [dataRow])
 
+  const companyType = [{ label: 'Company' }, { label: 'Individual' }]
+
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
+
   return (
     <Box>
-      <Card
-        sx={{
-          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
-          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
-          p: 2,
-          mb: 2
-        }}
-      >
+      <Card sx={styles.card}>
         <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={6}>
             <Typography>Customer Name</Typography>
@@ -76,16 +96,20 @@ const DetailCustomer = ({ dataRow, setDataRow }) => {
               fullWidth
             />
             <Typography>Customer Type</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              label=''
-              onChange={handleTextChange}
-              value={dataRow.customer_type || ''}
-              name='customer_type'
-              fullWidth
-            />
+            <FormControl variant='filled' fullWidth size='small' sx={{ minHeight: 26 }}>
+              <InputLabel id='demo-simple-select-filled-label'></InputLabel>
+              <Select
+                sx={{ marginBottom: 5 }}
+                labelId='demo-simple-select-filled-label'
+                id='demo-simple-select-filled'
+                value={dataCustomerType}
+                onChange={handleChange}
+              >
+                <MenuItem value={10}>Billing</MenuItem>
+                <MenuItem value={20}>Shipping</MenuItem>
+              </Select>
+            </FormControl>
+
             <Typography>Customer Group</Typography>
             <TextField
               sx={{ marginBottom: 5 }}
@@ -147,7 +171,7 @@ const DetailCustomer = ({ dataRow, setDataRow }) => {
           </Grid>
         </Grid>
         <Divider sx={{ margin: 0, mb: 5 }} />
-        <CardHeader title='Descripstion' />
+        <Typography sx={{ fontWeight: 'bold', my: 6 }}> Description</Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12} md={12} lg={6}>
             <Typography>Billing Currency</Typography>
