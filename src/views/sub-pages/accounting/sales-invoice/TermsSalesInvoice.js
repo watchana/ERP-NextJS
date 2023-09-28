@@ -57,6 +57,25 @@ const TermsSalesInvoice = ({ dataRow }) => {
     return formattedValue
   }
 
+  const handleTextChange = event => {
+    handleUpdateData(event.target.name, event.target.value)
+  }
+
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
+
   const [quotation, setQuotation] = useState([])
   useEffect(() => {
     axios
@@ -111,14 +130,7 @@ const TermsSalesInvoice = ({ dataRow }) => {
 
   return (
     <Box>
-      <Card
-        sx={{
-          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
-          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
-          p: 2,
-          mb: 2
-        }}
-      >
+      <Card sx={styles.card}>
         <DataGrid
           sx={{ width: 'full', mt: 6 }}
           rows={quotation.payment_schedule || ''}
@@ -156,69 +168,92 @@ const TermsSalesInvoice = ({ dataRow }) => {
                 {/* {Object.values(quotation.items)?.map(item => ( */}
                 {/* ))} */}
                 <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>Due Date *</Typography>
-                    <TextField sx={{ marginBottom: 5 }} size='small' variant='filled' fullWidth value={formattedDate} />
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
+                      <Typography>Due Date *</Typography>
+                      <TextField
+                        fullWidth
+                        variant='outlined'
+                        name='due_date'
+                        value={formattedDate}
+                        onChange={handleTextChange}
+                        sx={styles.textField}
+                      />
+                    </Box>
                   </Grid>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>Invoice Portion</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={`${selectedRow?.invoice_portion === '0.0' ? ' 0.0' : selectedRow?.invoice_portion}%`}
-                    />
+
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
+                      <Typography>Invoice Portion</Typography>
+                      <TextField
+                        fullWidth
+                        variant='outlined'
+                        name='invoice_portion'
+                        value={`${selectedRow?.invoice_portion === '0.0' ? ' 0.0' : selectedRow?.invoice_portion}%`}
+                        onChange={handleTextChange}
+                        sx={styles.textField}
+                      />
+                    </Box>
                   </Grid>
                 </Grid>
                 <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}></Grid>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>Discount</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={selectedRow?.discount === '0.0' ? ' 0.0' : selectedRow?.discount}
-                    />
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}></Grid>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
+                      <Typography>Discount</Typography>
+                      <TextField
+                        fullWidth
+                        variant='outlined'
+                        name='discount'
+                        value={`${selectedRow?.discount === '0.0' ? ' 0.0' : selectedRow?.invoice_portion}%`}
+                        onChange={handleTextChange}
+                        sx={styles.textField}
+                      />
+                    </Box>
                   </Grid>
                 </Grid>
                 <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>Payment Amount (THB) *</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={
-                        selectedRow?.payment_amount === '0.0'
-                          ? '฿ 0.0'
-                          : `฿ ${parseFloat(selectedRow?.payment_amount).toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })}`
-                      }
-                    />
-                    <Typography>Outstanding</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={
-                        selectedRow?.outstanding === '0.0'
-                          ? '฿ 0.0'
-                          : `฿ ${parseFloat(selectedRow?.outstanding).toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })}`
-                      }
-                    />
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
+                      <Typography>Payment Amount (THB) *</Typography>
+                      <TextField
+                        fullWidth
+                        variant='outlined'
+                        name='discount'
+                        value={
+                          selectedRow?.payment_amount === '0.0'
+                            ? '฿ 0.0'
+                            : `฿ ${parseFloat(selectedRow?.payment_amount).toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                              })}`
+                        }
+                        onChange={handleTextChange}
+                        sx={styles.textField}
+                      />
+                    </Box>
+
+                    <Box sx={styles.box}>
+                      <Typography>Outstanding</Typography>
+                      <TextField
+                        fullWidth
+                        variant='outlined'
+                        name='discount'
+                        value={
+                          selectedRow?.outstanding === '0.0'
+                            ? '฿ 0.0'
+                            : `฿ ${parseFloat(selectedRow?.outstanding).toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                              })}`
+                        }
+                        onChange={handleTextChange}
+                        sx={styles.textField}
+                      />
+                    </Box>
                   </Grid>
                 </Grid>
               </Grid>

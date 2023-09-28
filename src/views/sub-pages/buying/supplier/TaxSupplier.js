@@ -1,53 +1,70 @@
 // ** React Import
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 // ** Mui Import
-import { Box, Divider, Grid, TextField, Typography, Card } from '@mui/material'
+import { Box, Grid, TextField, Typography, Card } from '@mui/material'
 
-const TaxSupplier = dataRow => {
+const TaxSupplier = ({ dataRow, handleUpdateData }) => {
+  const handleTextChange = event => {
+    handleUpdateData(event.target.name, event.target.value)
+  }
+
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
+
   return (
     <Box>
-      <Card
-        sx={{
-          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
-          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
-          p: 2,
-          mb: 2
-        }}
-      >
-        {/* ////////////////////////////////////// แถวที่ 1 ///////////////////////////////////////////// */}
-        <Grid container spacing={2}>
-          <Grid item sm={12} md={12} lg={6}>
-            <Typography>Tax ID</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              label=''
-              value={dataRow?.tax_id || ''}
-              fullWidth
-            />
+      <Card sx={styles.card}>
+        <Grid container spacing={3}>
+          <Grid item sm={12} md={6}>
+            <Box sx={styles.box}>
+              <Typography>Tax ID</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='tax_id'
+                value={dataRow.tax_id}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
           </Grid>
-          <Grid item sm={12} md={12} lg={6}>
-            <Typography>Tax Category</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              label=''
-              value={dataRow?.tax_category || ''}
-              fullWidth
-            />
+          <Grid item sm={12} md={6}>
+            <Box sx={styles.box}>
+              <Typography>Tax Category</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='tax_category'
+                value={dataRow?.tax_category || ''}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
 
-            <Typography>Tax Wihholding Category</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              label=''
-              value={dataRow?.tax_withholding_category || ''}
-              fullWidth
-            />
+            <Box sx={styles.box}>
+              <Typography>Tax Withholding Category</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='tax_withholding_category'
+                value={dataRow?.tax_withholding_category || ''}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
           </Grid>
         </Grid>
       </Card>

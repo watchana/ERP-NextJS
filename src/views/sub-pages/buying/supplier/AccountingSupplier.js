@@ -6,11 +6,15 @@ import { Box, Card, Divider, Grid, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 
-const Accounting = () => {
+const Accounting = ({ dataRow, handleUpdateData }) => {
   const [age, setAge] = useState('')
 
   const handleChange = event => {
     setAge(event.target.value)
+  }
+
+  const handleTextChange = event => {
+    handleUpdateData(event.target.name, event.target.value)
   }
 
   const columns = [
@@ -27,23 +31,38 @@ const Accounting = () => {
     }
   ]
 
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
+
   return (
     <Box>
-      <Card
-        sx={{
-          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
-          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
-          p: 2,
-          mb: 2
-        }}
-      >
-        {/* ////////////////////////////////////// แถวที่ 1 ///////////////////////////////////////////// */}
-        <Grid container spacing={2}>
-          <Grid item sm={12} md={12} lg={12}>
-            <Typography sx={{ marginBottom: 1 }}>Default Payment Terms Template</Typography>
-            <TextField size='small' variant='filled' fullWidth multiline />
-            <Box sx={{ borderBottom: '0.5px solid rgba(0, 0, 0, 0.1)', m: 8 }}></Box>
-
+      <Card sx={styles.card}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Box sx={styles.box}>
+              <Typography>Default Payment Terms Template</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='item_group'
+                value={dataRow?.payment_terms}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
+            <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
             <Typography sx={{ marginBottom: 1, mb: 5 }}>Default Accounts</Typography>
             <Typography variant='body2' sx={{ marginBottom: 1 }}>
               Accounts

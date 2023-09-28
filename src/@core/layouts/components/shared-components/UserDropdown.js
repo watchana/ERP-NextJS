@@ -56,10 +56,6 @@ const UserDropdown = () => {
     setUserData(storedUser)
   }, [])
 
-  useEffect(() => {
-    console.log('userData', userData)
-  }, [userData])
-
   const handleDropdownClose = url => {
     if (url) {
       router.push(url)

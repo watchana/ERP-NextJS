@@ -1,5 +1,5 @@
 // ** React Imports
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 // ** Axios Imports
 import axios from 'axios'
@@ -21,13 +21,26 @@ import SubPageLayout from 'src/@core/layouts/SubPageLayout'
 const SalesInvoice = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
   const [dataList, setDataList] = React.useState(data)
+  const [dataUpdate, setDataUpdate] = React.useState([])
+  const [editStatus, setEditStatus] = React.useState(false)
+
+  // ? function to update dataRow and store the required values in dataUpdated.
+  const handleUpdateData = async (field, value) => {
+    setDataRow({ ...dataRow, [field]: value })
+    setDataUpdate({ ...dataUpdate, [field]: value })
+    setEditStatus(true)
+  }
+
+  useEffect(() => {
+    console.log('dataUpdate: ', dataUpdate)
+  }, [dataUpdate])
 
   const showContent = [
-    <DetailSalesInvoice key={'detail'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <Payments key={'payments'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <ContactAddressSalesinvoice key={'accounting'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <TermsSalesInvoice key={'trems'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <MoreinfoSalesinvoice key={'moerinfo'} dataRow={dataRow} setDataRow={setDataRow} />
+    <DetailSalesInvoice key={'detail'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <Payments key={'payments'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <ContactAddressSalesinvoice key={'accounting'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <TermsSalesInvoice key={'trems'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <MoreinfoSalesinvoice key={'moerinfo'} dataRow={dataRow} handleUpdateData={handleUpdateData} />
   ]
 
   return (
