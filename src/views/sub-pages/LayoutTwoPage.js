@@ -202,6 +202,7 @@ const LayoutTwoPage = ({
     setDataRowModified(dataUpdate.modified)
 
     if (Object.keys(dataRow).length !== 0 && dataRow.modified === dataUpdate.modified) {
+      console.log('s', doctype, dataRow.name)
       axios
         .put(`${process.env.NEXT_PUBLIC_API_URL}${doctype}/${dataRow.name}`, dataUpdate, {
           headers: {

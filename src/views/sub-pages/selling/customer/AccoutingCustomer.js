@@ -12,15 +12,19 @@ import {
   CardContent,
   Grid,
   Card,
-  FormControlLabel
+  FormControlLabel,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
 } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 import axios from 'axios'
 
-const AccountingCustomer = ({ dataRow, setDataRow }) => {
+const AccountingCustomer = ({ dataRow, setDataRow, handleUpdateData }) => {
   const [collapseInformation, setCollapseInformation] = useState()
 
   const columnsCredit = [
@@ -75,8 +79,22 @@ const AccountingCustomer = ({ dataRow, setDataRow }) => {
   }
 
   const handleTextChange = event => {
-    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+    handleUpdateData(event.target.name, event.target.value)
+  }
+
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
   }
 
   return (
@@ -91,15 +109,17 @@ const AccountingCustomer = ({ dataRow, setDataRow }) => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography sx={{ marginBottom: 2 }}>Default Payment Terms Template</Typography>
-            <TextField
-              size='small'
-              variant='filled'
-              value={dataRow.payment_terms || ''}
-              fullWidth
-              onChange={handleTextChange}
-              name='payment_terms'
-            />
+            <Box sx={styles.box}>
+              <Typography sx={{ marginBottom: 2 }}>Default Payment Terms Template</Typography>
+              <TextField
+                sx={styles.textField}
+                variant='outlined'
+                value={dataRow.payment_terms || ''}
+                fullWidth
+                onChange={handleTextChange}
+                name='payment_terms'
+              />
+            </Box>
           </Grid>
         </Grid>
 
@@ -145,35 +165,27 @@ const AccountingCustomer = ({ dataRow, setDataRow }) => {
         <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
         <Grid container sx={{ mb: 5 }}>
           <Grid item sx={{ width: '100%' }}>
-            <Button size='small' variant='filled' onClick={handleClickInformation} sx={{ fontWeight: 'bold' }}>
-              More Infomation
-            </Button>
-
-            <IconButton size='small' onClick={handleClickInformation}>
-              {collapseInformation ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography sx={{ fontWeight: 'bold', p: 0 }}> More Infomation</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
+                  <Grid item xs={12}>
+                    <Typography sx={{ marginBottom: 2 }}>Loyalty Program</Typography>
+                    <TextField
+                      sx={styles.textField}
+                      variant='outlined'
+                      value={dataRow.loyalty_program || ''}
+                      fullWidth
+                      onChange={handleTextChange}
+                      name='loyalty_program'
+                    />
+                  </Grid>
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
-        </Grid>
-        <Grid container>
-          <Collapse in={collapseInformation} width={'100%'} style={{ width: '100%' }}>
-            <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-              <Grid item xs={12}>
-                <Typography sx={{ marginBottom: 2 }}>Loyalty Program</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={dataRow.loyalty_program || ''}
-                  fullWidth
-                  onChange={handleTextChange}
-                  name='loyalty_program'
-                />
-              </Grid>
-            </Grid>
-          </Collapse>
         </Grid>
       </Card>
     </Box>
