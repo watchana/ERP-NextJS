@@ -8,7 +8,7 @@ import LayoutTwoPage from 'src/views/sub-pages/LayoutTwoPage'
 // ** Custom Components
 import ChartOfAccounts from 'src/views/sub-pages/accounting/account/ChartOfAccounts'
 
-const Account = ({ data }) => {
+const AccountPage = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
   const [dataList, setDataList] = React.useState(data)
   const [dataUpdate, setDataUpdate] = React.useState([])
@@ -55,4 +55,4 @@ export async function getServerSideProps() {
   }
 }
 
-export default Account
+export default AccountPage

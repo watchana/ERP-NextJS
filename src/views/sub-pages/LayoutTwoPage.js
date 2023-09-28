@@ -67,8 +67,6 @@ const LayoutTwoPage = ({
   dataUpdate,
   setDataUpdate
 }) => {
-  const contentSizeInit = 7
-
   const { contentLeftStatus, contentDividerStatus, contentRightStatus, contentLeftGrid, contentRightGrid } =
     useSelector(state => state.layoutPage) || {}
 
@@ -78,9 +76,7 @@ const LayoutTwoPage = ({
   const [windowWidth, setWindowWidth] = useState(isClient ? window.innerWidth : 0)
 
   // ** States
-  const [contentSize, setContentSize] = useState(contentSizeInit)
   const [screenMD, setScreenMD] = useState(false)
-  const [sideContentOpen, setSideContentOpen] = useState(false)
   const [tabValue, setTabValue] = useState(1)
   const [buttonArrow, setButtonArrow] = useState(true)
   const [saveWarning, setSaveWarning] = useState(false)
@@ -214,10 +210,8 @@ const LayoutTwoPage = ({
     }
 
     if (screenMD) {
-      console.log('a')
       dispatch(contentMiddleRight())
     } else {
-      console.log('b')
       dispatch(contentDetailRight())
     }
   }
@@ -338,7 +332,6 @@ const LayoutTwoPage = ({
               doctype={doctype}
               docStatusName={docStatusName}
               handleRowClick={handleRowClick}
-              sideContentOpen={sideContentOpen}
             />
           </Grid>
         )}

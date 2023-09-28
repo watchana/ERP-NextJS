@@ -9,27 +9,40 @@ import LayoutTwoPage from 'src/views/sub-pages/LayoutTwoPage'
 import { JournalEntryMenu } from 'src/dummy/contentPages/journalEntry'
 
 // ** Custom Components
-import JournalEntryComp from 'src/views/sub-pages/accounting/journal-entry/journal-entry'
+import JournalEntry from 'src/views/sub-pages/accounting/journal-entry/JournalEntry'
 
 // ** Layouts
 import SubPageLayout from 'src/@core/layouts/SubPageLayout'
 
-const JournalEntry = ({ data }) => {
+const JournalEntryPage = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
   const [dataList, setDataList] = React.useState(data)
+  const [dataUpdate, setDataUpdate] = React.useState([])
+  const [editStatus, setEditStatus] = React.useState(false)
 
-  const showContent = [<JournalEntryComp key={'detail'} dataRow={dataRow} setDataRow={setDataRow} />]
+  // ? function to update dataRow and store the required values in dataUpdated.
+  const handleUpdateData = async (field, value) => {
+    setDataRow({ ...dataRow, [field]: value })
+    setDataUpdate({ ...dataUpdate, [field]: value })
+    setEditStatus(true)
+  }
 
   return (
     <LayoutTwoPage
       data={dataList}
       setData={setDataList}
-      menuContent={JournalEntryMenu}
-      showContent={showContent}
+      statusUpdate={false}
+      menuContent={[]}
+      showContent={[]}
+      noTabContent={<JournalEntry key={'detail'} dataRow={dataRow} handleUpdateData={handleUpdateData} />}
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='Journal Entry'
       docStatusName='disabled'
+      dataUpdate={dataUpdate}
+      setDataUpdate={setDataUpdate}
+      editStatus={editStatus}
+      setEditStatus={setEditStatus}
     />
   )
 }
@@ -50,4 +63,4 @@ export async function getServerSideProps() {
   }
 }
 
-export default JournalEntry
+export default JournalEntryPage

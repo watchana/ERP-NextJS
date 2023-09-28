@@ -4,28 +4,16 @@ import React, { useEffect, useState } from 'react'
 // ** Mui Import
 import {
   Box,
-  Button,
   Card,
-  CardActions,
-  CardContent,
   Checkbox,
-  Collapse,
-  Divider,
   FormControlLabel,
-  FormGroup,
   Grid,
-  IconButton,
-  Menu,
   MenuItem,
   Select,
   Skeleton,
   TextField,
-  TextareaAutosize,
   Typography
 } from '@mui/material'
-
-import Icon from '@mdi/react'
-import { mdiMenuDown } from '@mdi/js'
 
 // ** Dropdown
 import {
@@ -34,22 +22,14 @@ import {
   AccountDropdownBalanceMustBe
 } from 'src/dummy/sub-pages/accounting/account'
 
-const ChartofAccounts = ({ dataRow, handleUpdateData }) => {
+const ChartOfAccounts = ({ dataRow, handleUpdateData }) => {
   const handleCheckboxChange = event => {
-    const { name } = event.target
-    if (name === 'is_stock_item') {
-      setValuationRateOpen(!valuationRateOpen)
-    }
-    handleUpdateData(name, event.target.checked === true ? 1 : 0)
+    handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
   }
 
   const handleTextChange = event => {
     handleUpdateData(event.target.name, event.target.value)
   }
-
-  useEffect(() => {
-    console.log('dataRow', dataRow)
-  }, [dataRow])
 
   const styles = {
     card: {
@@ -266,4 +246,4 @@ const ChartofAccounts = ({ dataRow, handleUpdateData }) => {
   )
 }
 
-export default ChartofAccounts
+export default ChartOfAccounts
