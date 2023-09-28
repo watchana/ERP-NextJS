@@ -22,17 +22,12 @@ import {
   TextareaAutosize,
   Typography
 } from '@mui/material'
-import ChevronUp from 'mdi-material-ui/ChevronUp'
-import ChevronDown from 'mdi-material-ui/ChevronDown'
+
 import Icon from '@mdi/react'
 import { mdiMenuDown } from '@mdi/js'
 
 const ChartofAccounts = ({ dataRow, setDataRow }) => {
   const [collapseDescription, setCollapseDescription] = useState(false)
-
-  const handleClickDescription = () => {
-    setCollapseDescription(!collapseDescription)
-  }
 
   const handleCheckboxChange = event => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
@@ -135,93 +130,130 @@ const ChartofAccounts = ({ dataRow, setDataRow }) => {
     console.log('dataRow', dataRow)
   }, [dataRow])
 
-  const checkboxStyle = {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    },
+    redAsterisk: {
+      color: 'red'
+    },
+    gridItem: {
+      p: 0
+    }
   }
 
   if (!dataRow) return <Skeleton variant='rounded' width={210} height={60} />
 
   return (
     <Box>
-      <Card
-        sx={{
-          p: 2,
-          mb: 2
-        }}
-      >
-        <Grid container spacing={2} style={{ width: '100%', display: 'flex' }}>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <FormControlLabel control={<Checkbox checked={dataRow.disabled || false} />} label='Disable' />
+      <Card sx={styles.card}>
+        <Grid container spacing={3}>
+          <Grid item sm={12} md={6} sx={styles.gridItem}>
+            <Box sx={styles.box}>
+              <FormControlLabel
+                control={
+                  <Checkbox checked={Boolean(dataRow.disabled)} name='disabled' onChange={handleCheckboxChange} />
+                }
+                label='Disabled'
+              />
+            </Box>
 
-            <Typography>Account Number</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              fullWidth
-              size='small'
-              variant='filled'
-              value={dataRow?.account_number || ''}
-              onChange={handleTextChange}
-            />
+            <Box sx={styles.box}>
+              <Typography>Account Number</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='account_number'
+                value={dataRow.account_number}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
 
-            <FormControlLabel control={<Checkbox checked={dataRow.is_group || false} />} label='Is Group' />
-            <Typography>company *</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              fullWidth
-              size='small'
-              variant='filled'
-              value={dataRow.company || ''}
-              onChange={handleTextChange}
-            />
+            <Box sx={styles.box}>
+              <FormControlLabel
+                control={
+                  <Checkbox checked={Boolean(dataRow.is_group)} name='is_group' onChange={handleCheckboxChange} />
+                }
+                label='is_group'
+              />
+            </Box>
 
-            <Typography>Root Type</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              fullWidth
-              size='small'
-              variant='filled'
-              value={dataRow.root_type || ''}
-              onChange={handleTextChange}
-            />
+            <Box sx={styles.box}>
+              <Typography>
+                company <span style={styles.redAsterisk}>*</span>
+              </Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='company'
+                value={dataRow.company}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
 
-            <Typography>Report Type</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              fullWidth
-              size='small'
-              variant='filled'
-              label=''
-              value={dataRow.report_type || ''}
-              onChange={handleTextChange}
-            />
+            <Box sx={styles.box}>
+              <Typography>Root Type</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='root_type'
+                value={dataRow.root_type}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
 
-            <Typography>Currency</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              fullWidth
-              size='small'
-              variant='filled'
-              label=''
-              value={dataRow.account_currency || ''}
-              name='account_currency'
-              onChange={handleTextChange}
-            />
+            <Box sx={styles.box}>
+              <Typography>Report Type</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='report_type'
+                value={dataRow.report_type}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
+
+            <Box sx={styles.box}>
+              <Typography>Currency</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='account_currency'
+                value={dataRow.account_currency}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
           </Grid>
-          <Grid item xs={12} sm={12} md={6} lg={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography>Parent Account *</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              fullWidth
-              size='small'
-              variant='filled'
-              label=''
-              value={dataRow.parent_account || ''}
-              name='parent_account'
-              onChange={handleTextChange}
-            />
+          <Grid item sm={12} md={6} sx={styles.gridItem}>
+            <Box sx={styles.box}>
+              <Typography>
+                Parent Account <span style={styles.redAsterisk}>*</span>
+              </Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='parent_account'
+                value={dataRow.parent_account}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
 
+            {/* !! */}
             <Typography>Account Type</Typography>
             <TextField
               fullWidth

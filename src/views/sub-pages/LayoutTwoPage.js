@@ -74,7 +74,8 @@ const LayoutTwoPage = ({
 
   const dispatch = useDispatch()
   const router = useRouter()
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const isClient = typeof window !== 'undefined'
+  const [windowWidth, setWindowWidth] = useState(isClient ? window.innerWidth : 0)
 
   // ** States
   const [contentSize, setContentSize] = useState(contentSizeInit)
@@ -408,12 +409,12 @@ const LayoutTwoPage = ({
                     </Tabs>
                     {showContent.map((component, index) => (
                       <TabPanel value={(index + 1).toString()} key={index + 1}>
-                        <Box sx={{ m: -3 }}>{component}</Box>
+                        <Box sx={{ m: -3, mb: 2 }}>{component}</Box>
                       </TabPanel>
                     ))}
                   </TabContext>
                 ) : (
-                  <Box sx={{ mr: 3 }}>{noTabContent}</Box>
+                  <Box sx={{ mb: 3 }}>{noTabContent}</Box>
                 )}
               </Grid>
 

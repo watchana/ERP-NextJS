@@ -6,31 +6,40 @@ import axios from 'axios'
 import LayoutTwoPage from 'src/views/sub-pages/LayoutTwoPage'
 
 // ** Custom Components
-import ChartofAccounts from 'src/views/sub-pages/accounting/account/ChartofAccounts'
-
-// ** Layouts
-import SubPageLayout from 'src/@core/layouts/SubPageLayout'
+import ChartOfAccounts from 'src/views/sub-pages/accounting/account/ChartOfAccounts'
 
 const Account = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
   const [dataList, setDataList] = React.useState(data)
+  const [dataUpdate, setDataUpdate] = React.useState([])
+  const [editStatus, setEditStatus] = React.useState(false)
+
+  // ? function to update dataRow and store the required values in dataUpdated.
+  const handleUpdateData = async (field, value) => {
+    setDataRow({ ...dataRow, [field]: value })
+    setDataUpdate({ ...dataUpdate, [field]: value })
+    setEditStatus(true)
+  }
 
   return (
     <LayoutTwoPage
       data={dataList}
       setData={setDataList}
+      statusUpdate={false}
       menuContent={[]}
       showContent={[]}
-      noTabContent={<ChartofAccounts dataRow={dataRow} setDataRow={setDataRow} />}
+      noTabContent={<ChartOfAccounts dataRow={dataRow} handleUpdateData={handleUpdateData} />}
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='Account'
       docStatusName='disabled'
+      dataUpdate={dataUpdate}
+      setDataUpdate={setDataUpdate}
+      editStatus={editStatus}
+      setEditStatus={setEditStatus}
     />
   )
 }
-
-Account.getLayout = page => <SubPageLayout>{page}</SubPageLayout>
 
 // nextJS SSR
 export async function getServerSideProps() {
