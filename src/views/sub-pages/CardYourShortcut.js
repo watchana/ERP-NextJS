@@ -47,7 +47,7 @@ function CardYourShortcut({ menus }) {
                       color: 'common.white'
                     }
                   }}
-                  onClick={() => router.replace(item.route)}
+                  onClick={() => router.push(item.route)}
                 >
                   {item.name}
                 </Button>
