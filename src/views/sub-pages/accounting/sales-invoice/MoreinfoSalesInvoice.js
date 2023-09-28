@@ -16,7 +16,13 @@ import {
   FormControlLabel,
   Checkbox,
   Card,
-  InputAdornment
+  InputAdornment,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  FormGroup,
+  Select,
+  MenuItem
 } from '@mui/material'
 
 import EventIcon from '@mui/icons-material/Event'
@@ -24,13 +30,13 @@ import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 import Btn from 'src/components/Button/Button'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
 import axios from 'axios'
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid, GridExpandMoreIcon } from '@mui/x-data-grid'
+import { IsOpeningEntry } from 'src/dummy/contentPages/salesInvoice'
 
-const MoreinfoSalesinvoice = ({ dataRow }) => {
+const MoreinfoSalesinvoice = ({ dataRow, handleUpdateData }) => {
   const [customerPOdetails, setCustomerPO] = useState(false)
   const [accountingDetails, setAccountingDetails] = useState(false)
   const [commission, setDeferredCommission] = useState(false)
@@ -80,9 +86,34 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
     setAdditionalInfo(!additionalInfo)
   }
 
-  /*  checkbox */
   const handleCheckboxChange = event => {
-    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
+    handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
+  }
+
+  const handleTextChange = event => {
+    handleUpdateData(event.target.name, event.target.value)
+  }
+
+  const handleSelectChange = event => {
+    handleUpdateData(event.target.name, event.target.value)
+  }
+
+  const PoDate = dayjs(dataRow.po_date)
+  const ToDate = dayjs(dataRow.to_date)
+
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
   }
 
   useEffect(() => {
@@ -121,352 +152,370 @@ const MoreinfoSalesinvoice = ({ dataRow }) => {
 
   return (
     <Grid>
-      <Card sx={{ width: '100%', p: 5 }}>
-        <Grid container>
-          <Box sx={{ width: '100%' }}>
-            <Button variant='filled' onClick={handleClickCustomerPO} sx={{ fontWeight: 'bold' }}>
-              Customer PO Details
-            </Button>
-            <IconButton size='small' onClick={handleClickCustomerPO}>
-              {customerPOdetails ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
-          </Box>
-
-          <Grid container>
-            <Collapse in={customerPOdetails} style={{ width: '100%' }}>
-              <Divider sx={{ margin: 0, width: '100%' }} />
-              <Grid container>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Typography sx={{ margin: 1 }}>Debit To *</Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={dataRow?.po_no || `${inputValue}`}
-                    onChange={handleInputChange}
-                  />
-                  <Typography sx={{ margin: 1 }}>Customer's Purchase Order Date</Typography>
-                  <TextField
-                    onClick={handleOpenCalendar}
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={selectedDate ? dayjs(selectedDate).format('DD - MM - YYYY') : ''}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position='end'>
-                          <IconButton>
-                            <EventIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                  {openCalendar && (
-                    <Grid width={'100%'}>
-                      <Typography sx={{ marginBottom: 2 }}>Release Date </Typography>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <StaticDatePicker
-                          orientation='landscape'
-                          value={selectedDate}
-                          onChange={handleDateChange}
-                          componentsProps={{ actionBar: { actions: [] } }}
-                          renderInput={params => <TextField {...params} variant='filled' fullWidth />}
-                        />
-                      </LocalizationProvider>
+      <Card sx={styles.card}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Box sx={styles.box}>
+              <Accordion>
+                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                  <Typography> Customer PO Details</Typography>
+                </AccordionSummary>
+                <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
+                <AccordionDetails>
+                  <Box sx={{ p: 2 }}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12} md={6}>
+                        <Box sx={styles.box}>
+                          <Typography>Customer's Purchase Order</Typography>
+                          <TextField
+                            fullWidth
+                            variant='outlined'
+                            name='po_no'
+                            value={dataRow?.po_no}
+                            onChange={handleTextChange}
+                            sx={styles.textField}
+                          />
+                        </Box>
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Box sx={styles.box}>
+                          <Typography>Customer's Purchase Order Date</Typography>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              sx={{
+                                backgroundColor: 'grey.100',
+                                width: '100%'
+                              }}
+                              views={['year', 'month', 'day']}
+                              value={PoDate}
+                              onChange={date => handleDateChange('po_date', date)}
+                            />
+                          </LocalizationProvider>
+                        </Box>
+                      </Grid>
                     </Grid>
-                  )}
-                </Grid>
-              </Grid>
-            </Collapse>
-          </Grid>
-        </Grid>
-        <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
-        <Grid container>
-          <Box sx={{ width: '100%' }}>
-            <Button variant='filled' onClick={handleClickAccountingDetails} sx={{ fontWeight: 'bold' }}>
-              Accounting Details
-            </Button>
-            <IconButton size='small' onClick={handleClickAccountingDetails}>
-              {accountingDetails ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
-          </Box>
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
 
-          <Grid container>
-            <Collapse in={accountingDetails} width={'100%'} style={{ width: '100%' }}>
-              <Divider sx={{ margin: 0, width: '100%' }} />
-              <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  {' '}
-                  <Typography sx={{ margin: 1 }}>Debit To *</Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={dataRow?.debit_to || ''}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography sx={{ margin: 1 }}>Is Opening Entry</Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={dataRow?.is_opening || ''}
-                  />
-                </Grid>
-              </Grid>
-            </Collapse>
-          </Grid>
-        </Grid>
-        <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
-        <Grid container>
-          <Box sx={{ width: '100%' }}>
-            <Button variant='filled' onClick={handleClickcommission} sx={{ fontWeight: 'bold' }}>
-              Commission
-            </Button>
-            <IconButton size='small' onClick={handleClickcommission}>
-              {commission ? <ChevronUp sx={{ fontSize: '1.875rem' }} /> : <ChevronDown sx={{ fontSize: '1.875rem' }} />}
-            </IconButton>
-          </Box>
+              <Accordion>
+                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                  <Typography> Accounting Details</Typography>
+                </AccordionSummary>
+                <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
+                <AccordionDetails>
+                  <Box sx={{ p: 2 }}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12} md={6}>
+                        <Box sx={styles.box}>
+                          <Typography>Debit To *</Typography>
+                          <TextField
+                            fullWidth
+                            variant='outlined'
+                            name='debit_to'
+                            value={dataRow?.debit_to || ''}
+                            onChange={handleTextChange}
+                            sx={styles.textField}
+                          />
+                        </Box>
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Box sx={styles.box}>
+                          <Typography>Default Material Request Type</Typography>
+                          <Select
+                            fullWidth
+                            name='default_material_request_type'
+                            value={dataRow.default_material_request_type}
+                            onChange={handleSelectChange}
+                            sx={{
+                              backgroundColor: 'grey.100'
+                            }}
+                          >
+                            {IsOpeningEntry.map(item => (
+                              <MenuItem key={item.id} value={item.name}>
+                                {item.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
 
-          <Grid container>
-            <Collapse in={commission} width={'100%'} style={{ width: '100%' }}>
-              <Divider sx={{ margin: 0, width: '100%' }} />
-              <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography sx={{ margin: 1 }}>Amount Eligible for Commission</Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={
-                      dataRow?.amount_eligible_for_commission === '0.0'
-                        ? '฿ 0.0'
-                        : `฿ ${parseFloat(dataRow?.amount_eligible_for_commission).toLocaleString('en-US', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                          })}`
-                    }
-                  />
-                </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography sx={{ margin: 1 }}>Commission Rate (%)</Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={dataRow?.commission_rate || ''}
-                  />
-                  <Typography sx={{ margin: 1 }}>Total Commission</Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={
-                      dataRow?.total_commission === '0.0'
-                        ? '฿ 0.0'
-                        : `฿ ${parseFloat(dataRow?.total_commission).toLocaleString('en-US', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                          })}`
-                    }
-                  />
-                </Grid>
-              </Grid>
-            </Collapse>
-          </Grid>
-        </Grid>
-        <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
-        <Grid container>
-          <Box sx={{ width: '100%' }}>
-            <Button variant='filled' onClick={handleClickSalesTeam} sx={{ fontWeight: 'bold' }}>
-              Sales Team
-            </Button>
-            <IconButton size='small' onClick={handleClickSalesTeam}>
-              {salesTeam ? <ChevronUp sx={{ fontSize: '1.875rem' }} /> : <ChevronDown sx={{ fontSize: '1.875rem' }} />}
-            </IconButton>
-          </Box>
-          <Grid container>
-            <Collapse in={salesTeam} width={'100%'} style={{ width: '100%' }}>
-              <Divider sx={{ margin: 0, width: '100%' }} />
-              <DataGrid
-                sx={{ width: 'full', mt: 6 }}
-                rows={dataRow.sales_team || ''}
-                columns={column}
-                getRowId={row => row.name}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 }
-                  }
-                }}
-                pageSizeOptions={[5, 10]}
-              />
-            </Collapse>
-          </Grid>
-        </Grid>
+              <Accordion>
+                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                  <Typography> Commission</Typography>
+                </AccordionSummary>
+                <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
+                <AccordionDetails>
+                  <Box sx={{ p: 2 }}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12} md={6}>
+                        <Box sx={styles.box}>
+                          <Typography>Customer's Purchase Order</Typography>
+                          <TextField
+                            fullWidth
+                            variant='outlined'
+                            name='amount_eligible_for_commission'
+                            value={
+                              dataRow?.amount_eligible_for_commission === '0.0'
+                                ? '฿ 0.0'
+                                : `฿ ${parseFloat(dataRow?.amount_eligible_for_commission).toLocaleString('en-US', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                  })}`
+                            }
+                            onChange={handleTextChange}
+                            sx={styles.textField}
+                          />
+                        </Box>
+                      </Grid>
 
-        <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
-        <Grid container>
-          <Box sx={{ width: '100%' }}>
-            <Button variant='filled' onClick={handleClickPrintSettings} sx={{ fontWeight: 'bold' }}>
-              Print Settings
-            </Button>
-            <IconButton size='small' onClick={handleClickPrintSettings}>
-              {printSettings ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
-          </Box>
+                      <Grid item xs={12} md={6}>
+                        <Box sx={styles.box}>
+                          <Typography>Commission Rate (%)</Typography>
+                          <TextField
+                            fullWidth
+                            variant='outlined'
+                            name='commission_rate'
+                            value={dataRow?.commission_rate || '0'}
+                            onChange={handleTextChange}
+                            sx={styles.textField}
+                          />
+                        </Box>
 
-          <Grid container>
-            <Collapse in={printSettings} width={'100%'} style={{ width: '100%' }}>
-              <Divider sx={{ margin: 0, width: '100%' }} />
-              <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  {' '}
-                  <Typography sx={{ margin: 1 }}>Letter Head </Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={dataRow?.letter_head}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={dataRow?.group_same_items === 1} onChange={handleCheckboxChange} />}
-                    label='Group same items'
-                  />
-                </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography sx={{ margin: 1 }}>Print Heading</Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={dataRow?.select_print_heading}
-                  />
+                        <Box sx={styles.box}>
+                          <Typography>Total Commission</Typography>
+                          <TextField
+                            fullWidth
+                            variant='outlined'
+                            name='commission_rate'
+                            value={
+                              dataRow?.total_commission === '0.0'
+                                ? '฿ 0.0'
+                                : `฿ ${parseFloat(dataRow?.total_commission).toLocaleString('en-US', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                  })}`
+                            }
+                            onChange={handleTextChange}
+                            sx={styles.textField}
+                          />
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
 
-                  <Typography sx={{ margin: 1 }}>Print Language</Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={dataRow?.language}
-                  />
-                </Grid>
-              </Grid>
-            </Collapse>
-          </Grid>
-        </Grid>
-        <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
-        <Grid container>
-          <Box sx={{ width: '100%' }}>
-            <Button variant='filled' onClick={handleClicubscription} sx={{ fontWeight: 'bold' }}>
-              Subscription
-            </Button>
-            <IconButton size='small' onClick={handleClicubscription}>
-              {subscription ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
-          </Box>
+              <Accordion defaultExpanded>
+                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                  <Typography> Sales Team</Typography>
+                </AccordionSummary>
+                <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
+                <AccordionDetails>
+                  <Box sx={{ p: 2 }}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <Box sx={{ p: 2 }}>
+                          <DataGrid
+                            sx={{ height: dataRow.sales_team.length === 0 ? 200 : 'auto' }}
+                            rows={dataRow.sales_team || ''}
+                            columns={column}
+                            getRowId={row => row.name}
+                            initialState={{
+                              pagination: {
+                                paginationModel: { page: 0, pageSize: 5 }
+                              }
+                            }}
+                            pageSizeOptions={[5, 10]}
+                            checkboxSelection
+                          />
+                          <Button variant='contained' size='small' sx={{ my: 2 }}>
+                            Add Row
+                          </Button>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
 
-          <Grid container>
-            <Collapse in={subscription} width={'100%'} style={{ width: '100%' }}>
-              <Divider sx={{ margin: 0, width: '100%' }} />
-              <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  {' '}
-                  <Typography sx={{ margin: 1 }}>From Date</Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={dataRow?.from_date}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography sx={{ margin: 1 }}>To Date</Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={dataRow?.to_date}
-                  />
-                </Grid>
-              </Grid>
-            </Collapse>
-          </Grid>
-        </Grid>
+              <Accordion>
+                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                  <Typography> Print Settings</Typography>
+                </AccordionSummary>
+                <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
+                <AccordionDetails>
+                  <Box sx={{ p: 2 }}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12} md={6}>
+                        <Box sx={styles.box}>
+                          <Typography>Letter Head</Typography>
+                          <TextField
+                            fullWidth
+                            variant='outlined'
+                            name='letter_head'
+                            value={dataRow?.letter_head || ''}
+                            onChange={handleTextChange}
+                            sx={styles.textField}
+                          />
+                        </Box>
 
-        <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
-        <Grid container>
-          <Box sx={{ width: '100%' }}>
-            <Button variant='filled' onClick={handleClickAdditionalInfo} sx={{ fontWeight: 'bold' }}>
-              Additional Info
-            </Button>
-            <IconButton size='small' onClick={handleClickAdditionalInfo}>
-              {additionalInfo ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
-          </Box>
+                        <Box sx={styles.BoxStyle}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={Boolean(dataRow.allow_negative_stock)}
+                                name='allow_negative_stock'
+                                onChange={handleCheckboxChange}
+                              />
+                            }
+                            label='Allow Negative Stock'
+                          />
+                        </Box>
+                      </Grid>
 
-          <Grid container>
-            <Collapse in={additionalInfo} width={'100%'} style={{ width: '100%' }}>
-              <Divider sx={{ margin: 0, width: '100%' }} />
-              <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  {' '}
-                  <Typography sx={{ margin: 1 }}>Status </Typography>
-                  <TextField sx={{ marginBottom: 5 }} size='small' variant='filled' fullWidth value={dataRow?.status} />
-                </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <FormControlLabel
-                    control={<Checkbox checked={dataRow?.is_internal_customer === 1} onChange={handleCheckboxChange} />}
-                    label='Is Internal Customer'
-                  />
-                  <FormControlLabel
-                    control={<Checkbox checked={dataRow?.is_discounted === 1} onChange={handleCheckboxChange} />}
-                    label='Allow Zero Valuation Rate'
-                  />
-                  <Typography sx={{ margin: 1 }}>Remarks</Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={dataRow?.remarks}
-                  />
-                </Grid>
-              </Grid>
-            </Collapse>
+                      <Grid item xs={12} md={6}>
+                        <Box sx={styles.box}>
+                          <Typography>Print Heading</Typography>
+                          <TextField
+                            fullWidth
+                            variant='outlined'
+                            name='select_print_heading'
+                            value={dataRow?.select_print_heading || ''}
+                            onChange={handleTextChange}
+                            sx={styles.textField}
+                          />
+                        </Box>
+
+                        <Box sx={styles.box}>
+                          <Typography>Print Language</Typography>
+                          <TextField
+                            fullWidth
+                            disabled
+                            variant='outlined'
+                            name='commission_rate'
+                            value={dataRow?.language || ''}
+                            onChange={handleTextChange}
+                            sx={styles.textField}
+                          />
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion>
+                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                  <Typography> Subscription</Typography>
+                </AccordionSummary>
+                <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
+                <AccordionDetails>
+                  <Box sx={{ p: 2 }}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12} md={6}>
+                        <Box sx={styles.box}>
+                          <Typography>From Date</Typography>
+                          <TextField
+                            fullWidth
+                            variant='outlined'
+                            name='from_date'
+                            value={dataRow?.from_date || ''}
+                            onChange={handleTextChange}
+                            sx={styles.textField}
+                          />
+                        </Box>
+                      </Grid>
+
+                      <Grid item xs={12} md={6}>
+                        <Box sx={styles.box}>
+                          <Typography>To Date</Typography>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              sx={{
+                                backgroundColor: 'grey.100',
+                                width: '100%'
+                              }}
+                              views={['year', 'month', 'day']}
+                              value={ToDate}
+                              onChange={date => handleDateChange('to_date', date)}
+                            />
+                          </LocalizationProvider>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion>
+                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                  <Typography> Additional Info</Typography>
+                </AccordionSummary>
+                <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
+                <AccordionDetails>
+                  <Box sx={{ p: 2 }}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12} md={6}>
+                        <Box sx={styles.box}>
+                          <Typography>Status</Typography>
+                          <TextField
+                            fullWidth
+                            variant='outlined'
+                            name='status'
+                            value={dataRow?.status || ''}
+                            onChange={handleTextChange}
+                            sx={styles.textField}
+                          />
+                        </Box>
+                      </Grid>
+
+                      <Grid item xs={12} md={6}>
+                        <Box sx={styles.BoxStyle}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={Boolean(dataRow.is_internal_customer)}
+                                name='Is Internal Customer'
+                                onChange={handleCheckboxChange}
+                              />
+                            }
+                            label='Allow Negative Stock'
+                          />
+
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={Boolean(dataRow.is_discounted)}
+                                name='allow_negative_stock'
+                                onChange={handleCheckboxChange}
+                              />
+                            }
+                            label='Is Discounted
+'
+                          />
+                        </Box>
+                        <Box sx={styles.box}>
+                          <Typography>Remarks</Typography>
+                          <TextField
+                            fullWidth
+                            variant='outlined'
+                            name='status'
+                            value={dataRow?.remarks || ''}
+                            onChange={handleTextChange}
+                            sx={styles.textField}
+                          />
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
+            </Box>
           </Grid>
         </Grid>
       </Card>

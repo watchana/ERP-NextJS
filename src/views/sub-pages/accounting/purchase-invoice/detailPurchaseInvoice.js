@@ -16,10 +16,13 @@ import {
   FormControlLabel,
   Checkbox,
   InputAdornment,
-  CardHeader
+  CardHeader,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
 } from '@mui/material'
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid, GridExpandMoreIcon } from '@mui/x-data-grid'
 
 // ** Mdi Import
 import ChevronUp from 'mdi-material-ui/ChevronUp'
@@ -129,8 +132,17 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
   }
 
   const styles = {
-    lineBreakText: {
-      whiteSpace: 'pre-line'
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
     }
   }
 
@@ -260,126 +272,147 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
 
   return (
     <Box>
-      <Card
-        sx={{
-          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
-          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
-          p: 2,
-          mb: 2
-        }}
-      >
+      <Card sx={styles.card}>
         {/* /                   แสดงข่อมูลชุด แรก ของ Detail                               / */}
-        <Grid container spacing={2} width={'100%'}>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Typography>Supplier *</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              fullWidth
-              value={dataRow.supplier}
-              onChange={handleTextChange}
-            />
-            <Typography>Date * :</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              fullWidth
-              label=''
-              value={formattedDate}
-              onChange={handleTextChange}
-            />
-            <Typography>Posting Time :</Typography>
-            <TextField
-              size='small'
-              variant='filled'
-              fullWidth
-              label=''
-              value={formattedTime}
-              onChange={handleTextChange}
-            />
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <Box sx={styles.box}>
+              <Typography>Supplier *</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='supplier'
+                value={dataRow.supplier}
+                onChange={handleTextChange}
+                sx={styles.textField}
+                disabled
+              />
+            </Box>
+
+            <Box sx={styles.box}>
+              <Typography>Date *</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='customer'
+                value={formattedDate}
+                onChange={handleTextChange}
+                sx={styles.textField}
+                disabled
+              />
+            </Box>
+
+            <Box sx={styles.box}>
+              <Typography>Posting Time</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='formattedTime'
+                value={formattedTime}
+                onChange={handleTextChange}
+                sx={styles.textField}
+                disabled
+              />
+            </Box>
             <Typography sx={{ marginBottom: 5 }}>Asia/Kolkata</Typography>
-            <Typography>Payment Due Date *</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              fullWidth
-              label=''
-              value={formattedDateEnd}
-              formatDate
-              onChange={handleTextChange}
-            />
+
+            <Box sx={styles.box}>
+              <Typography>Payment Due Date</Typography>
+              <TextField
+                fullWidth
+                variant='outlined'
+                name='formattedDateEnd'
+                value={formattedDateEnd}
+                onChange={handleTextChange}
+                sx={styles.textField}
+                disabled
+              />
+            </Box>
           </Grid>
-          <Grid item xs={12} sm={12} md={6} lg={6} sx={{ mb: 5, display: 'flex', flexDirection: 'column' }}>
-            <FormControlLabel
-              control={<Checkbox checked={Boolean(dataRow?.is_paid) || false} onChange={handleCheckboxChange} />}
-              label='Is Paid'
-            />
-            <FormControlLabel
-              control={<Checkbox checked={Boolean(dataRow?.is_return) || false} onChange={handleCheckboxChange} />}
-              label='Is Return (Debit Note)'
-            />
-            <FormControlLabel
-              control={<Checkbox checked={Boolean(dataRow?.apply_tds) || false} onChange={handleCheckboxChange} />}
-              label='Apply Tax Withholding Amount'
-            />
+
+          <Grid item xs={12} md={6}>
+            <Box sx={styles.box}>
+              <FormControlLabel
+                control={<Checkbox checked={dataRow?.is_paid === 1} onChange={handleCheckboxChange} />}
+                label='Is Paid'
+              />
+            </Box>
+
+            <Box sx={styles.box}>
+              <FormControlLabel
+                control={<Checkbox checked={dataRow?.is_return === 1} onChange={handleCheckboxChange} />}
+                label='Is Return (Debit Note)'
+              />
+            </Box>
+
+            <Box sx={styles.box}>
+              <FormControlLabel
+                control={<Checkbox checked={dataRow?.apply_tds === 1} onChange={handleCheckboxChange} />}
+                label='Apply Tax Withholding Amount'
+              />
+            </Box>
           </Grid>
         </Grid>
         <Divider sx={{ margin: 0, my: 4 }} />
 
         {/* /                   แสดงข่อมูลชุด dopdown                               / */}
 
-        <Grid container sx={{ mb: 5 }}>
-          <Box sx={{ width: '100%' }}>
-            <Button variant='filled' onClick={handleClickCurrencyPrice} sx={{ fontWeight: 'bold', p: 0 }}>
-              Currency and Price List
-            </Button>
-            <IconButton size='small' onClick={handleClickCurrencyPrice}>
-              {currencyPrice ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
-          </Box>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Accordion>
+              <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                <Typography>Currency and Price List</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Box sx={{ p: 2 }}>
+                  <Divider />
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} md={6}>
+                      <Box sx={styles.box}>
+                        <Typography variant='subtitle1'>Currency</Typography>
+                        <TextField
+                          fullWidth
+                          disabled
+                          variant='outlined'
+                          name='currency'
+                          value={dataRow.currency}
+                          onChange={handleTextChange}
+                          sx={styles.textField}
+                        />
+                      </Box>
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+                      <Box sx={styles.box}>
+                        <Typography variant='subtitle1'>Price List *</Typography>
+                        <TextField
+                          fullWidth
+                          disabled
+                          variant='outlined'
+                          name='selling_price_list'
+                          value={dataRow.buying_price_list}
+                          onChange={handleTextChange}
+                          sx={styles.textField}
+                        />
+                      </Box>
+
+                      <FormControlLabel
+                        control={
+                          <Checkbox checked={dataRow?.ignore_pricing_rule === 1} onChange={handleCheckboxChange} />
+                        }
+                        label='Ignore Pricing Rule'
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
 
           {/* /                   แสดงข่อมูลชุด ที่อยู่ในdopdown                               / */}
           <Grid container>
             <Collapse in={currencyPrice} width={'100%'} style={{ width: '100%' }}>
               <Divider sx={{ margin: 0, width: '100%' }} />
-              <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography>Currency *</Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={dataRow.currency}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography>Price List *</Typography>
-                  <TextField
-                    sx={{ marginBottom: 5 }}
-                    size='small'
-                    variant='filled'
-                    fullWidth
-                    value={dataRow.buying_price_list}
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={Boolean(dataRow?.ignore_pricing_rule) || false}
-                        onChange={handleCheckboxChange}
-                      />
-                    }
-                    label='Ignore Pricing Rule'
-                  />
-                </Grid>
-              </Grid>
             </Collapse>
           </Grid>
         </Grid>
@@ -1149,39 +1182,38 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
 
         {/* /                   แสดงข่อมูลชุด Total Quantity                               / */}
         <Divider sx={{ margin: 0, my: 8 }} />
-        <Grid container spacing={2} width={'100%'}>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Typography>Total Quantity</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              fullWidth
-              value={dataRow.total_qty}
-              name='total_qty'
-              onChange={handleTextChange}
-            />
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <Box sx={styles.box}>
+              <Typography variant='subtitle1'>Total Quantity</Typography>
+              <TextField
+                fullWidth
+                disabled
+                variant='outlined'
+                name='total_qty'
+                value={dataRow.total_qty}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
           </Grid>
 
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Typography>Total (THB)</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              fullWidth
-              value={dataRow.total.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <Typography>฿</Typography>
-                  </InputAdornment>
-                )
-              }}
-            />
+          <Grid item xs={12} md={6}>
+            <Box sx={styles.box}>
+              <Typography variant='subtitle1'>Total (THB)</Typography>
+              <TextField
+                fullWidth
+                disabled
+                variant='outlined'
+                name='total_qty'
+                value={`฿ ${parseFloat(dataRow.total_qty).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}`}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
           </Grid>
         </Grid>
 
@@ -1190,35 +1222,43 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
         <Grid container spacing={2} width={'100%'}>
           <Grid item xs={12} sm={12} md={6} lg={6}></Grid>
 
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Typography>Taxes and Charges Added (THB)</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              fullWidth
-              value={dataRow.taxes_and_charges_added.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <Typography>฿</Typography>
-                  </InputAdornment>
-                )
-              }}
-            />
+          <Grid item xs={12} md={6}>
+            <Box sx={styles.box}>
+              <Typography variant='subtitle1'>Taxes and Charges Added (THB)</Typography>
+              <TextField
+                fullWidth
+                disabled
+                variant='outlined'
+                name='currency'
+                value={dataRow.taxes_and_charges_added.toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <Typography>฿</Typography>
+                    </InputAdornment>
+                  )
+                }}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
+
             <Typography>Taxes and Charges Deducted (THB)</Typography>
             <TextField
               sx={{ marginBottom: 5 }}
               size='small'
               variant='filled'
               fullWidth
-              value={dataRow.taxes_and_charges_deducted.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}
+              value={
+                dataRow.taxes_and_charges_deducted ||
+                '0'.toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })
+              }
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
@@ -1227,16 +1267,41 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
                 )
               }}
             />
+            <Box sx={styles.box}>
+              <Typography variant='subtitle1'>Taxes and Charges Added (THB)</Typography>
+              <TextField
+                fullWidth
+                disabled
+                variant='outlined'
+                name='currency'
+                value={dataRow.taxes_and_charges_added.toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <Typography>฿</Typography>
+                    </InputAdornment>
+                  )
+                }}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
             <Typography>Total Taxes and Charges (THB)</Typography>
             <TextField
               sx={{ marginBottom: 5 }}
               size='small'
               variant='filled'
               fullWidth
-              value={dataRow.total_taxes_and_charges.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}
+              value={
+                dataRow.total_taxes_and_charges ||
+                ''.toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })
+              }
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>

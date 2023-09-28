@@ -1,5 +1,5 @@
 // ** React Imports
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 // ** Axios Imports
 import axios from 'axios'
@@ -23,15 +23,28 @@ import { SupplierContentMenu } from 'src/dummy/contentPages/supplierPage'
 const SupplierPage = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
   const [dataList, setDataList] = React.useState(data)
+  const [dataUpdate, setDataUpdate] = React.useState([])
+  const [editStatus, setEditStatus] = React.useState(false)
+
+  // ? function to update dataRow and store the required values in dataUpdated.
+  const handleUpdateData = async (field, value) => {
+    setDataRow({ ...dataRow, [field]: value })
+    setDataUpdate({ ...dataUpdate, [field]: value })
+    setEditStatus(true)
+  }
+
+  useEffect(() => {
+    console.log('dataUpdate: ', dataUpdate)
+  }, [dataUpdate])
 
   const showContent = [
-    <DetailSupplier key={'detail'} dataRow={dataRow} />,
-    <Dashboard_sup key={'payments'} dataRow={dataRow} />,
-    <TaxSupplier key={'accounting'} dataRow={dataRow} />,
-    <Contact_Address key={'trems'} dataRow={dataRow} />,
-    <Accounting key={'moerinfo'} dataRow={dataRow} />,
-    <SettingsSupplier key={'moerinfo'} dataRow={dataRow} />,
-    <PortalUserSupplier key={'moerinfo'} dataRow={dataRow} />
+    <DetailSupplier key={'detail'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <Dashboard_sup key={'dashbord'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <TaxSupplier key={'tax'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <Contact_Address key={'contactaddress'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <Accounting key={'accounting'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <SettingsSupplier key={'srtting'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <PortalUserSupplier key={'port'} dataRow={dataRow} handleUpdateData={handleUpdateData} />
   ]
 
   return (

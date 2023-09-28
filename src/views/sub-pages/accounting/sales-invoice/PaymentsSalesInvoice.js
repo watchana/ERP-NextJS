@@ -2,11 +2,26 @@
 import React from 'react'
 
 // ** Mui Import
-import { Grid, Box, Button, Card, IconButton, Collapse, Divider, FormControlLabel, Checkbox } from '@mui/material'
+import {
+  Grid,
+  Box,
+  Button,
+  Card,
+  IconButton,
+  Collapse,
+  Divider,
+  FormControlLabel,
+  Checkbox,
+  Accordion,
+  AccordionSummary,
+  Typography,
+  AccordionDetails
+} from '@mui/material'
 import ChevronUp from 'mdi-material-ui/ChevronUp'
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 import { useState } from 'react'
 import Btn from 'src/components/Button/Button'
+import { GridExpandMoreIcon } from '@mui/x-data-grid'
 
 const Payments = ({ dataRow }) => {
   // ** State
@@ -28,90 +43,79 @@ const Payments = ({ dataRow }) => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
   }
 
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
+
   return (
     <Box>
-      <Card
-        sx={{
-          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
-          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
-          p: 2,
-          mb: 2
-        }}
-      >
-        <Grid container sx={{ mt: 10 }}>
-          <Grid>
+      <Card sx={styles.card}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
             <Box sx={{ width: '100%' }}>
-              <Button size='small' variant='filled' label='' onClick={handleClickAdvancePayments}>
-                Advance Payments
-              </Button>
-              <IconButton size='small' onClick={handleClickAdvancePayments}>
-                {advancePayments ? (
-                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                ) : (
-                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                )}
-              </IconButton>
-            </Box>
-
-            <Collapse in={advancePayments} width={'100%'} style={{ width: '100%' }}>
-              <Divider sx={{ margin: 0, width: '100%' }} />
-              <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={dataRow?.allocate_advances_automatically === 1}
-                        onChange={handleCheckboxChange}
-                      />
-                    }
-                    label='Allocate Advances Automatically (FIFO)
+              <Accordion>
+                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                  <Typography> Tax Breakup</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Box sx={{ p: 2 }}>
+                    <Divider />
+                    <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
+                      <Grid item xs={12}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={dataRow?.allocate_advances_automatically === 1}
+                              onChange={handleCheckboxChange}
+                            />
+                          }
+                          label='Allocate Advances Automatically (FIFO)
 '
-                  />
-                </Grid>
+                        />
+                      </Grid>
 
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Btn
-                    detailbutton={' Get Advances Automatically'}
-                    bgcolorbutton={'white'}
-                    numminwid={'auto'}
-                    handleButtonClick={() => router.push()}
-                  />
-                </Grid>
-              </Grid>
-            </Collapse>
-          </Grid>
-        </Grid>
-        <Divider sx={{ margin: 0, my: 5 }} />
-        <Grid container sx={{ mt: 5 }}>
-          <Grid>
-            <Box>
-              <Box sx={{ width: '100%' }}>
-                <Button size='small' variant='filled' label='' onClick={handleClickLoyailtyPointsRedemption}>
-                  Loyailty Points Redemption
-                </Button>
-                <IconButton size='small' onClick={handleClickLoyailtyPointsRedemption}>
-                  {loyailtyPointsRedemption ? (
-                    <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                  ) : (
-                    <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                  )}
-                </IconButton>
-              </Box>
+                      <Grid item xs={12}>
+                        <Btn
+                          detailbutton={' Get Advances Automatically'}
+                          bgcolorbutton={'white'}
+                          numminwid={'auto'}
+                          handleButtonClick={() => router.push()}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
 
-              <Collapse in={loyailtyPointsRedemption}>
-                <Divider sx={{ margin: 0, width: '100%' }} />
-                <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox checked={dataRow?.redeem_loyalty_points === 1} onChange={handleCheckboxChange} />
-                      }
-                      label='Redeem Loyalty Points'
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={12} md={12} lg={12}></Grid>
-                </Grid>
-              </Collapse>
+              <Accordion>
+                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                  <Typography> Loyailty Points Redemption</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Box sx={{ p: 2 }}>
+                    <Divider />
+                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox checked={dataRow?.redeem_loyalty_points === 1} onChange={handleCheckboxChange} />
+                        }
+                        label='Redeem Loyalty Points'
+                      />
+                    </Grid>
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
             </Box>
           </Grid>
         </Grid>

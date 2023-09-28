@@ -3,7 +3,7 @@ import { DataGrid } from '@mui/x-data-grid'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
-const SalesTeamCustomer = ({ dataRow, setDataRow }) => {
+const SalesTeamCustomer = ({ dataRow, setDataRow, handleUpdateData }) => {
   const columns = [
     { field: 'idx', headerName: 'No', width: 70 },
     { field: 'sales_person', headerName: 'Sales Person', width: 150 },
@@ -37,13 +37,27 @@ const SalesTeamCustomer = ({ dataRow, setDataRow }) => {
   }
 
   const handleTextChange = event => {
-    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+    handleUpdateData(event.target.name, event.target.value)
+  }
+
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
   }
 
   return (
     <Grid>
-      <Card sx={{ width: '100%', p: 5 }}>
+      <Card sx={styles.card}>
         <Grid>
           <Grid item xs={12}>
             <Typography>Sales Team</Typography>
@@ -65,28 +79,31 @@ const SalesTeamCustomer = ({ dataRow, setDataRow }) => {
         <Grid container spacing={2} sx={{ mt: 10 }}>
           <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
           <Grid item xs={12}>
-            <Typography sx={{ marginBottom: 2 }}>Sales Partner</Typography>
-            <TextField
-              size='small'
-              variant='filled'
-              label=''
-              value={dataRow.default_sales_partner}
-              fullWidth
-              onChange={handleTextChange}
-              name='default_sales_partner'
-            />
+            <Box sx={styles.box}>
+              <Typography sx={{ marginBottom: 2 }}>Sales Partner</Typography>
+              <TextField
+                sx={styles.textField}
+                variant='outlined'
+                label=''
+                value={dataRow.default_sales_partner}
+                fullWidth
+                onChange={handleTextChange}
+                name='default_sales_partner'
+              />
+            </Box>
           </Grid>
           <Grid item xs={12}>
-            <Typography sx={{ marginBottom: 2 }}>Commission Rate</Typography>
-            <TextField
-              size='small'
-              variant='filled'
-              label=''
-              value={dataRow.default_commission_rate}
-              fullWidth
-              onChange={handleTextChange}
-              name='default_commission_rate'
-            />
+            <Box sx={styles.box}>
+              <Typography sx={{ marginBottom: 2 }}>Commission Rate</Typography>
+              <TextField
+                sx={styles.textField}
+                variant='outlined'
+                value={dataRow.default_commission_rate}
+                fullWidth
+                onChange={handleTextChange}
+                name='default_commission_rate'
+              />
+            </Box>
           </Grid>
         </Grid>
       </Card>

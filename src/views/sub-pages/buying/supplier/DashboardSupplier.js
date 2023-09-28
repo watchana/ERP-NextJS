@@ -1,69 +1,126 @@
 // ** React Import
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 // ** Mui Import
-import { Grid, Box, Button, CardContent, IconButton, Collapse, Divider, Card } from '@mui/material'
-import ChevronUp from 'mdi-material-ui/ChevronUp'
-import ChevronDown from 'mdi-material-ui/ChevronDown'
-import { useState } from 'react'
+import {
+  Grid,
+  Box,
+  Divider,
+  Card,
+  Skeleton,
+  Accordion,
+  AccordionSummary,
+  Typography,
+  AccordionDetails,
+  TextField
+} from '@mui/material'
 
-const Dashboard_sup = ({ dataRow }) => {
-  // ** State
-  const [activity, setActivity] = useState(false)
-  const [connections, setConnections] = useState(false)
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-  const handleClickActivity = () => {
-    setActivity(!activity)
+const Dashboard_sup = ({ dataRow, handleUpdateData }) => {
+  const handleTextChange = event => {
+    handleUpdateData(event.target.name, event.target.value)
   }
 
-  const handleClickConnections = () => {
-    setConnections(!connections)
+  useEffect(() => {
+    console.log('dataRow', dataRow)
+  }, [dataRow])
+
+  if (!dataRow) return <Skeleton variant='rounded' width={210} height={60} />
+
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
   }
 
   return (
-    <Box>
-      <Card
-        sx={{
-          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
-          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
-          p: 2,
-          mb: 2
-        }}
-      >
-        <Grid container sx={{ mt: 10 }}>
-          <Grid item sx={{ width: '100%' }}>
-            <Button size='small' variant='filled' label='' onClick={handleClickActivity}>
-              Activity
-            </Button>
-            <IconButton size='small' onClick={handleClickActivity}>
-              {activity ? <ChevronUp sx={{ fontSize: '1.875rem' }} /> : <ChevronDown sx={{ fontSize: '1.875rem' }} />}
-            </IconButton>
-          </Grid>
-          <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-          <Collapse in={activity}>
-            <Divider sx={{ margin: 0 }} />
-            <CardContent></CardContent>
-          </Collapse>
-        </Grid>
+    <Box sx={styles.box}>
+      <Card sx={styles.card}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography>Description</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Box sx={{ p: 2 }}>
+                  <Divider />
+                  <Typography variant='subtitle2'>Description</Typography>
+                  <TextField
+                    fullWidth
+                    multiline
+                    size='small'
+                    variant='outlined'
+                    rows={4}
+                    value={dataRow.description}
+                    name='description'
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
 
-        <Grid container>
-          <Grid item sx={{ width: '100%' }}>
-            <Button size='small' variant='filled' label='' onClick={handleClickConnections}>
-              Connections
-            </Button>
-            <IconButton size='small' onClick={handleClickConnections}>
-              {connections ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Brand</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      size='small'
+                      variant='outlined'
+                      name='brand'
+                      value={dataRow.brand}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+                </Box>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography>Description</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Box sx={{ p: 2 }}>
+                  <Divider />
+                  <Typography variant='subtitle2'>Description</Typography>
+                  <TextField
+                    fullWidth
+                    multiline
+                    size='small'
+                    variant='outlined'
+                    rows={4}
+                    value={dataRow.description}
+                    name='description'
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
+
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Brand</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      size='small'
+                      variant='outlined'
+                      name='brand'
+                      value={dataRow.brand}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+                </Box>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
-          <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-          <Collapse in={connections}>
-            <Divider sx={{ margin: 0 }} />
-            <CardContent></CardContent>
-          </Collapse>
         </Grid>
       </Card>
     </Box>
