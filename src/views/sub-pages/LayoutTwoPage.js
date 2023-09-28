@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react'
 // ** Axios Imports
 import axios from 'axios'
 
+// ** Router Imports
+import { useRouter } from 'next/router'
+
 // ** Redux Imports
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -66,7 +69,11 @@ const LayoutTwoPage = ({
 }) => {
   const contentSizeInit = 7
 
+  const { contentLeftStatus, contentDividerStatus, contentRightStatus, contentLeftGrid, contentRightGrid } =
+    useSelector(state => state.layoutPage) || {}
+
   const dispatch = useDispatch()
+  const router = useRouter()
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
   // ** States
@@ -80,13 +87,23 @@ const LayoutTwoPage = ({
   useEffect(() => {
     if (statusUpdate === true) {
       dispatch(contentUpdate())
-    } else {
-      dispatch(contentDefault())
     }
   }, [statusUpdate, dispatch])
 
-  const { contentLeftStatus, contentDividerStatus, contentRightStatus, contentLeftGrid, contentRightGrid } =
-    useSelector(state => state.layoutPage) || {}
+  useEffect(() => {
+    // เมื่อเปลี่ยน path ไปหน้าอื่น ให้ dispatch action contentDefault()
+    const handleRouteChange = url => {
+      dispatch(contentDefault())
+    }
+
+    // เพิ่ม event listener เพื่อตรวจสอบการเปลี่ยน path
+    router.events.on('routeChangeComplete', handleRouteChange)
+
+    // ลบ event listener เมื่อคอมโพเนนต์ถูก unmount
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [dispatch, router])
 
   const getCardCommentStyle = menuContentLength => {
     if (menuContentLength > 0) {
@@ -124,7 +141,7 @@ const LayoutTwoPage = ({
       if (window.innerWidth <= 1000) {
         // กำหนดขนาดหน้าจอที่ต้องการให้แสดงเนื้อหาแท็บ
 
-        if (contentRightStatus === true) {
+        if (contentRightStatus === true && contentLeftStatus === false) {
           console.log('midRight')
           dispatch(contentMiddleRight())
         } else {
