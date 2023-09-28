@@ -20,8 +20,6 @@ import {
 import { DataGrid } from '@mui/x-data-grid'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-import ChevronUp from 'mdi-material-ui/ChevronUp'
-import ChevronDown from 'mdi-material-ui/ChevronDown'
 import axios from 'axios'
 
 const AccountingCustomer = ({ dataRow, setDataRow, handleUpdateData }) => {

@@ -20,7 +20,10 @@ import {
   FormControl,
   InputLabel,
   Select,
-  DialogActions
+  DialogActions,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
 } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete'
 import EventIcon from '@mui/icons-material/Event'
@@ -34,6 +37,7 @@ import axios from 'axios'
 import { ChevronDown, ChevronUp } from 'mdi-material-ui'
 import Icon from '@mdi/react'
 import { mdiMenuDown } from '@mdi/js'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const JournalEntryComp = ({ dataRow, setDataRow }) => {
   const [openCalendar, setOpenCalendar] = useState(false)
@@ -45,12 +49,8 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
   const [openCalendarBillDate, setOpenCalendarBillDate] = useState(false)
   const [selectedDueDate, setSelectedDueDate] = useState(null)
   const [openCalendarDueDate, setOpenCalendarDueDate] = useState(false)
-  const [collapseRefer, setCollapseRefer] = useState(false)
-  const [collapsePrinting, setCollapsePrinting] = useState(false)
-  const [collapseMoreInfo, setCollapseMoreInfo] = useState(false)
   const [open, setOpen] = useState(false)
   const [getItem, setGetItem] = useState([])
-  const [collapseAccounting, setCollapseAccounting] = useState(false)
   const [selectedRerferDueDate, setSelectedRerferDueDate] = useState(false)
   const [openCalendarRerferDueDate, setOpenCalendarRerferDueDate] = useState(false)
 
@@ -71,10 +71,6 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
     setGetItem(event.target.value)
   }
 
-  const handleCollapsAccouting = () => {
-    setCollapseAccounting(!collapseAccounting)
-  }
-
   const handleRowClick = params => {
     setOpen(true)
     setGetItem(params.row)
@@ -84,9 +80,6 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
     setOpen(false)
   }
 
-  const handleCollapseRefer = () => {
-    setCollapseRefer(!collapseRefer)
-  }
   const [anchorElType, setAnchorElType] = useState(null)
   const [selectedType, setSelectedType] = useState('')
 
@@ -160,8 +153,6 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
     { field: 'credit_in_account_currency', headerName: 'Credit', width: 150, valueFormatter: formatCurrency }
   ]
 
-  const IsOpenting = [{ label: 'Yes' }, { label: 'No' }]
-
   const handleTextChange = event => {
     console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
     setDataRow({ ...dataRow, [event.target.name]: event.target.value })
@@ -192,14 +183,6 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
 
   const handleOpenCalendar = () => {
     setOpenCalendar(true)
-  }
-
-  const handleOpenPrinting = () => {
-    setCollapsePrinting(!collapsePrinting)
-  }
-
-  const handleOpenMoreInfo = () => {
-    setCollapseMoreInfo(!collapseMoreInfo)
   }
 
   const handleDateChangeToEnd = date => {
@@ -235,101 +218,120 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
     setOpenCalendarDueDate(true)
   }
 
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
+
   return (
     <Card sx={{ p: 4 }}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <Typography>Entry Type</Typography>
-          <TextField
-            sx={{ marginBottom: 5 }}
-            fullWidth
-            size='small'
-            variant='filled'
-            value={selectedType || dataRow.voucher_type}
-            onClick={handleMenuOpenType}
-            InputProps={{
-              endAdornment: (
-                <span onClick={handleMenuOpenType} style={{ cursor: 'pointer' }}>
-                  <Icon path={mdiMenuDown} size={1} />
-                </span>
-              )
-            }}
-          />
-          <Menu
-            anchorEl={anchorElType}
-            open={Boolean(anchorElType)}
-            onClose={handleMenuCloseType}
-            PaperProps={{
-              style: {
-                maxHeight: 250, // ความสูงสูงสุดของ dropdown
-                width: 350 // ความกว้างของ dropdown
-              }
-            }}
-          >
-            {accountDorpdownType.map(option => (
-              <MenuItem key={option.value} value={option.value} onClick={() => handleTypeChange(option.value)}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Menu>
+          <Box sx={styles.box}>
+            <Typography>Entry Type</Typography>
+            <TextField
+              sx={styles.textField}
+              fullWidth
+              variant='outlined'
+              value={selectedType || dataRow.voucher_type}
+              onClick={handleMenuOpenType}
+              InputProps={{
+                endAdornment: (
+                  <span onClick={handleMenuOpenType} style={{ cursor: 'pointer' }}>
+                    <Icon path={mdiMenuDown} size={1} />
+                  </span>
+                )
+              }}
+            />
+            <Menu
+              anchorEl={anchorElType}
+              open={Boolean(anchorElType)}
+              onClose={handleMenuCloseType}
+              PaperProps={{
+                style: {
+                  maxHeight: 250, // ความสูงสูงสุดของ dropdown
+                  width: 350 // ความกว้างของ dropdown
+                }
+              }}
+            >
+              {accountDorpdownType.map(option => (
+                <MenuItem key={option.value} value={option.value} onClick={() => handleTypeChange(option.value)}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
 
-          <Typography>Company</Typography>
-          <TextField
-            sx={{ marginBottom: 5 }}
-            size='small'
-            variant='filled'
-            fullWidth
-            label=''
-            value={dataRow.company || ''}
-            name='company'
-            onChange={handleTextChange}
-          />
+          <Box sx={styles.box}>
+            <Typography>Company</Typography>
+            <TextField
+              sx={styles.textField}
+              variant='outlined'
+              fullWidth
+              label=''
+              value={dataRow.company || ''}
+              name='company'
+              onChange={handleTextChange}
+            />
+          </Box>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Typography>From Template</Typography>
-          <TextField
-            sx={{ marginBottom: 5 }}
-            size='small'
-            variant='filled'
-            fullWidth
-            label=''
-            value={dataRow.from_template || ''}
-            name='from_template'
-            onChange={handleTextChange}
-          />
+          <Box sx={styles.box}>
+            <Typography>From Template</Typography>
+            <TextField
+              sx={styles.textField}
+              variant='outlined'
+              fullWidth
+              label=''
+              value={dataRow.from_template || ''}
+              name='from_template'
+              onChange={handleTextChange}
+            />
+          </Box>
 
-          <Typography>Posting Date *</Typography>
-          <TextField
-            onClick={handleOpenCalendar}
-            size='small'
-            variant='filled'
-            fullWidth
-            value={selectedDate ? dayjs(selectedDate).format('DD - MM - YYYY') : ''}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position='end'>
-                  <IconButton>
-                    <EventIcon />
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-          />
+          <Box sx={styles.box}>
+            <Typography>Posting Date *</Typography>
+            <TextField
+              onClick={handleOpenCalendar}
+              variant='outlined'
+              fullWidth
+              value={selectedDate ? dayjs(selectedDate).format('DD - MM - YYYY') : ''}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <IconButton>
+                      <EventIcon />
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
 
-          {openCalendar && (
-            <Grid width={'100%'}>
-              <Typography sx={{ marginBottom: 2 }}>Release Date </Typography>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <StaticDatePicker
-                  orientation='landscape'
-                  value={selectedDate}
-                  onChange={handleDateChange}
-                  componentsProps={{ actionBar: { actions: [] } }}
-                  renderInput={params => <TextField {...params} variant='filled' fullWidth />}
-                />
-              </LocalizationProvider>
-            </Grid>
-          )}
+            {openCalendar && (
+              <Grid width={'100%'}>
+                <Typography sx={{ marginBottom: 2 }}>Release Date </Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <StaticDatePicker
+                    orientation='landscape'
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                    componentsProps={{ actionBar: { actions: [] } }}
+                    renderInput={params => <TextField {...params} variant='filled' fullWidth />}
+                  />
+                </LocalizationProvider>
+              </Grid>
+            )}
+          </Box>
         </Grid>
       </Grid>
       <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
@@ -358,114 +360,119 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
       <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <Typography>Reference Number</Typography>
-          <TextField
-            sx={{ marginBottom: 5 }}
-            size='small'
-            variant='filled'
-            fullWidth
-            label=''
-            value={dataRow.cheque_no || ''}
-            name='cheque_no'
-            onChange={handleTextChange}
-          />
+          <Box sx={styles.box}>
+            <Typography>Reference Number</Typography>
+            <TextField
+              sx={styles.textField}
+              variant='outlined'
+              fullWidth
+              label=''
+              value={dataRow.cheque_no || ''}
+              name='cheque_no'
+              onChange={handleTextChange}
+            />
+          </Box>
 
-          <Typography>To Date</Typography>
-          <TextField
-            onClick={handleOpenCalendarToEnd}
-            sx={{ marginBottom: 5 }}
-            size='small'
-            variant='filled'
-            fullWidth
-            value={selectedToEnd ? dayjs(selectedToEnd).format('DD - MM - YYYY') : ''}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position='end'>
-                  <IconButton>
-                    <EventIcon />
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-          />
-          {openCalendarToEnd && (
-            <Grid width={'100%'}>
-              <Typography sx={{ marginBottom: 2 }}>Release Date </Typography>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <StaticDatePicker
-                  orientation='landscape'
-                  value={selectedToEnd}
-                  onChange={handleDateChangeToEnd}
-                  componentsProps={{ actionBar: { actions: [] } }}
-                  renderInput={params => <TextField {...params} variant='filled' fullWidth />}
-                />
-              </LocalizationProvider>
-            </Grid>
-          )}
+          <Box sx={styles.box}>
+            <Typography>To Date</Typography>
+            <TextField
+              onClick={handleOpenCalendarToEnd}
+              sx={styles.textField}
+              variant='outlined'
+              fullWidth
+              value={selectedToEnd ? dayjs(selectedToEnd).format('DD - MM - YYYY') : ''}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <IconButton>
+                      <EventIcon />
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
+            {openCalendarToEnd && (
+              <Grid width={'100%'}>
+                <Typography sx={{ marginBottom: 2 }}>Release Date </Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <StaticDatePicker
+                    orientation='landscape'
+                    value={selectedToEnd}
+                    onChange={handleDateChangeToEnd}
+                    componentsProps={{ actionBar: { actions: [] } }}
+                    renderInput={params => <TextField {...params} variant='filled' fullWidth />}
+                  />
+                </LocalizationProvider>
+              </Grid>
+            )}
+          </Box>
 
-          <Typography>User Remark</Typography>
-          <TextareaAutosize
-            style={{ minHeight: '200px', width: '100%' }}
-            size='small'
-            variant='filled'
-            label='User Remark'
-            value={dataRow.user_remark || ''}
-          />
+          <Box sx={styles.box}>
+            <Typography>User Remark</Typography>
+            <TextareaAutosize
+              style={{ minHeight: '200px', width: '100%' }}
+              variant='outlined'
+              label='User Remark'
+              value={dataRow.user_remark || ''}
+            />
+          </Box>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Typography>Total Debit</Typography>
-          <TextField
-            sx={{ marginBottom: 5 }}
-            size='small'
-            variant='filled'
-            fullWidth
-            label=''
-            value={
-              dataRow?.total_debit === '0.0'
-                ? '฿0.0'
-                : dataRow?.total_debit.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                  })
-            }
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <Typography>฿</Typography>
-                </InputAdornment>
-              )
-            }}
-            name='total_debit'
-            onChange={handleTextChange}
-            disabled
-          />
+          <Box sx={styles.box}>
+            <Typography>Total Debit</Typography>
+            <TextField
+              sx={styles.textField}
+              variant='outlined'
+              fullWidth
+              label=''
+              value={
+                dataRow?.total_debit === '0.0'
+                  ? '฿0.0'
+                  : dataRow?.total_debit.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })
+              }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Typography>฿</Typography>
+                  </InputAdornment>
+                )
+              }}
+              name='total_debit'
+              onChange={handleTextChange}
+              disabled
+            />
+          </Box>
 
-          <Typography>Total Debit</Typography>
-          <TextField
-            sx={{ marginBottom: 5 }}
-            size='small'
-            variant='filled'
-            fullWidth
-            label=''
-            value={
-              dataRow?.total_credit === '0.0'
-                ? '฿0.0'
-                : dataRow?.total_credit.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                  })
-            }
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <Typography>฿</Typography>
-                </InputAdornment>
-              )
-            }}
-            name='total_credit'
-            onChange={handleTextChange}
-            disabled
-          />
+          <Box sx={styles.box}>
+            <Typography>Total Debit</Typography>
+            <TextField
+              sx={styles.textField}
+              variant='outlined'
+              fullWidth
+              label=''
+              value={
+                dataRow?.total_credit === '0.0'
+                  ? '฿0.0'
+                  : dataRow?.total_credit.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })
+              }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Typography>฿</Typography>
+                  </InputAdornment>
+                )
+              }}
+              name='total_credit'
+              onChange={handleTextChange}
+              disabled
+            />
+          </Box>
 
           <Grid sx={checkboxStyle}>
             <Checkbox
@@ -478,205 +485,197 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
         </Grid>
       </Grid>
       <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
-      <Grid>
-        <Box sx={{ display: 'flex' }}>
-          <Button size='small' variant='filled' label='' onClick={handleCollapseRefer} sx={{ fontWeight: 'bold' }}>
-            Reference
-          </Button>
 
-          <IconButton size='small' onClick={handleCollapseRefer}>
-            {collapseRefer ? (
-              <ChevronUp sx={{ fontSize: '1.875rem' }} />
-            ) : (
-              <ChevronDown sx={{ fontSize: '1.875rem' }} />
-            )}
-          </IconButton>
-        </Box>
+      <Box sx={{ width: '100%' }}>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography sx={{ fontWeight: 'bold', p: 0 }}> Reference</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Divider sx={{ margin: 0 }} />
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Box sx={styles.box}>
+                  <Typography sx={{ margin: 1 }}>Bill No</Typography>
+                  <TextField
+                    sx={styles.textField}
+                    variant='outlined'
+                    value={dataRow.bill_no || ''}
+                    fullWidth
+                    name='bill_no'
+                    onChange={handleTextChange}
+                  />
+                </Box>
 
-        <Collapse in={collapseRefer}>
-          <Divider sx={{ margin: 0 }} />
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Typography sx={{ margin: 1 }}>Bill No</Typography>
-              <TextField
-                size='small'
-                variant='filled'
-                value={dataRow.bill_no || ''}
-                fullWidth
-                name='bill_no'
-                onChange={handleTextChange}
-              />
+                <Box sx={styles.box}>
+                  <Typography>Bill Date</Typography>
+                  <TextField
+                    onClick={handleOpenCalendarBillDate}
+                    sx={styles.textField}
+                    variant='outlined'
+                    fullWidth
+                    value={selectedBillDate ? dayjs(selectedBillDate).format('DD - MM - YYYY') : ''}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <IconButton>
+                            <EventIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  {openCalendarBillDate && (
+                    <Grid width={'100%'}>
+                      <Typography sx={{ marginBottom: 2 }}>Release Date </Typography>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <StaticDatePicker
+                          orientation='landscape'
+                          value={selectedBillDate}
+                          onChange={handleDateChangeBillDate}
+                          componentsProps={{ actionBar: { actions: [] } }}
+                          renderInput={params => <TextField {...params} variant='filled' fullWidth />}
+                        />
+                      </LocalizationProvider>
+                    </Grid>
+                  )}
+                </Box>
 
-              <Typography>Bill Date</Typography>
-              <TextField
-                onClick={handleOpenCalendarBillDate}
-                sx={{ marginBottom: 5 }}
-                size='small'
-                variant='filled'
-                fullWidth
-                value={selectedBillDate ? dayjs(selectedBillDate).format('DD - MM - YYYY') : ''}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <IconButton>
-                        <EventIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              {openCalendarBillDate && (
-                <Grid width={'100%'}>
-                  <Typography sx={{ marginBottom: 2 }}>Release Date </Typography>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <StaticDatePicker
-                      orientation='landscape'
-                      value={selectedBillDate}
-                      onChange={handleDateChangeBillDate}
-                      componentsProps={{ actionBar: { actions: [] } }}
-                      renderInput={params => <TextField {...params} variant='filled' fullWidth />}
-                    />
-                  </LocalizationProvider>
-                </Grid>
-              )}
-
-              <Typography>Due Date</Typography>
-              <TextField
-                onClick={handleOpenCalendarDueDate}
-                sx={{ marginBottom: 5 }}
-                size='small'
-                variant='filled'
-                fullWidth
-                value={selectedDueDate ? dayjs(selectedDueDate).format('DD - MM - YYYY') : ''}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <IconButton>
-                        <EventIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              {openCalendarDueDate && (
-                <Grid width={'100%'}>
-                  <Typography sx={{ marginBottom: 2 }}>Release Date </Typography>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <StaticDatePicker
-                      orientation='landscape'
-                      value={selectedDueDate}
-                      onChange={handleDateChangeDueDate}
-                      componentsProps={{ actionBar: { actions: [] } }}
-                      renderInput={params => <TextField {...params} variant='filled' fullWidth />}
-                    />
-                  </LocalizationProvider>
-                </Grid>
-              )}
+                <Box sx={styles.box}>
+                  <Typography>Due Date</Typography>
+                  <TextField
+                    onClick={handleOpenCalendarDueDate}
+                    sx={styles.textField}
+                    variant='outlined'
+                    fullWidth
+                    value={selectedDueDate ? dayjs(selectedDueDate).format('DD - MM - YYYY') : ''}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <IconButton>
+                            <EventIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  {openCalendarDueDate && (
+                    <Grid width={'100%'}>
+                      <Typography sx={{ marginBottom: 2 }}>Release Date </Typography>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <StaticDatePicker
+                          orientation='landscape'
+                          value={selectedDueDate}
+                          onChange={handleDateChangeDueDate}
+                          componentsProps={{ actionBar: { actions: [] } }}
+                          renderInput={params => <TextField {...params} variant='filled' fullWidth />}
+                        />
+                      </LocalizationProvider>
+                    </Grid>
+                  )}
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
-        </Collapse>
-      </Grid>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+
       <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
-      <Grid>
-        <Box sx={{ display: 'flex' }}>
-          <Button size='small' variant='filled' label='' onClick={handleOpenPrinting} sx={{ fontWeight: 'bold' }}>
-            Printing Settings
-          </Button>
-          <Box>
-            <IconButton size='small' onClick={handleOpenPrinting}>
-              {collapsePrinting ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
-          </Box>
-        </Box>
-        <Collapse in={collapsePrinting}>
-          <Divider sx={{ margin: 0 }} />
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <Typography sx={{ margin: 1 }}>Pay To / Recd From</Typography>
-              <TextField
-                size='small'
-                variant='filled'
-                value={dataRow.pay_to_recd_from || ''}
-                fullWidth
-                name='pay_to_recd_from'
-                onChange={handleTextChange}
-              />
 
-              <Typography sx={{ margin: 1 }}>Print Heading</Typography>
-              <TextField
-                size='small'
-                variant='filled'
-                value={dataRow.select_print_heading || ''}
-                fullWidth
-                name='select_print_heading'
-                onChange={handleTextChange}
-              />
+      <Box>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography sx={{ fontWeight: 'bold', p: 0 }}> Printing Settings</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Divider sx={{ margin: 0 }} />
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <Box sx={styles.box}>
+                  <Typography sx={{ margin: 1 }}>Pay To / Recd From</Typography>
+                  <TextField
+                    sx={styles.textField}
+                    variant='outlined'
+                    value={dataRow.pay_to_recd_from || ''}
+                    fullWidth
+                    name='pay_to_recd_from'
+                    onChange={handleTextChange}
+                  />
+                </Box>
+
+                <Box sx={styles.box}>
+                  <Typography sx={{ margin: 1 }}>Print Heading</Typography>
+                  <TextField
+                    sx={styles.textField}
+                    variant='outlined'
+                    value={dataRow.select_print_heading || ''}
+                    fullWidth
+                    name='select_print_heading'
+                    onChange={handleTextChange}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Box sx={styles.box}>
+                  <Typography sx={{ margin: 1 }}>Letter Head</Typography>
+                  <TextField
+                    sx={styles.textField}
+                    variant='outlined'
+                    value={dataRow.letter_head || ''}
+                    fullWidth
+                    name='letter_head'
+                    onChange={handleTextChange}
+                  />
+                </Box>
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography sx={{ margin: 1 }}>Letter Head</Typography>
-              <TextField
-                size='small'
-                variant='filled'
-                value={dataRow.letter_head || ''}
-                fullWidth
-                name='letter_head'
-                onChange={handleTextChange}
-              />
-            </Grid>
-          </Grid>
-        </Collapse>
-      </Grid>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+
       <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
-      <Grid>
-        <Box sx={{ display: 'flex' }}>
-          <Button size='small' variant='filled' label='' onClick={handleOpenMoreInfo} sx={{ fontWeight: 'bold' }}>
-            More Information
-          </Button>
-
-          <IconButton size='small' onClick={handleOpenMoreInfo}>
-            {collapseMoreInfo ? (
-              <ChevronUp sx={{ fontSize: '1.875rem' }} />
-            ) : (
-              <ChevronDown sx={{ fontSize: '1.875rem' }} />
-            )}
-          </IconButton>
-        </Box>
-        <Collapse in={collapseMoreInfo}>
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography sx={{ fontWeight: 'bold', p: 0 }}> More Information</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
           <Divider sx={{ margin: 0 }} />
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <Typography sx={{ margin: 1 }}>Mode of Payment</Typography>
-              <TextField
-                size='small'
-                variant='filled'
-                value={dataRow.mode_of_payment || ''}
-                fullWidth
-                name='mode_of_payment'
-                onChange={handleTextChange}
-              />
+              <Box sx={styles.box}>
+                <Typography>Mode of Payment</Typography>
+                <TextField
+                  sx={styles.textField}
+                  variant='outlined'
+                  value={dataRow.mode_of_payment || ''}
+                  fullWidth
+                  name='mode_of_payment'
+                  onChange={handleTextChange}
+                />
+              </Box>
             </Grid>
             <Grid item xs={12} md={6}>
-              <FormControl variant='filled' fullWidth>
-                <Typography>Is Advance</Typography>
-                <InputLabel id='demo-simple-select-filled-label'></InputLabel>
-                <Select
-                  labelId='demo-simple-select-filled-label'
-                  id='demo-simple-select-filled'
-                  // value={getItem.is_advance}
-                  onChange={handleChange}
-                >
-                  <MenuItem value={1}>Yes</MenuItem>
-                  <MenuItem value={2}>No</MenuItem>
-                </Select>
-              </FormControl>
+              <Box sx={styles.box}>
+                <FormControl variant='outlined' fullWidth>
+                  <Typography>Is Advance</Typography>
+
+                  <Select
+                    sx={styles.textField}
+                    labelId='demo-simple-select-filled-label'
+                    id='demo-simple-select-filled'
+                    // value={getItem.is_advance}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={1}>Yes</MenuItem>
+                    <MenuItem value={2}>No</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
             </Grid>
           </Grid>
-        </Collapse>
-      </Grid>
+        </AccordionDetails>
+      </Accordion>
+
       <Dialog
         open={open}
         onClose={handleClose}
@@ -700,146 +699,163 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
-            <Grid container spacing={3} sx={{ mt: 6 }}>
+            <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
-                <Typography sx={{ margin: 1 }}>Account</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={getItem.account || ''}
-                  fullWidth
-                  name='account'
-                  onChange={handleTextChangeItem}
-                />
+                <Box sx={styles.box}>
+                  <Typography sx={{ margin: 1 }}>Account</Typography>
+                  <TextField
+                    sx={styles.textField}
+                    variant='outlined'
+                    value={getItem.account || ''}
+                    fullWidth
+                    name='account'
+                    onChange={handleTextChangeItem}
+                  />
+                </Box>
 
-                <Typography sx={{ margin: 1 }}>Account Balance</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={
-                    getItem?.balance === '0.0'
-                      ? '฿ 0.0'
-                      : `฿ ${parseFloat(getItem?.balance).toLocaleString('en-US', {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2
-                        })}`
-                  }
-                  fullWidth
-                  name='balance'
-                  onChange={handleTextChangeItem}
-                  disabled
-                />
+                <Box sx={styles.box}>
+                  <Typography sx={{ margin: 1 }}>Account Balance</Typography>
+                  <TextField
+                    sx={styles.textField}
+                    variant='outlined'
+                    value={
+                      getItem?.balance === '0.0'
+                        ? '฿ 0.0'
+                        : `฿ ${parseFloat(getItem?.balance).toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                          })}`
+                    }
+                    fullWidth
+                    name='balance'
+                    onChange={handleTextChangeItem}
+                    disabled
+                  />
+                </Box>
 
-                <Typography sx={{ margin: 1 }}>Party</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={getItem.party || ''}
-                  fullWidth
-                  name='party'
-                  onChange={handleTextChangeItem}
-                />
+                <Box sx={styles.box}>
+                  <Typography sx={{ margin: 1 }}>Party</Typography>
+                  <TextField
+                    sx={styles.textField}
+                    variant='outlined'
+                    value={getItem.party || ''}
+                    fullWidth
+                    name='party'
+                    onChange={handleTextChangeItem}
+                  />
+                </Box>
               </Grid>
 
               <Grid item xs={12} md={6}>
+                <Box sx={styles.box}></Box>
                 <Typography sx={{ margin: 1 }}>Bank Account</Typography>
                 <TextField
-                  size='small'
-                  variant='filled'
+                  sx={styles.textField}
+                  variant='outlined'
                   value={getItem.bank_account || ''}
                   fullWidth
                   name='bank_account'
                   onChange={handleTextChangeItem}
                 />
 
-                <Typography sx={{ margin: 1 }}>Party Type</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={getItem.party_type || ''}
-                  fullWidth
-                  name='party_type'
-                  disabled
-                  onChange={handleTextChangeItem}
-                />
-
-                <Typography sx={{ margin: 1 }}>Party Balance</Typography>
-                <TextField size='small' variant='filled' fullWidth name='party_type' onChange={handleTextChangeItem} />
+                <Box sx={styles.box}>
+                  <Typography sx={{ margin: 1 }}>Party Type</Typography>
+                  <TextField
+                    sx={styles.textField}
+                    variant='outlined'
+                    value={getItem.party_type || ''}
+                    fullWidth
+                    name='party_type'
+                    disabled
+                    onChange={handleTextChangeItem}
+                  />
+                </Box>
+                <Box sx={styles.box}>
+                  <Typography sx={{ margin: 1 }}>Party Balance</Typography>
+                  <TextField
+                    sx={styles.textField}
+                    variant='outlined'
+                    fullWidth
+                    name='party_type'
+                    onChange={handleTextChangeItem}
+                  />
+                </Box>
               </Grid>
             </Grid>
 
             <Box sx={{ width: '100%' }}>
-              <Button variant='filled' onClick={handleCollapsAccouting} sx={{ fontWeight: 'bold' }}>
-                Accounting Dimensions
-              </Button>
-              <IconButton size='small' onClick={handleCollapsAccouting}>
-                {collapseAccounting ? (
-                  <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                ) : (
-                  <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                )}
-              </IconButton>
+              <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography sx={{ fontWeight: 'bold', p: 0 }}> Accounting Dimensions</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Divider sx={{ margin: 0, width: '100%' }} />
+                  <Grid container spacing={2} style={{ width: '100%' }}>
+                    <Grid item xs={12} sm={12} md={6} lg={6}>
+                      <Box sx={styles.box}>
+                        <Typography sx={{ margin: 1 }}>Cost Center</Typography>
+                        <TextField
+                          sx={styles.textField}
+                          variant='outlined'
+                          value={getItem.cost_center || ''}
+                          fullWidth
+                          name='cost_center'
+                          onChange={handleTextChangeItem}
+                        />
+                      </Box>
+                      <Typography sx={{ margin: 1 }} variant='subtitle2'>
+                        If Income or Expense
+                      </Typography>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12} md={6} lg={6}>
+                      <Box sx={styles.box}>
+                        <Typography sx={{ margin: 1 }}>Project</Typography>
+                        <TextField
+                          sx={styles.textField}
+                          variant='outlined'
+                          value={getItem.project || ''}
+                          fullWidth
+                          name='project'
+                          onChange={handleTextChangeItem}
+                        />
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
             </Box>
 
-            <Grid>
-              <Collapse in={collapseAccounting} width={'100%'}>
-                <Divider sx={{ margin: 0, width: '100%' }} />
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography sx={{ margin: 1 }}>Cost Center</Typography>
-                    <TextField
-                      size='small'
-                      variant='filled'
-                      value={getItem.cost_center || ''}
-                      fullWidth
-                      name='cost_center'
-                      onChange={handleTextChangeItem}
-                    />
-                    <Typography sx={{ margin: 1 }} variant='subtitle2'>
-                      If Income or Expense
-                    </Typography>
-                  </Grid>
-
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography sx={{ margin: 1 }}>Project</Typography>
-                    <TextField
-                      size='small'
-                      variant='filled'
-                      value={getItem.project || ''}
-                      fullWidth
-                      name='project'
-                      onChange={handleTextChangeItem}
-                    />
-                  </Grid>
-                </Grid>
-              </Collapse>
-            </Grid>
-            <Grid>
+            <Grid sx={{ mt: 6 }}>
               <Typography sx={{ fontWeight: 'bold' }}> Amount</Typography>
             </Grid>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
-                <Typography sx={{ margin: 1 }}>Debit</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={getItem.debit_in_account_currency || ''}
-                  fullWidth
-                  name='debit_in_account_currency'
-                  onChange={handleTextChangeItem}
-                />
+                <Box sx={styles.box}>
+                  <Typography sx={{ margin: 1 }}>Debit</Typography>
+                  <TextField
+                    sx={styles.textField}
+                    variant='outlined'
+                    value={getItem.debit_in_account_currency || ''}
+                    fullWidth
+                    name='debit_in_account_currency'
+                    onChange={handleTextChangeItem}
+                  />
+                </Box>
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Typography sx={{ margin: 1 }}>Credit</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={getItem.debit_in_account_currency || ''}
-                  fullWidth
-                  name='debit_in_account_currency'
-                  onChange={handleTextChangeItem}
-                />
+                <Box sx={styles.box}>
+                  <Typography sx={{ margin: 1 }}>Credit</Typography>
+                  <TextField
+                    sx={styles.textField}
+                    variant='outlined'
+                    value={getItem.debit_in_account_currency || ''}
+                    fullWidth
+                    name='debit_in_account_currency'
+                    onChange={handleTextChangeItem}
+                  />
+                </Box>
               </Grid>
             </Grid>
             <Divider sx={{ m: 6, width: '100%' }} />
@@ -848,51 +864,55 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
             </Grid>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
-                <FormControl variant='filled' fullWidth>
-                  <Typography>Reference Type</Typography>
-                  <InputLabel id='demo-simple-select-filled-label'></InputLabel>
-                  <Select
-                    labelId='demo-simple-select-filled-label'
-                    id='demo-simple-select-filled'
-                    // value={getItem.reference_type}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value=''>
-                      <em>{getItem.reference_type}</em>
-                    </MenuItem>
-                    <MenuItem value={1}>Sales Invoice </MenuItem>
-                    <MenuItem value={2}>Purchase Invoice</MenuItem>
-                    <MenuItem value={3}>Journal Entry</MenuItem>
-                    <MenuItem value={4}>Sales Order</MenuItem>
-                    <MenuItem value={5}>Purchase Order</MenuItem>
-                    <MenuItem value={6}>Expense Claim</MenuItem>
-                    <MenuItem value={7}>Asset</MenuItem>
-                    <MenuItem value={8}>Loan</MenuItem>
-                    <MenuItem value={9}>Payroll Entry</MenuItem>
-                    <MenuItem value={10}>Employee Advance</MenuItem>
-                    <MenuItem value={11}>Exchange Rate Revaluation</MenuItem>
-                    <MenuItem value={12}>Invoice Discounting</MenuItem>
-                    <MenuItem value={13}>Fees</MenuItem>
-                    <MenuItem value={14}>Full and Final Statement</MenuItem>
-                  </Select>
-                </FormControl>
+                <Box sx={styles.box}>
+                  <FormControl variant='outlined' fullWidth>
+                    <Typography>Reference Type</Typography>
 
-                <Typography sx={{ margin: 1 }}>Reference Name</Typography>
-                <TextField
-                  size='small'
-                  variant='filled'
-                  value={getItem.reference_name || ''}
-                  fullWidth
-                  name='reference_name'
-                  onChange={handleTextChangeItem}
-                />
+                    <Select
+                      labelId='demo-simple-select-filled-label'
+                      id='demo-simple-select-filled'
+                      // value={getItem.reference_type}
+                      onChange={handleChange}
+                      sx={styles.textField}
+                    >
+                      <MenuItem value=''>
+                        <em>{getItem.reference_type}</em>
+                      </MenuItem>
+                      <MenuItem value={1}>Sales Invoice </MenuItem>
+                      <MenuItem value={2}>Purchase Invoice</MenuItem>
+                      <MenuItem value={3}>Journal Entry</MenuItem>
+                      <MenuItem value={4}>Sales Order</MenuItem>
+                      <MenuItem value={5}>Purchase Order</MenuItem>
+                      <MenuItem value={6}>Expense Claim</MenuItem>
+                      <MenuItem value={7}>Asset</MenuItem>
+                      <MenuItem value={8}>Loan</MenuItem>
+                      <MenuItem value={9}>Payroll Entry</MenuItem>
+                      <MenuItem value={10}>Employee Advance</MenuItem>
+                      <MenuItem value={11}>Exchange Rate Revaluation</MenuItem>
+                      <MenuItem value={12}>Invoice Discounting</MenuItem>
+                      <MenuItem value={13}>Fees</MenuItem>
+                      <MenuItem value={14}>Full and Final Statement</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+
+                <Box sx={styles.box}>
+                  <Typography sx={{ margin: 1 }}>Reference Name</Typography>
+                  <TextField
+                    sx={styles.textField}
+                    variant='outlined'
+                    value={getItem.reference_name || ''}
+                    fullWidth
+                    name='reference_name'
+                    onChange={handleTextChangeItem}
+                  />
+                </Box>
 
                 <Typography sx={{ margin: 1 }}>Reference Due Date</Typography>
                 <TextField
                   onClick={handleOpenCalendarRerfer}
-                  sx={{ marginBottom: 5 }}
-                  size='small'
-                  variant='filled'
+                  sx={styles.textField}
+                  variant='outlined'
                   fullWidth
                   value={selectedRerferDueDate ? dayjs(selectedRerferDueDate).format('DD - MM - YYYY') : ''}
                   InputProps={{
@@ -922,28 +942,32 @@ const JournalEntryComp = ({ dataRow, setDataRow }) => {
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <FormControl variant='filled' fullWidth>
-                  <Typography>Is Advance</Typography>
-                  <InputLabel id='demo-simple-select-filled-label'></InputLabel>
-                  <Select
-                    labelId='demo-simple-select-filled-label'
-                    id='demo-simple-select-filled'
-                    // value={getItem.is_advance}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={1}>Yes</MenuItem>
-                    <MenuItem value={2}>No</MenuItem>
-                  </Select>
-                </FormControl>
+                <Box sx={styles.box}>
+                  <FormControl variant='outlined' fullWidth>
+                    <Typography>Is Advance</Typography>
+                    <Select
+                      labelId='demo-simple-select-filled-label'
+                      id='demo-simple-select-filled'
+                      // value={getItem.is_advance}
+                      onChange={handleChange}
+                      sx={styles.textField}
+                    >
+                      <MenuItem value={1}>Yes</MenuItem>
+                      <MenuItem value={2}>No</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
 
-                <Typography>User Remark</Typography>
-                <TextareaAutosize
-                  style={{ minHeight: '150px', width: '100%' }}
-                  size='small'
-                  variant='filled'
-                  label=''
-                  value={getItem.user_remark || ''}
-                />
+                <Box sx={styles.box}>
+                  <Typography>User Remark</Typography>
+                  <TextareaAutosize
+                    style={{ minHeight: '150px', width: '100%' }}
+                    size='small'
+                    variant='filled'
+                    label=''
+                    value={getItem.user_remark || ''}
+                  />
+                </Box>
               </Grid>
             </Grid>
           </DialogContentText>
