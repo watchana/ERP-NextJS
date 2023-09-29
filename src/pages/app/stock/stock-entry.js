@@ -36,6 +36,7 @@ const StockEntry = ({ data }) => {
       setDataRow={setDataRow}
       doctype='Stock Entry'
       docStatusName='disabled'
+      noTabContent={[]}
     />
   )
 }
