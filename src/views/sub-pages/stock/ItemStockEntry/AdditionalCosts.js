@@ -74,6 +74,21 @@ const AdditionalCosts = ({ dataRow, setDataRow }) => {
     { field: 'payment_amount', headerName: 'Payment Amount (THB)', width: 150 }
   ]
 
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
+
   return (
     <Card sx={{ p: 4 }}>
       <Grid container spacing={3}>
@@ -95,30 +110,32 @@ const AdditionalCosts = ({ dataRow, setDataRow }) => {
       </Grid>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Typography sx={{ margin: 1 }}>Total Additional Costs</Typography>
-          <TextField
-            size='small'
-            variant='filled'
-            value={
-              dataRow?.total_additional_costs === '0.0'
-                ? '฿0.0'
-                : dataRow?.total_additional_costs.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                  })
-            }
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <Typography>฿</Typography>
-                </InputAdornment>
-              )
-            }}
-            name='total_additional_costs'
-            onChange={handleTextChange}
-            fullWidth
-            disabled
-          />
+          <Box sx={styles.box}>
+            <Typography sx={{ margin: 1 }}>Total Additional Costs</Typography>
+            <TextField
+              variant='outlined'
+              sx={styles.textField}
+              value={
+                dataRow?.total_additional_costs === '0.0'
+                  ? '฿0.0'
+                  : dataRow?.total_additional_costs.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })
+              }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Typography>฿</Typography>
+                  </InputAdornment>
+                )
+              }}
+              name='total_additional_costs'
+              onChange={handleTextChange}
+              fullWidth
+              disabled
+            />
+          </Box>
         </Grid>
       </Grid>
       <Grid>
@@ -147,69 +164,79 @@ const AdditionalCosts = ({ dataRow, setDataRow }) => {
             <DialogContentText id='alert-dialog-description'>
               <Grid container spacing={3} sx={{ mt: 6 }}>
                 <Grid item xs={12} md={6}>
-                  <Typography variant='subtitle1'>Expense Account</Typography>
-                  <TextField
-                    size='small'
-                    variant='filled'
-                    value={getDataAddions.expense_account}
-                    fullWidth
-                    name='expense_account'
-                    sx={{ mb: 4 }}
-                  />
-                  <Typography variant='subtitle1'>Account Currency</Typography>
-                  <TextField
-                    size='small'
-                    variant='filled'
-                    value={getDataAddions.account_currency}
-                    fullWidth
-                    name='account_currency'
-                    sx={{ mb: 4 }}
-                    disabled
-                  />
-                  <Typography variant='subtitle1'>Exchange Rate</Typography>
-                  <TextField
-                    size='small'
-                    variant='filled'
-                    value={getDataAddions.exchange_rate}
-                    fullWidth
-                    name='exchange_rate'
-                    sx={{ mb: 4 }}
-                    disabled
-                  />
-                  <Typography variant='subtitle1'>Description</Typography>
-                  <TextField
-                    size='small'
-                    variant='filled'
-                    value={getDataAddions.description}
-                    fullWidth
-                    name='description'
-                    sx={{ mb: 4 }}
-                    disabled
-                  />
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Expense Account</Typography>
+                    <TextField
+                      variant='outlined'
+                      value={getDataAddions.expense_account}
+                      fullWidth
+                      name='expense_account'
+                      sx={styles.textField}
+                      disabled
+                    />
+                  </Box>
+
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Account Currency</Typography>
+                    <TextField
+                      variant='outlined'
+                      value={getDataAddions.account_currency}
+                      fullWidth
+                      name='account_currency'
+                      sx={styles.textField}
+                      disabled
+                    />
+                  </Box>
+
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Exchange Rate</Typography>
+                    <TextField
+                      variant='outlined'
+                      value={getDataAddions.exchange_rate}
+                      fullWidth
+                      name='exchange_rate'
+                      sx={styles.textField}
+                      disabled
+                    />
+                  </Box>
+
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Description</Typography>
+                    <TextField
+                      variant='outlined'
+                      value={getDataAddions.description}
+                      fullWidth
+                      name='description'
+                      sx={styles.textField}
+                      disabled
+                    />
+                  </Box>
                 </Grid>
 
                 <Grid item xs={12} md={6}>
-                  <Typography variant='subtitle1'>Amount</Typography>
-                  <TextField
-                    size='small'
-                    variant='filled'
-                    value={getDataAddions.amount}
-                    fullWidth
-                    name='amount'
-                    sx={{ mb: 4 }}
-                    disabled
-                  />
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Amount</Typography>
+                    <TextField
+                      variant='outlined'
+                      value={getDataAddions.amount}
+                      fullWidth
+                      name='amount'
+                      sx={styles.textField}
+                      disabled
+                    />
+                  </Box>
 
-                  <Typography variant='subtitle1'>Amount (Company Currency)</Typography>
-                  <TextField
-                    size='small'
-                    variant='filled'
-                    value={getDataAddions.base_amount}
-                    fullWidth
-                    name='base_amount'
-                    sx={{ mb: 4 }}
-                    disabled
-                  />
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Amount (Company Currency)</Typography>
+                    <TextField
+                      variant='outlined'
+                      value={getDataAddions.base_amount}
+                      fullWidth
+                      name='base_amount'
+                      sx={styles.textField}
+                      disabled
+                    />
+                  </Box>
                 </Grid>
               </Grid>
               <Grid container spacing={3}>

@@ -57,7 +57,6 @@ const LayoutTwoPage = ({
   statusUpdate,
   menuContent,
   showContent,
-  noTabContent,
   dataRow,
   setDataRow,
   doctype,
@@ -390,7 +389,7 @@ const LayoutTwoPage = ({
               </Grid>
 
               <Grid item xs={12}>
-                {menuContent !== undefined && menuContent.length > 0 ? (
+                {menuContent !== undefined ? (
                   <TabContext value={tabValue.toString()}>
                     <Tabs
                       value={tabValue}
