@@ -294,6 +294,10 @@ const LayoutTwoPage = ({
     console.log('screenMD', screenMD)
   }, [contentRightStatus, contentLeftStatus, screenMD])
 
+  useEffect(() => {
+    console.log('menuContent', menuContent)
+  }, [menuContent])
+
   if (!data) {
     return <FullPageSkeleton />
   }
@@ -345,11 +349,7 @@ const LayoutTwoPage = ({
         )}
 
         {contentRightStatus && (
-          <Grid
-            item
-            xs
-            md={(menuContent && menuContent.length === 0) || menuContent === undefined ? 12 : contentRightGrid}
-          >
+          <Grid item xs md={contentRightGrid}>
             <Grid container>
               <Grid item xs={12}>
                 <Box
