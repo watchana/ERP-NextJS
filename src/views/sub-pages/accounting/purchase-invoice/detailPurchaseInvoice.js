@@ -25,80 +25,14 @@ import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material
 import { DataGrid, GridExpandMoreIcon } from '@mui/x-data-grid'
 
 // ** Mdi Import
-import ChevronUp from 'mdi-material-ui/ChevronUp'
-import ChevronDown from 'mdi-material-ui/ChevronDown'
+
 import Icon from '@mdi/react'
 import { mdiPencil } from '@mdi/js'
-import useMediaQuery from '@mui/material/useMediaQuery'
 
 const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
   // ** State
 
   const [currencyPrice, setCurrencyPrice] = useState(false)
-  const [additionalDiscount, setAdditionalDiscount] = useState(false)
-  const [description, setDescription] = useState(false)
-  const [image, setImage] = useState(false)
-  const [discountMargin, setDiscountMargin] = useState(false)
-  const [deferredExpense, setDropShip] = useState(false)
-  const [reference, setAccountingDetails] = useState(false)
-  const [deferredRevenue, setDeferredRevenue] = useState(false)
-  const [itemWeightDetails, setItemWeightDetails] = useState(false)
-  const [stockDetails, setStockDetails] = useState(false)
-  const [references, setReferences] = useState(false)
-  const [accountingDimensions, setAccountingDimensions] = useState(false)
-  const [activity, setActivity] = useState(false)
-
-  const handleClickActivity = () => {
-    setActivity(!activity)
-  }
-
-  const handleClickAdditionalDiscount = () => {
-    setAdditionalDiscount(!additionalDiscount)
-  }
-
-  const handleClickCurrencyPrice = () => {
-    setCurrencyPrice(!currencyPrice)
-  }
-
-  const handleClickDescription = () => {
-    setDescription(!description)
-  }
-
-  const handleClickImage = () => {
-    setImage(!image)
-  }
-
-  const handleClickDeferredExpense = () => {
-    setDropShip(!deferredExpense)
-  }
-
-  const handleClickReference = () => {
-    setAccountingDetails(!reference)
-  }
-
-  const handleClickDeferredRevenue = () => {
-    setDeferredRevenue(!deferredRevenue)
-  }
-
-  const handleClickItemWeightDetails = () => {
-    setItemWeightDetails(!itemWeightDetails)
-  }
-
-  const handleClickReferences = () => {
-    setReferences(!references)
-  }
-
-  const handleClickStockDetails = () => {
-    setStockDetails(!stockDetails)
-  }
-
-  const handleClickAccountingDimensions = () => {
-    setAccountingDimensions(!accountingDimensions)
-  }
-
-  const handleClickDiscountMargin = () => {
-    setDiscountMargin(!discountMargin)
-  }
 
   const [selectedRow, setSelectedRow] = useState(null)
   const [openDialog, setOpenDialog] = useState(false)
@@ -122,13 +56,6 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
 
   const handleCloseDialogs = () => {
     setOpenDialogs(false)
-  }
-
-  const [selectedRowData, setSelectedRowData] = useState({})
-
-  const handleRowClicks = params => {
-    setSelectedRowData(params.row)
-    setOpenDialog(true) // เปิด Dialog เมื่อคลิกแถว
   }
 
   const styles = {
@@ -223,7 +150,6 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
 
     return formattedValue
   }
-  const isLGScreen = useMediaQuery(theme => theme.breakpoints.up('lg'))
 
   useEffect(() => {
     console.log('Formatted Total:', selectedRow)
@@ -422,7 +348,7 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
         <Typography size='small' sx={{ fontWeight: 'bold' }}>
           Items
         </Typography>
-        <Grid item xs={12} sm={12} md={6} lg={6}>
+        <Grid item xs={12} md={6}>
           <FormControlLabel
             control={<Checkbox checked={Boolean(dataRow?.update_stock) || false} onChange={handleCheckboxChange} />}
             label='Update Stock'
@@ -467,712 +393,675 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
 
           <CardHeader title='Row Details' />
           <DialogContent>
-            <Card sx={{ width: '100%', p: 5 }}>
-              <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Card sx={styles.card}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
                     <Typography>Item</Typography>
                     <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
                       fullWidth
+                      variant='outlined'
+                      name='item_code'
                       value={selectedRow?.item_code || ''}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                      disabled
                     />
-                  </Grid>
+                  </Box>
+                </Grid>
 
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
                     <Typography>Item Name</Typography>
                     <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
                       fullWidth
+                      variant='outlined'
+                      name='item_name'
                       value={selectedRow?.item_name || ''}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                      disabled
                     />
-                  </Grid>
-                </Grid>
-                <Divider sx={{ margin: 0, my: 4, width: '100%' }} />
-                <Grid container>
-                  <Box sx={{ width: '100%' }}>
-                    <Button variant='filled' onClick={handleClickDescription} sx={{ fontWeight: 'bold' }}>
-                      Description
-                    </Button>
-                    <IconButton size='small' onClick={handleClickDescription}>
-                      {description ? (
-                        <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                      ) : (
-                        <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                      )}
-                    </IconButton>
                   </Box>
-
-                  <Grid container>
-                    <Collapse in={description} width={'100%'} style={{ width: '100%' }}>
-                      <Divider sx={{ margin: 0, width: '100%' }} />
-                      <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <Typography>Description * </Typography>
-                          <TextField
-                            sx={{ marginBottom: 5 }}
-                            size='small'
-                            variant='filled'
-                            fullWidth
-                            label=''
-                            value={selectedRow?.description || ''}
-                          />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <Typography>Item Group </Typography>
-                          <TextField
-                            sx={{ marginBottom: 5 }}
-                            size='small'
-                            variant='filled'
-                            fullWidth
-                            label=''
-                            value={selectedRow?.item_group || ''}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Collapse>
-                  </Grid>
-                </Grid>
-                <Divider sx={{ margin: 0, my: 4, width: '100%' }} />
-
-                <Grid container>
-                  <Box sx={{ width: '100%' }}>
-                    <Button variant='filled' onClick={handleClickImage} sx={{ fontWeight: 'bold' }}>
-                      Image
-                    </Button>
-                    <IconButton size='small' onClick={handleClickImage}>
-                      {image ? (
-                        <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                      ) : (
-                        <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                      )}
-                    </IconButton>
-                  </Box>
-                  <Grid container>
-                    <Collapse in={image} width={'100%'} style={{ width: '100%' }}>
-                      <Divider sx={{ margin: 0, mb: 5, width: '100%' }} />
-                      <Grid container spacing={2} style={{ width: '100%' }}>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <CardMedia
-                            sx={{
-                              border: '1px solid gray',
-                              borderRadius: '10px',
-                              width: '50%', // เพิ่มข้อมูลเพื่อทำให้รูปภาพเต็มพื้นที่
-                              height: '250px' // กำหนดความสูงเป็น 0 เพื่อให้เกิดเป็นสี่เหลี่ยมจัตุรัส
-                            }}
-                            component='img'
-                            alt='Sample Image'
-                            image={selectedRow?.image_view || ''}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Collapse>
-                  </Grid>
-                </Grid>
-                <Divider sx={{ margin: 0, my: 4.5, width: '100%' }} />
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item mt={3}>
-                    <Typography sx={{ fontWeight: 'bold' }}>Quantity and Rate</Typography>
-                  </Grid>
-                </Grid>
-
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>Received Qty</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={selectedRow?.received_qty === '0' ? '0' : selectedRow?.received_qty}
-                    />
-                    <Typography>Accepted Qty</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={selectedRow?.qty === '0' ? '0' : selectedRow?.qty}
-                    />
-                    <Typography>Rejected Qty</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={selectedRow?.rejected_qty === '0' ? '0' : selectedRow?.rejected_qty}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>UOM *</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={selectedRow?.uom || ''}
-                    />
-                  </Grid>
-                </Grid>
-                <Divider sx={{ margin: 0, my: 4.5, width: '100%' }} />
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>Price List Rate (THB)</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={
-                        selectedRow?.price_list_rate ||
-                        ''.toLocaleString('en-US', {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2
-                        })
-                      }
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Typography>฿</Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>Price List Rate (THB)</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={
-                        selectedRow?.base_price_list_rate === '0.0'
-                          ? '฿0.0'
-                          : selectedRow?.base_price_list_rate ||
-                            ''.toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })
-                      }
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Typography>฿</Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-                <Divider sx={{ margin: 0, my: 4.5, width: '100%' }} />
-                <Grid container>
-                  <Box sx={{ width: '100%' }}>
-                    <Button variant='filled' onClick={handleClickDiscountMargin} sx={{ fontWeight: 'bold' }}>
-                      Discount and Margin
-                    </Button>
-                    <IconButton size='small' onClick={handleClickDiscountMargin}>
-                      {discountMargin ? (
-                        <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                      ) : (
-                        <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                      )}
-                    </IconButton>
-                  </Box>
-
-                  <Grid container>
-                    <Collapse in={discountMargin} width={'100%'} style={{ width: '100%' }}>
-                      <Divider sx={{ margin: 0, width: '100%' }} />
-                      <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <Typography>Discount on Price List Rate (%)</Typography>
-                          <TextField
-                            sx={{ marginBottom: 5 }}
-                            size='small'
-                            variant='filled'
-                            fullWidth
-                            value={selectedRow?.base_amount === '0.0' ? '0%' : selectedRow?.discount_percentage + '%'}
-                          />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6} lg={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-                          <Typography>Discount Amount </Typography>
-                          <TextField
-                            sx={{ marginBottom: 5 }}
-                            size='small'
-                            variant='filled'
-                            fullWidth
-                            value={
-                              selectedRow?.discount_amount === '0.0'
-                                ? '฿0.0'
-                                : selectedRow?.discount_amount ||
-                                  ''.toLocaleString('en-US', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                  })
-                            }
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position='start'>
-                                  <Typography>฿</Typography>
-                                </InputAdornment>
-                              )
-                            }}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Collapse>
-                  </Grid>
-                </Grid>
-                <Divider sx={{ margin: 0, my: 4, width: '100%' }} />
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>Rate (THB) *</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={
-                        selectedRow?.rate === '0.0'
-                          ? '฿0.0'
-                          : selectedRow?.rate ||
-                            ''.toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })
-                      }
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Typography>฿</Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <Typography>Amount (THB) * </Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={
-                        selectedRow?.amount === '0.0'
-                          ? '฿0.0'
-                          : selectedRow?.amount ||
-                            ''.toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })
-                      }
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Typography>฿</Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={12} md={6} lg={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography>Rate (THB) *</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={
-                        selectedRow?.base_rate === '0.0'
-                          ? '฿0.0'
-                          : selectedRow?.base_rate ||
-                            ''.toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })
-                      }
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Typography>฿</Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <Typography>Amount (THB) *</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={
-                        selectedRow?.base_amount === '0.0'
-                          ? '฿0.0'
-                          : selectedRow?.base_amount ||
-                            ''.toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })
-                      }
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Typography>฿</Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={Boolean(selectedRow?.is_free_item) || false}
-                          onChange={handleCheckboxChange}
-                        />
-                      }
-                      label='Is Free Item'
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox checked={Boolean(selectedRow?.apply_tds) || false} onChange={handleCheckboxChange} />
-                      }
-                      label='Apply TDS'
-                    />
-                  </Grid>
-                </Grid>
-                <Divider sx={{ margin: 0, my: 4, width: '100%' }} />
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>Net Rate (THB)</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={
-                        selectedRow?.net_rate === '0.0'
-                          ? '฿0.0'
-                          : selectedRow?.net_rate ||
-                            ''.toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })
-                      }
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Typography>฿</Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <Typography>Net Amount (THB)</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={
-                        selectedRow?.net_amount === '0.0'
-                          ? '฿0.0'
-                          : selectedRow?.net_amount ||
-                            ''.toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })
-                      }
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Typography>฿</Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>Net Rate (THB)</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={
-                        selectedRow?.base_net_rate === '0.0'
-                          ? '฿0.0'
-                          : selectedRow?.base_net_rate ||
-                            ''.toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })
-                      }
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Typography>฿</Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <Typography>Net Amount (THB)</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={
-                        selectedRow?.base_net_amount === '0.0'
-                          ? '฿0.0'
-                          : selectedRow?.base_net_amount ||
-                            ''.toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })
-                      }
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Typography>฿</Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <Typography>Landed Cost Voucher Amount</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={
-                        selectedRow?.landed_cost_voucher_amount === '0'
-                          ? '0'
-                          : selectedRow?.landed_cost_voucher_amount ||
-                            `0`.toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })
-                      }
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <Typography>฿</Typography>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-                <Divider sx={{ margin: 0, my: 4, width: '100%' }} />
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item mt={3}>
-                    <Typography sx={{ fontWeight: 'bold' }}>Warehouse</Typography>
-                  </Grid>
-                </Grid>
-
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>Accepted Warehouse</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={selectedRow?.warehouse || ''}
-                    />
-                  </Grid>
-                </Grid>
-                <Divider sx={{ margin: 0, my: 4, width: '100%' }} />
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item mt={3}>
-                    <Typography sx={{ fontWeight: 'bold' }}>Accounting</Typography>
-                  </Grid>
-                </Grid>
-
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>Expense Head</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={selectedRow?.expense_account || ''}
-                    />
-                  </Grid>
-                </Grid>
-
-                <Divider sx={{ margin: 0, my: 4.5, width: '100%' }} />
-                <Grid container>
-                  <Box sx={{ width: '100%' }}>
-                    <Button variant='filled' onClick={handleClickDeferredExpense} sx={{ fontWeight: 'bold' }}>
-                      Deferred Expense
-                    </Button>
-                    <IconButton size='small' onClick={handleClickDeferredExpense}>
-                      {deferredExpense ? (
-                        <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                      ) : (
-                        <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                      )}
-                    </IconButton>
-                  </Box>
-
-                  <Grid container>
-                    <Collapse in={deferredExpense} width={'100%'} style={{ width: '100%' }}>
-                      <Divider sx={{ margin: 0, width: '100%' }} />
-                      <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={Boolean(dataRow?.enable_deferred_expense) || false}
-                                onChange={handleCheckboxChange}
-                              />
-                            }
-                            label='Enable Deferred Expense'
-                          />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6} lg={6}></Grid>
-                      </Grid>
-                    </Collapse>
-                  </Grid>
-                </Grid>
-                <Divider sx={{ margin: 0, my: 4.5, width: '100%' }} />
-                <Grid container>
-                  <Box sx={{ width: '100%' }}>
-                    <Button variant='filled' onClick={handleClickReference} sx={{ fontWeight: 'bold' }}>
-                      Reference
-                    </Button>
-                    <IconButton size='small' onClick={handleClickReference}>
-                      {reference ? (
-                        <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                      ) : (
-                        <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                      )}
-                    </IconButton>
-                  </Box>
-
-                  <Grid container>
-                    <Collapse in={reference} width={'100%'} style={{ width: '100%' }}>
-                      <Divider sx={{ margin: 0, width: '100%' }} />
-                      <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={Boolean(dataRow?.allow_zero_valuation_rate) || false}
-                                onChange={handleCheckboxChange}
-                              />
-                            }
-                            label='Allow Zero Valuation Rate'
-                          />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <Typography>Purchase Order</Typography>
-                          <TextField
-                            sx={{ marginBottom: 5 }}
-                            size='small'
-                            variant='filled'
-                            fullWidth
-                            value={selectedRow?.purchase_order || ''}
-                            onChange={handleTextChange}
-                          />
-                          <Typography>Purchase Receipt</Typography>
-                          <TextField
-                            sx={{ marginBottom: 5 }}
-                            size='small'
-                            variant='filled'
-                            fullWidth
-                            value={selectedRow?.purchase_receipt || ''}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Collapse>
-                  </Grid>
-                </Grid>
-
-                <Divider sx={{ margin: 0, my: 4.5, width: '100%' }} />
-                <Grid container>
-                  <Box sx={{ width: '100%' }}>
-                    <Button variant='filled' onClick={handleClickItemWeightDetails} sx={{ fontWeight: 'bold' }}>
-                      Item Weight Details
-                    </Button>
-                    <IconButton size='small' onClick={handleClickItemWeightDetails}>
-                      {itemWeightDetails ? (
-                        <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                      ) : (
-                        <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                      )}
-                    </IconButton>
-                  </Box>
-
-                  <Grid container>
-                    <Collapse in={itemWeightDetails} width={'100%'} style={{ width: '100%' }}>
-                      <Divider sx={{ margin: 0, width: '100%' }} />
-                      <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          {' '}
-                          <Typography>Weight Per Unit </Typography>
-                          <TextField
-                            sx={{ marginBottom: 5 }}
-                            size='small'
-                            variant='filled'
-                            fullWidth
-                            value={selectedRow?.weight_per_unit}
-                          />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <Typography>Total Weight</Typography>
-                          <TextField
-                            sx={{ marginBottom: 5 }}
-                            size='small'
-                            variant='filled'
-                            fullWidth
-                            value={selectedRow?.total_weight}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Collapse>
-                  </Grid>
-                </Grid>
-
-                <Divider sx={{ margin: 0, my: 4.5, width: '100%' }} />
-                <Grid container>
-                  <Box sx={{ width: '100%' }}>
-                    <Button variant='filled' onClick={handleClickAccountingDimensions} sx={{ fontWeight: 'bold' }}>
-                      Accounting Dimensions
-                    </Button>
-                    <IconButton size='small' onClick={handleClickAccountingDimensions}>
-                      {accountingDimensions ? (
-                        <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                      ) : (
-                        <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                      )}
-                    </IconButton>
-                  </Box>
-
-                  <Grid container>
-                    <Collapse in={accountingDimensions} width={'100%'} style={{ width: '100%' }}>
-                      <Divider sx={{ margin: 0, width: '100%' }} />
-                      <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          {' '}
-                          <Typography>Cost Center * </Typography>
-                          <TextField
-                            sx={{ marginBottom: 5 }}
-                            size='small'
-                            variant='filled'
-                            fullWidth
-                            value={selectedRow?.cost_center}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Collapse>
-                  </Grid>
                 </Grid>
               </Grid>
+              <Divider sx={{ margin: 0, my: 4, width: '100%' }} />
+              <Grid container>
+                <Grid item xs={12}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                      <Typography> Currency and Price List</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Box sx={{ p: 2 }}>
+                        <Divider />
+                        <Grid container spacing={3}>
+                          <Grid item xs={12} md={6}>
+                            <Box sx={styles.box}>
+                              <Typography variant='subtitle1'>Description *</Typography>
+                              <TextField
+                                fullWidth
+                                disabled
+                                variant='outlined'
+                                name='description'
+                                value={selectedRow?.description || ''}
+                                onChange={handleTextChange}
+                                sx={styles.textField}
+                              />
+                            </Box>
+                          </Grid>
+
+                          <Grid item xs={12} md={6}>
+                            <Box sx={styles.box}>
+                              <Typography variant='subtitle1'>Item Group</Typography>
+                              <TextField
+                                fullWidth
+                                disabled
+                                variant='outlined'
+                                name='item_group'
+                                value={selectedRow?.item_group || ''}
+                                onChange={handleTextChange}
+                                sx={styles.textField}
+                              />
+                            </Box>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+              </Grid>
+              <Divider sx={{ margin: 0, my: 4, width: '100%' }} />
+              <Grid container>
+                <Grid item xs={12}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                      <Typography> Image</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Box sx={{ p: 2 }}>
+                        <Divider />
+                        <Grid container spacing={3}>
+                          <Grid item xs={12} md={6}>
+                            <Box sx={styles.box}>
+                              <CardMedia
+                                sx={{
+                                  border: '1px solid gray',
+                                  borderRadius: '10px',
+                                  width: '50%', // เพิ่มข้อมูลเพื่อทำให้รูปภาพเต็มพื้นที่
+                                  height: '250px' // กำหนดความสูงเป็น 0 เพื่อให้เกิดเป็นสี่เหลี่ยมจัตุรัส
+                                }}
+                                component='img'
+                                alt='Sample Image'
+                                image={selectedRow?.image_view || ''}
+                              />
+                            </Box>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+              </Grid>
+              <Divider sx={{ margin: 0, my: 4.5, width: '100%' }} />
+              <Grid container spacing={2} style={{ width: '100%' }}>
+                <Grid item mt={3}>
+                  <Typography sx={{ fontWeight: 'bold' }}>Quantity and Rate</Typography>
+                </Grid>
+              </Grid>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Received Qty</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='description'
+                      value={selectedRow?.received_qty === '0' ? '0' : selectedRow?.received_qty}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Accepted Qty</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='qty'
+                      value={selectedRow?.qty === '0' ? '0' : selectedRow?.qty}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Rejected Qty</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='rejected_qty'
+                      value={selectedRow?.rejected_qty === '0' ? '0' : selectedRow?.rejected_qty}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>UOM *</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='description'
+                      value={selectedRow?.uom || ''}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Divider sx={{ margin: 0, my: 4.5, width: '100%' }} />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Price List Rate (THB)</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='description'
+                      value={
+                        selectedRow?.price_list_rate === '0.0'
+                          ? '฿ 0.0'
+                          : `฿ ${parseFloat(selectedRow?.price_list_rate).toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })}`
+                      }
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Price List Rate (THB)</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='description'
+                      value={
+                        selectedRow?.base_price_list_rate === '0.0'
+                          ? '฿ 0.0'
+                          : `฿ ${parseFloat(selectedRow?.base_price_list_rate).toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })}`
+                      }
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Divider sx={{ margin: 0, my: 4.5, width: '100%' }} />
+              <Grid container>
+                <Grid item xs={12}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                      <Typography> Discount and Margin</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Box sx={{ p: 2 }}>
+                        <Divider />
+                        <Grid container spacing={3}>
+                          <Grid item xs={12} md={6}>
+                            <Box sx={styles.box}>
+                              <Typography variant='subtitle1'>Discount on Price List Rate (%)</Typography>
+                              <TextField
+                                fullWidth
+                                disabled
+                                variant='outlined'
+                                name='description'
+                                value={
+                                  selectedRow?.discount_percentage === '0.0'
+                                    ? '0%'
+                                    : selectedRow?.discount_percentage + '%'
+                                }
+                                onChange={handleTextChange}
+                                sx={styles.textField}
+                              />
+                            </Box>
+                          </Grid>
+                          <Grid item xs={12} md={6}>
+                            <Box sx={styles.box}>
+                              <Typography variant='subtitle1'>Discount Amount</Typography>
+                              <TextField
+                                fullWidth
+                                disabled
+                                variant='outlined'
+                                name='price_list_rate'
+                                value={
+                                  selectedRow?.discount_amount === '0.0'
+                                    ? '฿ 0.0'
+                                    : `฿ ${parseFloat(selectedRow?.discount_amount).toLocaleString('en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                      })}`
+                                }
+                                onChange={handleTextChange}
+                                sx={styles.textField}
+                              />
+                            </Box>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+              </Grid>
+              <Divider sx={{ margin: 0, my: 4, width: '100%' }} />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Rate (THB) *</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='rate'
+                      value={
+                        selectedRow?.rate === '0.0'
+                          ? '฿ 0.0'
+                          : `฿ ${parseFloat(selectedRow?.rate).toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })}`
+                      }
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Amount (THB) *</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='amount'
+                      value={
+                        selectedRow?.amount === '0.0'
+                          ? '฿ 0.0'
+                          : `฿ ${parseFloat(selectedRow?.amount).toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })}`
+                      }
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Rate (THB) *</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='base_rate'
+                      value={
+                        selectedRow?.base_rate === '0.0'
+                          ? '฿ 0.0'
+                          : `฿ ${parseFloat(selectedRow?.base_rate).toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })}`
+                      }
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Amount (THB) *</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='base_amount'
+                      value={
+                        selectedRow?.base_amount === '0.0'
+                          ? '฿ 0.0'
+                          : `฿ ${parseFloat(selectedRow?.base_amount).toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })}`
+                      }
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+
+                  <FormControlLabel
+                    control={
+                      <Checkbox checked={Boolean(selectedRow?.is_free_item) || false} onChange={handleCheckboxChange} />
+                    }
+                    label='Is Free Item'
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox checked={Boolean(selectedRow?.apply_tds) || false} onChange={handleCheckboxChange} />
+                    }
+                    label='Apply TDS'
+                  />
+                </Grid>
+              </Grid>
+              <Divider sx={{ margin: 0, my: 4, width: '100%' }} />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Net Rate (THB)</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='net_rate'
+                      value={
+                        selectedRow?.net_rate === '0.0'
+                          ? '฿ 0.0'
+                          : `฿ ${parseFloat(selectedRow?.net_rate).toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })}`
+                      }
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Net Amount (THB)</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='net_amount'
+                      value={
+                        selectedRow?.net_amount === '0.0'
+                          ? '฿ 0.0'
+                          : `฿ ${parseFloat(selectedRow?.net_amount).toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })}`
+                      }
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Net Rate (THB)</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='base_net_rate'
+                      value={
+                        selectedRow?.base_net_rate === '0.0'
+                          ? '฿ 0.0'
+                          : `฿ ${parseFloat(selectedRow?.base_net_rate).toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })}`
+                      }
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Net Amount (THB)</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='base_net_amount'
+                      value={
+                        selectedRow?.base_net_amount === '0.0'
+                          ? '฿ 0.0'
+                          : `฿ ${parseFloat(selectedRow?.base_net_amount).toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })}`
+                      }
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+
+                  <Box sx={styles.box}>
+                    <Typography variant='subtitle1'>Landed Cost Voucher Amount</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='landed_cost_voucher_amount'
+                      value={
+                        selectedRow?.landed_cost_voucher_amount === '0.0'
+                          ? '฿ 0.0'
+                          : `฿ ${parseFloat(selectedRow?.landed_cost_voucher_amount).toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            })}`
+                      }
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Divider sx={{ margin: 0, my: 4, width: '100%' }} />
+              <Typography sx={{ fontWeight: 'bold' }}>Warehouse</Typography>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Box>
+                    <Typography variant='subtitle1'>Accepted Warehouse</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='warehouse'
+                      value={selectedRow?.warehouse || ''}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Divider sx={{ margin: 0, my: 4, width: '100%' }} />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Box>
+                    <Typography variant='subtitle1'>Expense Head</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='expense_account'
+                      value={selectedRow?.expense_account || ''}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+
+              <Divider sx={{ margin: 0, my: 4.5, width: '100%' }} />
+              <Grid container>
+                <Grid item xs={12}>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                      <Typography> Deferred Expense</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Box sx={{ p: 2 }}>
+                        <Divider />
+                        <Grid container spacing={3}>
+                          <Grid item xs={12} md={6}>
+                            <Box sx={styles.box}>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={Boolean(dataRow?.enable_deferred_expense) || false}
+                                    onChange={handleCheckboxChange}
+                                  />
+                                }
+                                label='Enable Deferred Expense'
+                              />
+                            </Box>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </AccordionDetails>
+                  </Accordion>
+
+                  <Accordion>
+                    <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                      <Typography> Reference</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Box sx={{ p: 2 }}>
+                        <Divider />
+                        <Grid container spacing={3}>
+                          <Grid item xs={12} md={6}>
+                            <Box sx={styles.box}>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={Boolean(dataRow?.allow_zero_valuation_rate) || false}
+                                    onChange={handleCheckboxChange}
+                                  />
+                                }
+                                label='Allow Zero Valuation Rate'
+                              />
+                            </Box>
+                          </Grid>
+
+                          <Grid item xs={12} md={6}>
+                            <Box sx={styles.box}>
+                              <Typography variant='subtitle1'>Purchase Order</Typography>
+                              <TextField
+                                fullWidth
+                                disabled
+                                variant='outlined'
+                                name='purchase_order'
+                                value={selectedRow?.purchase_order || ''}
+                                onChange={handleTextChange}
+                                sx={styles.textField}
+                              />
+                            </Box>
+
+                            <Box sx={styles.box}>
+                              <Typography variant='subtitle1'>Purchase Receipt</Typography>
+                              <TextField
+                                fullWidth
+                                disabled
+                                variant='outlined'
+                                name='purchase_receipt'
+                                value={selectedRow?.purchase_receipt || ''}
+                                onChange={handleTextChange}
+                                sx={styles.textField}
+                              />
+                            </Box>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </AccordionDetails>
+                  </Accordion>
+
+                  <Accordion>
+                    <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                      <Typography> Item Weight Details</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Box sx={{ p: 2 }}>
+                        <Divider />
+                        <Grid container spacing={3}>
+                          <Grid item xs={12} md={6}>
+                            <Box sx={styles.box}>
+                              <Typography variant='subtitle1'>Purchase Order</Typography>
+                              <TextField
+                                fullWidth
+                                disabled
+                                variant='outlined'
+                                name='weight_per_unit'
+                                value={selectedRow?.weight_per_unit || '0'}
+                                onChange={handleTextChange}
+                                sx={styles.textField}
+                              />
+                            </Box>
+                          </Grid>
+
+                          <Grid item xs={12} md={6}>
+                            <Box sx={styles.box}>
+                              <Typography variant='subtitle1'>Purchase Receipt</Typography>
+                              <TextField
+                                fullWidth
+                                disabled
+                                variant='outlined'
+                                name='total_weight'
+                                value={selectedRow?.total_weight || '0'}
+                                onChange={handleTextChange}
+                                sx={styles.textField}
+                              />
+                            </Box>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </AccordionDetails>
+                  </Accordion>
+
+                  <Accordion>
+                    <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                      <Typography> Accounting Dimensions</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Box sx={{ p: 2 }}>
+                        <Divider />
+                        <Grid container spacing={3}>
+                          <Grid item xs={12} md={6}>
+                            <Box sx={styles.box}>
+                              <Typography variant='subtitle1'>Cost Center *</Typography>
+                              <TextField
+                                fullWidth
+                                disabled
+                                variant='outlined'
+                                name='cost_center'
+                                value={selectedRow?.cost_center || '0'}
+                                onChange={handleTextChange}
+                                sx={styles.textField}
+                              />
+                            </Box>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
+              </Grid>
+
+              <Divider sx={{ margin: 0, my: 4.5, width: '100%' }} />
             </Card>
           </DialogContent>
           <DialogActions>
@@ -1220,8 +1109,7 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
         {/* /                   แสดงข่อมูลชุด taxes                               / */}
         <Divider sx={{ margin: 0, my: 3 }} />
         <Grid container spacing={2} width={'100%'}>
-          <Grid item xs={12} sm={12} md={6} lg={6}></Grid>
-
+          <Grid item xs={12} md={6}></Grid>
           <Grid item xs={12} md={6}>
             <Box sx={styles.box}>
               <Typography variant='subtitle1'>Taxes and Charges Added (THB)</Typography>
@@ -1230,86 +1118,46 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
                 disabled
                 variant='outlined'
                 name='currency'
-                value={dataRow.taxes_and_charges_added.toLocaleString('en-US', {
+                value={`฿ ${parseFloat(dataRow.taxes_and_charges_added).toLocaleString('en-US', {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2
-                })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <Typography>฿</Typography>
-                    </InputAdornment>
-                  )
-                }}
+                })}`}
                 onChange={handleTextChange}
                 sx={styles.textField}
               />
             </Box>
 
-            <Typography>Taxes and Charges Deducted (THB)</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              fullWidth
-              value={
-                dataRow.taxes_and_charges_deducted ||
-                '0'.toLocaleString('en-US', {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2
-                })
-              }
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <Typography>฿</Typography>
-                  </InputAdornment>
-                )
-              }}
-            />
             <Box sx={styles.box}>
-              <Typography variant='subtitle1'>Taxes and Charges Added (THB)</Typography>
+              <Typography variant='subtitle1'>Taxes and Charges Deducted (THB)</Typography>
               <TextField
                 fullWidth
                 disabled
                 variant='outlined'
                 name='currency'
-                value={dataRow.taxes_and_charges_added.toLocaleString('en-US', {
+                value={`฿ ${parseFloat(dataRow.taxes_and_charges_deducted).toLocaleString('en-US', {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2
-                })}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <Typography>฿</Typography>
-                    </InputAdornment>
-                  )
-                }}
+                })}`}
                 onChange={handleTextChange}
                 sx={styles.textField}
               />
             </Box>
-            <Typography>Total Taxes and Charges (THB)</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              fullWidth
-              value={
-                dataRow.total_taxes_and_charges ||
-                ''.toLocaleString('en-US', {
+
+            <Box sx={styles.box}>
+              <Typography variant='subtitle1'>Total Taxes and Charges (THB)</Typography>
+              <TextField
+                fullWidth
+                disabled
+                variant='outlined'
+                name='currency'
+                value={`฿ ${parseFloat(dataRow.total_taxes_and_charges).toLocaleString('en-US', {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2
-                })
-              }
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <Typography>฿</Typography>
-                  </InputAdornment>
-                )
-              }}
-            />
+                })}`}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
           </Grid>
         </Grid>
 
@@ -1348,38 +1196,50 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
           >
             <DialogTitle>Row Detail1</DialogTitle>
             <DialogContent>
-              <Card sx={{ width: '100%', p: 5 }}>
-                <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Grid container spacing={2} width={'100%'}>
-                    <Grid item xs={12} sm={12} md={6} lg={6}>
+              <Card sx={styles.card}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
                       <Typography>Consider Tax or Charge for *</Typography>
                       <TextField
-                        sx={{ marginBottom: 5 }}
-                        size='small'
-                        variant='filled'
                         fullWidth
-                        label=''
+                        disabled
+                        variant='outlined'
+                        name='category'
                         value={selectedRow?.category || ''}
+                        onChange={handleTextChange}
+                        sx={styles.textField}
                       />
+                    </Box>
+
+                    <Box sx={styles.box}>
                       <Typography>Add or Deduct *</Typography>
                       <TextField
-                        sx={{ marginBottom: 5 }}
-                        size='small'
-                        variant='filled'
                         fullWidth
-                        label=''
+                        disabled
+                        variant='outlined'
+                        name='add_deduct_tax'
                         value={selectedRow?.add_deduct_tax || ''}
+                        onChange={handleTextChange}
+                        sx={styles.textField}
                       />
+                    </Box>
+
+                    <Box sx={styles.box}>
                       <Typography>Type *</Typography>
                       <TextField
-                        sx={{ marginBottom: 5 }}
-                        size='small'
-                        variant='filled'
                         fullWidth
+                        disabled
+                        variant='outlined'
+                        name='charge_type'
                         value={selectedRow?.charge_type || ''}
+                        onChange={handleTextChange}
+                        sx={styles.textField}
                       />
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={6} lg={6} sx={{ mb: 5 }}>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -1389,80 +1249,104 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
                         }
                         label='Is this Tax included in Basic Rate?'
                       />
-                      <Typography>
+                      <Typography sx={{ mt: -2.5 }}>
                         If checked, the tax amount will be considered as already included in the Print Rate / Print
                         Amount
                       </Typography>
-                      <Typography>Account Head *</Typography>
-                      <TextField
-                        sx={{ marginBottom: 5 }}
-                        size='small'
-                        variant='filled'
-                        fullWidth
-                        label=''
-                        value={selectedRow?.account_head || ''}
-                      />
-                      <Typography>Account Head *</Typography>
-                      <TextField
-                        sx={{ marginBottom: 5 }}
-                        size='small'
-                        variant='filled'
-                        fullWidth
-                        label=''
-                        value={selectedRow?.account_head || ''}
-                      />
-                    </Grid>
-                    <Divider sx={{ margin: 0, my: 5.5, width: '100%' }} />
+                    </Box>
 
-                    <Grid container spacing={2} style={{ width: '100%' }}>
-                      <Grid item mt={3}>
-                        <Typography sx={{ fontWeight: 'bold', ml: 1.5 }}>Accounting Dimensions</Typography>
-                      </Grid>
+                    <Box sx={styles.box}>
+                      <Typography>Account Head *</Typography>
+                      <TextField
+                        fullWidth
+                        disabled
+                        variant='outlined'
+                        name='account_head'
+                        value={selectedRow?.account_head || ''}
+                        onChange={handleTextChange}
+                        sx={styles.textField}
+                      />
+                    </Box>
+
+                    <Box sx={styles.box}>
+                      <Typography>Description *</Typography>
+                      <TextField
+                        fullWidth
+                        disabled
+                        variant='outlined'
+                        name='description'
+                        value={selectedRow?.description || ''}
+                        onChange={handleTextChange}
+                        sx={styles.textField}
+                      />
+                    </Box>
+                  </Grid>
+                  <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
+
+                  <Grid container spacing={2} style={{ width: '100%' }}>
+                    <Grid item mt={3}>
+                      <Typography sx={{ fontWeight: 'bold', ml: 1.5 }}>Accounting Dimensions</Typography>
                     </Grid>
                   </Grid>
-                  <Grid container spacing={2} width={'100%'}>
-                    <Grid item xs={12} sm={12} md={6} lg={6}>
+                </Grid>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
                       <Typography>Cost Center</Typography>
                       <TextField
-                        sx={{ marginBottom: 5 }}
-                        size='small'
-                        variant='filled'
                         fullWidth
+                        disabled
+                        variant='outlined'
+                        name='cost_center'
                         value={selectedRow?.cost_center || ''}
+                        onChange={handleTextChange}
+                        sx={styles.textField}
                       />
-                    </Grid>
+                    </Box>
                   </Grid>
-                  <Divider sx={{ margin: 0, my: 5.5, width: '100%' }} />
-                  <Grid container spacing={2} width={'100%'}>
-                    <Grid item xs={12} sm={12} md={6} lg={6}>
+                </Grid>
+
+                <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
                       <Typography>Rate</Typography>
                       <TextField
-                        sx={{ marginBottom: 5 }}
-                        size='small'
-                        variant='filled'
                         fullWidth
-                        value={selectedRow?.tax_amount || 0}
+                        disabled
+                        variant='outlined'
+                        name='rate'
+                        value={selectedRow?.rate || '0'}
+                        onChange={handleTextChange}
+                        sx={styles.textField}
                       />
-                    </Grid>
+                    </Box>
                   </Grid>
-                  <Divider sx={{ margin: 0, my: 5.5, width: '100%' }} />
-                  <Grid container spacing={2} width={'100%'}>
-                    <Grid item xs={12} sm={12} md={6} lg={6}>
+                </Grid>
+
+                <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
                       <Typography>Account Currency</Typography>
                       <TextField
-                        sx={{ marginBottom: 5 }}
-                        size='small'
-                        variant='filled'
                         fullWidth
+                        disabled
+                        variant='outlined'
+                        name='rate'
                         value={selectedRow?.account_currency || ''}
+                        onChange={handleTextChange}
+                        sx={styles.textField}
                       />
+                    </Box>
 
+                    <Box sx={styles.box}>
                       <Typography>Amount (THB) *</Typography>
                       <TextField
-                        sx={{ marginBottom: 5 }}
-                        size='small'
-                        variant='filled'
                         fullWidth
+                        disabled
+                        variant='outlined'
+                        name='tax_amount'
                         value={
                           selectedRow?.tax_amount === '0.0'
                             ? '฿ 0.0'
@@ -1471,14 +1355,18 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
                                 maximumFractionDigits: 2
                               })}`
                         }
+                        onChange={handleTextChange}
+                        sx={styles.textField}
                       />
+                    </Box>
 
+                    <Box sx={styles.box}>
                       <Typography>Tax Amount After Discount Amount</Typography>
                       <TextField
-                        sx={{ marginBottom: 5 }}
-                        size='small'
-                        variant='filled'
                         fullWidth
+                        disabled
+                        variant='outlined'
+                        name='tax_amount_after_discount_amount'
                         value={
                           selectedRow?.tax_amount_after_discount_amount === '0.0'
                             ? '฿ 0.0'
@@ -1487,13 +1375,18 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
                                 maximumFractionDigits: 2
                               })}`
                         }
+                        onChange={handleTextChange}
+                        sx={styles.textField}
                       />
+                    </Box>
+
+                    <Box sx={styles.box}>
                       <Typography>Total (THB)</Typography>
                       <TextField
-                        sx={{ marginBottom: 5 }}
-                        size='small'
-                        variant='filled'
                         fullWidth
+                        disabled
+                        variant='outlined'
+                        name='total'
                         value={
                           selectedRow?.total === '0.0'
                             ? '฿ 0.0'
@@ -1502,15 +1395,19 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
                                 maximumFractionDigits: 2
                               })}`
                         }
+                        onChange={handleTextChange}
+                        sx={styles.textField}
                       />
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={6} lg={6}>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
                       <Typography>Amount (THB)</Typography>
                       <TextField
-                        sx={{ marginBottom: 5 }}
-                        size='small'
-                        variant='filled'
                         fullWidth
+                        disabled
+                        variant='outlined'
+                        name='base_tax_amount'
                         value={
                           selectedRow?.base_tax_amount === '0.0'
                             ? '฿ 0.0'
@@ -1519,13 +1416,18 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
                                 maximumFractionDigits: 2
                               })}`
                         }
+                        onChange={handleTextChange}
+                        sx={styles.textField}
                       />
+                    </Box>
+
+                    <Box sx={styles.box}>
                       <Typography>Tax Amount After Discount Amount</Typography>
                       <TextField
-                        sx={{ marginBottom: 5 }}
-                        size='small'
-                        variant='filled'
                         fullWidth
+                        disabled
+                        variant='outlined'
+                        name='base_tax_amount_after_discount_amount'
                         value={
                           selectedRow?.base_tax_amount_after_discount_amount === '0.0'
                             ? '฿ 0.0'
@@ -1537,11 +1439,14 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
                                 }
                               )}`
                         }
+                        onChange={handleTextChange}
+                        sx={styles.textField}
                       />
-                    </Grid>
+                    </Box>
                   </Grid>
-                  <Divider sx={{ margin: 0, my: 5.5, width: '100%' }} />
                 </Grid>
+
+                <Divider sx={{ margin: 0, my: 3, width: '100%' }} />
               </Card>
             </DialogContent>
           </Dialog>
@@ -1550,187 +1455,208 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
         <Divider sx={{ margin: 0, my: 4.5 }} />
         <Typography sx={{ fontWeight: 'bold' }}>Totals</Typography>
         <Grid container spacing={2} width={'100%'}>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Typography>Grand Total (THB)</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              fullWidth
-              label=''
-              value={`฿ ${parseFloat(dataRow.grand_total).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}`}
-            />
-            <Typography>Rounding Adjustment (THB)</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              fullWidth
-              value={`฿ ${parseFloat(dataRow.rounding_adjustment).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}`}
-            />
-            <FormControlLabel
-              sx={{ mt: -5 }}
-              control={
-                <Checkbox
-                  checked={Boolean(dataRow?.use_company_roundoff_cost_center) || false}
-                  onChange={handleCheckboxChange}
-                />
-              }
-              label='Use Company default Cost Center for Round off'
-            />
-            <Typography>Rounded Total (THB)</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              fullWidth
-              label=''
-              value={`฿ ${parseFloat(dataRow.rounded_total).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}`}
-            />
+          <Grid item xs={12} md={6}>
+            <Box sx={styles.box}>
+              <Typography variant='subtitle1'>Grand Total (THB)</Typography>
+              <TextField
+                fullWidth
+                disabled
+                variant='outlined'
+                name='grand_total'
+                value={`฿ ${parseFloat(dataRow.grand_total).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}`}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
+
+            <Box sx={styles.box}>
+              <Typography variant='subtitle1'>Rounding Adjustment (THB)</Typography>
+              <TextField
+                fullWidth
+                disabled
+                variant='outlined'
+                name='rounding_adjustment'
+                value={`฿ ${parseFloat(dataRow.rounding_adjustment).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}`}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
+
+            <Box sx={styles.box}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={Boolean(dataRow.use_company_roundoff_cost_center) || false}
+                    onChange={handleCheckboxChange}
+                  />
+                }
+                label='Use Company default Cost Center for Round off'
+              />
+            </Box>
+
+            <Box sx={styles.box}>
+              <Typography variant='subtitle1'>Rounded Total (THB)</Typography>
+              <TextField
+                fullWidth
+                disabled
+                variant='outlined'
+                name='rounded_total'
+                value={`฿ ${parseFloat(dataRow.rounded_total).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}`}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
           </Grid>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Typography></Typography>
-            <Typography>In Words (THB)</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              fullWidth
-              label=''
-              value={dataRow.in_words}
-            />
 
-            <Typography>Total Advance</Typography>
-            <TextField
-              sx={{
-                marginBottom: 5,
-                ...(isLGScreen ? { marginBottom: 12 } : {}) // เพิ่ม mb5 ถ้าหน้าจอ LG (ความกว้าง >= 1280px)
-              }}
-              size='small'
-              variant='filled'
-              fullWidth
-              label=''
-              value={`฿ ${parseFloat(dataRow.total_advance).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}`}
-            />
+          <Grid item xs={12} md={6}>
+            <Box sx={styles.box}>
+              <Typography variant='subtitle1'>In Words (THB)</Typography>
+              <TextField
+                fullWidth
+                disabled
+                variant='outlined'
+                name='in_words'
+                value={dataRow.in_words}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
 
-            <Typography>Outstanding Amount (THB)</Typography>
-            <TextField
-              sx={{ marginBottom: 5 }}
-              size='small'
-              variant='filled'
-              fullWidth
-              label=''
-              value={`฿ ${parseFloat(dataRow.outstanding_amount).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}`}
-            />
-            <FormControlLabel
-              sx={{ mt: -5 }}
-              control={
-                <Checkbox checked={Boolean(dataRow?.disable_rounded_total) || false} onChange={handleCheckboxChange} />
-              }
-              label='Disable Rounded Total'
-            />
+            <Box sx={styles.box}>
+              <Typography variant='subtitle1'>Total Advance</Typography>
+              <TextField
+                fullWidth
+                disabled
+                variant='outlined'
+                name='total_advance'
+                value={`฿ ${parseFloat(dataRow.total_advance).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}`}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
+
+            <Box sx={styles.box}>
+              <Typography variant='subtitle1'>Outstanding Amount (THB)</Typography>
+              <TextField
+                fullWidth
+                disabled
+                variant='outlined'
+                name='outstanding_amount'
+                value={`฿ ${parseFloat(dataRow.outstanding_amount).toLocaleString('en-US', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}`}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
+
+            <Box sx={styles.box}>
+              <FormControlLabel
+                control={
+                  <Checkbox checked={Boolean(dataRow.disable_rounded_total) || false} onChange={handleCheckboxChange} />
+                }
+                label='Disable Rounded Total'
+              />
+            </Box>
           </Grid>
         </Grid>
         {/* /                   แสดงข่อมูลชุด ที่อยู่ในdopdown                               / */}
+
         <Divider sx={{ margin: 0, my: 4.5 }} />
-        <Grid container sx={{ mb: 5 }}>
-          <Box sx={{ width: '100%' }}>
-            <Button size='small' sx={{ fontWeight: 'bold' }} variant='filled' onClick={handleClickAdditionalDiscount}>
-              Additional Discount
-            </Button>
-            <IconButton size='small' onClick={handleClickAdditionalDiscount}>
-              {additionalDiscount ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
-          </Box>
-          <Collapse in={additionalDiscount} width={'100%'} style={{ width: '100%' }}>
-            <Divider sx={{ margin: 0, width: '100%' }} />
-            <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Typography>Apply Additional Discount On</Typography>
-                <TextField
-                  sx={{ marginBottom: 5 }}
-                  size='small'
-                  variant='filled'
-                  fullWidth
-                  value={dataRow.apply_discount_on}
-                />
-                <FormControlLabel
-                  sx={{ mt: -2 }}
-                  control={
-                    <Checkbox
-                      checked={Boolean(dataRow?.is_cash_or_non_trade_discount) || false}
-                      onChange={handleCheckboxChange}
-                    />
-                  }
-                  label='Is Cash or Non Trade Discount'
-                />
-              </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Typography>Additional Discount Percentage</Typography>
-                <TextField
-                  sx={{ marginBottom: 5 }}
-                  size='small'
-                  variant='filled'
-                  fullWidth
-                  label=''
-                  value={dataRow.additional_discount_percentage}
-                />
-                <Typography>Additional Discount Amount (THB)</Typography>
-                <TextField
-                  sx={{ marginBottom: 5 }}
-                  size='small'
-                  variant='filled'
-                  fullWidth
-                  label=''
-                  value={`฿ ${parseFloat(dataRow.discount_amount).toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                  })}`}
-                />
-              </Grid>
-            </Grid>
-          </Collapse>
-        </Grid>
-        <Divider sx={{ margin: 0, my: 4, width: '100%' }} />
-        <Grid container>
-          <Grid item sx={{ width: '100%' }}>
-            <Button size='small' variant='filled' sx={{ fontWeight: 'bold' }} onClick={handleClickActivity}>
-              Tax Breakup
-            </Button>
-            <IconButton size='small' onClick={handleClickActivity}>
-              {activity ? <ChevronUp sx={{ fontSize: '1.875rem' }} /> : <ChevronDown sx={{ fontSize: '1.875rem' }} />}
-            </IconButton>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Accordion>
+              <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+                <Typography>Currency and Price List</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Box sx={{ p: 2 }}>
+                  <Divider />
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} md={6}>
+                      <Box sx={styles.box}>
+                        <Typography variant='subtitle1'>Apply Additional Discount On</Typography>
+                        <TextField
+                          fullWidth
+                          disabled
+                          variant='outlined'
+                          name='apply_discount_on'
+                          value={dataRow.apply_discount_on}
+                          onChange={handleTextChange}
+                          sx={styles.textField}
+                        />
+                      </Box>
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+                      <Box sx={styles.box}>
+                        <Typography variant='subtitle1'>Additional Discount Percentage</Typography>
+                        <TextField
+                          fullWidth
+                          disabled
+                          variant='outlined'
+                          name='additional_discount_percentage'
+                          value={dataRow.additional_discount_percentage}
+                          onChange={handleTextChange}
+                          sx={styles.textField}
+                        />
+                      </Box>
+
+                      <Box sx={styles.box}>
+                        <Typography variant='subtitle1'>Additional Discount Amount (THB)</Typography>
+                        <TextField
+                          fullWidth
+                          disabled
+                          variant='outlined'
+                          name='selling_price_list'
+                          value={`฿ ${parseFloat(dataRow.discount_amount).toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                          })}`}
+                          onChange={handleTextChange}
+                          sx={styles.textField}
+                        />
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
-          <Collapse in={activity} style={{ width: '100%', overflowY: 'auto' }}>
-            <Divider sx={{ margin: 0 }} />
-            {dataRow.other_charges_calculation && (
-              <Card sx={{ margin: '4px', padding: '8px', textAlign: 'left' }}>
-                <table style={{ width: '100%', fontSize: '13px', textAlign: 'left' }}>
-                  <tbody dangerouslySetInnerHTML={{ __html: dataRow.other_charges_calculation }} />
-                </table>
-              </Card>
-            )}
-          </Collapse>
         </Grid>
+
+        <Accordion>
+          <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+            <Typography> Tax Breakup</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box sx={{ p: 2 }}>
+              <Divider />
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Box sx={styles.box}>
+                    <table style={{ width: '100%', fontSize: '10.6px', textAlign: 'left' }}>
+                      <tbody dangerouslySetInnerHTML={{ __html: dataRow.other_charges_calculation }} />
+                    </table>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
       </Card>
     </Box>
   )
