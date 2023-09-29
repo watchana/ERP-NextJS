@@ -25,10 +25,6 @@ import {
   MenuItem
 } from '@mui/material'
 
-import EventIcon from '@mui/icons-material/Event'
-import ChevronUp from 'mdi-material-ui/ChevronUp'
-import ChevronDown from 'mdi-material-ui/ChevronDown'
-import Btn from 'src/components/Button/Button'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
@@ -52,38 +48,6 @@ const MoreinfoSalesinvoice = ({ dataRow, handleUpdateData }) => {
       setSelectedDate(date)
     }
     setOpenCalendar(false) // ปิดปฏิทินเสมอเมื่อมีการเลือกหรือไม่เลือก
-  }
-
-  const handleOpenCalendar = () => {
-    setOpenCalendar(true)
-  }
-
-  const handleClickCustomerPO = () => {
-    setCustomerPO(!customerPOdetails)
-  }
-
-  const handleClickAccountingDetails = () => {
-    setAccountingDetails(!accountingDetails)
-  }
-
-  const handleClickcommission = () => {
-    setDeferredCommission(!commission)
-  }
-
-  const handleClickSalesTeam = () => {
-    setSalesTeam(!salesTeam)
-  }
-
-  const handleClickPrintSettings = () => {
-    setPrintSettings(!printSettings)
-  }
-
-  const handleClicubscription = () => {
-    setStockDetails(!subscription)
-  }
-
-  const handleClickAdditionalInfo = () => {
-    setAdditionalInfo(!additionalInfo)
   }
 
   const handleCheckboxChange = event => {

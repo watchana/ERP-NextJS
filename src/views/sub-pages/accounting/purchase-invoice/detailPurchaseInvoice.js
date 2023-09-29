@@ -279,10 +279,9 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
             </Box>
           </Grid>
         </Grid>
-        <Divider sx={{ margin: 0, my: 4 }} />
+      </Card>
 
-        {/* /                   แสดงข่อมูลชุด dopdown                               / */}
-
+      <Box sx={styles.box}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Accordion>
@@ -334,16 +333,10 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
               </AccordionDetails>
             </Accordion>
           </Grid>
-
-          {/* /                   แสดงข่อมูลชุด ที่อยู่ในdopdown                               / */}
-          <Grid container>
-            <Collapse in={currencyPrice} width={'100%'} style={{ width: '100%' }}>
-              <Divider sx={{ margin: 0, width: '100%' }} />
-            </Collapse>
-          </Grid>
         </Grid>
-        <Divider sx={{ margin: 0, my: 4 }} />
+      </Box>
 
+      <Card sx={styles.card}>
         {/* /                   แสดงข่อมูลชุด Item ที่เป็น DataGit                               / */}
         <Typography size='small' sx={{ fontWeight: 'bold' }}>
           Items
@@ -1573,14 +1566,14 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
             </Box>
           </Grid>
         </Grid>
-        {/* /                   แสดงข่อมูลชุด ที่อยู่ในdopdown                               / */}
+      </Card>
 
-        <Divider sx={{ margin: 0, my: 4.5 }} />
+      <Box sx={styles.box}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Accordion>
               <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-                <Typography>Currency and Price List</Typography>
+                <Typography>Additional Discount</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <Box sx={{ p: 2 }}>
@@ -1637,7 +1630,6 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
             </Accordion>
           </Grid>
         </Grid>
-
         <Accordion>
           <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
             <Typography> Tax Breakup</Typography>
@@ -1657,7 +1649,7 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
             </Box>
           </AccordionDetails>
         </Accordion>
-      </Card>
+      </Box>
     </Box>
   )
 }
