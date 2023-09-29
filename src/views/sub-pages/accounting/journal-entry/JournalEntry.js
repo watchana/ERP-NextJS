@@ -14,6 +14,7 @@ import {
   Grid,
   MenuItem,
   Select,
+  Skeleton,
   TextField,
   Typography
 } from '@mui/material'
@@ -105,6 +106,10 @@ const JournalEntry = ({ dataRow, handleUpdateData }) => {
   useEffect(() => {
     console.log('dataRow: ', dataRow)
   }, [dataRow])
+
+  if (!dataRow) {
+    return <Skeleton variant='rounded' width={210} height={60} />
+  }
 
   return (
     <Box>
@@ -281,7 +286,7 @@ const JournalEntry = ({ dataRow, handleUpdateData }) => {
                   multiline
                   fullWidth
                   name='remark'
-                  value={dataRow.remark.replace(/\\n/g, '\n')}
+                  value={dataRow && dataRow.remark ? dataRow.remark.replace(/\\n/g, '\n') : ''}
                   sx={styles.textField}
                 />
               </Box>

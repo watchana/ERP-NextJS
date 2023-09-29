@@ -32,9 +32,7 @@ const JournalEntryPage = ({ data }) => {
       data={dataList}
       setData={setDataList}
       statusUpdate={false}
-      menuContent={[]}
-      showContent={[]}
-      noTabContent={<JournalEntry key={'detail'} dataRow={dataRow} handleUpdateData={handleUpdateData} />}
+      showContent={<JournalEntry key={'detail'} dataRow={dataRow} handleUpdateData={handleUpdateData} />}
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='Journal Entry'
