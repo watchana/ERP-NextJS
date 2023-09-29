@@ -22,14 +22,23 @@ import SubPageLayout from 'src/@core/layouts/SubPageLayout'
 const PurchaseInvoice = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
   const [dataList, setDataList] = React.useState(data)
+  const [dataUpdate, setDataUpdate] = React.useState([])
+  const [editStatus, setEditStatus] = React.useState(false)
+
+  // ? function to update dataRow and store the required values in dataUpdated.
+  const handleUpdateData = async (field, value) => {
+    setDataRow({ ...dataRow, [field]: value })
+    setDataUpdate({ ...dataUpdate, [field]: value })
+    setEditStatus(true)
+  }
 
   const showContent = [
-    <DetailPurchaseInvoice key={'detail'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <PaymentsPurchaseInvoice key={'payments'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <ContactAndAddressPurchaseInvoice key={'contact'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <TermsPurchaseInvoice key={'terms'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <MoreInfoPurchaseInvoice key={'moreinfo'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <ConnectionPurchaseInvoice key={'connect'} dataRow={dataRow} setDataRow={setDataRow} />
+    <DetailPurchaseInvoice key={'detail'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <PaymentsPurchaseInvoice key={'payments'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <ContactAndAddressPurchaseInvoice key={'contact'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <TermsPurchaseInvoice key={'terms'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <MoreInfoPurchaseInvoice key={'moreinfo'} dataRow={dataRow} handleUpdateData={handleUpdateData} />,
+    <ConnectionPurchaseInvoice key={'connect'} dataRow={dataRow} handleUpdateData={handleUpdateData} />
   ]
 
   return (

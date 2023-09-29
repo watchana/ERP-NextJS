@@ -22,9 +22,13 @@ import { DataGrid } from '@mui/x-data-grid'
 import Icon from '@mdi/react'
 import { mdiPencil } from '@mdi/js'
 
-const TermsSalesInvoice = ({ dataRow }) => {
+const TermsSalesInvoice = ({ dataRow, handleUpdateData }) => {
   const [selectedRow, setSelectedRow] = useState(null)
   const [openDialog, setOpenDialog] = useState(false)
+
+  const handleTextChange = event => {
+    handleUpdateData(event.target.name, event.target.value)
+  }
 
   const handleCloseDialog = () => {
     setOpenDialog(false)
@@ -93,6 +97,21 @@ const TermsSalesInvoice = ({ dataRow }) => {
     }
   ]
 
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
+
   return (
     <Box>
       <Card
@@ -135,59 +154,77 @@ const TermsSalesInvoice = ({ dataRow }) => {
           {/* /                   แสดงข่อมูลชุด ที่อยู่ใน popup เมื่อคลิกข้อมูลในตลาง                               / */}
           <DialogTitle>Editing Row</DialogTitle>
           <DialogContent>
-            <Card sx={{ width: '100%', p: 5 }}>
-              <Grid container spacing={3} sx={{ display: 'flex', justifyContent: 'center' }}>
-                {/* {Object.values(quotation.items)?.map(item => ( */}
-                {/* ))} */}
-                <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Card sx={styles.card}>
+              <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
                     <Typography>Due Date *</Typography>
-                    <TextField sx={{ marginBottom: 5 }} size='small' variant='filled' fullWidth value={formattedDate} />
-                  </Grid>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
+                    <TextField
+                      fullWidth
+                      variant='outlined'
+                      name='formattedDate'
+                      value={formattedDate}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
                     <Typography>Invoice Portion</Typography>
                     <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
                       fullWidth
-                      value={`${selectedRow?.invoice_portion === '0.0' ? ' 0.0' : selectedRow?.invoice_portion}%`}
+                      variant='outlined'
+                      name='invoice_portion'
+                      value={selectedRow?.invoice_portion ? `${selectedRow.invoice_portion}%` : ''}
+                      onChange={e => {
+                        const newValue = e.target.value.replace('%', '') // ลบ % ออกจากข้อมูลที่แก้ไข
+                        handleTextChange({ ...e, target: { ...e.target, value: newValue } })
+                      }}
+                      sx={styles.textField}
                     />
-                  </Grid>
+                  </Box>
                 </Grid>
-                <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
+              </Grid>
+              <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
                     <Typography>Discount Type</Typography>
                     <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
                       fullWidth
+                      variant='outlined'
+                      name='discount_type'
                       value={selectedRow?.discount_type === '0.0' ? ' 0.0' : selectedRow?.discount_type}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
                     />
-                  </Grid>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Typography>Discount</Typography>
-                    <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
-                      fullWidth
-                      value={selectedRow?.discount === '0.0' ? ' 0.0' : selectedRow?.discount}
-                    />
-                  </Grid>
+                  </Box>
                 </Grid>
-                <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-                <Grid container spacing={2} style={{ width: '100%' }}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
+                    <Typography>Discount </Typography>
+                    <TextField
+                      fullWidth
+                      variant='outlined'
+                      name='discount'
+                      value={selectedRow?.discount === '0.0' ? ' 0.0' : selectedRow?.discount}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
                     <Typography>Payment Amount (THB) *</Typography>
                     <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
                       fullWidth
+                      variant='outlined'
+                      name='payment_amount'
                       value={
                         selectedRow?.payment_amount === '0.0'
                           ? '฿ 0.0'
@@ -196,23 +233,44 @@ const TermsSalesInvoice = ({ dataRow }) => {
                               maximumFractionDigits: 2
                             })}`
                       }
+                      onChange={handleTextChange}
+                      sx={styles.textField}
                     />
-                    <Typography>Outstanding</Typography>
+                  </Box>
+
+                  <Typography>Outstanding</Typography>
+                  <TextField
+                    sx={{ marginBottom: 5 }}
+                    size='small'
+                    variant='filled'
+                    fullWidth
+                    value={
+                      selectedRow?.outstanding === '0.0'
+                        ? '฿ 0.0'
+                        : `฿ ${parseFloat(selectedRow?.outstanding).toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                          })}`
+                    }
+                  />
+                  <Box sx={styles.box}>
+                    <Typography>Payment Amount (THB) *</Typography>
                     <TextField
-                      sx={{ marginBottom: 5 }}
-                      size='small'
-                      variant='filled'
                       fullWidth
+                      variant='outlined'
+                      name='payment_amount'
                       value={
-                        selectedRow?.outstanding === '0.0'
+                        selectedRow?.payment_amount === '0.0'
                           ? '฿ 0.0'
-                          : `฿ ${parseFloat(selectedRow?.outstanding).toLocaleString('en-US', {
+                          : `฿ ${parseFloat(selectedRow?.payment_amount).toLocaleString('en-US', {
                               minimumFractionDigits: 2,
                               maximumFractionDigits: 2
                             })}`
                       }
+                      onChange={handleTextChange}
+                      sx={styles.textField}
                     />
-                  </Grid>
+                  </Box>
                 </Grid>
               </Grid>
             </Card>
