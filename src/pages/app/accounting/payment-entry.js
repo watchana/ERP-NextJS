@@ -17,20 +17,30 @@ import SubPageLayout from 'src/@core/layouts/SubPageLayout'
 const PurchaseInvoice = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
   const [dataList, setDataList] = React.useState(data)
+  const [dataUpdate, setDataUpdate] = React.useState([])
+  const [editStatus, setEditStatus] = React.useState(false)
 
-  const showContent = [<PaymentEntry key={'detail'} dataRow={dataRow} setDataRow={setDataRow} />]
+  // ? function to update dataRow and store the required values in dataUpdated.
+  const handleUpdateData = async (field, value) => {
+    setDataRow({ ...dataRow, [field]: value })
+    setDataUpdate({ ...dataUpdate, [field]: value })
+    setEditStatus(true)
+  }
 
   return (
     <LayoutTwoPage
       data={dataList}
       setData={setDataList}
-      menuContent={PaymentEntryMenu}
-      showContent={showContent}
+      statusUpdate={false}
+      showContent={<PaymentEntry key={'detail'} dataRow={dataRow} handleUpdateData={handleUpdateData} />}
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='Payment Entry'
       docStatusName='disabled'
-      noTabContent={[]}
+      dataUpdate={dataUpdate}
+      setDataUpdate={setDataUpdate}
+      editStatus={editStatus}
+      setEditStatus={setEditStatus}
     />
   )
 }

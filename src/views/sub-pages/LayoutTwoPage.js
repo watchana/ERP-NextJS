@@ -57,7 +57,6 @@ const LayoutTwoPage = ({
   statusUpdate,
   menuContent,
   showContent,
-  noTabContent,
   dataRow,
   setDataRow,
   doctype,
@@ -67,8 +66,6 @@ const LayoutTwoPage = ({
   dataUpdate,
   setDataUpdate
 }) => {
-  const contentSizeInit = 7
-
   const { contentLeftStatus, contentDividerStatus, contentRightStatus, contentLeftGrid, contentRightGrid } =
     useSelector(state => state.layoutPage) || {}
 
@@ -78,9 +75,7 @@ const LayoutTwoPage = ({
   const [windowWidth, setWindowWidth] = useState(isClient ? window.innerWidth : 0)
 
   // ** States
-  const [contentSize, setContentSize] = useState(contentSizeInit)
   const [screenMD, setScreenMD] = useState(false)
-  const [sideContentOpen, setSideContentOpen] = useState(false)
   const [tabValue, setTabValue] = useState(1)
   const [buttonArrow, setButtonArrow] = useState(true)
   const [saveWarning, setSaveWarning] = useState(false)
@@ -214,10 +209,8 @@ const LayoutTwoPage = ({
     }
 
     if (screenMD) {
-      console.log('a')
       dispatch(contentMiddleRight())
     } else {
-      console.log('b')
       dispatch(contentDetailRight())
     }
   }
@@ -300,6 +293,10 @@ const LayoutTwoPage = ({
     console.log('screenMD', screenMD)
   }, [contentRightStatus, contentLeftStatus, screenMD])
 
+  useEffect(() => {
+    console.log('menuContent', menuContent)
+  }, [menuContent])
+
   if (!data) {
     return <FullPageSkeleton />
   }
@@ -338,7 +335,6 @@ const LayoutTwoPage = ({
               doctype={doctype}
               docStatusName={docStatusName}
               handleRowClick={handleRowClick}
-              sideContentOpen={sideContentOpen}
             />
           </Grid>
         )}
@@ -352,7 +348,7 @@ const LayoutTwoPage = ({
         )}
 
         {contentRightStatus && (
-          <Grid item xs md={noTabContent.length > 0 ? 12 : contentRightGrid}>
+          <Grid item xs md={contentRightGrid}>
             <Grid container>
               <Grid item xs={12}>
                 <Box
@@ -393,7 +389,7 @@ const LayoutTwoPage = ({
               </Grid>
 
               <Grid item xs={12}>
-                {menuContent !== undefined && menuContent.length > 0 ? (
+                {menuContent !== undefined ? (
                   <TabContext value={tabValue.toString()}>
                     <Tabs
                       value={tabValue}
@@ -414,7 +410,7 @@ const LayoutTwoPage = ({
                     ))}
                   </TabContext>
                 ) : (
-                  <Box sx={{ mb: 3 }}>{noTabContent}</Box>
+                  <Box sx={{ mb: 3 }}>{showContent}</Box>
                 )}
               </Grid>
 

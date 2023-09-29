@@ -30,7 +30,7 @@ const {
 import { mdiKeyboardOutline } from '@mdi/js'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-const PaymentEntry = ({ dataRow, setDataRow }) => {
+const PaymentEntry = ({ dataRow, handleUpdateData }) => {
   const [collapseAccount, setCollapseAccount] = useState(false)
   const [getDataPayment, setGetDataPayment] = useState([])
   const [getPayment, setGetPayment] = useState([])
@@ -51,14 +51,12 @@ const PaymentEntry = ({ dataRow, setDataRow }) => {
     alignItems: 'center'
   }
 
-  const handleTextChange = event => {
-    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+  const handleCheckboxChange = event => {
+    handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
   }
 
-  const handleCheckbox = event => {
-    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
+  const handleTextChange = event => {
+    handleUpdateData(event.target.name, event.target.value)
   }
 
   const columnsPayment = [

@@ -78,10 +78,6 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
     handleUpdateData(event.target.name, event.target.value)
   }
 
-  const handleSelectChange = event => {
-    handleUpdateData(event.target.name, event.target.value)
-  }
-
   const handleDateChange = (name, date) => {
     const formattedDate = dayjs(date).format('YYYY-MM-DD')
     handleUpdateData(name, formattedDate)
@@ -148,7 +144,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                         fullWidth
                         name='default_material_request_type'
                         value={dataRow.default_material_request_type}
-                        onChange={handleSelectChange}
+                        onChange={handleTextChange}
                         sx={{
                           backgroundColor: 'grey.100'
                         }}

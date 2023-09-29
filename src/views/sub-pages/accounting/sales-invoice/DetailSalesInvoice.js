@@ -527,7 +527,7 @@ const DetailSalesInvoice = ({ dataRow, handleUpdateData }) => {
                         variant='outlined'
                         name='base_price_list_rate'
                         value={
-                          selectedRow?.price_list_rate === '0.0'
+                          selectedRow?.base_price_list_rate === '0.0'
                             ? '฿ 0.0'
                             : `฿ ${parseFloat(selectedRow?.base_price_list_rate).toLocaleString('en-US', {
                                 minimumFractionDigits: 2,
