@@ -348,7 +348,7 @@ const LayoutTwoPage = ({
         )}
 
         {contentRightStatus && (
-          <Grid item xs md={contentRightGrid}>
+          <Grid item xs md={contentRightGrid} sx={{ mr: menuContent && menuContent.length > 0 ? 0 : 4 }}>
             <Grid container>
               <Grid item xs={12}>
                 <Box
@@ -367,7 +367,7 @@ const LayoutTwoPage = ({
 
                     <StatusChip editStatus={editStatus} docStatus={dataRow[docStatusName]} />
                   </Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'row', mr: 3 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                     <IconButton sx={IconButtonStyle} onClick={() => handleArrowLeft()}>
                       <KeyboardArrowLeftIcon />
                     </IconButton>
