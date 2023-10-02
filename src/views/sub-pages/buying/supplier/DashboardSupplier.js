@@ -45,84 +45,78 @@ const Dashboard_sup = ({ dataRow, handleUpdateData }) => {
 
   return (
     <Box sx={styles.box}>
-      <Card sx={styles.card}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography>Description</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Box sx={{ p: 2 }}>
-                  <Divider />
-                  <Typography variant='subtitle2'>Description</Typography>
-                  <TextField
-                    fullWidth
-                    multiline
-                    size='small'
-                    variant='outlined'
-                    rows={4}
-                    value={dataRow.description}
-                    name='description'
-                    onChange={handleTextChange}
-                    sx={styles.textField}
-                  />
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Description</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Divider />
+            <Typography variant='subtitle2'>Description</Typography>
+            <TextField
+              fullWidth
+              multiline
+              size='small'
+              variant='outlined'
+              rows={4}
+              value={dataRow.description}
+              name='description'
+              onChange={handleTextChange}
+              sx={styles.textField}
+            />
 
-                  <Box sx={styles.box}>
-                    <Typography variant='subtitle1'>Brand</Typography>
-                    <TextField
-                      fullWidth
-                      disabled
-                      size='small'
-                      variant='outlined'
-                      name='brand'
-                      value={dataRow.brand}
-                      onChange={handleTextChange}
-                      sx={styles.textField}
-                    />
-                  </Box>
-                </Box>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography>Description</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Box sx={{ p: 2 }}>
-                  <Divider />
-                  <Typography variant='subtitle2'>Description</Typography>
-                  <TextField
-                    fullWidth
-                    multiline
-                    size='small'
-                    variant='outlined'
-                    rows={4}
-                    value={dataRow.description}
-                    name='description'
-                    onChange={handleTextChange}
-                    sx={styles.textField}
-                  />
+            <Box sx={styles.box}>
+              <Typography variant='subtitle1'>Brand</Typography>
+              <TextField
+                fullWidth
+                disabled
+                size='small'
+                variant='outlined'
+                name='brand'
+                value={dataRow.brand}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Description</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Divider />
+            <Typography variant='subtitle2'>Description</Typography>
+            <TextField
+              fullWidth
+              multiline
+              size='small'
+              variant='outlined'
+              rows={4}
+              value={dataRow.description}
+              name='description'
+              onChange={handleTextChange}
+              sx={styles.textField}
+            />
 
-                  <Box sx={styles.box}>
-                    <Typography variant='subtitle1'>Brand</Typography>
-                    <TextField
-                      fullWidth
-                      disabled
-                      size='small'
-                      variant='outlined'
-                      name='brand'
-                      value={dataRow.brand}
-                      onChange={handleTextChange}
-                      sx={styles.textField}
-                    />
-                  </Box>
-                </Box>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-        </Grid>
-      </Card>
+            <Box sx={styles.box}>
+              <Typography variant='subtitle1'>Brand</Typography>
+              <TextField
+                fullWidth
+                disabled
+                size='small'
+                variant='outlined'
+                name='brand'
+                value={dataRow.brand}
+                onChange={handleTextChange}
+                sx={styles.textField}
+              />
+            </Box>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
     </Box>
   )
 }

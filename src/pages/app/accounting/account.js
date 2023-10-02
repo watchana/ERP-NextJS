@@ -26,9 +26,7 @@ const AccountPage = ({ data }) => {
       data={dataList}
       setData={setDataList}
       statusUpdate={false}
-      menuContent={[]}
-      showContent={[]}
-      noTabContent={<ChartOfAccounts dataRow={dataRow} handleUpdateData={handleUpdateData} />}
+      showContent={<ChartOfAccounts dataRow={dataRow} handleUpdateData={handleUpdateData} />}
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='Account'

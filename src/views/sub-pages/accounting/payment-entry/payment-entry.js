@@ -1,8 +1,6 @@
-import { DataGrid } from '@mui/x-data-grid'
-import axios from 'axios'
-import { ChevronDown, ChevronUp } from 'mdi-material-ui'
-import { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
+// ** Mui imports
 const {
   Grid,
   Card,
@@ -24,31 +22,51 @@ const {
   DialogActions,
   Accordion,
   AccordionSummary,
-  AccordionDetails
+  AccordionDetails,
+  Skeleton,
+  Link,
+  InputLabel,
+  Input,
+  FormControlLabel
 } = require('@mui/material')
-
-import { mdiKeyboardOutline } from '@mdi/js'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
+// ** Mui X Date Picker
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs from 'dayjs'
+import 'dayjs/locale/en-gb'
+import { DataGrid } from '@mui/x-data-grid'
+
 const PaymentEntry = ({ dataRow, handleUpdateData }) => {
-  const [collapseAccount, setCollapseAccount] = useState(false)
-  const [getDataPayment, setGetDataPayment] = useState([])
-  const [getPayment, setGetPayment] = useState([])
-  const [collapseMoreInfo, setCollapseMoreInfo] = useState(false)
-  const [open, setOpen] = useState(false)
-
-  const handleCollapseAccount = () => {
-    setCollapseAccount(!collapseAccount)
-  }
-
-  const handleCollapseMoreInfo = () => {
-    setCollapseMoreInfo(!collapseMoreInfo)
-  }
-
-  const checkboxStyle = {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
+  const styles = {
+    card: {
+      p: 4
+    },
+    cardConnect: {
+      p: 4,
+      borderRadius: 0
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    textFieldDetail: {
+      minHeight: '4rem'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    },
+    redAsterisk: {
+      color: 'red'
+    },
+    gridItem: {
+      p: 1,
+      width: '100%'
+    },
+    datepicker: {
+      bgcolor: 'grey.100'
+    }
   }
 
   const handleCheckboxChange = event => {
@@ -65,82 +83,37 @@ const PaymentEntry = ({ dataRow, handleUpdateData }) => {
     { field: 'reference_name', headerName: 'Name', width: 300 },
     { field: 'total_amount', headerName: 'Grand Total (THB)', width: 150 },
     { field: 'outstanding_amount', headerName: 'Outstanding (THB)', width: 300 },
-    { field: 'allocated_amount', headerName: 'Allocated (THB)', width: 300 }
+    { field: 'allocated_amount', headerName: 'Allocated (THB)', width: 300 },
+    { field: 'edit', headerName: '', width: 100 }
   ]
 
-  useEffect(() => {
-    axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}Payment Entry/${dataRow.name}`, {
-        headers: {
-          Authorization: 'token 5891d01ccc2961e:0e446b332dc22aa'
-        }
-      })
-      .then(res => {
-        setGetDataPayment(res.data.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }, [dataRow])
-
-  if (Object.values(getDataPayment)?.length === 0) {
-    return 'waiting...'
-  }
-
-  const handleRowClick = params => {
-    setOpen(true)
-    setGetPayment(params.row)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
-
-  function formatDate(dateString) {
-    const dateObject = new Date(dateString)
-    const day = dateObject.getDate().toString().padStart(2, '0')
-    const month = (dateObject.getMonth() + 1).toString().padStart(2, '0')
-    const year = dateObject.getFullYear()
-
-    return `${day}-${month}-${year}`
-  }
-  const formattedDate = formatDate(dataRow.posting_date)
-  const formattedDateRefer = formatDate(dataRow.reference_date)
-  const formattedDueData = formatDate(getPayment.due_date)
-
-  function formatTime(timeString) {
-    const timeParts = timeString.split(':')
-    const hours = timeParts[0]
-    const minutes = timeParts[1]
-    const formattedTime = `${hours}:${minutes}`
-
-    return formattedTime
-  }
-  const formattedTime = formatTime(dataRow?.posting_time || '')
-
-  function formatCurrency(params) {
-    const formattedValue = new Intl.NumberFormat('th-TH', {
-      style: 'currency',
-      currency: 'THB',
-      minimumFractionDigits: 2
-    }).format(params.value)
-
-    return formattedValue
-  }
-
-  const styles = {
-    card: {
-      borderTopLeftRadius: 0,
-      borderTopRightRadius: 0,
-      p: 2
+  const columnsAdvanceTaxesAndCharges = [
+    { field: 'idx', headerName: 'No', width: 150 },
+    { field: 'type', headerName: 'Type', width: 150 },
+    { field: 'account_head', headerName: 'Account Head', width: 300 },
+    { field: 'rate', headerName: 'Rate', width: 150 },
+    {
+      field: 'amount',
+      headerName: 'Amount',
+      width: 300
     },
-    textField: {
-      bgcolor: 'grey.100'
-    },
-    box: {
-      marginBlock: 2,
-      mt: 4
+    {
+      field: 'total',
+      headerName: 'Total',
+      width: 300
     }
+  ]
+
+  const columnsDeductions = [
+    { field: 'idx', headerName: 'No', width: 150 },
+    { field: 'account', headerName: 'Account', width: 150 },
+    { field: 'cost_center', headerName: 'Cost Center', width: 300 },
+    { field: 'amount', headerName: 'Amount (Company Currency)', width: 150 },
+    { field: 'edit', headerName: '', width: 100 }
+  ]
+
+  if (!dataRow) {
+    return <Skeleton variant='rounded' width={210} height={60} />
   }
 
   return (
@@ -642,61 +615,44 @@ const PaymentEntry = ({ dataRow, handleUpdateData }) => {
                   </Box>
 
                   <Box sx={styles.box}>
-                    <Typography variant='subtitle1'>Name</Typography>
-                    <TextField
-                      variant='outlined'
-                      value={getPayment.reference_name}
-                      fullWidth
-                      name='reference_name'
-                      sx={styles.textField}
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={Boolean(dataRow.custom_remarks)}
+                          name='custom_remarks'
+                          onChange={handleCheckboxChange}
+                        />
+                      }
+                      label='Custom Remarks'
                     />
                   </Box>
 
                   <Box sx={styles.box}>
-                    <Typography variant='subtitle1'>Due Date</Typography>
+                    <Typography>Remarks</Typography>
                     <TextField
-                      variant='outlined'
-                      value={formattedDueData}
-                      fullWidth
-                      name='due_date'
                       sx={styles.textField}
+                      multiline
+                      rows={2}
+                      variant='outlined'
+                      name='remarks'
+                      value={dataRow && dataRow.remarks ? dataRow.remarks.replace(/\\n/g, '\n') : ''}
+                      fullWidth
+                      onChange={handleTextChange}
+                      disabled
                     />
                   </Box>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                <Grid item sm={12} md={6}>
                   <Box sx={styles.box}>
-                    <Typography variant='subtitle1'>Grand Total (THB)</Typography>
+                    <Typography>Letter Head</Typography>
                     <TextField
-                      variant='outlined'
-                      value={getPayment.total_amount}
-                      fullWidth
-                      name='total_amount'
-                      disabled
                       sx={styles.textField}
-                    />
-                  </Box>
-
-                  <Box sx={styles.box}>
-                    <Typography variant='subtitle1'>Outstanding (THB)</Typography>
-                    <TextField
                       variant='outlined'
-                      value={getPayment.outstanding_amount}
+                      name='letter_head'
+                      value={dataRow.letter_head}
                       fullWidth
-                      name='outstanding_amount'
-                      disabled
-                      sx={styles.textField}
-                    />
-                  </Box>
-
-                  <Box sx={styles.box}>
-                    <Typography variant='subtitle1'>Allocated</Typography>
-                    <TextField
-                      variant='outlined'
-                      value={getPayment.allocated_amount}
-                      fullWidth
-                      name='allocated_amount'
-                      sx={styles.textField}
+                      onChange={handleTextChange}
                       disabled
                     />
                   </Box>

@@ -32,8 +32,6 @@ import {
 import DorpdownButton from 'src/components/Button/Dorpdown_Text/Dorpdown_text'
 
 import axios from 'axios'
-import { DataGrid } from '@mui/x-data-grid'
-import { ChevronDown, ChevronUp } from 'mdi-material-ui'
 
 const ContactAndAddressPurchaseInvoice = ({ dataRow }) => {
   const [isOpenDetailAddress, setIsOpenDetailAddress] = useState(false)
@@ -57,16 +55,8 @@ const ContactAndAddressPurchaseInvoice = ({ dataRow }) => {
     setIsOpenDetailAddress(false)
   }
 
-  const handleClickInternalCustomer = () => {
-    setInternalSupplier(!internalCustomer)
-  }
-
-  const handleClickMoreInformation = () => {
-    setCurrencyPrice(!moreInformation)
-  }
-
-  const handleCheckboxChange = event => {
-    setIsInternalSupplier(event.target.checked)
+  const handleTextChange = event => {
+    handleUpdateData(event.target.name, event.target.value)
   }
 
   const [state, setState] = React.useState({
@@ -104,8 +94,17 @@ const ContactAndAddressPurchaseInvoice = ({ dataRow }) => {
   }
 
   const styles = {
-    lineBreakText: {
-      whiteSpace: 'pre-line'
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
     }
   }
 
@@ -162,29 +161,21 @@ const ContactAndAddressPurchaseInvoice = ({ dataRow }) => {
 
   return (
     <Box>
-      <Card
-        sx={{
-          borderTopLeftRadius: 0, // กำหนด borderRadius สำหรับมุมบนซ้าย
-          borderTopRightRadius: 0, // กำหนด borderRadius สำหรับมุมบนขวา
-          p: 2,
-          mb: 2
-        }}
-      >
+      <Card sx={styles.card}>
         {/* ////////////////////////////////////// แถวที่ 1 ///////////////////////////////////////////// */}
-        <Grid container>
-          <Grid item sx={{ width: '100%', height: '100%' }}>
-            <CardHeader title='Supplier Address' />
-
+        <Grid container spacing={3}>
+          <CardHeader title='Supplier Address' />
+          <Grid item xs={12}>
             <CardContent>
-              <Typography sx={{ fontWeight: 'bold' }}>Address</Typography>
-              <Card sx={{ mb: 5 }}>
-                <CardContent sx={{ width: '100%' }}>
+              <Typography sx={{ fontWeight: 'bold' }}>Select Supplier Address</Typography>
+              <Card sx={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
+                <Grid container justifyContent='flex-end'>
                   <table style={{ width: '100%', fontSize: '14px' }}>
                     <tbody dangerouslySetInnerHTML={{ __html: dataRow.address_display }} />
                   </table>
-                </CardContent>
-                <CardActions className='card-action-dense'>
                   <Button onClick={handleEditClickAddress}>แก้ไข</Button>
+                </Grid>
+                <CardActions className='card-action-dense'>
                   <Dialog
                     open={isOpenDetailAddress}
                     onClose={handleSaveClickAddress}
@@ -199,6 +190,7 @@ const ContactAndAddressPurchaseInvoice = ({ dataRow }) => {
                       }
                     }}
                   >
+                    {' '}
                     <DialogTitle>Edit Address</DialogTitle>
                     <DialogContent>
                       <Card sx={{ width: '100%', p: 5 }}>
@@ -345,43 +337,71 @@ const ContactAndAddressPurchaseInvoice = ({ dataRow }) => {
                   </Dialog>
                 </CardActions>
               </Card>
+            </CardContent>
+          </Grid>
+          <Grid item xs={12}>
+            <CardContent>
+              <Typography sx={{ fontWeight: 'bold' }}>Address</Typography>
+              <Card sx={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
+                <Typography variant='body2'>
+                  {dataAddress[0]?.address_line1 && ` ${dataAddress[0]?.address_line1}`}
+                </Typography>
+              </Card>
               <Divider sx={{ margin: 0, my: 5 }} />
-              <Grid container spacing={3} sx={{ display: 'flex' }}>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Typography sx={{ margin: 1 }}>Contact Person</Typography>
-                  <TextField
-                    fullWidth
-                    size='small'
-                    variant='filled'
-                    value={dataRow?.contact_person || ''}
-                    onChange={e => setAddressTitle(e.target.value || '')}
-                  />
-                  <Typography sx={{ margin: 1 }}>Contact</Typography>
-                  <TextField
-                    fullWidth
-                    size='small'
-                    variant='filled'
-                    value={dataRow?.contact_display || ''}
-                    onChange={e => setAddressTitle(e.target.value || '')}
-                  />
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
+                    <Typography>Contact Person</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='contact_person'
+                      value={dataRow?.contact_person || ''}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+
+                  <Box sx={styles.box}>
+                    <Typography>Contact </Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='contact_display'
+                      value={dataRow?.contact_display || ''}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} lg={6}>
-                  <Typography sx={{ margin: 1 }}>Territory</Typography>
-                  <TextField
-                    fullWidth
-                    size='small'
-                    variant='filled'
-                    value={dataRow?.contact_mobile || ''}
-                    onChange={e => setAddressTitle(e.target.value || '')}
-                  />
-                  <Typography sx={{ margin: 1 }}>Contact Email</Typography>
-                  <TextField
-                    fullWidth
-                    size='small'
-                    variant='filled'
-                    value={dataRow?.contact_email || ''}
-                    onChange={e => setAddressTitle(e.target.value || '')}
-                  />
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
+                    <Typography>Territory</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='contact_mobile'
+                      value={dataRow?.contact_mobile || ''}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
+
+                  <Box sx={styles.box}>
+                    <Typography>Contact Email</Typography>
+                    <TextField
+                      fullWidth
+                      disabled
+                      variant='outlined'
+                      name='contact_email'
+                      value={dataRow?.contact_email || ''}
+                      onChange={handleTextChange}
+                      sx={styles.textField}
+                    />
+                  </Box>
                 </Grid>
               </Grid>
             </CardContent>

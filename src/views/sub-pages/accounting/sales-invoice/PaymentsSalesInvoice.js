@@ -60,66 +60,56 @@ const Payments = ({ dataRow }) => {
 
   return (
     <Box>
-      <Card sx={styles.card}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Box sx={{ width: '100%' }}>
-              <Accordion>
-                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-                  <Typography> Tax Breakup</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Box sx={{ p: 2 }}>
-                    <Divider />
-                    <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                      <Grid item xs={12}>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={dataRow?.allocate_advances_automatically === 1}
-                              onChange={handleCheckboxChange}
-                            />
-                          }
-                          label='Allocate Advances Automatically (FIFO)
+      <Accordion>
+        <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+          <Typography> Tax Breakup</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Divider />
+            <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={dataRow?.allocate_advances_automatically === 1}
+                      onChange={handleCheckboxChange}
+                    />
+                  }
+                  label='Allocate Advances Automatically (FIFO)
 '
-                        />
-                      </Grid>
+                />
+              </Grid>
 
-                      <Grid item xs={12}>
-                        <Btn
-                          detailbutton={' Get Advances Automatically'}
-                          bgcolorbutton={'white'}
-                          numminwid={'auto'}
-                          handleButtonClick={() => router.push()}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
+              <Grid item xs={12}>
+                <Btn
+                  detailbutton={' Get Advances Automatically'}
+                  bgcolorbutton={'white'}
+                  numminwid={'auto'}
+                  handleButtonClick={() => router.push()}
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-                  <Typography> Loyailty Points Redemption</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Box sx={{ p: 2 }}>
-                    <Divider />
-                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox checked={dataRow?.redeem_loyalty_points === 1} onChange={handleCheckboxChange} />
-                        }
-                        label='Redeem Loyalty Points'
-                      />
-                    </Grid>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
-          </Grid>
-        </Grid>
-      </Card>
+      <Accordion>
+        <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+          <Typography> Loyailty Points Redemption</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Divider />
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <FormControlLabel
+                control={<Checkbox checked={dataRow?.redeem_loyalty_points === 1} onChange={handleCheckboxChange} />}
+                label='Redeem Loyalty Points'
+              />
+            </Grid>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
     </Box>
   )
 }
