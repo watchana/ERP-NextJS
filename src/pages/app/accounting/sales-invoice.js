@@ -47,17 +47,20 @@ const SalesInvoice = ({ data }) => {
     <LayoutTwoPage
       data={dataList}
       setData={setDataList}
+      statusUpdate={false}
       menuContent={SalesInvoiceContentMenu}
       showContent={showContent}
       dataRow={dataRow}
       setDataRow={setDataRow}
       doctype='Sales Invoice'
       docStatusName='disabled'
+      dataUpdate={dataUpdate}
+      setDataUpdate={setDataUpdate}
+      editStatus={editStatus}
+      setEditStatus={setEditStatus}
     />
   )
 }
-
-SalesInvoice.getLayout = page => <SubPageLayout>{page}</SubPageLayout>
 
 // nextJS SSR
 export async function getServerSideProps() {

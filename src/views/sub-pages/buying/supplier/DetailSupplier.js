@@ -69,7 +69,7 @@ const DetailSupplier = ({ dataRow, handleUpdateData }) => {
               <TextField
                 fullWidth
                 variant='outlined'
-                name='item_name'
+                name='supplier_name'
                 value={dataRow?.supplier_name}
                 onChange={handleTextChange}
                 sx={styles.textField}
@@ -177,97 +177,94 @@ const DetailSupplier = ({ dataRow, handleUpdateData }) => {
             </Box>
           </Grid>
         </Grid>
-        <Divider sx={{ margin: 0, my: 7, width: '100%' }} />
+      </Card>
 
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Internal Supplier</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box sx={{ p: 2 }}>
-              <FormGroup>
-                <FormControlLabel
-                  control={<Checkbox checked={isInternalSupplier} onChange={handleCheckboxChange} />}
-                  variant='body2'
-                  label='Is Internal Supplier'
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Internal Supplier</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox checked={isInternalSupplier} onChange={handleCheckboxChange} />}
+                variant='body2'
+                label='Is Internal Supplier'
+              />
+              {isInternalSupplier && (
+                <TextField
+                  fullWidth
+                  variant='outlined'
+                  name='represents_company'
+                  value={dataRow.represents_company}
+                  onChange={handleTextChange}
+                  sx={styles.textField}
                 />
-                {isInternalSupplier && (
+              )}
+            </FormGroup>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography> More Information</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Grid container spacing={2} width={'100%'}>
+              <Grid item xs={12}>
+                <Typography>Supplier Details</Typography>
+
+                <TextareaAutosize
+                  fullWidth={false}
+                  style={{
+                    minHeight: '200px',
+                    width: '100%',
+                    maxWidth: '100%',
+                    minWidth: '300px',
+                    overflow: 'hidden'
+                  }}
+                  multiline
+                  size='xsall'
+                  variant='outlined'
+                  rows={4}
+                  value={dataRow.supplier_details}
+                  name='supplier_details'
+                  onChange={handleTextChange}
+                  sx={styles.textField}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Box sx={styles.box}>
+                  <Typography>Website</Typography>
                   <TextField
                     fullWidth
                     variant='outlined'
-                    name='represents_company'
-                    value={dataRow.represents_company}
+                    name='website'
+                    value={dataRow.website}
                     onChange={handleTextChange}
                     sx={styles.textField}
                   />
-                )}
-              </FormGroup>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
+                </Box>
 
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography> More Information</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box sx={{ p: 2 }}>
-              <Grid container spacing={2} width={'100%'}>
-                <Grid item xs={12}>
-                  <Typography>Supplier Details</Typography>
-
-                  <TextareaAutosize
-                    fullWidth={false}
-                    style={{
-                      minHeight: '200px',
-                      width: '100%',
-                      maxWidth: '100%',
-                      minWidth: '300px',
-                      overflow: 'hidden'
-                    }}
-                    multiline
-                    size='xsall'
+                <Box sx={styles.box}>
+                  <Typography>Print Language</Typography>
+                  <TextField
+                    fullWidth
                     variant='outlined'
-                    rows={4}
-                    value={dataRow.supplier_details}
-                    name='supplier_details'
+                    name='language'
+                    value={dataRow.language}
                     onChange={handleTextChange}
                     sx={styles.textField}
                   />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Box sx={styles.box}>
-                    <Typography>Website</Typography>
-                    <TextField
-                      fullWidth
-                      variant='outlined'
-                      name='website'
-                      value={dataRow.website}
-                      onChange={handleTextChange}
-                      sx={styles.textField}
-                    />
-                  </Box>
-
-                  <Box sx={styles.box}>
-                    <Typography>Print Language</Typography>
-                    <TextField
-                      fullWidth
-                      variant='outlined'
-                      name='language'
-                      value={dataRow.language}
-                      onChange={handleTextChange}
-                      sx={styles.textField}
-                    />
-                  </Box>
-                </Grid>
+                </Box>
               </Grid>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-
-        <Divider sx={{ margin: 0, my: 5, width: '100%' }} />
-      </Card>
+            </Grid>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
     </Box>
   )
 }

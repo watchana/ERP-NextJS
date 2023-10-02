@@ -119,263 +119,255 @@ const MoreInfoPurchaseInvoice = ({ dataRow, handleUpdateData }) => {
   }
 
   return (
-    <Grid>
-      <Card sx={styles.card}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Box sx={styles.box}>
-              <Accordion>
-                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+    <Box>
+      <Accordion>
+        <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+          <Typography>Status</Typography>
+        </AccordionSummary>
+        <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Box sx={styles.box}>
                   <Typography>Status</Typography>
-                </AccordionSummary>
-                <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
-                <AccordionDetails>
-                  <Box sx={{ p: 2 }}>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12}>
-                        <Box sx={styles.box}>
-                          <Typography>Status</Typography>
-                          <TextField
-                            fullWidth
-                            disabled
-                            variant='outlined'
-                            name='status'
-                            value={dataRow?.status}
-                            onChange={handleTextChange}
-                            sx={styles.textField}
-                          />
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
+                  <TextField
+                    fullWidth
+                    disabled
+                    variant='outlined'
+                    name='status'
+                    value={dataRow?.status}
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-                  <Typography> Accounting Details</Typography>
-                </AccordionSummary>
-                <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
-                <AccordionDetails>
-                  <Box sx={{ p: 2 }}>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12} md={6}>
-                        <Box sx={styles.box}>
-                          <Typography>Debit To *</Typography>
-                          <TextField
-                            fullWidth
-                            disabled
-                            variant='outlined'
-                            name='credit_to'
-                            value={dataRow?.credit_to || ''}
-                            onChange={handleTextChange}
-                            sx={styles.textField}
-                          />
-                        </Box>
-                      </Grid>
-                      <Grid item xs={12} md={6}>
-                        <Box sx={styles.box}>
-                          <Typography>Is Opening Entry</Typography>
-                          <TextField
-                            fullWidth
-                            disabled
-                            variant='outlined'
-                            name='is_opening'
-                            value={dataRow?.is_opening || ''}
-                            onChange={handleTextChange}
-                            sx={styles.textField}
-                          />
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
+      <Accordion>
+        <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+          <Typography> Accounting Details</Typography>
+        </AccordionSummary>
+        <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <Box sx={styles.box}>
+                  <Typography>Debit To *</Typography>
+                  <TextField
+                    fullWidth
+                    disabled
+                    variant='outlined'
+                    name='credit_to'
+                    value={dataRow?.credit_to || ''}
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Box sx={styles.box}>
+                  <Typography>Is Opening Entry</Typography>
+                  <TextField
+                    fullWidth
+                    disabled
+                    variant='outlined'
+                    name='is_opening'
+                    value={dataRow?.is_opening || ''}
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-                  <Typography> Subscription</Typography>
-                </AccordionSummary>
-                <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
-                <AccordionDetails>
-                  <Box sx={{ p: 2 }}>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12}>
-                        <Box sx={styles.box}>
-                          <Typography>From Date</Typography>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                              sx={{
-                                backgroundColor: 'grey.100',
-                                width: '100%'
-                              }}
-                              views={['year', 'month', 'day']}
-                              value={FromDate}
-                              onChange={date => handleDateChange('from_date', date)}
-                            />
-                          </LocalizationProvider>
-                          <Typography>Start date of current invoice's period</Typography>
-                        </Box>
+      <Accordion>
+        <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+          <Typography> Subscription</Typography>
+        </AccordionSummary>
+        <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Box sx={styles.box}>
+                  <Typography>From Date</Typography>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      sx={{
+                        backgroundColor: 'grey.100',
+                        width: '100%'
+                      }}
+                      views={['year', 'month', 'day']}
+                      value={FromDate}
+                      onChange={date => handleDateChange('from_date', date)}
+                    />
+                  </LocalizationProvider>
+                  <Typography>Start date of current invoice's period</Typography>
+                </Box>
 
-                        <Box sx={styles.box}>
-                          <Typography>To Date</Typography>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                              sx={{
-                                backgroundColor: 'grey.100',
-                                width: '100%'
-                              }}
-                              views={['year', 'month', 'day']}
-                              value={ToDate}
-                              onChange={date => handleDateChange('to_date', date)}
-                            />
-                          </LocalizationProvider>
-                          <Typography>End date of current invoice's period</Typography>
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
+                <Box sx={styles.box}>
+                  <Typography>To Date</Typography>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      sx={{
+                        backgroundColor: 'grey.100',
+                        width: '100%'
+                      }}
+                      views={['year', 'month', 'day']}
+                      value={ToDate}
+                      onChange={date => handleDateChange('to_date', date)}
+                    />
+                  </LocalizationProvider>
+                  <Typography>End date of current invoice's period</Typography>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-                  <Typography> Print Settings</Typography>
-                </AccordionSummary>
-                <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
-                <AccordionDetails>
-                  <Box sx={{ p: 2 }}>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12} md={6}>
-                        <Box sx={styles.box}>
-                          <Typography>Letter Head</Typography>
-                          <TextField
-                            fullWidth
-                            variant='outlined'
-                            name='letter_head'
-                            value={dataRow?.letter_head || ''}
-                            onChange={handleTextChange}
-                            sx={styles.textField}
-                          />
-                        </Box>
+      <Accordion>
+        <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+          <Typography> Print Settings</Typography>
+        </AccordionSummary>
+        <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <Box sx={styles.box}>
+                  <Typography>Letter Head</Typography>
+                  <TextField
+                    fullWidth
+                    variant='outlined'
+                    name='letter_head'
+                    value={dataRow?.letter_head || ''}
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
+                </Box>
 
-                        <Box sx={styles.BoxStyle}>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={Boolean(dataRow.allow_negative_stock)}
-                                name='allow_negative_stock'
-                                onChange={handleCheckboxChange}
-                              />
-                            }
-                            label='Allow Negative Stock'
-                          />
-                        </Box>
-                      </Grid>
+                <Box sx={styles.BoxStyle}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={Boolean(dataRow.allow_negative_stock)}
+                        name='allow_negative_stock'
+                        onChange={handleCheckboxChange}
+                      />
+                    }
+                    label='Allow Negative Stock'
+                  />
+                </Box>
+              </Grid>
 
-                      <Grid item xs={12} md={6}>
-                        <Box sx={styles.box}>
-                          <Typography>Print Heading</Typography>
-                          <TextField
-                            fullWidth
-                            variant='outlined'
-                            name='select_print_heading'
-                            value={dataRow?.select_print_heading || ''}
-                            onChange={handleTextChange}
-                            sx={styles.textField}
-                          />
-                        </Box>
+              <Grid item xs={12} md={6}>
+                <Box sx={styles.box}>
+                  <Typography>Print Heading</Typography>
+                  <TextField
+                    fullWidth
+                    variant='outlined'
+                    name='select_print_heading'
+                    value={dataRow?.select_print_heading || ''}
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
+                </Box>
 
-                        <Box sx={styles.box}>
-                          <Typography>Print Language</Typography>
-                          <TextField
-                            fullWidth
-                            disabled
-                            variant='outlined'
-                            name='commission_rate'
-                            value={dataRow?.language || ''}
-                            onChange={handleTextChange}
-                            sx={styles.textField}
-                          />
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
+                <Box sx={styles.box}>
+                  <Typography>Print Language</Typography>
+                  <TextField
+                    fullWidth
+                    disabled
+                    variant='outlined'
+                    name='commission_rate'
+                    value={dataRow?.language || ''}
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-                  <Typography>Hold Invoice</Typography>
-                </AccordionSummary>
-                <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
-                <AccordionDetails>
-                  <Box sx={{ p: 2 }}>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12} md={6}>
-                        <Box sx={styles.BoxStyle}>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={Boolean(dataRow.on_hold)}
-                                name='Is Internal Customer'
-                                onChange={handleCheckboxChange}
-                              />
-                            }
-                            label='Hold Invoice'
-                          />
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
+      <Accordion>
+        <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+          <Typography>Hold Invoice</Typography>
+        </AccordionSummary>
+        <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <Box sx={styles.BoxStyle}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={Boolean(dataRow.on_hold)}
+                        name='Is Internal Customer'
+                        onChange={handleCheckboxChange}
+                      />
+                    }
+                    label='Hold Invoice'
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
 
-              <Accordion>
-                <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-                  <Typography> Additional Info</Typography>
-                </AccordionSummary>
-                <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
-                <AccordionDetails>
-                  <Box sx={{ p: 2 }}>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12} md={6}>
-                        <Box sx={styles.BoxStyle}>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={Boolean(dataRow.is_internal_supplier)}
-                                name='Is Internal Customer'
-                                onChange={handleCheckboxChange}
-                              />
-                            }
-                            label='Is Internal Supplier'
-                          />
-                        </Box>
-                      </Grid>
+      <Accordion>
+        <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+          <Typography> Additional Info</Typography>
+        </AccordionSummary>
+        <Divider sx={{ margin: 0, my: 1, width: '100%' }} />
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <Box sx={styles.BoxStyle}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={Boolean(dataRow.is_internal_supplier)}
+                        name='Is Internal Customer'
+                        onChange={handleCheckboxChange}
+                      />
+                    }
+                    label='Is Internal Supplier'
+                  />
+                </Box>
+              </Grid>
 
-                      <Grid item xs={12} md={6}>
-                        <Box sx={styles.box}>
-                          <Typography>Remarks</Typography>
-                          <TextField
-                            fullWidth
-                            variant='outlined'
-                            name='status'
-                            value={dataRow?.remarks || ''}
-                            onChange={handleTextChange}
-                            sx={styles.textField}
-                          />
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
-          </Grid>
-        </Grid>
-      </Card>
-    </Grid>
+              <Grid item xs={12} md={6}>
+                <Box sx={styles.box}>
+                  <Typography>Remarks</Typography>
+                  <TextField
+                    fullWidth
+                    variant='outlined'
+                    name='status'
+                    value={dataRow?.remarks || ''}
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+    </Box>
   )
 }
 

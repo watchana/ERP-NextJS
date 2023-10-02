@@ -165,7 +165,7 @@ const InventoryItem = ({ dataRow, handleUpdateData }) => {
                         fullWidth
                         name='valuation_method'
                         value={dataRow.valuation_method}
-                        onChange={handleSelectChange}
+                        // onChange={handleSelectChange}
                         sx={{
                           backgroundColor: 'grey.100'
                         }}

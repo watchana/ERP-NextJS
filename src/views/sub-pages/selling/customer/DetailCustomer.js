@@ -74,7 +74,7 @@ const DetailCustomer = ({ dataRow, setDataRow, handleUpdateData }) => {
     <Box>
       <Card sx={styles.card}>
         <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-          <Grid item xs={12} sm={12} md={12} lg={6}>
+          <Grid item xs={12} md={6}>
             <Box sx={styles.box}>
               <Typography>Customer Name</Typography>
               <TextField
@@ -117,7 +117,7 @@ const DetailCustomer = ({ dataRow, setDataRow, handleUpdateData }) => {
             </Box>
           </Grid>
 
-          <Grid item xs={12} sm={12} md={12} lg={6}>
+          <Grid item xs={12} md={6}>
             <Box sx={styles.box}>
               <Typography>Territory</Typography>
               <TextField
@@ -174,7 +174,7 @@ const DetailCustomer = ({ dataRow, setDataRow, handleUpdateData }) => {
         <Divider sx={{ margin: 0, mb: 5 }} />
         <Typography sx={{ fontWeight: 'bold', my: 6 }}> Description</Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={12} md={12} lg={6}>
+          <Grid item xs={12} md={6}>
             <Box sx={styles.box}>
               <Typography>Billing Currency</Typography>
               <TextField
@@ -201,7 +201,7 @@ const DetailCustomer = ({ dataRow, setDataRow, handleUpdateData }) => {
               />
             </Box>
           </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={6}>
+          <Grid item xs={12} md={6}>
             <Box sx={styles.box}>
               <Typography>Default Company Bank Account</Typography>
               <TextField

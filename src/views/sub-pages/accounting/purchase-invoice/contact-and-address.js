@@ -175,16 +175,6 @@ const ContactAndAddressPurchaseInvoice = ({ dataRow }) => {
                   </table>
                   <Button onClick={handleEditClickAddress}>แก้ไข</Button>
                 </Grid>
-              </Card>
-            </CardContent>
-          </Grid>
-          <Grid item xs={12}>
-            <CardContent>
-              <Typography sx={{ fontWeight: 'bold' }}>Address</Typography>
-              <Card sx={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
-                <Typography variant='body2'>
-                  {dataAddress[0]?.address_line1 && ` ${dataAddress[0]?.address_line1}`}
-                </Typography>
                 <CardActions className='card-action-dense'>
                   <Dialog
                     open={isOpenDetailAddress}
@@ -200,6 +190,7 @@ const ContactAndAddressPurchaseInvoice = ({ dataRow }) => {
                       }
                     }}
                   >
+                    {' '}
                     <DialogTitle>Edit Address</DialogTitle>
                     <DialogContent>
                       <Card sx={{ width: '100%', p: 5 }}>
@@ -345,6 +336,16 @@ const ContactAndAddressPurchaseInvoice = ({ dataRow }) => {
                     </DialogContent>
                   </Dialog>
                 </CardActions>
+              </Card>
+            </CardContent>
+          </Grid>
+          <Grid item xs={12}>
+            <CardContent>
+              <Typography sx={{ fontWeight: 'bold' }}>Address</Typography>
+              <Card sx={{ padding: '16px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#f9f9f9' }}>
+                <Typography variant='body2'>
+                  {dataAddress[0]?.address_line1 && ` ${dataAddress[0]?.address_line1}`}
+                </Typography>
               </Card>
               <Divider sx={{ margin: 0, my: 5 }} />
               <Grid container spacing={3}>

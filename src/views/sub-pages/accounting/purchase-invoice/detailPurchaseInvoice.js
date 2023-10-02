@@ -9,13 +9,10 @@ import {
   Typography,
   Button,
   Divider,
-  Collapse,
-  IconButton,
   Card,
   CardMedia,
   FormControlLabel,
   Checkbox,
-  InputAdornment,
   CardHeader,
   Accordion,
   AccordionSummary,
@@ -29,10 +26,8 @@ import { DataGrid, GridExpandMoreIcon } from '@mui/x-data-grid'
 import Icon from '@mdi/react'
 import { mdiPencil } from '@mdi/js'
 
-const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
+const DetailPurchaseInvoice = ({ dataRow, handleUpdateData }) => {
   // ** State
-
-  const [currencyPrice, setCurrencyPrice] = useState(false)
 
   const [selectedRow, setSelectedRow] = useState(null)
   const [openDialog, setOpenDialog] = useState(false)
@@ -74,31 +69,15 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
   }
 
   const handleCheckboxChange = event => {
-    console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
+    handleUpdateData(event.target.name, event.target.checked === true ? 1 : 0)
   }
 
   const handleTextChange = event => {
-    console.log('Text ถูกเปลี่ยนแปลงเป็น:', event.target.value)
-    setDataRow({ ...dataRow, [event.target.name]: event.target.value })
+    handleUpdateData(event.target.name, event.target.value)
   }
 
-  const handleNumChange = (event, NumberTotal) => {
-    const newValue = event.target.value
-
-    // ตรวจสอบว่าค่าที่ผู้ใช้ป้อนเป็นตัวเลขที่ถูกต้องหรือไม่
-    if (/^\d+(\.\d{0,4})?$/.test(newValue)) {
-      setDataRow({
-        ...dataRow,
-        [NumberTotal]: newValue
-      })
-    } else {
-      // Input is not a valid number, clear the field
-      setDataRow({
-        ...dataRow,
-        [NumberTotal]: ''
-      })
-    }
+  const handleSelectChange = event => {
+    handleUpdateData(event.target.name, event.target.value)
   }
 
   const handleBlur = NumberTotal => {
@@ -162,10 +141,10 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
     { field: 'amount', headerName: 'Amount (THB) *', width: 150, valueFormatter: formatCurrency },
     {
       field: 'icon',
-      headerName: 'Icon',
+      headerName: 'Edit',
       width: 150,
       renderCell: params => (
-        <Typography sx={{ display: 'flex' }}>
+        <Typography sx={{ display: 'flex', cursor: 'pointer' }}>
           <Icon path={mdiPencil} size={1} />
           &nbsp; Edit
         </Typography>
@@ -281,60 +260,52 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
         </Grid>
       </Card>
 
-      <Box sx={styles.box}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Accordion>
-              <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-                <Typography>Currency and Price List</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Box sx={{ p: 2 }}>
-                  <Divider />
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} md={6}>
-                      <Box sx={styles.box}>
-                        <Typography variant='subtitle1'>Currency</Typography>
-                        <TextField
-                          fullWidth
-                          disabled
-                          variant='outlined'
-                          name='currency'
-                          value={dataRow.currency}
-                          onChange={handleTextChange}
-                          sx={styles.textField}
-                        />
-                      </Box>
-                    </Grid>
-
-                    <Grid item xs={12} md={6}>
-                      <Box sx={styles.box}>
-                        <Typography variant='subtitle1'>Price List *</Typography>
-                        <TextField
-                          fullWidth
-                          disabled
-                          variant='outlined'
-                          name='selling_price_list'
-                          value={dataRow.buying_price_list}
-                          onChange={handleTextChange}
-                          sx={styles.textField}
-                        />
-                      </Box>
-
-                      <FormControlLabel
-                        control={
-                          <Checkbox checked={dataRow?.ignore_pricing_rule === 1} onChange={handleCheckboxChange} />
-                        }
-                        label='Ignore Pricing Rule'
-                      />
-                    </Grid>
-                  </Grid>
+      <Accordion>
+        <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+          <Typography>Currency and Price List</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Divider />
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <Box sx={styles.box}>
+                  <Typography variant='subtitle1'>Currency</Typography>
+                  <TextField
+                    fullWidth
+                    disabled
+                    variant='outlined'
+                    name='currency'
+                    value={dataRow.currency}
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
                 </Box>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-        </Grid>
-      </Box>
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <Box sx={styles.box}>
+                  <Typography variant='subtitle1'>Price List *</Typography>
+                  <TextField
+                    fullWidth
+                    disabled
+                    variant='outlined'
+                    name='selling_price_list'
+                    value={dataRow.buying_price_list}
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
+                </Box>
+
+                <FormControlLabel
+                  control={<Checkbox checked={dataRow?.ignore_pricing_rule === 1} onChange={handleCheckboxChange} />}
+                  label='Ignore Pricing Rule'
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
 
       <Card sx={styles.card}>
         {/* /                   แสดงข่อมูลชุด Item ที่เป็น DataGit                               / */}
@@ -1158,7 +1129,7 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
         <Box>
           {dataRow?.taxes?.length > 0 && (
             <DataGrid
-              sx={{ width: 'full', mt: 6 }}
+              sx={{ width: 'full', mt: 6, cursor: 'pointer' }}
               rows={dataRow?.taxes || []} // Use optional chaining for dataRow.taxes
               columns={column}
               getRowId={row => row.name}
@@ -1568,88 +1539,83 @@ const DetailPurchaseInvoice = ({ dataRow, setDataRow }) => {
         </Grid>
       </Card>
 
-      <Box sx={styles.box}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Accordion>
-              <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-                <Typography>Additional Discount</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Box sx={{ p: 2 }}>
-                  <Divider />
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} md={6}>
-                      <Box sx={styles.box}>
-                        <Typography variant='subtitle1'>Apply Additional Discount On</Typography>
-                        <TextField
-                          fullWidth
-                          disabled
-                          variant='outlined'
-                          name='apply_discount_on'
-                          value={dataRow.apply_discount_on}
-                          onChange={handleTextChange}
-                          sx={styles.textField}
-                        />
-                      </Box>
-                    </Grid>
-
-                    <Grid item xs={12} md={6}>
-                      <Box sx={styles.box}>
-                        <Typography variant='subtitle1'>Additional Discount Percentage</Typography>
-                        <TextField
-                          fullWidth
-                          disabled
-                          variant='outlined'
-                          name='additional_discount_percentage'
-                          value={dataRow.additional_discount_percentage}
-                          onChange={handleTextChange}
-                          sx={styles.textField}
-                        />
-                      </Box>
-
-                      <Box sx={styles.box}>
-                        <Typography variant='subtitle1'>Additional Discount Amount (THB)</Typography>
-                        <TextField
-                          fullWidth
-                          disabled
-                          variant='outlined'
-                          name='selling_price_list'
-                          value={`฿ ${parseFloat(dataRow.discount_amount).toLocaleString('en-US', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                          })}`}
-                          onChange={handleTextChange}
-                          sx={styles.textField}
-                        />
-                      </Box>
-                    </Grid>
-                  </Grid>
+      <Accordion>
+        <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+          <Typography>Additional Discount</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Divider />
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <Box sx={styles.box}>
+                  <Typography variant='subtitle1'>Apply Additional Discount On</Typography>
+                  <TextField
+                    fullWidth
+                    disabled
+                    variant='outlined'
+                    name='apply_discount_on'
+                    value={dataRow.apply_discount_on}
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
                 </Box>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-        </Grid>
-        <Accordion>
-          <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
-            <Typography> Tax Breakup</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box sx={{ p: 2 }}>
-              <Divider />
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Box sx={styles.box}>
-                    <table style={{ width: '100%', fontSize: '10.6px', textAlign: 'left' }}>
-                      <tbody dangerouslySetInnerHTML={{ __html: dataRow.other_charges_calculation }} />
-                    </table>
-                  </Box>
-                </Grid>
               </Grid>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-      </Box>
+
+              <Grid item xs={12} md={6}>
+                <Box sx={styles.box}>
+                  <Typography variant='subtitle1'>Additional Discount Percentage</Typography>
+                  <TextField
+                    fullWidth
+                    disabled
+                    variant='outlined'
+                    name='additional_discount_percentage'
+                    value={dataRow.additional_discount_percentage}
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
+                </Box>
+
+                <Box sx={styles.box}>
+                  <Typography variant='subtitle1'>Additional Discount Amount (THB)</Typography>
+                  <TextField
+                    fullWidth
+                    disabled
+                    variant='outlined'
+                    name='selling_price_list'
+                    value={`฿ ${parseFloat(dataRow.discount_amount).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })}`}
+                    onChange={handleTextChange}
+                    sx={styles.textField}
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion>
+        <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+          <Typography> Tax Breakup</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Divider />
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Box sx={styles.box}>
+                  <table style={{ width: '100%', fontSize: '10.6px', textAlign: 'left' }}>
+                    <tbody dangerouslySetInnerHTML={{ __html: dataRow.other_charges_calculation }} />
+                  </table>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
     </Box>
   )
 }
