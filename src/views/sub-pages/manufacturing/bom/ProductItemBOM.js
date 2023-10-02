@@ -20,7 +20,10 @@ import {
   DialogContentText,
   DialogActions,
   Card,
-  InputAdornment
+  InputAdornment,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
 } from '@mui/material'
 import Collapse from '@mui/material/Collapse'
 import { useEffect, useState } from 'react'
@@ -31,6 +34,7 @@ import ChevronDown from 'mdi-material-ui/ChevronDown'
 import IconButton from '@mui/material/IconButton'
 import { DataGrid } from '@mui/x-data-grid'
 import axios from 'axios'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const ProductItemBOM = ({ dataRow, setDataRow }) => {
   const [collapseConfig, setCollapseConfig] = useState([])
@@ -132,32 +136,51 @@ const ProductItemBOM = ({ dataRow, setDataRow }) => {
     alignItems: 'center'
   }
 
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
+
   return (
-    <Card sx={{ p: 4 }}>
-      <Grid>
+    <Box>
+      <Card sx={styles.card}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
-            <Typography>Item</Typography>
-            <TextField size='small' variant='filled' label='' value={dataRow.item || ''} fullWidth />
-            <Typography variant='subtitle2' sx={{ marginBottom: 5 }}>
-              Item to be manufactured or repacked
-            </Typography>
+            <Box sx={styles.box}>
+              <Typography>Item</Typography>
+              <TextField sx={styles.textField} variant='outlined' label='' value={dataRow.item || ''} fullWidth />
+              <Typography variant='subtitle2'>Item to be manufactured or repacked</Typography>
+            </Box>
 
-            <Typography>Item UOM</Typography>
-            <TextField
-              size='small'
-              variant='filled'
-              label=''
-              fullWidth
-              value={dataRow.uom || ''}
-              sx={{ marginBottom: 5 }}
-            />
+            <Box sx={styles.box}>
+              <Typography>Item UOM</Typography>
+              <TextField variant='outlined' label='' fullWidth value={dataRow.uom || ''} sx={styles.textField} />
+            </Box>
 
-            <Typography>Quantity</Typography>
-            <TextField size='small' variant='filled' label='' value={dataRow.quantity} fullWidth disabled />
-            <Typography variant='subtitle2'>
-              Quantity of item obtained after manufacturing / repacking from given quantities of raw materials
-            </Typography>
+            <Box sx={styles.box}>
+              <Typography>Quantity</Typography>
+              <TextField
+                variant='outlined'
+                label=''
+                value={dataRow.quantity || ''}
+                fullWidth
+                disabled
+                sx={styles.textField}
+              />
+              <Typography variant='subtitle2'>
+                Quantity of item obtained after manufacturing / repacking from given quantities of raw materials
+              </Typography>
+            </Box>
           </Grid>
 
           <Grid item xs={12} md={6}>
@@ -199,56 +222,54 @@ const ProductItemBOM = ({ dataRow, setDataRow }) => {
             </Grid>
           </Grid>
         </Grid>
+      </Card>
+      <Grid>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography sx={{ fontWeight: 'bold', p: 0 }}> Cost Configuration</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box>
+              <Divider sx={{ margin: 0 }} />
+              <CardContent>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
+                      <Typography>Rate Of Materials Based On</Typography>
+                      <FormControl variant='outlined' fullWidth sx={styles.textField}>
+                        <InputLabel id='demo-simple-select-filled-label'></InputLabel>
+                        <Select
+                          sx={{ marginBottom: 5 }}
+                          labelId='demo-simple-select-filled-label'
+                          id='demo-simple-select-filled'
 
-        <Grid sx={{ mt: 10, display: 'flex' }}>
-          <Button size='small' variant='filled' label='' onClick={handleChickConfig} sx={{ fontWeight: 'bold' }}>
-            Cost Configuration
-          </Button>
-          <Box>
-            <IconButton size='small' onClick={handleChickConfig}>
-              {collapseConfig ? (
-                <ChevronUp sx={{ fontSize: '1.875rem' }} />
-              ) : (
-                <ChevronDown sx={{ fontSize: '1.875rem' }} />
-              )}
-            </IconButton>
-          </Box>
-        </Grid>
-        <Box>
-          <Collapse in={collapseConfig}>
-            <Divider sx={{ margin: 0 }} />
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                  <Typography>Rate Of Materials Based On</Typography>
-                  <FormControl variant='filled' fullWidth size='small' sx={{ minHeight: 26 }}>
-                    <InputLabel id='demo-simple-select-filled-label'></InputLabel>
-                    <Select
-                      sx={{ marginBottom: 5 }}
-                      labelId='demo-simple-select-filled-label'
-                      id='demo-simple-select-filled'
+                          // value={dataCustomerType}
+                          // onChange={handleChange}
+                        >
+                          <MenuItem value={10}>Valuation Rate</MenuItem>
+                          <MenuItem value={20}>Last Purchase Rate</MenuItem>
+                          <MenuItem value={30}>Price List</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </Grid>
 
-                      // value={dataCustomerType}
-                      // onChange={handleChange}
-                    >
-                      <MenuItem value={10}>Valuation Rate</MenuItem>
-                      <MenuItem value={20}>Last Purchase Rate</MenuItem>
-                      <MenuItem value={30}>Price List</MenuItem>
-                    </Select>
-                  </FormControl>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
+                      <Typography>Currency</Typography>
+                      <TextField sx={styles.textField} variant='outlined' label='' value={dataRow.currency} fullWidth />
+                    </Box>
+                  </Grid>
                 </Grid>
-
-                <Grid item xs={12} md={6}>
-                  <Typography>Currency</Typography>
-                  <TextField size='small' variant='filled' label='' value={dataRow.currency} fullWidth />
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Collapse>
-        </Box>
+              </CardContent>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+      </Grid>
+      <Card sx={styles.card}>
         <Box>
           <Box sx={{ mt: 6 }}>
-            <Typography variant='h6'>Raw Materials</Typography>
+            <Typography sx={{ fontWeight: 'bold', p: 0 }}>Raw Materials</Typography>
           </Box>
           <Box sx={{ mt: 8 }}>
             <Typography>Item</Typography>
@@ -267,53 +288,57 @@ const ProductItemBOM = ({ dataRow, setDataRow }) => {
             />
           </Box>
         </Box>
-
-        <Box>
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby='alert-dialog-title'
-            aria-describedby='alert-dialog-description'
-            maxWidth={'lg'}
-            PaperProps={{
-              style: {
-                width: '60%',
-                height: '60%',
-                margin: 0,
-                maxWidth: 'none',
-                maxHeight: 'none'
-              }
-            }}
-          >
-            <DialogTitle id='Editing Row #' sx={{ display: 'flex' }}>
-              {'Editing Row #'}
-              <Typography variant='h6'>{getItemTable.idx}</Typography>
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id='alert-dialog-description'>
-                <Grid>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} md={6}>
+      </Card>
+      <Box>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'
+          maxWidth={'lg'}
+          PaperProps={{
+            style: {
+              width: '60%',
+              height: '60%',
+              margin: 0,
+              maxWidth: 'none',
+              maxHeight: 'none'
+            }
+          }}
+        >
+          <DialogTitle id='Editing Row #' sx={{ display: 'flex' }}>
+            {'Editing Row #'}
+            <Typography variant='h6'>{getItemTable.idx}</Typography>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id='alert-dialog-description'>
+              <Grid>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
                       <Typography>Item Code</Typography>
                       <TextField
-                        size='small'
-                        variant='filled'
+                        variant='outlined'
                         value={getItemTable.item_code || ''}
                         fullWidth
-                        sx={{ mb: 5 }}
+                        sx={styles.textField}
                       />
+                    </Box>
 
+                    <Box sx={styles.box}>
                       <Typography>Item Name</Typography>
                       <TextField
-                        size='small'
-                        variant='filled'
+                        sx={styles.textField}
+                        variant='outlined'
                         value={getItemTable.item_name || ''}
                         fullWidth
                         disabled
                       />
-                    </Grid>
+                    </Box>
+                  </Grid>
 
-                    <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
                       <Grid sx={checkboxStyle}>
                         <Checkbox
                           checked={dataRow.do_not_explode === 1 ? true : false}
@@ -333,104 +358,113 @@ const ProductItemBOM = ({ dataRow, setDataRow }) => {
                         />
                         <Typography variant='subtitle2'>Allow Alternative Item</Typography>
                       </Grid>
-                    </Grid>
+                    </Box>
+                  </Grid>
+                </Grid>
+
+                <Box>
+                  <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                      <Typography sx={{ fontWeight: 'bold', p: 0 }}> Discription</Typography>
+                    </AccordionSummary>
+
+                    <AccordionDetails>
+                      <Divider sx={{ margin: 0 }} />
+                      <CardContent>
+                        <Grid container spacing={3}>
+                          <Grid item xs={12} md={6}>
+                            <Typography>Item Description</Typography>
+                            <TextField
+                              size='small'
+                              variant='filled'
+                              value={getItemTable.description || ''}
+                              fullWidth
+                              disabled
+                            />
+                          </Grid>
+                          <Grid item xs={12} md={6}>
+                            <Box sx={{ height: 100, width: 100, backgroundColor: '#e0e0e0' }}></Box>
+                          </Grid>
+                        </Grid>
+                      </CardContent>
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
+
+                <Box sx={{ ml: 2, mt: 6 }}>
+                  <Typography sx={{ fontWeight: 'bold' }}>Quantity and Rate</Typography>
+                </Box>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
+                      <Typography>Qty</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={getItemTable.qty || ''}
+                        fullWidth
+                        disabled
+                      />
+                    </Box>
+
+                    <Box sx={styles.box}>
+                      <Typography>UOM</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={getItemTable.uom || ''}
+                        fullWidth
+                        disabled
+                      />
+                    </Box>
                   </Grid>
 
-                  <Box>
-                    <Box sx={{ mt: 10, display: 'flex' }}>
-                      <Button
-                        size='small'
-                        variant='filled'
-                        label=''
-                        onClick={handleChickDiscription}
-                        sx={{ fontWeight: 'bold' }}
-                      >
-                        Discription
-                      </Button>
-                      <CardActions className='card-action-dense'>
-                        <IconButton size='small' onClick={handleChickDiscription}>
-                          {collapseDiscription ? (
-                            <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                          ) : (
-                            <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                          )}
-                        </IconButton>
-                      </CardActions>
-                    </Box>
-                  </Box>
-
-                  <Collapse in={collapseDiscription}>
-                    <Divider sx={{ margin: 0 }} />
-                    <CardContent>
-                      <Grid container spacing={3}>
-                        <Grid item xs={12} md={6}>
-                          <Typography>Item Description</Typography>
-                          <TextField
-                            size='small'
-                            variant='filled'
-                            value={getItemTable.description || ''}
-                            fullWidth
-                            disabled
-                          />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                          <Box sx={{ height: 100, width: 100, backgroundColor: '#e0e0e0' }}></Box>
-                        </Grid>
-                      </Grid>
-                    </CardContent>
-                  </Collapse>
-
-                  <Box sx={{ ml: 2, mt: 6 }}>
-                    <Typography sx={{ fontWeight: 'bold' }}>Quantity and Rate</Typography>
-                  </Box>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} md={6}>
-                      <Typography>Qty</Typography>
-                      <TextField size='small' variant='filled' value={getItemTable.qty || ''} fullWidth disabled />
-
-                      <Typography>UOM</Typography>
-                      <TextField size='small' variant='filled' value={getItemTable.uom || ''} fullWidth disabled />
-                    </Grid>
-
-                    <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
                       <Typography>Stock Qty</Typography>
                       <TextField
-                        size='small'
-                        variant='filled'
+                        sx={styles.textField}
+                        variant='outlined'
                         value={getItemTable.stock_qty || ''}
                         fullWidth
                         disabled
                       />
+                    </Box>
 
+                    <Box sx={styles.box}>
                       <Typography>Stock UOM</Typography>
                       <TextField
-                        size='small'
-                        variant='filled'
+                        sx={styles.textField}
+                        variant='outlined'
                         value={getItemTable.stock_uom || ''}
                         fullWidth
                         disabled
                       />
+                    </Box>
 
+                    <Box sx={styles.box}>
                       <Typography>Conversion Factor</Typography>
                       <TextField
-                        size='small'
-                        variant='filled'
+                        sx={styles.textField}
+                        variant='outlined'
                         value={getItemTable.conversion_factor || ''}
                         fullWidth
                         disabled
                       />
-                    </Grid>
+                    </Box>
                   </Grid>
+                </Grid>
 
-                  <Box sx={{ ml: 2, my: 6 }}>
-                    <Typography sx={{ fontWeight: 'bold' }}>Rate & Amount</Typography>
-                  </Box>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12} md={6}>
+                <Box sx={{ ml: 2, my: 6 }}>
+                  <Typography sx={{ fontWeight: 'bold' }}>Rate & Amount</Typography>
+                </Box>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
                       <Typography>Rate (THB)</Typography>
                       <TextField
-                        size='small'
-                        variant='filled'
+                        sx={styles.textField}
+                        variant='outlined'
                         value={
                           getItemTable?.rate === '0.0'
                             ? '฿ 0.0'
@@ -443,11 +477,13 @@ const ProductItemBOM = ({ dataRow, setDataRow }) => {
                         name='rate'
                         disabled
                       />
+                    </Box>
 
+                    <Box sx={styles.box}>
                       <Typography>Basic Rate (THB)</Typography>
                       <TextField
-                        size='small'
-                        variant='filled'
+                        sx={styles.textField}
+                        variant='outlined'
                         value={
                           getItemTable?.base_rate === '0.0'
                             ? '฿ 0.0'
@@ -460,13 +496,15 @@ const ProductItemBOM = ({ dataRow, setDataRow }) => {
                         name='base_rate'
                         disabled
                       />
-                    </Grid>
+                    </Box>
+                  </Grid>
 
-                    <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={6}>
+                    <Box sx={styles.box}>
                       <Typography>Amount (THB)</Typography>
                       <TextField
-                        size='small'
-                        variant='filled'
+                        sx={styles.textField}
+                        variant='outlined'
                         value={
                           getItemTable?.amount === '0.0'
                             ? '฿ 0.0'
@@ -479,11 +517,12 @@ const ProductItemBOM = ({ dataRow, setDataRow }) => {
                         name='amount'
                         disabled
                       />
-
+                    </Box>
+                    <Box sx={styles.box}>
                       <Typography>Amount (THB)</Typography>
                       <TextField
-                        size='small'
-                        variant='filled'
+                        sx={styles.textField}
+                        variant='outlined'
                         value={
                           getItemTable?.base_amount === '0.0'
                             ? '฿ 0.0'
@@ -496,58 +535,58 @@ const ProductItemBOM = ({ dataRow, setDataRow }) => {
                         name='base_amount'
                         disabled
                       />
-                    </Grid>
+                    </Box>
+                  </Grid>
 
-                    <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
+                  <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
 
-                    <Grid container spacing={3}>
-                      <Grid item xs={12} md={6}>
-                        <Grid sx={checkboxStyle}>
-                          <Checkbox
-                            checked={getItemTable.has_variants === 1 ? true : false}
-                            name='has_variants'
-                            onChange={handleCheckboxChange}
-                            disabled
-                          />
-                          <Typography variant='subtitle2'>Has Variants</Typography>
-                        </Grid>
-
-                        <Grid sx={checkboxStyle}>
-                          <Checkbox
-                            checked={getItemTable.include_item_in_manufacturing === 1 ? true : false}
-                            name='include_item_in_manufacturing'
-                            onChange={handleCheckboxChange}
-                            disabled
-                          />
-                          <Typography variant='subtitle2'>Include Item In Manufacturing</Typography>
-                        </Grid>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} md={6}>
+                      <Grid sx={checkboxStyle}>
+                        <Checkbox
+                          checked={getItemTable.has_variants === 1 ? true : false}
+                          name='has_variants'
+                          onChange={handleCheckboxChange}
+                          disabled
+                        />
+                        <Typography variant='subtitle2'>Has Variants</Typography>
                       </Grid>
 
-                      <Grid item xs={12} md={6}>
-                        <Grid sx={checkboxStyle}>
-                          <Checkbox
-                            checked={getItemTable.sourced_by_supplier === 1 ? true : false}
-                            name='sourced_by_supplier'
-                            onChange={handleCheckboxChange}
-                            disabled
-                          />
-                          <Typography variant='subtitle2'>Sourced by Supplier</Typography>
-                        </Grid>
+                      <Grid sx={checkboxStyle}>
+                        <Checkbox
+                          checked={getItemTable.include_item_in_manufacturing === 1 ? true : false}
+                          name='include_item_in_manufacturing'
+                          onChange={handleCheckboxChange}
+                          disabled
+                        />
+                        <Typography variant='subtitle2'>Include Item In Manufacturing</Typography>
+                      </Grid>
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+                      <Grid sx={checkboxStyle}>
+                        <Checkbox
+                          checked={getItemTable.sourced_by_supplier === 1 ? true : false}
+                          name='sourced_by_supplier'
+                          onChange={handleCheckboxChange}
+                          disabled
+                        />
+                        <Typography variant='subtitle2'>Sourced by Supplier</Typography>
                       </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
-                <DialogActions>
-                  <Button onClick={handleClose} autoFocus>
-                    Insert Below
-                  </Button>
-                </DialogActions>
-              </DialogContentText>
-            </DialogContent>
-          </Dialog>
-        </Box>
-      </Grid>
-    </Card>
+              </Grid>
+              <DialogActions>
+                <Button onClick={handleClose} autoFocus>
+                  Insert Below
+                </Button>
+              </DialogActions>
+            </DialogContentText>
+          </DialogContent>
+        </Dialog>
+      </Box>
+    </Box>
   )
 }
 

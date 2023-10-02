@@ -30,7 +30,7 @@ const BomPage = ({ data }) => {
     <ScapAndProcessLoss key={'scap'} dataRow={dataRow} setDataRow={setDataRow} />,
     <Costing key={'costing'} dataRow={dataRow} setDataRow={setDataRow} />,
     <MoreInfoBOM key={'moreinfo'} dataRow={dataRow} setDataRow={setDataRow} />,
-    <WebsiteBOM key={'moreinfo'} dataRow={dataRow} setDataRow={setDataRow} />,
+    <WebsiteBOM key={'website'} dataRow={dataRow} setDataRow={setDataRow} />,
     <ConnectionsBOM key={'connection'} dataRow={dataRow} setDataRow={setDataRow} />
   ]
 
@@ -44,6 +44,7 @@ const BomPage = ({ data }) => {
       setDataRow={setDataRow}
       doctype='BOM'
       docStatusName='disabled'
+      noTabContent={[]}
     />
   )
 }
