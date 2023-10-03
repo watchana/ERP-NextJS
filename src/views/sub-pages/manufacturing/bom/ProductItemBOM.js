@@ -223,49 +223,49 @@ const ProductItemBOM = ({ dataRow, setDataRow }) => {
           </Grid>
         </Grid>
       </Card>
-      <Grid>
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography sx={{ fontWeight: 'bold', p: 0 }}> Cost Configuration</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box>
-              <Divider sx={{ margin: 0 }} />
-              <CardContent>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
-                    <Box sx={styles.box}>
-                      <Typography>Rate Of Materials Based On</Typography>
-                      <FormControl variant='outlined' fullWidth sx={styles.textField}>
-                        <InputLabel id='demo-simple-select-filled-label'></InputLabel>
-                        <Select
-                          sx={{ marginBottom: 5 }}
-                          labelId='demo-simple-select-filled-label'
-                          id='demo-simple-select-filled'
 
-                          // value={dataCustomerType}
-                          // onChange={handleChange}
-                        >
-                          <MenuItem value={10}>Valuation Rate</MenuItem>
-                          <MenuItem value={20}>Last Purchase Rate</MenuItem>
-                          <MenuItem value={30}>Price List</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Box>
-                  </Grid>
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography sx={{ fontWeight: 'bold', p: 0 }}> Cost Configuration</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box>
+            <Divider sx={{ margin: 0 }} />
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
+                    <Typography>Rate Of Materials Based On</Typography>
+                    <FormControl variant='outlined' fullWidth sx={styles.textField}>
+                      <InputLabel id='demo-simple-select-filled-label'></InputLabel>
+                      <Select
+                        sx={{ marginBottom: 5 }}
+                        labelId='demo-simple-select-filled-label'
+                        id='demo-simple-select-filled'
 
-                  <Grid item xs={12} md={6}>
-                    <Box sx={styles.box}>
-                      <Typography>Currency</Typography>
-                      <TextField sx={styles.textField} variant='outlined' label='' value={dataRow.currency} fullWidth />
-                    </Box>
-                  </Grid>
+                        // value={dataCustomerType}
+                        // onChange={handleChange}
+                      >
+                        <MenuItem value={10}>Valuation Rate</MenuItem>
+                        <MenuItem value={20}>Last Purchase Rate</MenuItem>
+                        <MenuItem value={30}>Price List</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
                 </Grid>
-              </CardContent>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-      </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Box sx={styles.box}>
+                    <Typography>Currency</Typography>
+                    <TextField sx={styles.textField} variant='outlined' label='' value={dataRow.currency} fullWidth />
+                  </Box>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+
       <Card sx={styles.card}>
         <Box>
           <Box sx={{ mt: 6 }}>
