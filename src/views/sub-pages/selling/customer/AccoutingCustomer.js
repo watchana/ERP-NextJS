@@ -160,32 +160,28 @@ const AccountingCustomer = ({ dataRow, setDataRow, handleUpdateData }) => {
             />
           </Grid>
         </Grid>
-        <Divider sx={{ margin: 0, my: 5, width: '100%', ml: 3 }} />
-        <Grid container sx={{ mb: 5 }}>
-          <Grid item sx={{ width: '100%' }}>
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography sx={{ fontWeight: 'bold', p: 0 }}> More Infomation</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container spacing={2} sx={{ mt: 5 }} style={{ width: '100%' }}>
-                  <Grid item xs={12}>
-                    <Typography sx={{ marginBottom: 2 }}>Loyalty Program</Typography>
-                    <TextField
-                      sx={styles.textField}
-                      variant='outlined'
-                      value={dataRow.loyalty_program || ''}
-                      fullWidth
-                      onChange={handleTextChange}
-                      name='loyalty_program'
-                    />
-                  </Grid>
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-        </Grid>
       </Card>
+
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography sx={{ fontWeight: 'bold', p: 0 }}> More Infomation</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Grid container spacing={2} style={{ width: '100%' }}>
+            <Grid item xs={12}>
+              <Typography sx={{ marginBottom: 2 }}>Loyalty Program</Typography>
+              <TextField
+                sx={styles.textField}
+                variant='outlined'
+                value={dataRow.loyalty_program || ''}
+                fullWidth
+                onChange={handleTextChange}
+                name='loyalty_program'
+              />
+            </Grid>
+          </Grid>
+        </AccordionDetails>
+      </Accordion>
     </Box>
   )
 }

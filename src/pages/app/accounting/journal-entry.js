@@ -41,6 +41,7 @@ const JournalEntryPage = ({ data }) => {
       setDataUpdate={setDataUpdate}
       editStatus={editStatus}
       setEditStatus={setEditStatus}
+      noTabContent={[]}
     />
   )
 }
