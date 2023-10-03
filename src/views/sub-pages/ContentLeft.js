@@ -80,7 +80,7 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName, si
         case 'Created On':
           return (a, b) => new Date(a.creation) - new Date(b.creation)
         case 'Most Used':
-          // ยังไม่ได้ระบุการเรียงลำดับสำหรับ 'Most Used'
+          // ! ยังไม่ได้ระบุการเรียงลำดับสำหรับ 'Most Used'
           return (a, b) => 0
         default:
           return (a, b) => 0
@@ -95,7 +95,7 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName, si
       copiedData.sort((a, b) => sortData()(b, a))
     }
 
-    // เพิ่มเงื่อนไขเพื่อป้องกัน loop
+    // ? เพิ่มเงื่อนไขเพื่อป้องกัน loop
     if (JSON.stringify(data) !== JSON.stringify(copiedData)) {
       setData(copiedData)
       setShowData(copiedData)
@@ -111,7 +111,7 @@ const ContentLeft = ({ data, setData, handleRowClick, doctype, docStatusName, si
       setShowData(data)
     } else {
       {
-        // ค้นหาคำที่คล้ายคลึงกับคำที่คุณค้นหา
+        // ? ค้นหาคำที่คล้ายคลึงกับคำที่คุณค้นหา
         const matches = data.filter(item => item.name.toLowerCase().includes(value.toLowerCase()))
 
         setShowData(matches)

@@ -41,7 +41,7 @@ function CardGuideVue({ MenuButton, RightSideContent }) {
       <Card style={{ background: theme.palette.secondary.E }} sx={{ mb: 5, width: '100%', height: 'auto' }}>
         <CardContent>
           <Grid container spacing={4} sx={{ width: '100%' }}>
-            <Grid item sm={12} xs={12} md={4}>
+            <Grid item sm={12} md={4}>
               {MenuButton.map(item => (
                 <Box sx={{ width: 'auto', marginBlock: 2 }} key={item.id}>
                   <Button
@@ -66,7 +66,7 @@ function CardGuideVue({ MenuButton, RightSideContent }) {
             </Grid>
 
             {/* /////////////// ข้อมูลใน BOX ขวา /////////////////// */}
-            <Grid item sm={12} xs={12} md={8}>
+            <Grid item sm={12} md={8}>
               <Box>
                 <Card
                   sx={{
