@@ -40,9 +40,11 @@ const SalesItem = ({ dataRow, handleUpdateData }) => {
     handleUpdateData(event.target.name, event.target.value)
   }
 
+  const heightValue = dataRow?.supplier_items?.length === 0 || dataRow.supplier_items === undefined ? 300 : 'auto'
+
   const styles = {
     dataGrid: {
-      height: dataRow.supplier_items.length === 0 ? 300 : 'auto'
+      height: heightValue
     }
   }
 
@@ -167,7 +169,7 @@ const SalesItem = ({ dataRow, handleUpdateData }) => {
             </Typography>
             <DataGrid
               style={styles.dataGrid}
-              rows={dataRow.customer_items}
+              rows={dataRow.customer_items || []}
               columns={columnsCustomer}
               getRowId={row => row.name} // ระบุ id โดยใช้ค่า name
               initialState={{

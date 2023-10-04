@@ -190,44 +190,44 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
             </Box>
           </Grid>
         </Grid>
+      </Card>
 
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Description</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box sx={{ p: 2 }}>
-              <Divider />
-              <Typography variant='subtitle2'>Description</Typography>
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography>Description</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ p: 2 }}>
+            <Divider />
+            <Typography variant='subtitle2'>Description</Typography>
+            <TextField
+              fullWidth
+              multiline
+              size='small'
+              variant='outlined'
+              rows={4}
+              value={dataRow.description}
+              name='description'
+              onChange={handleTextChange}
+              sx={styles.textField}
+            />
+
+            <Box>
+              <Typography variant='subtitle1'>Brand</Typography>
               <TextField
                 fullWidth
-                multiline
+                disabled
                 size='small'
                 variant='outlined'
-                rows={4}
-                value={dataRow.description}
-                name='description'
+                name='brand'
+                value={dataRow.brand}
                 onChange={handleTextChange}
                 sx={styles.textField}
               />
-
-              <Box>
-                <Typography variant='subtitle1'>Brand</Typography>
-                <TextField
-                  fullWidth
-                  disabled
-                  size='small'
-                  variant='outlined'
-                  name='brand'
-                  value={dataRow.brand}
-                  onChange={handleTextChange}
-                  sx={styles.textField}
-                />
-              </Box>
             </Box>
-          </AccordionDetails>
-        </Accordion>
-      </Card>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
     </Box>
   )
 }

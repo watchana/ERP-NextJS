@@ -15,6 +15,14 @@ const columnsAcc = [
 const AccountingItem = ({ dataRow }) => {
   if (!dataRow) return <Skeleton variant='rounded' width={210} height={60} />
 
+  const heightValue = dataRow?.item_defaults?.length === 0 || dataRow?.item_defaults === undefined ? 300 : 'auto'
+
+  const styles = {
+    dataGrid: {
+      height: heightValue
+    }
+  }
+
   return (
     <Box>
       <Card
@@ -30,8 +38,8 @@ const AccountingItem = ({ dataRow }) => {
         </Typography>
         <Box>
           <DataGrid
-            sx={{ height: dataRow.taxes.length === 0 ? 300 : 'auto' }}
-            rows={dataRow.item_defaults}
+            sx={styles.dataGrid}
+            rows={dataRow.item_defaults || []}
             columns={columnsAcc}
             getRowId={row => row.name} // ระบุ id โดยใช้ค่า name
             initialState={{
