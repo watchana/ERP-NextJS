@@ -7,7 +7,7 @@ import LayoutTwoPage from 'src/views/sub-pages/LayoutTwoPage'
 
 // ** Dummy Data
 import { ItemContentMenu, defaultMaterialRequestType } from 'src/dummy/sub-pages/stock/itemPage'
-import { CustomerContentMenu } from 'src/dummy/contentPages/customerPage'
+import { CustomerContentMenu } from 'src/dummy/sub-pages/selling/customerPage'
 
 // ** Custom Components
 import DetailCustomer from 'src/views/sub-pages/selling/customer/DetailCustomer'
