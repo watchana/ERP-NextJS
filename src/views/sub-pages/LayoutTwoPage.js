@@ -54,7 +54,6 @@ const IconButtonStyle = { bgcolor: 'white', borderRadius: 1, border: '1px solid 
 const LayoutTwoPage = ({
   data,
   setData,
-  statusUpdate,
   menuContent,
   showContent,
   dataRow,
@@ -79,14 +78,6 @@ const LayoutTwoPage = ({
   const [tabValue, setTabValue] = useState(1)
   const [buttonArrow, setButtonArrow] = useState(true)
   const [saveWarning, setSaveWarning] = useState(false)
-
-  useEffect(() => {
-    if (statusUpdate === true) {
-      dispatch(contentUpdate())
-    } else {
-      dispatch(contentDefault())
-    }
-  }, [statusUpdate, dispatch])
 
   useEffect(() => {
     // เมื่อเปลี่ยน path ไปหน้าอื่น ให้ dispatch action contentDefault()

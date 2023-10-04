@@ -17,7 +17,7 @@ const HomePage = () => {
     <Box>
       <Grid container rowSpacing={5}>
         <Grid item xs={12}>
-          <CardGuideVue MenuButton={HomeMenuButton} RightSideContent={HomeContent} />
+          <CardGuideVue menuButton={HomeMenuButton} rightSideContent={HomeContent} />
         </Grid>
         <Grid item xs={12}>
           <CardYourShortcut menus={HomeShortcut} />
