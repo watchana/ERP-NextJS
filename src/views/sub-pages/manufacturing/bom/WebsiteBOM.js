@@ -16,9 +16,14 @@ import {
   MenuItem,
   TextareaAutosize,
   IconButton,
-  Collapse
+  Collapse,
+  Card,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
 } from '@mui/material'
 import { useState } from 'react'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 //import Icon
 import { ChevronDown, ChevronUp } from 'mdi-material-ui'
@@ -40,10 +45,25 @@ const WebsiteBOM = ({ dataRow }) => {
     console.log('Checkbox ถูกเปลี่ยนแปลงเป็น:', event.target.checked)
   }
 
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
+
   return (
-    <Grid>
-      <Box>
-        <Box>
+    <Card sx={styles.card}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
           <FormGroup>
             <FormControlLabel
               control={<Checkbox checked={isShowWebsiteCheck} onChange={handleCheckShowWebsite} />}
@@ -51,41 +71,28 @@ const WebsiteBOM = ({ dataRow }) => {
               label='Show in Website'
               sx={{ ml: 0.2 }}
             />
-            <Box sx={{ mt: 8 }}>
+            <Box>
               <Typography>Route</Typography>
               <TextareaAutosize
-                style={{ minHeight: '200px', width: '40%' }}
-                size='small'
-                variant='filled'
+                variant='outlined'
                 label=''
                 value={dataRow.route}
+                style={{ minHeight: '200px', width: '100%' }}
               />
             </Box>
             {isShowWebsiteCheck && (
-              <Box sx={{ width: '70%', mt: 8 }}>
+              <Box sx={{ width: '100%', mt: 8 }}>
                 <Typography>Web site image</Typography>
                 <Button>Attach</Button>
                 <Typography variant='subtitle2' sx={{ width: '100%' }}>
                   Item Image (if not slideshow)
                 </Typography>
-                <Box sx={{ mt: 10, display: 'flex' }}>
-                  <Button size='small' variant='filled' label='' onClick={handleCickSpacifications}>
-                    <Typography variant='h6'>Website Specifications</Typography>
-                  </Button>
-                  <Box>
-                    <CardActions className='card-action-dense'>
-                      <IconButton size='small' onClick={handleCickSpacifications}>
-                        {collapsSpacifications ? (
-                          <ChevronUp sx={{ fontSize: '1.875rem' }} />
-                        ) : (
-                          <ChevronDown sx={{ fontSize: '1.875rem' }} />
-                        )}
-                      </IconButton>
-                    </CardActions>
-                  </Box>
-                </Box>
-                <Box>
-                  <Collapse in={collapsSpacifications}>
+
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography sx={{ fontWeight: 'bold', p: 0 }}> Website Specifications</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
                     <Divider sx={{ margin: 0 }} />
                     <CardContent>
                       <Box sx={{ display: 'flex' }}>
@@ -111,22 +118,14 @@ const WebsiteBOM = ({ dataRow }) => {
                         />
                       </Box>
                     </CardContent>
-                  </Collapse>
-                </Box>
+                  </AccordionDetails>
+                </Accordion>
               </Box>
             )}
           </FormGroup>
-        </Box>
-        <Box>
-          <Typography variant='h6' sx={{ m: 2 }}>
-            Add Comment
-          </Typography>
-          <TextField size='small' variant='filled' label='' multiline rows={4} fullWidth />
-          <Typography variant='subtitle2'>Ctrl+Enter to add comment</Typography>
-          <Button>add comment</Button>
-        </Box>
-      </Box>
-    </Grid>
+        </Grid>
+      </Grid>
+    </Card>
   )
 }
 

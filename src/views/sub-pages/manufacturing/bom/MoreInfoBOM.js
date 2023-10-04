@@ -5,15 +5,6 @@ import {
   TextField,
   Typography,
   Checkbox,
-  CardActions,
-  Divider,
-  CardContent,
-  FormGroup,
-  FormControlLabel,
-  Select,
-  FormControl,
-  InputLabel,
-  MenuItem,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -26,9 +17,8 @@ import axios from 'axios'
 import { BorderBottom } from 'mdi-material-ui'
 import { useEffect, useState } from 'react'
 
-const MoreInfoBOM = ({ dataRow }) => {
-  const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-  const [getMoreInfoTable, setGetMoreInfoTable] = useState('')
+const MoreInfoBOM = ({ dataRow, setDataRow }) => {
+  const [getMoreInfoTable, setGetMoreInfoTable] = useState([])
 
   const [open, setOpen] = useState(false)
 
@@ -101,16 +91,41 @@ const MoreInfoBOM = ({ dataRow }) => {
     setDataRow({ ...dataRow, [event.target.name]: event.target.checked === true ? 1 : 0 })
   }
 
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
+
   return (
     <Card sx={{ p: 4 }}>
       <Grid>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <Typography>Item Name</Typography>
-            <TextField size='small' variant='filled' label='' value={dataRow.item_name || ''} fullWidth />
+          <Grid item xs={12}>
+            <Box sx={styles.box}>
+              <Typography>Item Name</Typography>
+              <TextField sx={styles.textField} variant='outlined' label='' value={dataRow.item_name || ''} fullWidth />
+            </Box>
 
-            <Typography>Item Description</Typography>
-            <TextField size='small' variant='filled' label='' value={dataRow.description || ''} fullWidth />
+            <Box sx={styles.box}>
+              <Typography>Item Description</Typography>
+              <TextField
+                sx={styles.textField}
+                variant='outlined'
+                label=''
+                value={dataRow.description || ''}
+                fullWidth
+              />
+            </Box>
           </Grid>
         </Grid>
 
@@ -175,18 +190,38 @@ const MoreInfoBOM = ({ dataRow }) => {
               <DialogContentText id='alert-dialog-description'>
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
-                    <Typography>Item Code</Typography>
-                    <TextField size='small' variant='filled' value={getMoreInfoTable.item_code || ''} fullWidth />
-
-                    <Typography>Item Name</Typography>
-                    <TextField size='small' variant='filled' value={getMoreInfoTable.item_name || ''} fullWidth />
+                    <Box sx={styles.textField}>
+                      <Typography>Item Code</Typography>
+                      <TextField
+                        sx={styles.box}
+                        variant='outlined'
+                        value={getMoreInfoTable.item_code || ''}
+                        fullWidth
+                      />
+                    </Box>
+                    <Box sx={styles.box}>
+                      <Typography>Item Name</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={getMoreInfoTable.item_name || ''}
+                        fullWidth
+                      />
+                    </Box>
                   </Grid>
                 </Grid>
 
                 <Grid container spacing={3} sx={{ mt: 10 }}>
                   <Grid item xs={12} md={6}>
-                    <Typography>Description</Typography>
-                    <TextField size='small' variant='filled' value={getMoreInfoTable.description || ''} fullWidth />
+                    <Box sx={styles.box}>
+                      <Typography>Description</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={getMoreInfoTable.description || ''}
+                        fullWidth
+                      />
+                    </Box>
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Box sx={{ mt: 4, ml: 30, width: 100, height: 100, backgroundColor: '#e0e0e0' }}></Box>
@@ -194,27 +229,55 @@ const MoreInfoBOM = ({ dataRow }) => {
                 </Grid>
                 <Grid container spacing={3} sx={{ mt: 10 }}>
                   <Grid item xs={12} md={6}>
-                    <Typography>Stock Qty</Typography>
-                    <TextField size='small' variant='filled' value={getMoreInfoTable.stock_qty || ''} fullWidth />
+                    <Box sx={styles.box}>
+                      <Typography>Stock Qty</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={getMoreInfoTable.stock_qty || ''}
+                        fullWidth
+                      />
+                    </Box>
 
-                    <Typography>Rate</Typography>
-                    <TextField size='small' variant='filled' value={getMoreInfoTable.rate || ''} fullWidth />
+                    <Box sx={styles.box}>
+                      <Typography>Rate</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={getMoreInfoTable.rate || ''}
+                        fullWidth
+                      />
+                    </Box>
 
-                    <Typography>Qty Consumed Per Unit</Typography>
-                    <TextField
-                      size='small'
-                      variant='filled'
-                      value={getMoreInfoTable.qty_consumed_per_unit || ''}
-                      fullWidth
-                    />
+                    <Box sx={styles.box}>
+                      <Typography>Qty Consumed Per Unit</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={getMoreInfoTable.qty_consumed_per_unit || ''}
+                        fullWidth
+                      />
+                    </Box>
                   </Grid>
 
                   <Grid item xs={12} md={6}>
-                    <Typography>Stock UOM</Typography>
-                    <TextField size='small' variant='filled' value={getMoreInfoTable.stock_uom || ''} fullWidth />
+                    <Box sx={styles.box}>
+                      <Typography>Stock UOM</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={getMoreInfoTable.stock_uom || ''}
+                        fullWidth
+                      />
+                    </Box>
 
                     <Typography>Amount</Typography>
-                    <TextField size='small' variant='filled' value={getMoreInfoTable.amount || ''} fullWidth />
+                    <TextField
+                      sx={styles.textField}
+                      variant='outlined'
+                      value={getMoreInfoTable.amount || ''}
+                      fullWidth
+                    />
 
                     <Grid sx={checkboxStyle}>
                       <Checkbox

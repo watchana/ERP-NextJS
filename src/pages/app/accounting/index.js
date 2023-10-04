@@ -17,7 +17,7 @@ const AccountPage = () => {
     <Box>
       <Grid container rowSpacing={5}>
         <Grid item sm={12}>
-          <CardGuideVue MenuButton={AccountingMenuButton} RightSideContent={AccountingContent} />
+          <CardGuideVue menuButton={AccountingMenuButton} rightSideContent={AccountingContent} />
         </Grid>
         <Grid item sm={12}>
           <CardYourShortcut menus={AccountingYourShortcut} />

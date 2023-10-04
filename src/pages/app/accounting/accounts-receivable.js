@@ -34,7 +34,12 @@ const columns = [
   },
   { field: 'party', headerName: 'Customer', width: 250 },
   { field: 'account', headerName: 'Receivable Account', width: 400 },
-  { field: 'customer_contact', headerName: 'Customer Contact', width: 130 },
+  {
+    field: 'customer',
+    headerName: 'Customer Contact',
+    width: 130,
+    valueGetter: params => params.row.customer?.customer_primary_contact
+  },
   { field: 'cost_center', headerName: 'Cost Center', width: 130 },
   { field: 'voucher_type', headerName: 'Voucher Type', width: 130 },
   { field: 'voucher_no', headerName: 'Voucher No', width: 130 },
@@ -95,12 +100,14 @@ const columns = [
   {
     field: 'territory',
     headerName: 'Territory',
-    width: 130
+    width: 130,
+    valueGetter: params => params.row.customer?.territory
   },
   {
     field: 'customer_group',
     headerName: 'Customer Group',
-    width: 130
+    width: 130,
+    valueGetter: params => params.row.customer?.customer_group
   }
 ]
 
@@ -118,7 +125,7 @@ const AccountsReceivable = ({
 }) => {
   const [filterConfig, setFilterConfig] = useState({
     company: '',
-    postingDate: dayjs(),
+    postingDate: dayjs().format('YYYY-MM-DD'),
     financeBook: '',
     costCenter: '',
     customer: '',
@@ -141,6 +148,8 @@ const AccountsReceivable = ({
     showSalesPerson: false,
     showRemarks: false
   })
+
+  const [data, setData] = useState([])
 
   // ? สำหรับเพิ่ม input ในหน้าต่าง
   const inputConfigs = [
@@ -191,12 +200,24 @@ const AccountsReceivable = ({
   }
 
   useEffect(() => {
-    console.log('resData:', resData)
-  }, [resData])
+    console.log('filterConfig:', filterConfig)
 
-  console.log('resData:', resData)
+    const thresholdDate = dayjs(filterConfig.postingDate).subtract(30, 'day')
 
-  const data = resData.filter(row => row.delinked === 0)
+    const filteredData = resData.filter(row => {
+      if (filterConfig.ageingBasedOn === 'Due Date') {
+        return dayjs(row.due_date).isAfter(thresholdDate)
+      } else if (filterConfig.ageingBasedOn === 'Posting Date') {
+        return dayjs(row.posting_date).isAfter(thresholdDate)
+      }
+
+      return true // If neither conditions are met, don't filter out the row
+    })
+
+    setData(filteredData)
+  }, [filterConfig, resData])
+
+  console.log('data:', resData)
 
   return (
     <LayoutOnePageFilter title='Accounts Receivable' buttonTopRight={button}>
@@ -242,19 +263,20 @@ export async function getServerSideProps() {
       }
     )
 
-    const fetchCostCenterData = async () => {
-      try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}api/resource/Cost Center?fields=["*"]`, {
-          headers: { Authorization: process.env.NEXT_PUBLIC_API_TOKEN }
-        })
-        return response.data.data
-      } catch (error) {
-        console.error('Error fetching Cost Center data:', error)
-        return []
+    const responsesCustomer = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}api/resource/Customer?fields=["*"]&limit=500&order_by=creation%20desc`,
+      {
+        headers: { Authorization: process.env.NEXT_PUBLIC_API_TOKEN }
       }
-    }
+    )
 
     const resData = responsesData.data.message
+
+    const resDataWithCustomer = resData.map(row => {
+      const customer = responsesCustomer.data.data.find(customer => customer.name === row.party)
+
+      return { ...row, customer: customer ? customer : null }
+    })
 
     const [
       resDataCompany,
@@ -270,7 +292,7 @@ export async function getServerSideProps() {
 
     return {
       props: {
-        resData: resData,
+        resData: resDataWithCustomer,
         dataCompany: resDataCompany.data.data,
         dataFinanceBook: resDataFinanceBook.data.data,
         dataCostCenter: resDataCostCenter.data.data,

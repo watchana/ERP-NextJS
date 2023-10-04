@@ -17,10 +17,8 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 const OperationBOM = ({ dataRow, setDataRow }) => {
-  const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-
-  const [getOperationsBOM, setGetOperationsBOM] = useState('')
-  const [getTableOperation, setGetTableOperation] = useState('')
+  const [getOperationsBOM, setGetOperationsBOM] = useState([])
+  const [getTableOperation, setGetTableOperation] = useState([])
   const [open, setOpen] = useState(false)
 
   const handleClose = () => {
@@ -104,6 +102,21 @@ const OperationBOM = ({ dataRow, setDataRow }) => {
     return 'waiting...'
   }
 
+  const styles = {
+    card: {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      p: 2
+    },
+    textField: {
+      bgcolor: 'grey.100'
+    },
+    box: {
+      marginBlock: 2,
+      mt: 4
+    }
+  }
+
   return (
     <Card sx={{ p: 4 }}>
       <Grid>
@@ -123,8 +136,15 @@ const OperationBOM = ({ dataRow, setDataRow }) => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Typography sx={{ margin: 1 }}>Transfer Material Against</Typography>
-              <TextField size='small' variant='filled' fullWidth value={dataRow.transfer_material_against || ''} />
+              <Box sx={styles.box}>
+                <Typography sx={{ margin: 1 }}>Transfer Material Against</Typography>
+                <TextField
+                  sx={styles.textField}
+                  variant='outlined'
+                  fullWidth
+                  value={dataRow.transfer_material_against || ''}
+                />
+              </Box>
 
               <Grid sx={checkboxStyle}>
                 <Checkbox
@@ -177,8 +197,15 @@ const OperationBOM = ({ dataRow, setDataRow }) => {
               <DialogContentText id='alert-dialog-description'>
                 <Grid container spacing={3}>
                   <Grid item xs={12} md={6}>
-                    <Typography sx={{ margin: 1 }}>Operation</Typography>
-                    <TextField size='small' variant='filled' value={getTableOperation.operation || ''} fullWidth />
+                    <Box sx={styles.box}>
+                      <Typography sx={{ margin: 1 }}>Operation</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={getTableOperation.operation || ''}
+                        fullWidth
+                      />
+                    </Box>
 
                     <Grid sx={checkboxStyle}>
                       <Checkbox
@@ -192,23 +219,27 @@ const OperationBOM = ({ dataRow, setDataRow }) => {
                     <Typography variant='subtitle2'>Operation time does not depend on quantity to produce</Typography>
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <Typography sx={{ margin: 1 }}>Workstation Type</Typography>
-                    <TextField
-                      size='small'
-                      variant='filled'
-                      value={getTableOperation.workstation || ''}
-                      fullWidth
-                      disabled
-                    />
+                    <Box sx={styles.box}>
+                      <Typography sx={{ margin: 1 }}>Workstation Type</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={getTableOperation.workstation || ''}
+                        fullWidth
+                        disabled
+                      />
+                    </Box>
 
-                    <Typography sx={{ margin: 1 }}>Operation Time </Typography>
-                    <TextField
-                      size='small'
-                      variant='filled'
-                      value={getTableOperation.time_in_mins || ''}
-                      fullWidth
-                      disabled
-                    />
+                    <Box sx={styles.box}>
+                      <Typography sx={{ margin: 1 }}>Operation Time </Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={getTableOperation.time_in_mins || ''}
+                        fullWidth
+                        disabled
+                      />
+                    </Box>
                   </Grid>
                 </Grid>
 
@@ -217,96 +248,107 @@ const OperationBOM = ({ dataRow, setDataRow }) => {
                 </Box>
                 <Grid container spacing={3}>
                   <Grid item xs={12} md={4}>
-                    <Typography sx={{ margin: 1 }}>Hour Rate (THB)</Typography>
-                    <TextField
-                      size='small'
-                      variant='filled'
-                      value={
-                        getTableOperation?.hour_rate === '0.0'
-                          ? '฿ 0.0'
-                          : `฿ ${parseFloat(getTableOperation?.hour_rate).toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })}`
-                      }
-                      name='hour_rate'
-                      disabled
-                      fullWidth
-                    />
+                    <Box sx={styles.box}>
+                      <Typography sx={{ margin: 1 }}>Hour Rate (THB)</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={
+                          getTableOperation?.hour_rate === '0.0'
+                            ? '฿ 0.0'
+                            : `฿ ${parseFloat(getTableOperation?.hour_rate).toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                              })}`
+                        }
+                        name='hour_rate'
+                        disabled
+                        fullWidth
+                      />
+                    </Box>
 
-                    <Typography sx={{ margin: 1 }}>Base Hour Rate (THB)</Typography>
-                    <TextField
-                      size='small'
-                      variant='filled'
-                      value={
-                        getTableOperation?.base_hour_rate === '0.0'
-                          ? '฿ 0.0'
-                          : `฿ ${parseFloat(getTableOperation?.base_hour_rate).toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })}`
-                      }
-                      disabled
-                      name='base_hour_rate'
-                      fullWidth
-                    />
+                    <Box sx={styles.box}>
+                      <Typography sx={{ margin: 1 }}>Base Hour Rate (THB)</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={
+                          getTableOperation?.base_hour_rate === '0.0'
+                            ? '฿ 0.0'
+                            : `฿ ${parseFloat(getTableOperation?.base_hour_rate).toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                              })}`
+                        }
+                        disabled
+                        name='base_hour_rate'
+                        fullWidth
+                      />
+                    </Box>
                   </Grid>
 
                   <Grid item xs={12} md={4}>
-                    <Typography sx={{ margin: 1 }}>Operating Cost (THB)</Typography>
-                    <TextField
-                      size='small'
-                      variant='filled'
-                      value={
-                        getTableOperation?.operating_cost === '0.0'
-                          ? '฿ 0.0'
-                          : `฿ ${parseFloat(getTableOperation?.operating_cost).toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })}`
-                      }
-                      name='operating_cost'
-                      disabled
-                      fullWidth
-                    />
+                    <Box sx={styles.box}>
+                      <Typography sx={{ margin: 1 }}>Operating Cost (THB)</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={
+                          getTableOperation?.operating_cost === '0.0'
+                            ? '฿ 0.0'
+                            : `฿ ${parseFloat(getTableOperation?.operating_cost).toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                              })}`
+                        }
+                        name='operating_cost'
+                        disabled
+                        fullWidth
+                      />
+                    </Box>
 
-                    <Typography sx={{ margin: 1 }}>Operating Cost (THB)</Typography>
-                    <TextField
-                      size='small'
-                      variant='filled'
-                      value={
-                        getTableOperation?.base_operating_cost === '0.0'
-                          ? '฿ 0.0'
-                          : `฿ ${parseFloat(getTableOperation?.base_operating_cost).toLocaleString('en-US', {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2
-                            })}`
-                      }
-                      name='base_operating_cost'
-                      disabled
-                      fullWidth
-                    />
+                    <Box sx={styles.box}>
+                      <Typography sx={{ margin: 1 }}>Operating Cost (THB)</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={
+                          getTableOperation?.base_operating_cost === '0.0'
+                            ? '฿ 0.0'
+                            : `฿ ${parseFloat(getTableOperation?.base_operating_cost).toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                              })}`
+                        }
+                        name='base_operating_cost'
+                        disabled
+                        fullWidth
+                      />
+                    </Box>
                   </Grid>
 
                   <Grid item xs={12} md={4}>
-                    <Typography sx={{ margin: 1 }}>Batch Size</Typography>
-                    <TextField
-                      size='small'
-                      variant='filled'
-                      value={getTableOperation.batch_size || ''}
-                      fullWidth
-                      disabled
-                    />
-
-                    <Grid sx={checkboxStyle}>
-                      <Checkbox
-                        checked={dataRow.set_cost_based_on_bom_qty === 1 ? true : false}
-                        name='set_cost_based_on_bom_qty'
-                        onChange={handleCheckbox}
+                    <Box sx={styles.box}>
+                      <Typography sx={{ margin: 1 }}>Batch Size</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={getTableOperation.batch_size || ''}
+                        fullWidth
                         disabled
                       />
-                      <Typography variant='subtitle2'>Set Operating Cost Based On BOM Quantity</Typography>
-                    </Grid>
+                    </Box>
+                    <Box sx={styles.box}>
+                      <Grid sx={checkboxStyle}>
+                        <Checkbox
+                          checked={dataRow.set_cost_based_on_bom_qty === 1 ? true : false}
+                          name='set_cost_based_on_bom_qty'
+                          onChange={handleCheckbox}
+                          disabled
+                        />
+                        <Typography variant='subtitle2'>Set Operating Cost Based On BOM Quantity</Typography>
+                      </Grid>
+                    </Box>
                   </Grid>
                 </Grid>
 
@@ -315,14 +357,16 @@ const OperationBOM = ({ dataRow, setDataRow }) => {
                 </Box>
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
-                    <Typography sx={{ margin: 1 }}>Description</Typography>
-                    <TextField
-                      size='small'
-                      variant='filled'
-                      value={getTableOperation.description || ''}
-                      fullWidth
-                      disabled
-                    />
+                    <Box sx={styles.box}>
+                      <Typography sx={{ margin: 1 }}>Description</Typography>
+                      <TextField
+                        sx={styles.textField}
+                        variant='outlined'
+                        value={getTableOperation.description || ''}
+                        fullWidth
+                        disabled
+                      />
+                    </Box>
                   </Grid>
                 </Grid>
 

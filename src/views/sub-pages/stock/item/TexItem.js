@@ -15,6 +15,14 @@ const columnsTax = [
 ]
 
 const TexItem = ({ dataRow }) => {
+  const heightValue = dataRow?.taxes?.length === 0 || dataRow?.taxes === undefined ? 300 : 'auto'
+
+  const styles = {
+    dataGrid: {
+      height: heightValue
+    }
+  }
+
   return (
     <Box>
       <Card
@@ -31,8 +39,8 @@ const TexItem = ({ dataRow }) => {
             <Typography variant='subtitle2'>Will also apply for variants</Typography>
             <Box>
               <DataGrid
-                style={{ height: dataRow.taxes.length === 0 ? 300 : 'auto' }}
-                rows={dataRow.taxes}
+                style={styles.dataGrid}
+                rows={dataRow.taxes || []}
                 columns={columnsTax}
                 getRowId={row => row.id}
                 initialState={{

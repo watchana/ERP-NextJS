@@ -33,13 +33,16 @@ const PurchasingItem = ({ dataRow, handleUpdateData }) => {
     handleUpdateData(event.target.name, event.target.value)
   }
 
+  const heightValue = dataRow?.supplier_items?.length === 0 || dataRow?.supplier_items === undefined ? 300 : 'auto'
+
   const style = {
     styleBox: {
       marginBlock: 3
     },
     styleTextField: {
       backgroundColor: 'grey.100'
-    }
+    },
+    dataGrid: { height: heightValue }
   }
 
   return (
@@ -194,8 +197,8 @@ const PurchasingItem = ({ dataRow, handleUpdateData }) => {
             />
             <Typography sx={{ marginBottom: 2 }}>Supplier Items</Typography>
             <DataGrid
-              style={{ height: dataRow.supplier_items.length === 0 ? 300 : 'auto' }}
-              rows={dataRow.supplier_items}
+              style={style.dataGrid}
+              rows={dataRow?.supplier_items || []}
               columns={columnsSupplierItem}
               initialState={{
                 pagination: {
