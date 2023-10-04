@@ -138,8 +138,8 @@ const InputListRenderer = ({ inputConfigs, filterConfig, onDataChange }) => {
                       }
                     }}
                     format='DD-MM-YYYY'
-                    value={filterConfig[input.name]}
-                    onChange={date => onDataChange(input.name, date.format('DD-MM-YYYY'))}
+                    value={dayjs(filterConfig[input.name])}
+                    onChange={date => onDataChange(input.name, dayjs(date).format('YYYY-MM-DD'))}
                     renderInput={params => <TextField {...params} size='small' variant='outlined' />}
                   />
                 </LocalizationProvider>
