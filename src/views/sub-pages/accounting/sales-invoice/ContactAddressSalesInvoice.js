@@ -37,7 +37,7 @@ import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid'
 import { ChevronDown, ChevronUp } from 'mdi-material-ui'
 import SalesInvoice from 'src/pages/app/accounting/sales-invoice'
-import { AddressType } from 'src/dummy/contentPages/salesInvoice'
+import { AddressType } from 'src/dummy/sub-pages/accounting/salesInvoice'
 
 const ContactAddressSalesinvoice = ({ dataRow, handleUpdateData }) => {
   const [isOpenDetailAddress, setIsOpenDetailAddress] = useState(false)

@@ -6,7 +6,7 @@ import axios from 'axios'
 import LayoutTwoPage from 'src/views/sub-pages/LayoutTwoPage'
 
 // ** Dummy Data
-import { SalesInvoiceContentMenu } from 'src/dummy/contentPages/salesInvoice'
+import { SalesInvoiceContentMenu } from 'src/dummy/sub-pages/accounting/salesInvoice'
 
 // ** Custom Components
 import DetailSalesInvoice from 'src/views/sub-pages/accounting/sales-invoice/DetailSalesInvoice'

@@ -16,7 +16,7 @@ import Accounting from 'src/views/sub-pages/buying/supplier/AccountingSupplier'
 import SettingsSupplier from 'src/views/sub-pages/buying/supplier/SettingsSupplier'
 import PortalUserSupplier from 'src/views/sub-pages/buying/supplier/PortalUsersSupplier'
 import SubPageLayout from 'src/@core/layouts/SubPageLayout'
-import { SupplierContentMenu } from 'src/dummy/contentPages/supplierPage'
+import { SupplierContentMenu } from 'src/dummy/sub-pages/buying/supplierPage'
 
 // ** Layouts
 

@@ -7,7 +7,7 @@ import { Box, Grid, Typography, Checkbox, FormGroup, FormControlLabel, Card, Sel
 import { useState } from 'react'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import dayjs from 'dayjs'
-import { HoldType } from 'src/dummy/contentPages/supplierPage'
+import { HoldType } from 'src/dummy/sub-pages/buying/supplierPage'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 
 const SettingsSupplier = ({ dataRow, handleUpdateData }) => {
