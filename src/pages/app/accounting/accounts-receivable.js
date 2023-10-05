@@ -111,18 +111,7 @@ const columns = [
   }
 ]
 
-const AccountsReceivable = ({
-  resData,
-  dataCompany,
-  dataFinanceBook,
-  dataCostCenter,
-  dataCustomer,
-  dataCustomerGroup,
-  dataPaymentTerm,
-  dataSalesPartner,
-  dataSalesPerson,
-  dataTerritory
-}) => {
+const AccountsReceivable = ({ responseData }) => {
   const [filterConfig, setFilterConfig] = useState({
     company: '',
     postingDate: dayjs().format('YYYY-MM-DD'),
@@ -149,16 +138,16 @@ const AccountsReceivable = ({
     showRemarks: false
   })
 
-  const [data, setData] = useState([])
+  const [data, setData] = useState(responseData.additionalData)
 
   // ? สำหรับเพิ่ม input ในหน้าต่าง
   const inputConfigs = [
-    { type: 'textDropdown', label: 'Company', name: 'company', data: dataCompany },
+    { type: 'textDropdown', label: 'Company', name: 'company', data: responseData.dataCompany },
     { type: 'date', label: 'Posting Date', name: 'postingDate' },
-    { type: 'textDropdown', label: 'Finance Book', name: 'financeBook', data: dataFinanceBook },
-    { type: 'textDropdown', label: 'Cost Center', name: 'costCenter', data: dataCostCenter },
-    { type: 'textDropdown', label: 'Customer', name: 'customer', data: dataCustomer },
-    { type: 'textDropdown', label: 'Receivable Account', name: 'receivableAccount', data: dataCustomer },
+    { type: 'textDropdown', label: 'Finance Book', name: 'financeBook', data: responseData.dataFinanceBook },
+    { type: 'textDropdown', label: 'Cost Center', name: 'costCenter', data: responseData.dataCostCenter },
+    { type: 'textDropdown', label: 'Customer', name: 'customer', data: responseData.dataCustomer },
+    { type: 'textDropdown', label: 'Receivable Account', name: 'receivableAccount', data: responseData.dataCustomer },
     {
       type: 'select',
       label: 'Ageing Based On',
@@ -170,11 +159,16 @@ const AccountsReceivable = ({
     { type: 'text', label: 'Ageing Range 2', name: 'ageingRange2' },
     { type: 'text', label: 'Ageing Range 3', name: 'ageingRange3' },
     { type: 'text', label: 'Ageing Range 4', name: 'ageingRange4' },
-    { type: 'textDropdown', label: 'Customer Group', name: 'customerGroup', data: dataCustomerGroup },
-    { type: 'textDropdown', label: 'Payment Terms Template', name: 'paymentTermsTemplate', data: dataPaymentTerm },
-    { type: 'textDropdown', label: 'Sales Partner', name: 'salesPartner', data: dataSalesPartner },
-    { type: 'textDropdown', label: 'Sales Person', name: 'salesPerson', data: dataSalesPerson },
-    { type: 'textDropdown', label: 'Territory', name: 'territory', data: dataTerritory },
+    { type: 'textDropdown', label: 'Customer Group', name: 'customerGroup', data: responseData.dataCustomerGroup },
+    {
+      type: 'textDropdown',
+      label: 'Payment Terms Template',
+      name: 'paymentTermsTemplate',
+      data: responseData.dataPaymentTerm
+    },
+    { type: 'textDropdown', label: 'Sales Partner', name: 'salesPartner', data: responseData.dataSalesPartner },
+    { type: 'textDropdown', label: 'Sales Person', name: 'salesPerson', data: responseData.dataSalesPerson },
+    { type: 'textDropdown', label: 'Territory', name: 'territory', data: responseData.dataTerritory },
     { type: 'checkbox', label: 'Group By Customer', name: 'groupByCustomer' },
     {
       type: 'checkbox',
@@ -195,16 +189,18 @@ const AccountsReceivable = ({
     { type: 'checkbox', label: 'Show Remarks', name: 'showRemarks' }
   ]
 
+  // ** สำหรับแก้ไขค่าใน filterConfig จาก input
   const handleDataChange = (name, value) => {
     setFilterConfig(prevData => ({ ...prevData, [name]: value }))
   }
 
+  // ** filter data ตามเงื่อนไขที่กำหนดใน filterConfig
   useEffect(() => {
     console.log('filterConfig:', filterConfig)
 
     const thresholdDate = dayjs(filterConfig.postingDate).subtract(30, 'day')
 
-    const filteredData = resData.filter(row => {
+    const filteredData = responseData?.additionalData.filter(row => {
       if (filterConfig.ageingBasedOn === 'Due Date') {
         return dayjs(row.due_date).isAfter(thresholdDate)
       } else if (filterConfig.ageingBasedOn === 'Posting Date') {
@@ -215,30 +211,39 @@ const AccountsReceivable = ({
     })
 
     setData(filteredData)
-  }, [filterConfig, resData])
+  }, [filterConfig, responseData])
 
-  console.log('data:', resData)
+  console.log('data:', responseData)
 
   return (
     <LayoutOnePageFilter title='Accounts Receivable' buttonTopRight={button}>
       <InputListRenderer inputConfigs={inputConfigs} filterConfig={filterConfig} onDataChange={handleDataChange} />
       <Divider />
-      <DataGrid rows={data} columns={columns} getRowId={row => row.name} />
+      <DataGrid
+        rows={data}
+        columns={columns}
+        getRowId={row => row.name}
+        style={{ height: data.length > 0 ? 'auto' : 300 }}
+      />
     </LayoutOnePageFilter>
   )
 }
 
-// ? สำหรับเรียกข้อมูลจาก API
-const fetchData = endpoint => {
-  return axios.get(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
-    headers: { Authorization: process.env.NEXT_PUBLIC_API_TOKEN }
-  })
+const fetchData = async endpoint => {
+  try {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+      headers: { Authorization: process.env.NEXT_PUBLIC_API_TOKEN }
+    })
+
+    return response.data
+  } catch (error) {
+    console.error(`Error fetching data from ${endpoint}:`, error)
+    throw error // Re-throw the error to handle it later in getServerSideProps
+  }
 }
 
-// ? SSR
 export async function getServerSideProps() {
   try {
-    // ดึงข้อมูลจาก API อื่น ๆ ตามที่มีอยู่
     const endpoints = [
       'Company',
       'Finance Book',
@@ -251,76 +256,39 @@ export async function getServerSideProps() {
       'Territory'
     ]
 
+    // Fetch data from multiple endpoints concurrently
     const responses = await Promise.all(endpoints.map(endpoint => fetchData(endpoint)))
 
-    // ดึงข้อมูล Cost Center
-    const costCenterData = await fetchCostCenterData()
-
-    const responsesData = await axios.get(
+    // Make an additional Axios request to a specific endpoint
+    const additionalData = await axios.get(
       `${process.env.NEXT_PUBLIC_BASE_URL}api/method/frappe.erpapp.test.getAccountsReceivable`,
       {
         headers: { Authorization: process.env.NEXT_PUBLIC_API_TOKEN }
       }
     )
 
-    const responsesCustomer = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}api/resource/Customer?fields=["*"]&limit=500&order_by=creation%20desc`,
-      {
-        headers: { Authorization: process.env.NEXT_PUBLIC_API_TOKEN }
-      }
-    )
-
-    const resData = responsesData.data.message
-
-    const resDataWithCustomer = resData.map(row => {
-      const customer = responsesCustomer.data.data.find(customer => customer.name === row.party)
-
-      return { ...row, customer: customer ? customer : null }
+    // Combine all responses into an object
+    const responseData = {}
+    endpoints.forEach((endpoint, index) => {
+      responseData[`${endpoint.toLowerCase()}Data`] = responses[index].data
     })
 
-    const [
-      resDataCompany,
-      resDataFinanceBook,
-      resDataCostCenter,
-      resDataCustomer,
-      resDataCustomerGroup,
-      resDataPaymentTerm,
-      resDataSalesPartner,
-      resDataSalesPerson,
-      resDataTerritory
-    ] = responses
+    // Add the additional data to responseData
+    responseData.additionalData = additionalData.data.message
 
+    // Return the data as props
     return {
       props: {
-        resData: resDataWithCustomer,
-        dataCompany: resDataCompany.data.data,
-        dataFinanceBook: resDataFinanceBook.data.data,
-        dataCostCenter: resDataCostCenter.data.data,
-        dataCustomer: resDataCustomer.data.data,
-        dataCustomerGroup: resDataCustomerGroup.data.data,
-        dataPaymentTerm: resDataPaymentTerm.data.data,
-        dataSalesPartner: resDataSalesPartner.data.data,
-        dataSalesPerson: resDataSalesPerson.data.data,
-        dataTerritory: resDataTerritory.data.data,
-        costCenterData: costCenterData // เพิ่มข้อมูล Cost Center ใน props
+        responseData
       }
     }
   } catch (error) {
     console.error('Error fetching data:', error)
 
+    // In case of an error, return an empty object as props
     return {
       props: {
-        resData: [],
-        dataCompany: [],
-        dataFinanceBook: [],
-        dataCostCenter: [],
-        dataCustomer: [],
-        dataCustomerGroup: [],
-        dataPaymentTerm: [],
-        dataSalesPartner: [],
-        dataSalesPerson: [],
-        dataTerritory: [],
-        costCenterData: []
+        responseData: {}
       }
     }
   }
