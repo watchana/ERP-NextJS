@@ -142,12 +142,12 @@ const AccountsReceivable = ({ responseData }) => {
 
   // ? สำหรับเพิ่ม input ในหน้าต่าง
   const inputConfigs = [
-    { type: 'textDropdown', label: 'Company', name: 'company', data: responseData.dataCompany },
+    { type: 'textDropdown', label: 'Company', name: 'company', data: responseData.CompanyData },
     { type: 'date', label: 'Posting Date', name: 'postingDate' },
-    { type: 'textDropdown', label: 'Finance Book', name: 'financeBook', data: responseData.dataFinanceBook },
-    { type: 'textDropdown', label: 'Cost Center', name: 'costCenter', data: responseData.dataCostCenter },
-    { type: 'textDropdown', label: 'Customer', name: 'customer', data: responseData.dataCustomer },
-    { type: 'textDropdown', label: 'Receivable Account', name: 'receivableAccount', data: responseData.dataCustomer },
+    { type: 'textDropdown', label: 'Finance Book', name: 'financeBook', data: responseData.FinanceBookData },
+    { type: 'textDropdown', label: 'Cost Center', name: 'costCenter', data: responseData.CostCenterData },
+    { type: 'textDropdown', label: 'Customer', name: 'customer', data: responseData.CustomerData },
+    { type: 'textDropdown', label: 'Receivable Account', name: 'receivableAccount' },
     {
       type: 'select',
       label: 'Ageing Based On',
@@ -159,16 +159,16 @@ const AccountsReceivable = ({ responseData }) => {
     { type: 'text', label: 'Ageing Range 2', name: 'ageingRange2' },
     { type: 'text', label: 'Ageing Range 3', name: 'ageingRange3' },
     { type: 'text', label: 'Ageing Range 4', name: 'ageingRange4' },
-    { type: 'textDropdown', label: 'Customer Group', name: 'customerGroup', data: responseData.dataCustomerGroup },
+    { type: 'textDropdown', label: 'Customer Group', name: 'customerGroup', data: responseData.CustomerGroupData },
     {
       type: 'textDropdown',
       label: 'Payment Terms Template',
       name: 'paymentTermsTemplate',
       data: responseData.dataPaymentTerm
     },
-    { type: 'textDropdown', label: 'Sales Partner', name: 'salesPartner', data: responseData.dataSalesPartner },
-    { type: 'textDropdown', label: 'Sales Person', name: 'salesPerson', data: responseData.dataSalesPerson },
-    { type: 'textDropdown', label: 'Territory', name: 'territory', data: responseData.dataTerritory },
+    { type: 'textDropdown', label: 'Sales Partner', name: 'salesPartner', data: responseData.SalesPartnerData },
+    { type: 'textDropdown', label: 'Sales Person', name: 'salesPerson', data: responseData.SalesPersonData },
+    { type: 'textDropdown', label: 'Territory', name: 'territory', data: responseData.TerritoryData },
     { type: 'checkbox', label: 'Group By Customer', name: 'groupByCustomer' },
     {
       type: 'checkbox',
@@ -270,7 +270,11 @@ export async function getServerSideProps() {
     // Combine all responses into an object
     const responseData = {}
     endpoints.forEach((endpoint, index) => {
-      responseData[`${endpoint.toLowerCase()}Data`] = responses[index].data
+      // ใช้ .replace() เพื่อลบช่องว่างและแทนที่ด้วย ''
+      const formattedEndpoint = endpoint.replace(/\s/g, '')
+
+      // ใช้ formattedEndpoint ในการสร้าง property ใน responseData
+      responseData[`${formattedEndpoint}Data`] = responses[index].data
     })
 
     // Add the additional data to responseData
