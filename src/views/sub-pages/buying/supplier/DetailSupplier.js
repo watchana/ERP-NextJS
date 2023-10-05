@@ -23,7 +23,7 @@ import { useState } from 'react'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 // ** data selection
-import { SupplierType } from 'src/dummy/contentPages/supplierPage'
+import { SupplierType } from 'src/dummy/sub-pages/buying/supplierPage'
 
 const DetailSupplier = ({ dataRow, handleUpdateData }) => {
   const [age, setAge] = useState('')

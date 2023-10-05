@@ -34,7 +34,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
 import axios from 'axios'
 import { DataGrid, GridExpandMoreIcon } from '@mui/x-data-grid'
-import { IsOpeningEntry } from 'src/dummy/contentPages/salesInvoice'
+import { IsOpeningEntry } from 'src/dummy/sub-pages/accounting/salesInvoice'
 
 const MoreInfoPurchaseInvoice = ({ dataRow, handleUpdateData }) => {
   const [customerPOdetails, setCustomerPO] = useState(false)

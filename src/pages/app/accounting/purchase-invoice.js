@@ -6,7 +6,7 @@ import axios from 'axios'
 import LayoutTwoPage from 'src/views/sub-pages/LayoutTwoPage'
 
 // ** Dummy Data
-import { PurchaseInvoiceContentMenu } from 'src/dummy/contentPages/purchaseInvoice'
+import { PurchaseInvoiceContentMenu } from 'src/dummy/sub-pages/accounting/purchaseInvoice'
 
 // ** Custom Components
 import DetailPurchaseInvoice from 'src/views/sub-pages/accounting/purchase-invoice/detailPurchaseInvoice'
@@ -56,6 +56,7 @@ const PurchaseInvoice = ({ data }) => {
       setDataUpdate={setDataUpdate}
       editStatus={editStatus}
       setEditStatus={setEditStatus}
+      noTabContent={[]}
     />
   )
 }

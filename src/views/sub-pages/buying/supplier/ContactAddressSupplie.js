@@ -31,7 +31,7 @@ import { ChevronDown, ChevronUp } from 'mdi-material-ui'
 import { DataGrid } from '@mui/x-data-grid'
 
 // ** data selection
-import { AddressType, Status } from 'src/dummy/contentPages/supplierPage'
+import { AddressType, Status } from 'src/dummy/sub-pages/buying/supplierPage'
 
 const Contact_Address = ({ dataRow, handleUpdateData }) => {
   const [age, setAge] = useState('')
