@@ -23,20 +23,19 @@ import LayoutUpdatePage from 'src/views/sub-pages/LayoutUpdatePage'
 
 const AddItemPage = ({ data }) => {
   const [dataRow, setDataRow] = React.useState({})
-  const [dataList, setDataList] = React.useState(data)
-  const [dataUpdate, setDataUpdate] = React.useState([])
+  const [dataCreate, setDataCreate] = React.useState([])
   const [editStatus, setEditStatus] = React.useState(false)
 
-  // ? function to update dataRow and store the required values in dataUpdated.
+  // ? function to update dataRow and store the required values in dataCreated.
   const handleUpdateData = async (field, value) => {
     setDataRow({ ...dataRow, [field]: value })
-    setDataUpdate({ ...dataUpdate, [field]: value })
+    setDataCreate({ ...dataCreate, [field]: value })
     setEditStatus(true)
   }
 
   useEffect(() => {
-    console.log('dataUpdate: ', dataUpdate)
-  }, [dataUpdate])
+    console.log('dataCreate: ', dataCreate)
+  }, [dataCreate])
 
   const showContent = [
     <DetailItem key='detail' dataRow={dataRow} handleUpdateData={handleUpdateData} />,
@@ -50,7 +49,14 @@ const AddItemPage = ({ data }) => {
     <ManufacturingItem key='manufacturing' dataRow={dataRow} handleUpdateData={handleUpdateData} />
   ]
 
-  return <LayoutUpdatePage doctype={'Item'} menuContent={ItemContentMenu} showContent={showContent} />
+  return (
+    <LayoutUpdatePage
+      doctype={'Item'}
+      menuContent={ItemContentMenu}
+      showContent={showContent}
+      dataCreate={dataCreate}
+    />
+  )
 }
 
 // nextJS SSR

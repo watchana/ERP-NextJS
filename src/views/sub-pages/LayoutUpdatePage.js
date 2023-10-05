@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 
 // ** Mui imports
-import { Box, Button, Card, Grid, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Button, Grid, Tab, Tabs, Typography } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
+import axios from 'axios'
 
-const LayoutUpdatePage = ({ doctype, menuContent, showContent }) => {
+const LayoutUpdatePage = ({ doctype, menuContent, showContent, dataCreate }) => {
   const [tabValue, setTabValue] = useState(1)
 
   const styles = {
@@ -26,6 +27,21 @@ const LayoutUpdatePage = ({ doctype, menuContent, showContent }) => {
     setTabValue(newValue)
   }
 
+  const handleSave = () => {
+    axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}${doctype}`, dataCreate, {
+        headers: {
+          Authorization: process.env.NEXT_PUBLIC_API_TOKEN
+        }
+      })
+      .then(res => {
+        console.log('res: ', res)
+      })
+      .catch(err => {
+        console.log('err: ', err)
+      })
+  }
+
   return (
     <Box>
       <Grid container spacing={3}>
@@ -34,7 +50,7 @@ const LayoutUpdatePage = ({ doctype, menuContent, showContent }) => {
             <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
               {doctype}
             </Typography>
-            <Button variant='contained' color='primary' size='small'>
+            <Button variant='contained' color='primary' size='small' onChange={handleSave}>
               Save
             </Button>
           </Box>
