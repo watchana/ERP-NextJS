@@ -238,6 +238,7 @@ const fetchData = endpoint => {
 // ? SSR
 export async function getServerSideProps() {
   try {
+    // ดึงข้อมูลจาก API อื่น ๆ ตามที่มีอยู่
     const endpoints = [
       'Company',
       'Finance Book',
@@ -251,6 +252,9 @@ export async function getServerSideProps() {
     ]
 
     const responses = await Promise.all(endpoints.map(endpoint => fetchData(endpoint)))
+
+    // ดึงข้อมูล Cost Center
+    const costCenterData = await fetchCostCenterData()
 
     const responsesData = await axios.get(
       `${process.env.NEXT_PUBLIC_BASE_URL}api/method/frappe.erpapp.test.getAccountsReceivable`,
@@ -297,7 +301,8 @@ export async function getServerSideProps() {
         dataPaymentTerm: resDataPaymentTerm.data.data,
         dataSalesPartner: resDataSalesPartner.data.data,
         dataSalesPerson: resDataSalesPerson.data.data,
-        dataTerritory: resDataTerritory.data.data
+        dataTerritory: resDataTerritory.data.data,
+        costCenterData: costCenterData // เพิ่มข้อมูล Cost Center ใน props
       }
     }
   } catch (error) {
@@ -314,7 +319,8 @@ export async function getServerSideProps() {
         dataPaymentTerm: [],
         dataSalesPartner: [],
         dataSalesPerson: [],
-        dataTerritory: []
+        dataTerritory: [],
+        costCenterData: []
       }
     }
   }

@@ -17,7 +17,7 @@ const CardSupport = () => {
     <Box>
       <Grid container rowSpacing={5}>
         <Grid item sm={12}>
-          <CardGuideVue MenuButton={BuyingMenuButton} RightSideContent={BuyingContent} />
+          <CardGuideVue menuButton={BuyingMenuButton} rightSideContent={BuyingContent} />
         </Grid>
         <Grid item sm={12}>
           <CardYourShortcut menus={BuyingYourShortcut} />

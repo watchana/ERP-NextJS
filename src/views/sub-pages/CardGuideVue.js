@@ -5,18 +5,18 @@ import React, { useState, useEffect } from 'react'
 import { useTheme } from '@mui/material/styles'
 import { Card, CardContent, Box, Typography, Grid, Button } from '@mui/material'
 
-function CardGuideVue({ MenuButton, RightSideContent }) {
+function CardGuideVue({ menuButton, rightSideContent }) {
   // ** Hooks
   const theme = useTheme()
 
   // ** Vars
   const [buttonId, setButtonId] = useState(1)
-  const [rightSideContent, setRightSideContent] = useState(RightSideContent[0])
+  const [valueSideContent, setValueSideContent] = useState(rightSideContent[0])
 
   const handleButtonClick = id => {
     setButtonId(id)
     const array = id - 1
-    setRightSideContent(RightSideContent[array])
+    setValueSideContent(rightSideContent[array])
   }
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function CardGuideVue({ MenuButton, RightSideContent }) {
         <CardContent>
           <Grid container spacing={4} sx={{ width: '100%' }}>
             <Grid item sm={12} md={4}>
-              {MenuButton.map(item => (
+              {menuButton.map(item => (
                 <Box sx={{ width: 'auto', marginBlock: 2 }} key={item.id}>
                   <Button
                     sx={{
@@ -74,26 +74,26 @@ function CardGuideVue({ MenuButton, RightSideContent }) {
                     background: theme.palette.grey[200]
                   }}
                 >
-                  {rightSideContent.head && (
+                  {valueSideContent.head && (
                     <Box sx={{ mb: 5, mt: -6 }}>
                       <Typography variant='body1' sx={{ color: theme.palette.secondary.F }}>
-                        {rightSideContent.head}
+                        {valueSideContent.head}
                       </Typography>
                     </Box>
                   )}
 
-                  {rightSideContent.body && (
+                  {valueSideContent.body && (
                     <Box sx={{ mb: 5 }}>
                       <Typography variant='body2' sx={{ fornSize: 19, color: theme.palette.secondary.F }}>
-                        {rightSideContent.body}
+                        {valueSideContent.body}
                       </Typography>
                     </Box>
                   )}
 
-                  {rightSideContent.footer && (
+                  {valueSideContent.footer && (
                     <Box>
                       <Typography style={{ fontSize: '13px', color: theme.palette.secondary.F }} variant='body2'>
-                        {rightSideContent.footer.split('\n').map((item, index) => (
+                        {valueSideContent.footer.split('\n').map((item, index) => (
                           <div key={index} style={{ marginBottom: '5px' }}>
                             {item}
                           </div>
