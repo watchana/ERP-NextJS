@@ -17,7 +17,7 @@ const StockPage = () => {
     <Box>
       <Grid container rowSpacing={5}>
         <Grid item sm={12}>
-          <CardGuideVue MenuButton={StockMenuButton} RightSideContent={StockContent} />
+          <CardGuideVue menuButton={StockMenuButton} rightSideContent={StockContent} />
         </Grid>
         <Grid item sm={12}>
           <CardYourShortcut menus={StockShortcut} />
