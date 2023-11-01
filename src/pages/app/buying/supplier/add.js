@@ -59,7 +59,15 @@ function GitHubContributionsGraph() {
             return 'color-empty'
           }
 
-          return `color-github-contributions-${green['A400']}` // ใช้สีเขียวจาก Material-UI
+          const date = new Date(value.date)
+          const dayOfWeek = date.getDay() // 0=Sunday, 1=Monday, ..., 6=Saturday
+
+          // Check if the day is Monday to Friday (1 to 5)
+          if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+            return `color-github-contributions-${green['A400']}`
+          } else {
+            return 'color-empty' // Set to empty for other days (Saturday and Sunday)
+          }
         }}
         titleForValue={value => {
           if (!value) {

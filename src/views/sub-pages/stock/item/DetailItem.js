@@ -57,6 +57,7 @@ const DetailItem = ({ dataRow, handleUpdateData }) => {
   return (
     <Box>
       <Card sx={styles.card}>
+        
         <Grid container spacing={3}>
           <Grid item sm={12} md={6}>
             <Box sx={styles.box}>
